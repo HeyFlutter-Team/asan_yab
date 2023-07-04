@@ -15,7 +15,6 @@ class _DetailsPageState extends State<DetailsPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _pageViewController.dispose();
     super.dispose();
   }
@@ -29,9 +28,7 @@ class _DetailsPageState extends State<DetailsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(
-              height: 30,
-            ),
+            const SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -67,9 +64,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     image: AssetImage('assets/images/restaurant.jpg')),
               ),
             ),
-            const SizedBox(
-              height: 30,
-            ),
+            const SizedBox(height: 30),
             RichText(
               text: TextSpan(
                   text: 'Name of resturant',
@@ -79,13 +74,13 @@ class _DetailsPageState extends State<DetailsPage> {
                       fontWeight: FontWeight.bold),
                   children: [
                     TextSpan(
-                      text: '\n\n description resturant\n',
+                      text: '\n\n description restaurant\n',
                       style: TextStyle(
                         color: Colors.blueGrey.withOpacity(0.7),
                       ),
                     ),
                     TextSpan(
-                      text: '\n Phone resturant',
+                      text: '\n Phone restaurant',
                       style: TextStyle(
                         color: Colors.blueGrey.withOpacity(0.7),
                       ),
@@ -114,9 +109,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   fontWeight: FontWeight.bold,
                   fontSize: 16),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
@@ -128,9 +121,7 @@ class _DetailsPageState extends State<DetailsPage> {
               child: const Row(
                 children: [
                   Text('Find the address in google map'),
-                  SizedBox(
-                    width: 5,
-                  ),
+                  SizedBox(width: 5),
                   Icon(Icons.map),
                 ],
               ),

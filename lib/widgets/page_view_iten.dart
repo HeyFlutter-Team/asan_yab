@@ -24,9 +24,7 @@ class PageViewItem extends StatelessWidget {
                     fit: BoxFit.fitHeight,
                   ),
                 ),
-                const SizedBox(
-                  height: 12,
-                ),
+                const SizedBox(height: 12),
                 ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -39,9 +37,7 @@ class PageViewItem extends StatelessWidget {
                     child: const Row(
                       children: [
                         Icon(Icons.arrow_back_ios_sharp),
-                        SizedBox(
-                          width: 3,
-                        ),
+                        SizedBox(width: 3),
                         Text('Back')
                       ],
                     )),
