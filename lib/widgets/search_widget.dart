@@ -1,10 +1,12 @@
-// ignore_for_file: prefer_const_constructors, camel_case_types
+// ignore_for_file: prefer_const_constructors, camel_case_types, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 
 class searchWidget extends StatelessWidget {
+  final String Search;
   const searchWidget({
     super.key,
+    required this.Search,
   });
 
   @override
@@ -25,7 +27,7 @@ class searchWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(12.0),
             borderSide: BorderSide(color: Colors.white),
           ),
-          hintText: 'Search Your Target',
+          hintText: Search,
           prefixIcon: Icon(
             Icons.search,
           ),

@@ -17,27 +17,27 @@ final popularList = [
   ),
   Popular(
     imageUrl: 'images/9.jpg',
-    name: 'Herat',
+    name: 'Kabul',
     phone: '0790129920',
   ),
   Popular(
     imageUrl: 'images/10.jpg',
-    name: 'Herat',
+    name: 'Mazar',
     phone: '0790129920',
   ),
   Popular(
     imageUrl: 'images/11.jpg',
-    name: 'Herat',
+    name: 'Qandhar',
     phone: '0790129920',
   ),
   Popular(
     imageUrl: 'images/12.jpg',
-    name: 'Herat',
+    name: 'khost',
     phone: '0790129920',
   ),
   Popular(
     imageUrl: 'images/13.jpg',
-    name: 'Herat',
+    name: 'Farah',
     phone: '0790129920',
   ),
 ];

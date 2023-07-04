@@ -27,7 +27,7 @@ class HomePage extends StatelessWidget {
       body: ListView(
         shrinkWrap: true,
         children: [
-          searchWidget(),
+          const searchWidget(Search: 'Search Your Target'),
           SizedBox(height: 15.0),
           CarouselWidget(),
           Padding(
