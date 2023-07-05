@@ -1,6 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, unused_import, depend_on_referenced_packages
-
-import 'package:easy_finder/main_page.dart';
+import 'package:details/screens/detials_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
