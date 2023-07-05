@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import '../model/popular.dart';
 
 class PopularList extends StatelessWidget {
-  const PopularList({
-    super.key,
-  });
+  const PopularList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +42,7 @@ class PopularList extends StatelessWidget {
                             items.imageUrl,
                           ),
                         ),
-                        SizedBox(
-                          height: 15.0,
-                        ),
+                        SizedBox(height: 15.0),
                         Text(
                           items.name,
                           style: TextStyle(
@@ -69,12 +65,13 @@ class PopularList extends StatelessWidget {
                   left: 10.0,
                   top: 10.0,
                   child: IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.favorite_border,
-                        color: Colors.white,
-                        size: 30.0,
-                      )),
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.favorite_border,
+                      color: Colors.white,
+                      size: 30.0,
+                    ),
+                  ),
                 ),
               ],
             );

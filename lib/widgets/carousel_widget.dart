@@ -4,23 +4,32 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class CarouselWidget extends StatelessWidget {
-  const CarouselWidget({
-    super.key,
-  });
+  const CarouselWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return CarouselSlider(
       items: [
-        Container(
-          margin: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            image: const DecorationImage(
-              image: AssetImage('images/1.jpg'),
-              fit: BoxFit.cover,
+        Stack(
+          children: [
+            Container(
+              margin: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                image: const DecorationImage(
+                  image: AssetImage('images/1.jpg'),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
-          ),
+            Positioned(
+              top: 30.0,
+              child: Container(
+                color: Colors.red,
+                height: 100.0,
+              ),
+            ),
+          ],
         ),
         Container(
           margin: const EdgeInsets.all(8.0),

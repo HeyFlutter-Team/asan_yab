@@ -16,9 +16,7 @@ class _ProfilePageState extends State<ProfilePage> {
       body: Center(
         child: Text(
           'Profile',
-          style: TextStyle(
-            color: Colors.grey,
-          ),
+          style: TextStyle(color: Colors.grey),
         ),
       ),
     );
