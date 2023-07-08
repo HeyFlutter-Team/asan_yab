@@ -22,25 +22,47 @@ class PopularWidget extends StatelessWidget {
         final items = popularList[index];
         return Padding(
           padding: const EdgeInsets.only(
-            left: 20.0,
             top: 10.0,
             bottom: 10.0,
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Container(
-                height: screenHeight * 0.2,
-                width: screenWidth * 0.4,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage(
-                      items.imageUrl,
+              Stack(
+                children: [
+                  Container(
+                    height: screenHeight * 0.2,
+                    width: screenWidth * 0.4,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12.0),
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage(
+                          items.imageUrl,
+                        ),
+                      ),
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12.0),
+                        color: Colors.black.withOpacity(0.5),
+                      ),
                     ),
                   ),
-                ),
+                  Positioned(
+                    left: 10.0,
+                    top: 10.0,
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.favorite_border,
+                        color: Colors.white,
+                        size: 30.0,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.only(

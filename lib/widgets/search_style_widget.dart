@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 import '../pages/search_bar_page.dart';
@@ -42,26 +44,12 @@ class SearchStyle extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'جستجوی محصول',
+                    'جستجوی در آسان یاب',
                     style: TextStyle(
                       color: Colors.grey,
                     ),
                   )
                 ],
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(25.0),
-                ),
-                height: 50.0,
-                width: 75.0,
-                child: Center(
-                  child: Text(
-                    'جستجو',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
               ),
             ],
           ),
