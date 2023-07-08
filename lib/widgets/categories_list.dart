@@ -30,7 +30,7 @@ class CategoriesList extends StatelessWidget {
                   width: 150.0,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20.0),
-                    color: Colors.grey,
+                    color: Colors.green,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

@@ -16,34 +16,34 @@ class Categories {
 final listOfCategories = [
   Categories(
       iconProduct: Icons.restaurant,
-      titleProduct: 'Resturant',
-      subtitleProduct: 'Navid Resturant'),
+      titleProduct: 'رستورانت',
+      subtitleProduct: 'نوید رستورانت'),
   Categories(
       iconProduct: Icons.local_hospital,
-      titleProduct: 'Hospital',
-      subtitleProduct: 'Mofed Hospital'),
+      titleProduct: 'شفاخانه',
+      subtitleProduct: 'شفاخانه مفید'),
   Categories(
       iconProduct: Icons.computer,
-      titleProduct: 'Computer',
-      subtitleProduct: 'Fahim Computer'),
+      titleProduct: 'کامپیوتر',
+      subtitleProduct: 'فهیم کامپیوتر'),
   Categories(
       iconProduct: Icons.icecream_rounded,
-      titleProduct: 'Icecream',
-      subtitleProduct: 'Char Fasl'),
+      titleProduct: 'آیسکریم',
+      subtitleProduct: 'هرات آیسکریم'),
   Categories(
       iconProduct: Icons.sports_gymnastics_sharp,
-      titleProduct: 'Sports Gymnastics',
-      subtitleProduct: 'Almas'),
+      titleProduct: 'جمناستیک',
+      subtitleProduct: 'آریانا جمناستیک'),
   Categories(
       iconProduct: Icons.sports_soccer_rounded,
-      titleProduct: 'Soccer',
-      subtitleProduct: 'Hemmat'),
+      titleProduct: 'فوتبال',
+      subtitleProduct: 'انصاری فوتبال'),
   Categories(
       iconProduct: Icons.park,
-      titleProduct: 'Park',
-      subtitleProduct: 'farhang'),
+      titleProduct: 'پارک',
+      subtitleProduct: 'پارک فرهنگ'),
   Categories(
       iconProduct: Icons.phone,
-      titleProduct: 'Phone Shop',
-      subtitleProduct: 'Gallry')
+      titleProduct: 'موبایل',
+      subtitleProduct: 'گالری موبایل')
 ];

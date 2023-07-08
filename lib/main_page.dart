@@ -1,10 +1,9 @@
-// ignore_for_file: unused_import, prefer_const_constructors, unused_local_variable, no_leading_underscores_for_local_identifiers
+// ignore_for_file: unused_import, prefer_const_constructors, unused_local_variable, no_leading_underscores_for_local_identifiers, prefer_const_literals_to_create_immutables
 
 import 'package:easy_finder/pages/favorite_page.dart';
 import 'package:easy_finder/pages/home_page.dart';
 import 'package:easy_finder/pages/profile_page.dart';
 import 'package:flutter/material.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -14,13 +13,13 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
   Widget getIndex(int index) {
     switch (index) {
       case 0:
-        return ProfilePage();
-      case 1:
         return HomePage();
+      case 1:
+        return ProfilePage();
       case 2:
         return FavoritePage();
     }
@@ -32,29 +31,34 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       extendBody: true,
       backgroundColor: Colors.white,
-      bottomNavigationBar: CurvedNavigationBar(
-        color: Colors.green,
-        buttonBackgroundColor: Colors.green,
-        backgroundColor: Colors.transparent,
-        height: 65.0,
-        index: _selectedIndex,
+      bottomNavigationBar: BottomNavigationBar(
+        selectedFontSize: 20.0,
+        unselectedFontSize: 15.0,
+        currentIndex: _selectedIndex,
+        fixedColor: Colors.white,
+        type: BottomNavigationBarType.fixed,
         onTap: (int index) {
           setState(() {
             _selectedIndex = index;
           });
         },
-        items: const [
-          Icon(
-            Icons.person,
-            color: Colors.white,
+        backgroundColor: Color.fromARGB(255, 2, 100, 5),
+        items: [
+          BottomNavigationBarItem(
+            label: 'خانه',
+            icon: Icon(
+              Icons.home,
+            ),
           ),
-          Icon(
-            Icons.home,
-            color: Colors.white,
+          BottomNavigationBarItem(
+            label: 'در باره ما',
+            icon: Icon(
+              Icons.person,
+            ),
           ),
-          Icon(
-            Icons.favorite,
-            color: Colors.white,
+          BottomNavigationBarItem(
+            label: 'موارد دلخواه',
+            icon: Icon(Icons.favorite),
           ),
         ],
       ),

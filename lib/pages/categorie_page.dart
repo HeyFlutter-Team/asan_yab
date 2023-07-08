@@ -13,7 +13,7 @@ class CategoriePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text(
-          'Categories',
+          'دسته بندی ها',
           style: TextStyle(color: Colors.grey),
         ),
       ),
@@ -47,7 +47,7 @@ class CategoriePage extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12.0),
-                        color: Colors.grey,
+                        color: Colors.green,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,

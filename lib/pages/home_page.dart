@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0.0,
         title: Text(
-          'easy finder',
+          'آسان یاب',
           style: TextStyle(color: Colors.grey),
         ),
       ),
@@ -39,7 +39,7 @@ class HomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Categories',
+                  'دسته بندی ها',
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 20.0,
@@ -66,12 +66,13 @@ class HomePage extends StatelessWidget {
           SizedBox(height: 20.0),
           CategoriesList(),
           Padding(
-            padding: const EdgeInsets.only(left: 15.0, top: 10.0),
+            padding: const EdgeInsets.only(right: 15.0, top: 10.0),
             child: Text(
-              'Popular Deals',
+              'موارد دلخواه',
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 20.0,
+                fontFamily: 'Persian',
               ),
             ),
           ),
