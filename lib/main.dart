@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, unused_import, depend_on_referenced_packages, prefer_const_constructors, deprecated_member_use
-
 import 'package:easy_finder/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -15,7 +14,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final TextStyle customTextStyle = TextStyle(
+    final customTextStyle = TextStyle(
       fontFamily: 'Persian',
     );
     return MaterialApp(

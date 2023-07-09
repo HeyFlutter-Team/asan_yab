@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 import '../model/popular.dart';
 
@@ -79,13 +80,18 @@ class PopularWidget extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 10.0),
-                    Text(
-                      items.phone,
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 15.0,
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                            await FlutterPhoneDirectCaller.callNumber(
+                                items.phone);
+                          },
+                      icon:const Icon(
+                        Icons.call,
+                        color: Colors.green,
+                        size: 25.0,
                       ),
-                    ),
+                      label: Text(items.phone),
+                    )
                   ],
                 ),
               ),

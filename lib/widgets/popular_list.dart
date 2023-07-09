@@ -46,25 +46,27 @@ class PopularList extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        Container(
-                          height: 130.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(12.0),
-                              topRight: Radius.circular(12.0),
-                            ),
-                            image: DecorationImage(
-                              image: AssetImage(items.imageUrl),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                        Expanded(
                           child: Container(
+                            height: 130.0,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(12.0),
                                 topRight: Radius.circular(12.0),
                               ),
-                              color: Colors.black.withOpacity(0.5),
+                              image: DecorationImage(
+                                image: AssetImage(items.imageUrl),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(12.0),
+                                  topRight: Radius.circular(12.0),
+                                ),
+                                color: Colors.black.withOpacity(0.5),
+                              ),
                             ),
                           ),
                         ),
