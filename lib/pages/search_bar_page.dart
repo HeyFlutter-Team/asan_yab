@@ -28,7 +28,7 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
       body: ListView(
-        children: [],
+        children: const [],
       ),
     );
   }
