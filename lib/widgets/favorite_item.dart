@@ -1,31 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
-import '../model/popular.dart';
+import '../model/favorite.dart';
 
-class PopularWidget extends StatelessWidget {
-  const PopularWidget({
-    super.key,
-    required this.screenHeight,
-    required this.screenWidth,
-  });
-
-  final double screenHeight;
-  final double screenWidth;
+class FavoriteItem extends StatelessWidget {
+  const FavoriteItem({super.key});
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: popularList.length,
+      itemCount: favorites.length,
       itemBuilder: (context, index) {
-        final items = popularList[index];
+        final items = favorites[index];
         return Padding(
-          padding: const EdgeInsets.only(
-            top: 10.0,
-            bottom: 10.0,
-          ),
+          padding: const EdgeInsets.symmetric(vertical: 12),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -39,9 +31,7 @@ class PopularWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12.0),
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: AssetImage(
-                          items.imageUrl,
-                        ),
+                        image: AssetImage(items.image),
                       ),
                     ),
                     child: Container(
@@ -52,8 +42,8 @@ class PopularWidget extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    left: 10.0,
-                    top: 10.0,
+                    left: 12.0,
+                    top: 12.0,
                     child: IconButton(
                       onPressed: () {},
                       icon: const Icon(
@@ -76,19 +66,19 @@ class PopularWidget extends StatelessWidget {
                       items.name,
                       style: const TextStyle(
                         color: Colors.black,
-                        fontSize: 25.0,
+                        fontSize: 24.0,
+                        fontFamily: 'Persion Font',
                       ),
                     ),
-                    const SizedBox(height: 10.0),
+                    const SizedBox(height: 12.0),
                     ElevatedButton.icon(
                       onPressed: () async {
-                            await FlutterPhoneDirectCaller.callNumber(
-                                items.phone);
-                          },
-                      icon:const Icon(
+                        await FlutterPhoneDirectCaller.callNumber(items.phone);
+                      },
+                      icon: const Icon(
                         Icons.call,
                         color: Colors.green,
-                        size: 25.0,
+                        size: 24.0,
                       ),
                       label: Text(items.phone),
                     )

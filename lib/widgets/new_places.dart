@@ -3,8 +3,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-class CarouselWidget extends StatelessWidget {
-  const CarouselWidget({super.key});
+class NewPlaces extends StatelessWidget {
+  const NewPlaces({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class CarouselWidget extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
             image: const DecorationImage(
-              image: AssetImage('images/1.jpg'),
+              image: AssetImage('assets/1.jpg'),
               fit: BoxFit.cover,
             ),
           ),
@@ -24,32 +24,18 @@ class CarouselWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.0),
               color: Colors.black.withOpacity(0.5),
             ),
-            child: TextOfCarousel(title: 'رستورانت', subTitle: 'نوید رستورانت'),
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            image: const DecorationImage(
-              image: AssetImage('images/2.jpg'),
-              fit: BoxFit.cover,
+            child: TitleOfNewPlace(
+              title: 'رستورانت',
+              subTitle: 'نوید رستورانت',
             ),
           ),
-          child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: Colors.black.withOpacity(0.5),
-              ),
-              child:
-                  TextOfCarousel(title: 'شفاخانه', subTitle: 'شفاخانه مفید')),
         ),
         Container(
           margin: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
             image: const DecorationImage(
-              image: AssetImage('images/3.jpg'),
+              image: AssetImage('assets/2.jpg'),
               fit: BoxFit.cover,
             ),
           ),
@@ -58,7 +44,10 @@ class CarouselWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.0),
               color: Colors.black.withOpacity(0.5),
             ),
-            child: TextOfCarousel(title: 'کامپیوتر', subTitle: 'فهیم کامپیوتر'),
+            child: TitleOfNewPlace(
+              title: 'شفاخانه',
+              subTitle: 'شفاخانه مفید',
+            ),
           ),
         ),
         Container(
@@ -66,7 +55,25 @@ class CarouselWidget extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
             image: const DecorationImage(
-              image: AssetImage('images/4.jpg'),
+              image: AssetImage('assets/3.jpg'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              color: Colors.black.withOpacity(0.5),
+            ),
+            child:
+                TitleOfNewPlace(title: 'کامپیوتر', subTitle: 'فهیم کامپیوتر'),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            image: const DecorationImage(
+              image: AssetImage('assets/4.jpg'),
               fit: BoxFit.cover,
             ),
           ),
@@ -75,14 +82,14 @@ class CarouselWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10.0),
                 color: Colors.black.withOpacity(0.5),
               ),
-              child: TextOfCarousel(title: 'آسکریم', subTitle: 'هرات آسکریم')),
+              child: TitleOfNewPlace(title: 'آسکریم', subTitle: 'هرات آسکریم')),
         ),
         Container(
           margin: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
             image: const DecorationImage(
-              image: AssetImage('images/5.jpg'),
+              image: AssetImage('assets/5.jpg'),
               fit: BoxFit.cover,
             ),
           ),
@@ -91,7 +98,7 @@ class CarouselWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10.0),
                 color: Colors.black.withOpacity(0.5),
               ),
-              child: TextOfCarousel(
+              child: TitleOfNewPlace(
                   title: 'جمناستیک', subTitle: 'آریانا جمناستیک')),
         ),
         Container(
@@ -99,7 +106,7 @@ class CarouselWidget extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.5),
             image: const DecorationImage(
-              image: AssetImage('images/6.jpg'),
+              image: AssetImage('assets/6.jpg'),
               fit: BoxFit.cover,
             ),
           ),
@@ -109,14 +116,14 @@ class CarouselWidget extends StatelessWidget {
                 color: Colors.black.withOpacity(0.5),
               ),
               child:
-                  TextOfCarousel(title: 'فوتبال', subTitle: 'انصاری فوتبال')),
+                  TitleOfNewPlace(title: 'فوتبال', subTitle: 'انصاری فوتبال')),
         ),
         Container(
           margin: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
             image: const DecorationImage(
-              image: AssetImage('images/7.jpg'),
+              image: AssetImage('assets/7.jpg'),
               fit: BoxFit.cover,
             ),
           ),
@@ -125,7 +132,7 @@ class CarouselWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.0),
               color: Colors.black.withOpacity(0.5),
             ),
-            child: TextOfCarousel(title: 'پارک', subTitle: 'پارک فرهنگ'),
+            child: TitleOfNewPlace(title: 'پارک', subTitle: 'پارک فرهنگ'),
           ),
         ),
       ],
@@ -143,10 +150,10 @@ class CarouselWidget extends StatelessWidget {
   }
 }
 
-class TextOfCarousel extends StatelessWidget {
+class TitleOfNewPlace extends StatelessWidget {
   final String title;
   final String subTitle;
-  const TextOfCarousel({
+  const TitleOfNewPlace({
     super.key,
     required this.title,
     required this.subTitle,
