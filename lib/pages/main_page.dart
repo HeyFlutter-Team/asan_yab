@@ -2,7 +2,7 @@
 
 import 'package:easy_finder/pages/favorite_page.dart';
 import 'package:easy_finder/pages/home_page.dart';
-import 'package:easy_finder/pages/profile_page.dart';
+import 'package:easy_finder/pages/about_us_page.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
@@ -13,18 +13,9 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 0;
-  Widget getIndex(int index) {
-    switch (index) {
-      case 0:
-        return HomePage();
-      case 1:
-        return ProfilePage();
-      case 2:
-        return FavoritePage();
-    }
-    return Container();
-  }
+  int selectedIndex = 0;
+
+  final pages = const [HomePage(), AboutUsPage(), FavoritePage()];
 
   @override
   Widget build(BuildContext context) {
@@ -33,28 +24,20 @@ class _MainPageState extends State<MainPage> {
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavigationBar(
         selectedFontSize: 20.0,
-        unselectedFontSize: 15.0,
-        currentIndex: _selectedIndex,
+        unselectedFontSize: 16.0,
+        currentIndex: selectedIndex,
         fixedColor: Colors.white,
         type: BottomNavigationBarType.fixed,
-        onTap: (int index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        backgroundColor: Color.fromARGB(255, 2, 100, 5),
+        onTap: (index) => setState(() => selectedIndex = index),
+        backgroundColor: Colors.teal,
         items: [
           BottomNavigationBarItem(
             label: 'خانه',
-            icon: Icon(
-              Icons.home,
-            ),
+            icon: Icon(Icons.home),
           ),
           BottomNavigationBarItem(
             label: 'در باره ما',
-            icon: Icon(
-              Icons.person,
-            ),
+            icon: Icon(Icons.person),
           ),
           BottomNavigationBarItem(
             label: 'موارد دلخواه',
@@ -62,7 +45,7 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
       ),
-      body: getIndex(_selectedIndex),
+      body: pages[selectedIndex],
     );
   }
 }

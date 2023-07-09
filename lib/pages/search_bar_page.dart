@@ -20,15 +20,13 @@ class _SearchPageState extends State<SearchPage> {
           icon: const Icon(
             Icons.arrow_left_outlined,
             color: Colors.black,
-            size: 35.0,
+            size: 36.0,
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: ListView(
-        children: [],
+        children: const [],
       ),
     );
   }
