@@ -10,7 +10,6 @@ class Favorites extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Padding(
       padding: const EdgeInsets.all(12.0),
@@ -38,7 +37,7 @@ class Favorites extends StatelessWidget {
                   child: Column(
                     children: [
                       Container(
-                        height: 130.0,
+                        height: screenHeight * 0.16,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(12.0),
@@ -64,20 +63,25 @@ class Favorites extends StatelessWidget {
                         items.name,
                         style: TextStyle(color: Colors.black, fontSize: 16.0),
                       ),
-                      ElevatedButton.icon(
+                      ElevatedButton(
                         onPressed: () async {
                           await FlutterPhoneDirectCaller.callNumber(
                             items.phone,
                           );
                         },
-                        label: Text(
-                          phoneNumber,
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16.0,
-                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              phoneNumber,
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                            Icon(Icons.call, color: Colors.green),
+                          ],
                         ),
-                        icon: Icon(Icons.call, color: Colors.green),
                       ),
                     ],
                   ),

@@ -16,22 +16,25 @@ class CustomSearchBar extends StatelessWidget {
         context,
         MaterialPageRoute(builder: (context) => SearchPage()),
       ),
-      child: Container(
+      child: Padding(
         padding: const EdgeInsets.all(12.0),
-        height: 50.0,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey, width: 1.4),
-          borderRadius: BorderRadius.circular(24.0),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Icon(Icons.search, color: Colors.grey),
-            ),
-            Text('جستجوی در آسان یاب', style: TextStyle(color: Colors.grey)),
-          ],
+        child: Container(
+          padding: const EdgeInsets.all(12.0),
+          height: screenHeight * 0.06,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey, width: 1.4),
+            borderRadius: BorderRadius.circular(24.0),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Icon(Icons.search, color: Colors.grey),
+              ),
+              Text('جستجوی در آسان یاب', style: TextStyle(color: Colors.grey)),
+            ],
+          ),
         ),
       ),
     );

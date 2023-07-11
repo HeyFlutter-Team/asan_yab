@@ -22,38 +22,22 @@ class FavoriteItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Stack(
-                children: [
-                  Container(
-                    height: screenHeight * 0.2,
-                    width: screenWidth * 0.4,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.0),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage(items.image),
-                      ),
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.0),
-                        color: Colors.black.withOpacity(0.5),
-                      ),
-                    ),
+              Container(
+                height: screenHeight * 0.2,
+                width: screenWidth * 0.4,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12.0),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage(items.image),
                   ),
-                  Positioned(
-                    left: 12.0,
-                    top: 12.0,
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.favorite_border,
-                        color: Colors.white,
-                        size: 30.0,
-                      ),
-                    ),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12.0),
+                    color: Colors.black.withOpacity(0.5),
                   ),
-                ],
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
