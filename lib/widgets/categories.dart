@@ -12,8 +12,7 @@ class Categories extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return SizedBox(
-      height: 130.0,
-      width: 150.0,
+      height: screenHeight * 0.2,
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
@@ -28,8 +27,8 @@ class Categories extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => DetailsPage()));
               },
               child: Container(
-                height: 130.0,
-                width: 150.0,
+                height: screenHeight * 0.2,
+                width: screenWidth * 0.4,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.0),
                   color: Colors.green,
