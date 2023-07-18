@@ -37,7 +37,7 @@ class Favorites extends StatelessWidget {
                   child: Column(
                     children: [
                       Container(
-                        height: screenHeight * 0.16,
+                        height: screenHeight * 0.15,
                         decoration: BoxDecoration(
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(12.0),
