@@ -56,7 +56,7 @@ class _MainPageState extends State<MainPage> {
           durationUntilAlertAgain: const Duration(days:1),
            dialogStyle:Platform.isIOS ? UpgradeDialogStyle.cupertino : UpgradeDialogStyle.material,
         ),
-        child: pages[selectedIndex]),
+        child: pages[selectedIndex],),
     );
   }
 }

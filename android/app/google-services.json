@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "525036166886",
+    "project_id": "asan-yab",
+    "storage_bucket": "asan-yab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:525036166886:android:e77723bb4cdd4fd6fea527",
+        "android_client_info": {
+          "package_name": "com.example.asan_yab"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "525036166886-nofco8i66dsus0297on1r822hfno5alb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANccJ4SzQJxS5jGzN8zNEOigxQ0_nWdFU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "525036166886-nofco8i66dsus0297on1r822hfno5alb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "525036166886-t77sn7nj4bkg3o7aoc00pfharddh4dds.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.easyFinder"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
