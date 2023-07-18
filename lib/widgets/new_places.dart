@@ -9,7 +9,9 @@ class NewPlaces extends StatelessWidget {
   const NewPlaces({super.key});
   @override
   Widget build(BuildContext context) {
+    
     final screenHeight = MediaQuery.of(context).size.height;
+
     return CarouselSlider.builder(
       itemCount: favorites.length,
       itemBuilder: (context, index, realIndex) {
