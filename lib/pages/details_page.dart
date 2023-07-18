@@ -1,8 +1,6 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
-import 'package:easy_finder/widgets/custom_search_bar.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/custom_search_bar.dart';
 import '../widgets/favorite_item.dart';
 
 class DetailsPage extends StatelessWidget {
@@ -10,18 +8,24 @@ class DetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'محصول  ',
-          style: TextStyle(color: Colors.grey),
+        backgroundColor: Theme.of(context).primaryColor,
+        title: SizedBox(
+          width: screenWidth * 0.99,
+          child: const CustomSearchBar(),
         ),
+        elevation: 0.0,
+        leading: IconButton(
+          onPressed:()=> Navigator.pop(context), 
+          icon: const Icon(Icons.arrow_back,color: Colors.black, size: 30.0,)
+          ),
       ),
       body: ListView(
         shrinkWrap: true,
         children: [
-          const CustomSearchBar(),
-          FavoriteItem(),
+          const FavoriteItem(),
         ],
       ),
     );

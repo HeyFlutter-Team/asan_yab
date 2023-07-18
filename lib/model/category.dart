@@ -16,7 +16,10 @@ class Category {
 
 final listOfCategories = [
   Category(
-      icon: Icons.restaurant, title: 'رستورانت', subtitle: 'نوید رستورانت'),
+    icon: Icons.restaurant,
+    title: 'رستورانت',
+    subtitle: 'نوید رستورانت',
+  ),
   Category(
     icon: Icons.local_hospital,
     title: 'شفاخانه',
@@ -28,7 +31,10 @@ final listOfCategories = [
     subtitle: 'فهیم کامپیوتر',
   ),
   Category(
-      icon: Icons.icecream_rounded, title: 'آیسکریم', subtitle: 'هرات آیسکریم'),
+    icon: Icons.icecream_rounded,
+    title: 'آیسکریم',
+    subtitle: 'هرات آیسکریم',
+  ),
   Category(
     icon: Icons.sports_gymnastics_sharp,
     title: 'جمناستیک',

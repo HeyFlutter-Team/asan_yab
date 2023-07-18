@@ -1,8 +1,7 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'package:easy_finder/pages/details_page.dart';
 import 'package:flutter/material.dart';
 import '../model/category.dart';
+import '../utils/kcolors.dart';
+import 'details_page.dart';
 
 class CategoryPage extends StatelessWidget {
   const CategoryPage({super.key});
@@ -11,10 +10,18 @@ class CategoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text(
+        backgroundColor: kPrimaryColor,
+        title: Text(
           'دسته بندی ها',
-          style: TextStyle(color: Colors.grey),
+          style: TextStyle(color: kSecodaryColor),
+        ),
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+            size: 30,
+          ),
         ),
       ),
       body: ListView(
@@ -37,10 +44,10 @@ class CategoryPage extends StatelessWidget {
                 return GestureDetector(
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => DetailsPage()),
+                    MaterialPageRoute(builder: (context) => const DetailsPage()),
                   ),
                   child: Card(
-                    color: Colors.green,
+                    color: Colors.teal,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -50,18 +57,19 @@ class CategoryPage extends StatelessWidget {
                         Icon(
                           items.icon,
                           size: 40.0,
-                          color: Colors.white,
+                          color: kPrimaryColor,
                         ),
-                        SizedBox(height: 16.0),
+                        const SizedBox(height: 16.0),
                         Text(
                           items.title,
-                          style: TextStyle(color: Colors.white, fontSize: 16.0),
+                          style:
+                              TextStyle(color: kPrimaryColor, fontSize: 16.0),
                         ),
-                        SizedBox(height: 2.0),
+                        const SizedBox(height: 5.0),
                         Text(
                           items.subtitle,
                           style: TextStyle(
-                            color: Colors.white54,
+                            color: kPrimaryColor,
                             fontSize: 12.0,
                           ),
                         ),

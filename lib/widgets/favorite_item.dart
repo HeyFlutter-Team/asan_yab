@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 import '../model/favorite.dart';
+import '../utils/convert_digits_to_farsi.dart';
+import '../utils/kcolors.dart';
 
 class FavoriteItem extends StatelessWidget {
   const FavoriteItem({super.key});
@@ -16,49 +18,32 @@ class FavoriteItem extends StatelessWidget {
       itemCount: favorites.length,
       itemBuilder: (context, index) {
         final items = favorites[index];
+        final phoneNumber = convertDigitsToFarsi(items.phone);
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Stack(
-                children: [
-                  Container(
-                    height: screenHeight * 0.2,
-                    width: screenWidth * 0.4,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.0),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage(items.image),
-                      ),
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.0),
-                        color: Colors.black.withOpacity(0.5),
-                      ),
-                    ),
+              Container(
+                height: screenHeight * 0.17,
+                width: screenWidth * 0.4,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12.0),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage(items.image),
                   ),
-                  Positioned(
-                    left: 12.0,
-                    top: 12.0,
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.favorite_border,
-                        color: Colors.white,
-                        size: 30.0,
-                      ),
-                    ),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12.0),
+                    color: Colors.black.withOpacity(0.5),
                   ),
-                ],
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
                   left: 40.0,
-                  top: 50.0,
+                  right: 15.0,
                 ),
                 child: Column(
                   children: [
@@ -71,17 +56,32 @@ class FavoriteItem extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 12.0),
-                    ElevatedButton.icon(
-                      onPressed: () async {
-                        await FlutterPhoneDirectCaller.callNumber(items.phone);
-                      },
-                      icon: const Icon(
-                        Icons.call,
-                        color: Colors.green,
-                        size: 24.0,
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black.withOpacity(0.6),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
                       ),
-                      label: Text(items.phone),
-                    )
+                      onPressed: () async {
+                        await FlutterPhoneDirectCaller.callNumber(
+                          items.phone,
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            phoneNumber,
+                            style: TextStyle(
+                              color: kPrimaryColor,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                          const Icon(Icons.call, color: Colors.teal),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
