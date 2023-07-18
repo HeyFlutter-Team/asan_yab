@@ -1,8 +1,7 @@
-// ignore_for_file: prefer_const_constructors, unused_local_variable
-
-import 'package:easy_finder/pages/details_page.dart';
 import 'package:flutter/material.dart';
 import '../model/category.dart';
+import '../pages/details_page.dart';
+import '../utils/kcolors.dart';
 
 class Categories extends StatelessWidget {
   const Categories({super.key});
@@ -12,8 +11,7 @@ class Categories extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return SizedBox(
-      height: 130.0,
-      width: 150.0,
+      height: screenHeight * 0.2,
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
@@ -25,35 +23,21 @@ class Categories extends StatelessWidget {
             child: GestureDetector(
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => DetailsPage()));
+                    MaterialPageRoute(builder: (context) => const DetailsPage()));
               },
               child: Container(
-                height: 130.0,
-                width: 150.0,
+                height: screenHeight * 0.2,
+                width: screenWidth * 0.4,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.0),
-                  color: Colors.green,
+                  color: Colors.teal,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      items.icon,
-                      color: Colors.white,
-                      size: 35.0,
-                    ),
-                    Text(
-                      items.title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      items.subtitle,
-                      style: const TextStyle(
-                        color: Colors.white54,
-                      ),
-                    ),
+                    Icon(items.icon, color: kPrimaryColor, size: 45.0),
+                    const SizedBox(height: 4),
+                    Text(items.title, style: TextStyle(color: kPrimaryColor)),
                   ],
                 ),
               ),

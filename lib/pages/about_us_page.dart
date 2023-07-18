@@ -1,6 +1,6 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
+
+import '../utils/kcolors.dart';
 
 class AboutUsPage extends StatefulWidget {
   const AboutUsPage({super.key});
@@ -14,7 +14,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('Profile', style: TextStyle(color: Colors.grey)),
+        child: Text('Profile', style: TextStyle(color:kPrimaryColor)),
       ),
     );
   }
