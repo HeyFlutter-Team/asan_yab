@@ -22,7 +22,7 @@ class Favorites extends StatelessWidget {
           crossAxisSpacing: 12.0,
           mainAxisExtent: 230.0,
         ),
-        itemCount: favorites.length,
+        itemCount: 0,
         itemBuilder: (context, index) {
           final items = favorites[index];
           final phoneNumber = convertDigitsToFarsi(items.phone);

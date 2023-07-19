@@ -19,6 +19,8 @@ dependencies:
   google_fonts: ^5.1.0
   intl: any
   provider: ^6.0.5
+  smooth_page_indicator: ^1.1.0
+  sqflite: ^2.2.8+4
   upgrader: ^7.1.0
 
 

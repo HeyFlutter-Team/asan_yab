@@ -1,61 +1,72 @@
 import 'package:flutter/material.dart';
 
-class PageViewItem extends StatelessWidget {
-  final String imgUrl;
+import '../models/restaurant_models.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-  const PageViewItem({super.key, required this.imgUrl});
+class PageViewItem extends StatelessWidget {
+  final int selectedIndex;
+  final List<String?> gallery;
+  const PageViewItem({super.key, required this.gallery, required this.selectedIndex, });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        showBottomSheet(
+      onTap: () => showBottomSheet(
           context: context,
-          builder: (context) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Image.asset(
-                    imgUrl,
-                    fit: BoxFit.fitHeight,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        backgroundColor: Colors.blueGrey,
-                        minimumSize: const Size(double.maxFinite, 55)),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.arrow_back_ios_sharp),
-                        SizedBox(width: 3),
-                        Text('Back')
-                      ],
-                    )),
-              ],
-            ),
-          ),
-        );
-      },
+          builder: (context) => ImageView(selectedIndex: selectedIndex,gallery: gallery,)),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(50),
-        child: Hero(
-          tag: imgUrl,
-          child: Image.asset(
-            imgUrl,
-            fit: BoxFit.cover,
-          ),
+        child: Image.network(
+          gallery[selectedIndex]!,
+          fit: BoxFit.cover,
         ),
       ),
+    );
+  }
+}
+
+class ImageView extends StatelessWidget {
+  final int selectedIndex;
+  final List<String?> gallery;
+  const ImageView({super.key, required this.selectedIndex, required this.gallery});
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    final pageController = PageController(initialPage: selectedIndex);
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      // mainAxisSize: MainAxisSize.max,
+      children: [
+        PageView.builder(
+          padEnds: false,
+          controller: pageController,
+          itemCount: gallery.length,
+          itemBuilder: (context, index) => Image.network(
+            gallery[index]!,
+            fit: BoxFit.fill,
+            width: size.width,
+            height: size.height,
+          ),
+        ),
+        // const SizedBox(height: 12),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: SmoothPageIndicator(
+            controller: pageController,
+            count: gallery.length,
+            effect: const WormEffect(
+                dotHeight: 16,
+                dotWidth: 16,
+                type: WormType.thinUnderground,
+                activeDotColor: Colors.amber,
+                dotColor: Colors.cyanAccent),
+          ),
+        ),
+
+
+      ],
     );
   }
 }
