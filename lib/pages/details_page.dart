@@ -18,14 +18,17 @@ class DetailsPage extends StatelessWidget {
         ),
         elevation: 0.0,
         leading: IconButton(
-          onPressed:()=> Navigator.pop(context), 
-          icon: const Icon(Icons.arrow_back,color: Colors.black, size: 30.0,)
-          ),
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+              size: 30.0,
+            )),
       ),
       body: ListView(
         shrinkWrap: true,
-        children: [
-          const FavoriteItem(),
+        children: const [
+          FavoriteItem(),
         ],
       ),
     );
