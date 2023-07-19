@@ -74,7 +74,7 @@ class CustomDialog extends StatelessWidget {
 
           child: const Text('بازگشت به صفحه قبلی ',style: TextStyle(color :Colors.blueAccent,)),
           onPressed: () {
-            // Perform the desired action
+
             Navigator.of(context).pop(); // Close the dialog
           },
         ),
