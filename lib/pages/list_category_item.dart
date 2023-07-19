@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import '../widgets/custom_search_bar.dart';
 import '../widgets/favorite_item.dart';
 
-class DetailsPage extends StatelessWidget {
-  const DetailsPage({super.key});
+class ListCategoryItem extends StatelessWidget {
+  final String categoryNameCollection;
+  const ListCategoryItem({super.key, required this.categoryNameCollection});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class DetailsPage extends StatelessWidget {
       body: ListView(
         shrinkWrap: true,
         children: [
-          const FavoriteItem(),
+           FavoriteItem(categoryNameCollection: categoryNameCollection ),
         ],
       ),
     );

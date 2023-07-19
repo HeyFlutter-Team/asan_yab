@@ -1,11 +1,12 @@
 import 'dart:io';
 
+import 'package:asan_yab/pages/suggestion.dart';
 import 'package:flutter/material.dart';
 import 'package:upgrader/upgrader.dart';
 
 import '../utils/kcolors.dart';
 import 'about_us_page.dart';
-import 'favorite_page.dart';
+
 import 'home_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -18,7 +19,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int selectedIndex = 0;
 
-  final pages = const [HomePage(), AboutUsPage(), FavoritePage()];
+  final pages =  [const HomePage(), SuggestionPage(),const AboutUsPage() ];
   
 
   @override
@@ -40,13 +41,14 @@ class _MainPageState extends State<MainPage> {
             icon: Icon(Icons.home),
           ),
           BottomNavigationBarItem(
+            label: ' مکان جدید',
+            icon: Icon(Icons.favorite),
+          ),
+          BottomNavigationBarItem(
             label: 'در باره ما',
             icon: Icon(Icons.person),
           ),
-          BottomNavigationBarItem(
-            label: 'موارد دلخواه',
-            icon: Icon(Icons.favorite),
-          ),
+
         ],
       ),
       body: UpgradeAlert(
