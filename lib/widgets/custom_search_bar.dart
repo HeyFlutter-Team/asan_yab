@@ -8,7 +8,6 @@ class CustomSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
       onTap: () => Navigator.push(
@@ -27,13 +26,19 @@ class CustomSearchBar extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Icon(Icons.search, color:Colors.black),
+              child: Icon(Icons.search, color: Colors.black),
             ),
             Row(
-              children:[
-                Text('جستجوی در', style: TextStyle(color: Colors.black, fontSize:15.0)),
-                SizedBox(width: 5,),
-                Text('آسان یاب', style: TextStyle(color: Colors.red , fontSize: 18.0),),
+              children: [
+                Text('جستجوی در',
+                    style: TextStyle(color: Colors.black, fontSize: 15.0)),
+                SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  'آسان یاب',
+                  style: TextStyle(color: Colors.red, fontSize: 18.0),
+                ),
               ],
             ),
           ],
