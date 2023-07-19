@@ -1,7 +1,8 @@
+import 'package:asan_yab/constants/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../database/firebase_helper/category.dart';
-import '../model/category.dart';
+
 import '../utils/kcolors.dart';
 import 'list_category_item.dart';
 
@@ -64,7 +65,7 @@ class CategoryPage extends StatelessWidget {
                               builder: (context) => ListCategoryItem(categoryNameCollection: category[index].categoryName!,)),
                         ),
                     child: Container(
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12) , color: Color(int.parse((category[index].color!.replaceAll('#', '0xff')))).withOpacity(0.6),),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12) , color: tempName(tempColor: category[index].color!),),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

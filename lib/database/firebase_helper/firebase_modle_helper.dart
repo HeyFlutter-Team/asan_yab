@@ -17,8 +17,8 @@ final idTime = getId();
 }
 
 String getId(){
-  DateTime now = DateTime.now();
-  String timestamp = DateFormat('yyyyMMddHHmmss').format(now);
+  final DateTime now = DateTime.now();
+  final String timestamp = DateFormat('yyyyMMddHHmmss').format(now);
   return timestamp;
 }
 }
