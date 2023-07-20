@@ -92,13 +92,13 @@ class FavoriteItem extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () async {
-                                await FlutterPhoneDirectCaller.callNumber(places[index].phoneNumbers[0]);
+                                await FlutterPhoneDirectCaller.callNumber( places[index].adresses[0].phone);
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    places[index].phoneNumbers[0],
+                                    places[index].adresses[0].phone,
                                     style: TextStyle(
                                       color: kPrimaryColor,
                                       fontSize: 16.0,
