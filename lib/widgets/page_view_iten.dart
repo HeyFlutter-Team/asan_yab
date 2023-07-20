@@ -6,19 +6,30 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 class PageViewItem extends StatelessWidget {
   final int selectedIndex;
   final List<String?> gallery;
-  const PageViewItem({super.key, required this.gallery, required this.selectedIndex, });
+  const PageViewItem({
+    super.key,
+    required this.gallery,
+    required this.selectedIndex,
+  });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => showBottomSheet(
           context: context,
-          builder: (context) => ImageView(selectedIndex: selectedIndex,gallery: gallery,)),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(50),
-        child: Image.network(
-          gallery[selectedIndex]!,
-          fit: BoxFit.cover,
+          builder: (context) => ImageView(
+                selectedIndex: selectedIndex,
+                gallery: gallery,
+              )),
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(50),
+          child: Image.network(
+            gallery[selectedIndex]!,
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );
@@ -28,7 +39,8 @@ class PageViewItem extends StatelessWidget {
 class ImageView extends StatelessWidget {
   final int selectedIndex;
   final List<String?> gallery;
-  const ImageView({super.key, required this.selectedIndex, required this.gallery});
+  const ImageView(
+      {super.key, required this.selectedIndex, required this.gallery});
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +55,14 @@ class ImageView extends StatelessWidget {
           padEnds: false,
           controller: pageController,
           itemCount: gallery.length,
-          itemBuilder: (context, index) => Image.network(
-            gallery[index]!,
-            fit: BoxFit.fill,
-            width: size.width,
-            height: size.height,
+          itemBuilder: (context, index) => InteractiveViewer(
+            // constrained: false,
+            child: Image.network(
+              gallery[index]!,
+              fit: BoxFit.contain,
+              width: size.width,
+              height: size.height,
+            ),
           ),
         ),
         // const SizedBox(height: 12),
@@ -57,15 +72,13 @@ class ImageView extends StatelessWidget {
             controller: pageController,
             count: gallery.length,
             effect: const WormEffect(
-                dotHeight: 16,
-                dotWidth: 16,
+                dotHeight: 12,
+                dotWidth: 12,
                 type: WormType.thinUnderground,
-                activeDotColor: Colors.amber,
-                dotColor: Colors.cyanAccent),
+                activeDotColor: Colors.white,
+                dotColor: Colors.white30),
           ),
         ),
-
-
       ],
     );
   }

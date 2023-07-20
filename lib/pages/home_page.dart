@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../database/favorite_provider.dart';
 import '../utils/kcolors.dart';
 import '../widgets/new_places.dart';
 import '../widgets/categories.dart';
@@ -9,6 +11,8 @@ import 'category_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
+
+  @override
 
   @override
   Widget build(BuildContext context) {
