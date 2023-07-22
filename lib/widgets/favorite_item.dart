@@ -40,7 +40,7 @@ class FavoriteItem extends StatelessWidget {
                   child: Row(
                     children: [
                       InkWell(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -79,9 +79,7 @@ class FavoriteItem extends StatelessWidget {
                               overflow: TextOverflow.fade,
                               maxLines: 2,
                               style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 24.0
-                              ),
+                                  color: Colors.black, fontSize: 24.0),
                             ),
                             const SizedBox(height: 12.0),
                             ElevatedButton(
@@ -92,7 +90,8 @@ class FavoriteItem extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () async {
-                                await FlutterPhoneDirectCaller.callNumber( places[index].adresses[0].phone);
+                                await FlutterPhoneDirectCaller.callNumber(
+                                    places[index].adresses[0].phone);
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
