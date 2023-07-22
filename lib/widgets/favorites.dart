@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:provider/provider.dart';
@@ -20,8 +19,9 @@ class _FavoritesState extends State<Favorites> {
     // TODO: implement initState
 
     super.initState();
-    Provider.of<FavoriteProvider>(context,listen: false).fetchUser();
+    Provider.of<FavoriteProvider>(context, listen: false).fetchUser();
   }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -41,7 +41,8 @@ class _FavoritesState extends State<Favorites> {
             ),
             itemCount: value.dataList.length,
             itemBuilder: (context, index) {
-              final toggle = value.dataList[index]['toggle'] == 1 ? true : false;
+              final toggle =
+                  value.dataList[index]['toggle'] == 1 ? true : false;
               final items = favorites[index];
               final phoneNumber = convertDigitsToFarsi(items.phone);
               return Stack(
@@ -78,15 +79,15 @@ class _FavoritesState extends State<Favorites> {
                           ),
                           const SizedBox(height: 10.0),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal:12),
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
                             child: Column(
                               children: [
                                 Text(
                                   value.dataList[index]['name'],
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style:
-                                  const TextStyle(color: Colors.black, fontSize: 20.0),
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 20.0),
                                 ),
                                 OutlinedButton(
                                   onPressed: () async {
@@ -103,7 +104,8 @@ class _FavoritesState extends State<Favorites> {
                                           fontSize: 16.0,
                                         ),
                                       ),
-                                      const Icon(Icons.phone_android, color: Colors.teal),
+                                      const Icon(Icons.phone_android,
+                                          color: Colors.teal),
                                     ],
                                   ),
                                 ),
@@ -117,17 +119,25 @@ class _FavoritesState extends State<Favorites> {
                   Positioned(
                     left: 10.0,
                     top: 10.0,
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: toggle ? Icon(
-              Icons.favorite,
-              color: Colors.red,
-              size: 30.0,
-              ) :Icon(
-                        Icons.favorite_border,
-                        color: kPrimaryColor,
-                        size: 30.0,
-                      ),
+                    child: Consumer<FavoriteProvider>(
+                      builder: (context, value, child) {
+                        return IconButton(
+                          onPressed: () {
+                            value.delete(value.dataList[index]['id']);
+                          },
+                          icon: toggle
+                              ? Icon(
+                                  Icons.favorite,
+                                  color: Colors.red,
+                                  size: 30.0,
+                                )
+                              : Icon(
+                                  Icons.favorite_border,
+                                  color: kPrimaryColor,
+                                  size: 30.0,
+                                ),
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -136,7 +146,6 @@ class _FavoritesState extends State<Favorites> {
           ),
         );
       },
-
     );
   }
 }

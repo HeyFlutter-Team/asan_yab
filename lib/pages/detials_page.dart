@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:provider/provider.dart';
 
-import '../database/databasehelper.dart';
 import '../database/favorite_provider.dart';
 import '../database/firebase_helper/place.dart';
 
@@ -43,8 +42,6 @@ class _DetailsPageState extends State<DetailsPage> {
 
     debugPrint("Mahdi: check data: ${provider.dataList}");
 
-    // bool toggle2= provider.dataList.isEmpty || provider.dataList[]['toggle'] == 0  ? false : true;
-
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,17 +59,22 @@ class _DetailsPageState extends State<DetailsPage> {
                   icon: const Icon(Icons.arrow_back),
                   iconSize: 25,
                 ),
-                IconButton(
-                  onPressed: () {
-                    provider.toggleFavorite(true, widget.places);
+                Consumer<FavoriteProvider>(
+                  builder: (context, value, child) {
+                    return IconButton(
+                      onPressed: () {
+                        provider.toggleFavorite(
+                            widget.places.id, widget.places);
+                      },
+                      icon: value.isExist(widget.places.id)
+                          ? const Icon(
+                              Icons.favorite,
+                              color: Colors.red,
+                            )
+                          : const Icon(Icons.favorite_border),
+                      iconSize: 25,
+                    );
                   },
-                  icon: true
-                      ? const Icon(
-                          Icons.favorite,
-                          color: Colors.red,
-                        )
-                      : const Icon(Icons.favorite_border),
-                  iconSize: 25,
                 ),
               ],
             ),
