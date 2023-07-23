@@ -1,16 +1,15 @@
+import 'dart:typed_data';
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-
 import 'firebase_helper/place.dart';
-
-
 
 class DatabaseHelper {
   static Future<Database> _openDatabase() async {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, 'my-database.db');
-    return openDatabase(path, version: 8, onCreate: _createDatabase);
+    return openDatabase(path, version: 12, onCreate: _createDatabase);
   }
 
   static Future<void> _createDatabase(Database db, int version) async {
@@ -21,12 +20,14 @@ class DatabaseHelper {
     dec TEXT,
     phone TEXT,
     address TEXT,
-    image TEXT,
+    image JSON NOT NULL,
+    coverImage JSON NOT NULL,
     toggle INTEGER
     )''');
   }
 
-  static Future<int> insertUser(Place databaseModel,bool toggle) async {
+  static Future<int> insertUser(Place databaseModel, bool toggle, Int8List logo,
+      Int8List coverImage) async {
     final db = await _openDatabase();
     final data = {
       'id': databaseModel.id,
@@ -34,7 +35,8 @@ class DatabaseHelper {
       'dec': databaseModel.description,
       'phone': databaseModel.adresses[0].phone,
       'address': databaseModel.adresses[0].address,
-      'image': databaseModel.logo,
+      'image': logo,
+      'coverImage': coverImage,
       'toggle': toggle ? 1 : 0,
     };
     return await db.insert('users', data);

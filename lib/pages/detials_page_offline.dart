@@ -1,57 +1,19 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-
 import 'package:provider/provider.dart';
 
 import '../database/favorite_provider.dart';
-import '../database/firebase_helper/place.dart';
 
-import '../widgets/page_view_iten.dart';
-
-class DetailsPage extends StatefulWidget {
-  final Place places;
-
-  const DetailsPage({
-    super.key,
-    required this.places,
-  });
-
-  @override
-  State<DetailsPage> createState() => _DetailsPageState();
-}
-
-class _DetailsPageState extends State<DetailsPage> {
-  final _pageViewController = PageController(viewportFraction: 0.27);
-
-  Future<Int8List> downloadFile(String url) async {
-    final bytes = (await NetworkAssetBundle(Uri.parse(url)).load(url))
-        .buffer
-        .asInt8List();
-    return bytes;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _pageViewController.dispose();
-    super.dispose();
-  }
+class DetailPageOffline extends StatelessWidget {
+  final Map<String, dynamic> favItem;
+  const DetailPageOffline({super.key, required this.favItem});
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<FavoriteProvider>(context, listen: false);
-
     final size = MediaQuery.of(context).size;
-
-    debugPrint("Mahdi: coverImage: ${widget.places.coverImage}");
-
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,14 +34,10 @@ class _DetailsPageState extends State<DetailsPage> {
                 Consumer<FavoriteProvider>(
                   builder: (context, value, child) {
                     return IconButton(
-                      onPressed: () async {
-                        final logo = await downloadFile(widget.places.logo!);
-                        final coverImage =
-                            await downloadFile(widget.places.coverImage!);
-                        provider.toggleFavorite(
-                            widget.places.id, widget.places, logo, coverImage);
+                      onPressed: () {
+                        provider.delete(favItem['id']);
                       },
-                      icon: value.isExist(widget.places.id)
+                      icon: value.isExist(favItem['id'])
                           ? const Icon(
                               Icons.favorite,
                               color: Colors.red,
@@ -118,15 +76,15 @@ class _DetailsPageState extends State<DetailsPage> {
                           ],
                           image: DecorationImage(
                               fit: BoxFit.fitWidth,
-                              image:
-                                  NetworkImage('${widget.places.coverImage}')),
+                              image: MemoryImage(
+                                  Uint8List.fromList(favItem['coverImage']))),
                         ),
                       ),
                       const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: Text(
-                          '${widget.places.name}',
+                          favItem['name'],
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
@@ -136,7 +94,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       const SizedBox(height: 12),
                       CustomCard(
                         title: 'توضیحات',
-                        child: Text(widget.places.description!),
+                        child: Text(favItem['dec']),
                       ),
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 12),
@@ -147,39 +105,15 @@ class _DetailsPageState extends State<DetailsPage> {
                               color: Colors.black54,
                             ),
                             SizedBox(width: 8),
-                            Text(
-                              'گالری',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black54),
-                            ),
                             SizedBox(height: 12)
                           ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: size.height * 0.25,
-                        child: PageView.builder(
-                          controller: _pageViewController,
-                          itemCount: widget.places.gallery.length,
-                          padEnds: false,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 6, left: 2, right: 2, bottom: 18),
-                              child: PageViewItem(
-                                  selectedIndex: index,
-                                  gallery: widget.places.gallery),
-                            );
-                          },
                         ),
                       ),
                       CustomCard(
                         title: 'مشحصات',
                         child: ListView.builder(
                           padding: EdgeInsets.zero,
-                          itemCount: widget.places.adresses.length,
+                          itemCount: 1,
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
@@ -199,8 +133,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                           width: 3,
                                         ),
                                         Flexible(
-                                          child: Text(
-                                              '${widget.places.adresses[index].address} ',
+                                          child: Text('${favItem['address']} ',
                                               maxLines: 4,
                                               overflow: TextOverflow.fade,
                                               style: const TextStyle(
@@ -218,14 +151,13 @@ class _DetailsPageState extends State<DetailsPage> {
                                             horizontal: 8)),
                                     onPressed: () async {
                                       await FlutterPhoneDirectCaller.callNumber(
-                                        widget.places.adresses[index].phone,
+                                        favItem['phone'],
                                       );
                                     },
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        Text(
-                                            widget.places.adresses[index].phone,
+                                        Text(favItem['phone'],
                                             style: const TextStyle(
                                                 fontSize: 16,
                                                 color: Colors.black54)),
