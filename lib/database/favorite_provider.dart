@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 
 import 'databasehelper.dart';
@@ -7,12 +9,13 @@ class FavoriteProvider extends ChangeNotifier {
   List<Map<String, dynamic>> _dataList = [];
   List<Map<String, dynamic>> get dataList => _dataList;
 
-  Future<void> toggleFavorite(String data, Place places) async {
+  Future<void> toggleFavorite(
+      String data, Place places, Int8List logo, Int8List coverImage) async {
     final forToggle = isExist(data);
     if (forToggle) {
       delete(places.id);
     } else {
-      _saveData(places, !forToggle);
+      _saveData(places, !forToggle, logo, coverImage);
     }
     fetchUser();
     notifyListeners();
@@ -30,8 +33,10 @@ class FavoriteProvider extends ChangeNotifier {
     return false;
   }
 
-  void _saveData(Place databaseModel, bool toggle) async {
-    await DatabaseHelper.insertUser(databaseModel, toggle);
+  void _saveData(Place databaseModel, bool toggle, Int8List logo,
+      Int8List coverImage) async {
+    debugPrint("Mahdi: _saveData: $databaseModel");
+    await DatabaseHelper.insertUser(databaseModel, toggle, logo, coverImage);
   }
 
   void delete(String docId) async {

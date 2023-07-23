@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:asan_yab/pages/detials_page_offline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:provider/provider.dart';
@@ -48,71 +51,84 @@ class _FavoritesState extends State<Favorites> {
               return Stack(
                 children: [
                   Card(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.0),
-                        color: kPrimaryColor,
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            height: screenHeight * 0.15,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(12.0),
-                                topRight: Radius.circular(12.0),
-                              ),
-                              image: DecorationImage(
-                                image: AssetImage(''),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            child: Container(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailPageOffline(
+                                  favItem: value.dataList[index]),
+                            ));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12.0),
+                          color: kPrimaryColor,
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
+                              height: screenHeight * 0.15,
                               decoration: BoxDecoration(
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(12.0),
                                   topRight: Radius.circular(12.0),
                                 ),
-                                color: Colors.black.withOpacity(0.5),
+                                image: DecorationImage(
+                                  image: MemoryImage(Uint8List.fromList(
+                                      value.dataList[index]['image'])),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(12.0),
+                                    topRight: Radius.circular(12.0),
+                                  ),
+                                  color: Colors.black.withOpacity(0.5),
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 10.0),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: Column(
-                              children: [
-                                Text(
-                                  value.dataList[index]['name'],
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 20.0),
-                                ),
-                                OutlinedButton(
-                                  onPressed: () async {
-                                    await FlutterPhoneDirectCaller.callNumber(
-                                        value.dataList[index][phoneNumber]);
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        phoneNumber,
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16.0,
-                                        ),
-                                      ),
-                                      const Icon(Icons.phone_android,
-                                          color: Colors.teal),
-                                    ],
+                            const SizedBox(height: 10.0),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    value.dataList[index]['name'],
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        color: Colors.black, fontSize: 20.0),
                                   ),
-                                ),
-                              ],
+                                  OutlinedButton(
+                                    onPressed: () async {
+                                      await FlutterPhoneDirectCaller.callNumber(
+                                          value.dataList[index][phoneNumber]);
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          phoneNumber,
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16.0,
+                                          ),
+                                        ),
+                                        const Icon(Icons.phone_android,
+                                            color: Colors.teal),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -126,7 +142,7 @@ class _FavoritesState extends State<Favorites> {
                             value.delete(value.dataList[index]['id']);
                           },
                           icon: toggle
-                              ? Icon(
+                              ? const Icon(
                                   Icons.favorite,
                                   color: Colors.red,
                                   size: 30.0,
