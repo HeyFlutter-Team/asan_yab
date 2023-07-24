@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,116 +10,98 @@ class SearchPage extends StatefulWidget {
   @override
   State<SearchPage> createState() => _SearchPageState();
 }
-
 class _SearchPageState extends State<SearchPage> {
-  final searchController = TextEditingController();
-  final lazyLoadingController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    lazyLoadingController.addListener(_scrollListener);
-  }
-
-  void _scrollListener() {
-    if (lazyLoadingController.position.pixels ==
-        lazyLoadingController.position.maxScrollExtent) {
-      Provider.of<SearchProvider>(context, listen: false).fetchLazyLoading();
-    }
-  }
-
-  @override
-  void dispose() {
-    lazyLoadingController.removeListener(_scrollListener);
-    lazyLoadingController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final searchProvider = Provider.of<SearchProvider>(context);
+    final provider = Provider.of<SearchProvider>(context);
+     final searchResults = provider.searchResult;
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 1,
-        shadowColor: Colors.blue,
         backgroundColor: Theme.of(context).primaryColor,
-        title: TextField(
-          controller: searchController,
-          autofocus: true,
-          decoration: const InputDecoration(
-            border: InputBorder.none,
-            hintText: 'جستجو ',
+        appBar: AppBar(
+          elevation: 1,
+          shadowColor: Colors.blue,
+          backgroundColor: Theme.of(context).primaryColor,
+          title: TextFormField(
+              controller: provider.search,
+              autofocus: true,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: 'جستجو ',
+              ),
+              onChanged: (value) {
+                provider.setSearchQuery(value); 
+                provider.performSearch();          
+              }),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0),
+              child: provider.search.text.isNotEmpty
+                  ? IconButton(
+                      onPressed: () => provider.search.clear(),
+                      icon: const Icon(
+                        Icons.cancel,
+                        size: 28.0,
+                        color: Colors.black,
+                      ),
+                    )
+                  : null,
+            ),
+          ],
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+              size: 30.0,
+            ),
           ),
-          onChanged: (value) {
-            searchProvider.searchItems(value);
-          },
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0),
-            child: searchController.text.isNotEmpty
-                ? InkWell(
-                    onTap: () => searchController.clear(),
-                    child: const Icon(
-                      Icons.cancel,
-                      size: 28.0,
-                      color: Colors.black,
+        body: Consumer<SearchProvider>(
+          builder: (context, value, child){
+            if (searchResults.isEmpty) {
+              return Center(
+                child: Image.asset('assets/noInfo.jpg'),
+              );
+            } else {
+              return Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                        itemBuilder: (context, index) {
+                          final items = searchResults[index];
+                          return ListTile(
+                            onTap: () {
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => DetailsPage(
+                              //       places: searchResults[index],
+                              //     ),
+                              //   ),
+                              // );
+                            },
+                            title: Text(
+                              items.name!,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                            leading: CircleAvatar(
+                              radius: 50,
+                              backgroundImage: NetworkImage(items.logo!),
+                            ),
+                          );
+                        },
+                          itemCount:searchResults.length,)
                     ),
-                  )
-                : null,
-          ),
-        ],
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-            size: 30.0,
-          ),
-        ),
-      ),
-      body: Consumer<SearchProvider>(
-        builder: (context, value, child) {
-          if (searchProvider.lazyLoading.isEmpty) {
-            return Center(
-              child: Image.asset('assets/noInfo.jpg'),
-            );
-          } else {
-            return Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    controller: lazyLoadingController,
-                    itemCount: searchProvider.lazyLoading.length,
-                    itemBuilder: (context, index) {
-                      final items = searchProvider.lazyLoading[index];
-                      return ListTile(
-                        onTap: () {},
-                        title: Text(
-                          items.name,
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 20.0),
-                        ),
-                        subtitle: Text(
-                          items.phone,
-                          style: const TextStyle(
-                              color: Colors.grey, fontSize: 15.0),
-                        ),
-                      );
-                    },
-                  ),
+                  ],
                 ),
-                if (searchProvider.isloading)
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 20.0),
-                    child: CircularProgressIndicator(color: Colors.teal),
-                  )
-              ],
-            );
-          }
-        },
-      ),
-    );
+              );
+            }
+          },
+        ));
   }
 }

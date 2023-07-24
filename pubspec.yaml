@@ -7,7 +7,10 @@ environment:
 
 dependencies:
   carousel_slider: ^4.2.1
+  cloud_firestore: ^4.8.3
   cupertino_icons: ^1.0.2
+  firebase_core: ^2.15.0
+  firebase_crashlytics: ^3.3.4
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -16,9 +19,11 @@ dependencies:
   google_fonts: ^5.1.0
   intl: any
   provider: ^6.0.5
+  smooth_page_indicator: ^1.1.0
+  sqflite: ^2.2.8+4
   upgrader: ^7.1.0
-
-
+  cached_network_image: ^3.2.3
+  connectivity_plus: ^4.0.1
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
