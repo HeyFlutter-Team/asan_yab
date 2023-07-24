@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/restaurant_models.dart';
+
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class PageViewItem extends StatelessWidget {
