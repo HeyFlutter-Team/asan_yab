@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
-
 import '../widgets/custom_search_bar.dart';
 import '../widgets/favorite_item.dart';
 
-class ListCategoryItem extends StatelessWidget {
+class ListCategoryItem extends StatefulWidget {
   final String categoryNameCollection;
-  const ListCategoryItem({super.key, required this.categoryNameCollection});
+  final String catId;
+  const ListCategoryItem(
+      {super.key, required this.categoryNameCollection, required this.catId});
 
+  @override
+  State<ListCategoryItem> createState() => _ListCategoryItemState();
+}
+
+class _ListCategoryItemState extends State<ListCategoryItem> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -19,14 +25,19 @@ class ListCategoryItem extends StatelessWidget {
         ),
         elevation: 0.0,
         leading: IconButton(
-          onPressed:()=> Navigator.pop(context), 
-          icon: const Icon(Icons.arrow_back,color: Colors.black, size: 30.0,)
-          ),
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+              size: 30.0,
+            )),
       ),
       body: ListView(
-        shrinkWrap: true,
         children: [
-           FavoriteItem(categoryNameCollection: categoryNameCollection ),
+          FavoriteItem(
+            categoryNameCollection: widget.categoryNameCollection,
+            id:widget.catId ,
+          ),
         ],
       ),
     );

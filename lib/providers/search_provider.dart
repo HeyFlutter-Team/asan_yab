@@ -1,147 +1,36 @@
-// ignore_for_file: unused_field, prefer_final_fields
-
+import 'package:asan_yab/database/firebase_helper/place.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../model/favorite.dart';
+class SearchProvider with ChangeNotifier {
+  final database = FirebaseFirestore.instance;
 
-class SearchProvider with ChangeNotifier{
-  // all about the lazy Loading 
+  final search = TextEditingController();
+  final firebaseDatabase = FirebaseFirestore.instance;
+  String _searchQuery = '';
+  List<Place> _searchResult = [];
+  String get searchQuery => _searchQuery;
+  List<Place> get searchResult => _searchResult;
 
-  List<Favorite> _loading =[
-    Favorite(
-      image:"",
-      name:"Sharif",
-      phone:"0789097550",
-      id:1
-      ),
-      Favorite(
-      image:"",
-      name:"Ali",
-      phone:"078909734",
-      id:2
-      ),
-      Favorite(
-      image:"",
-      name:"Aziz",
-      phone:"0790236824",
-      id:3
-      ),
-      Favorite(
-      image:"",
-      name:"Karem",
-      phone:"0798458798",
-      id:4
-      ),
-       Favorite(
-      image:"",
-      name:"Karem",
-      phone:"0798458798",
-      id:4
-      ),
-       Favorite(
-      image:"",
-      name:"Karem",
-      phone:"0798458798",
-      id:4
-      ),
-       Favorite(
-      image:"",
-      name:"Karem",
-      phone:"0798458798",
-      id:4
-      ),
-       Favorite(
-      image:"",
-      name:"Karem",
-      phone:"0798458798",
-      id:4
-      ),
-       Favorite(
-      image:"",
-      name:"Karem",
-      phone:"0798458798",
-      id:4
-      ),
-       Favorite(
-      image:"",
-      name:"Karem",
-      phone:"0798458798",
-      id:4
-      ),
-    
-
-  ];
-  List<Favorite> _searchResult =[];
-  List<Favorite> get lazyLoading=>_searchResult; 
-  bool _isLoading = false;
-  int _pageNumber =0;
-  bool get isloading => _isLoading;
-  Future<void> fetchLazyLoading() async {
-    _isLoading = true;
-    notifyListeners();
-    await Future.delayed(const Duration(seconds:2));
-    _loading.addAll([
-      Favorite(
-        image: '',
-        name: 'John Doe',
-        phone: '+123456789',
-        id: 5,
-      ),
-      Favorite(
-        image: '',
-        name: 'Jane Smith',
-        phone: '+987654321',
-        id: 6,
-      ),
-      Favorite(
-        image: '',
-        name: 'Bob Johnson',
-        phone: '+555555555',
-        id: 7,
-      ),
-      Favorite(
-        image: '',
-        name: 'Jane  Johnson',
-        phone: '+555555555',
-        id: 8,
-      ),
-      Favorite(
-        image: '',
-        name: 'Bob Johnson',
-        phone: '+555555555',
-        id: 9,
-      ),
-      Favorite(
-        image: '',
-        name: 'Smith Johnson',
-        phone: '+555555555',
-        id: 10,
-      ),
-      Favorite(
-        image: '',
-        name: 'Smith Johnson',
-        phone: '+555555555',
-        id: 11,
-      ),
-      Favorite(
-        image: '',
-        name: 'Bob Johnson',
-        phone: '+555555555',
-        id: 12,
-      ),
-
-    ]);
-    _pageNumber++;
-    _isLoading = false;
+  void setSearchQuery(String query) {
+    _searchQuery = query;
     notifyListeners();
   }
 
-   void searchItems(String query) {
-   _searchResult = _loading
-        .where((item) =>
-            item.name.toLowerCase().contains(query.toLowerCase()))
-        .toList();
-        notifyListeners();    
+  Future<void> performSearch() async {
+    final snapShot = await database
+        .collection('Places')
+        .where('name', isEqualTo: _searchQuery)
+        .get();
+    _searchResult =
+        snapShot.docs.map((doc) => Place.fromJson(doc.data())).toList();
+    notifyListeners();
   }
 
+  @override
+  void dispose() {
+    search.clear();
+    super.dispose();
+    notifyListeners();
+  }
 }

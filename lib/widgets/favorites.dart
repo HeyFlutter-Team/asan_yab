@@ -1,9 +1,10 @@
+// ignore_for_file: prefer_const_constructors, unused_local_variable
 
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import '../constants/kcolors.dart';
 import '../model/favorite.dart';
 import '../utils/convert_digits_to_farsi.dart';
-import '../utils/kcolors.dart';
 
 class Favorites extends StatelessWidget {
   const Favorites({super.key});
