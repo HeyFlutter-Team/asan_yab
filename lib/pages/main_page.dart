@@ -1,10 +1,9 @@
-// ignore_for_file: unused_import, prefer_const_constructors, unused_local_variable, no_leading_underscores_for_local_identifiers, prefer_const_literals_to_create_immutables
-
-import 'package:easy_finder/pages/favorite_page.dart';
-import 'package:easy_finder/pages/home_page.dart';
-import 'package:easy_finder/pages/about_us_page.dart';
+import 'dart:io';
+import '../pages/suggestion.dart';
 import 'package:flutter/material.dart';
-
+import 'package:upgrader/upgrader.dart';
+import 'about_us_page.dart';
+import 'home_page.dart';
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
 
@@ -15,37 +14,46 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int selectedIndex = 0;
 
-  final pages = const [HomePage(), AboutUsPage(), FavoritePage()];
+  final pages = [const HomePage(), const SuggestionPage(), const AboutUsPage()];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: BottomNavigationBar(
-        selectedFontSize: 20.0,
-        unselectedFontSize: 16.0,
-        currentIndex: selectedIndex,
-        fixedColor: Colors.white,
-        type: BottomNavigationBarType.fixed,
-        onTap: (index) => setState(() => selectedIndex = index),
-        backgroundColor: Colors.teal,
-        items: [
-          BottomNavigationBarItem(
-            label: 'خانه',
-            icon: Icon(Icons.home),
-          ),
-          BottomNavigationBarItem(
-            label: 'در باره ما',
-            icon: Icon(Icons.person),
-          ),
-          BottomNavigationBarItem(
-            label: 'موارد دلخواه',
-            icon: Icon(Icons.favorite),
-          ),
-        ],
+          selectedFontSize: 20.0,
+          unselectedFontSize: 16.0,
+          currentIndex: selectedIndex,
+          selectedItemColor: Colors.red,
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) => setState(() => selectedIndex = index),
+          backgroundColor: Colors.white,
+          items: const [
+            BottomNavigationBarItem(
+              label: 'خانه',
+              icon: Icon(Icons.home),
+            ),
+            BottomNavigationBarItem(
+              label: ' مکان جدید',
+              icon: Icon(Icons.place),
+            ),
+            BottomNavigationBarItem(
+              label: 'در باره ما',
+              icon: Icon(Icons.person),
+            ),
+          ],
+        ),
+      body: UpgradeAlert(
+        upgrader: Upgrader(
+          shouldPopScope: () => true,
+          canDismissDialog: false,
+          durationUntilAlertAgain: const Duration(days: 1),
+          dialogStyle: Platform.isIOS
+              ? UpgradeDialogStyle.cupertino
+              : UpgradeDialogStyle.material,
+        ),
+        child: pages[selectedIndex],
       ),
-      body: pages[selectedIndex],
     );
   }
 }

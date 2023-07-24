@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, camel_case_types, non_constant_identifier_names
-
 import 'package:flutter/material.dart';
 
 class TextSearchBar extends StatelessWidget {
@@ -13,20 +11,20 @@ class TextSearchBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: TextField(
         autofocus: true,
-        style: TextStyle(fontSize: 15.0),
+        style: const TextStyle(fontSize: 15.0),
         decoration: InputDecoration(
           filled: true,
           border: InputBorder.none,
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12.0),
-            borderSide: BorderSide(color: Colors.white),
+            borderSide: const BorderSide(color: Colors.white),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12.0),
-            borderSide: BorderSide(color: Colors.white),
+            borderSide: const BorderSide(color: Colors.white),
           ),
           hintText: 'جستجو ',
-          prefixIcon: Icon(Icons.search),
+          prefixIcon: const Icon(Icons.search),
         ),
       ),
     );
