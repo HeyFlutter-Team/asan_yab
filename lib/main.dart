@@ -1,19 +1,27 @@
+import 'dart:ui';
+import 'package:asan_yab/providers/categories_provider.dart';
+import 'package:asan_yab/providers/places_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import '../pages/main_page.dart';
-
 import '../providers/search_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
 import 'package:provider/provider.dart';
-void main() {
+import 'firebase_options.dart';
+import 'providers/lazy_loading_provider.dart';
+Future<void> main()async{
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
-
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
   runApp(const MyApp());
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
@@ -23,6 +31,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => SearchProvider()),
+        ChangeNotifierProvider(create: (context) => LazyLoadingProvider()),
+        ChangeNotifierProvider(create: (context) => CategoriesProvider()),
+        ChangeNotifierProvider(create: (context)=> PlaceProvider())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -35,6 +46,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           fontFamily: 'Shabnam',
           primaryColor: Colors.white,
+          scaffoldBackgroundColor: Colors.white,
         ),
         home: const MainPage(),
       ),

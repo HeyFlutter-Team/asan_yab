@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import '../model/favorite.dart';
 import '../utils/convert_digits_to_farsi.dart';
-import '../utils/kcolors.dart';
+import '../constants/kcolors.dart';
 
 class Favorites extends StatelessWidget {
   const Favorites({super.key});
@@ -22,7 +22,7 @@ class Favorites extends StatelessWidget {
           crossAxisSpacing: 12.0,
           mainAxisExtent: 230.0,
         ),
-        itemCount: favorites.length,
+        itemCount: 0,
         itemBuilder: (context, index) {
           final items = favorites[index];
           final phoneNumber = convertDigitsToFarsi(items.phone);
@@ -37,7 +37,7 @@ class Favorites extends StatelessWidget {
                   child: Column(
                     children: [
                       Container(
-                        height: screenHeight * 0.16,
+                        height: screenHeight * 0.15,
                         decoration: BoxDecoration(
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(12.0),

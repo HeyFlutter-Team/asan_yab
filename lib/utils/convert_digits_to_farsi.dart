@@ -1,7 +1,5 @@
+
 // this method is use to convert the farsi number to english number
-
-
-
 String convertDigitsToFarsi(String input) {
   const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
   const farsi = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];

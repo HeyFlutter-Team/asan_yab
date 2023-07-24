@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../pages/search_bar_page.dart';
-import '../utils/kcolors.dart';
+import '../constants/kcolors.dart';
 
 class CustomSearchBar extends StatelessWidget {
   const CustomSearchBar({super.key});
@@ -16,7 +16,7 @@ class CustomSearchBar extends StatelessWidget {
       ),
       child: Container(
         padding: const EdgeInsets.all(12.0),
-        height: screenHeight * 0.06,
+        height: 46,
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
