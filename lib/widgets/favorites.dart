@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import '../constants/kcolors.dart';
 import '../model/favorite.dart';
 import '../utils/convert_digits_to_farsi.dart';
 
@@ -15,14 +16,14 @@ class Favorites extends StatelessWidget {
       padding: const EdgeInsets.all(12.0),
       child: GridView.builder(
         shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           mainAxisSpacing: 12.0,
           crossAxisSpacing: 12.0,
           mainAxisExtent: 230.0,
         ),
-        itemCount: favorites.length,
+        itemCount: 0,
         itemBuilder: (context, index) {
           final items = favorites[index];
           final phoneNumber = convertDigitsToFarsi(items.phone);
@@ -32,14 +33,14 @@ class Favorites extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12.0),
-                    color: Colors.white,
+                    color: kPrimaryColor,
                   ),
                   child: Column(
                     children: [
                       Container(
-                        height: screenHeight * 0.16,
+                        height: screenHeight * 0.15,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
+                          borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(12.0),
                             topRight: Radius.circular(12.0),
                           ),
@@ -50,7 +51,7 @@ class Favorites extends StatelessWidget {
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
+                            borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(12.0),
                               topRight: Radius.circular(12.0),
                             ),
@@ -58,28 +59,37 @@ class Favorites extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10.0),
-                      Text(
-                        items.name,
-                        style: TextStyle(color: Colors.black, fontSize: 16.0),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          await FlutterPhoneDirectCaller.callNumber(
-                            items.phone,
-                          );
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                      const SizedBox(height: 10.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal:12),
+                        child: Column(
                           children: [
                             Text(
-                              phoneNumber,
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 16.0,
+                              items.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style:
+                                  const TextStyle(color: Colors.black, fontSize: 20.0),
+                            ),
+                            OutlinedButton(
+                              onPressed: () async {
+                                await FlutterPhoneDirectCaller.callNumber(
+                                    items.phone);
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    phoneNumber,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                  const Icon(Icons.phone_android, color: Colors.teal),
+                                ],
                               ),
                             ),
-                            Icon(Icons.call, color: Colors.green),
                           ],
                         ),
                       ),
@@ -94,7 +104,7 @@ class Favorites extends StatelessWidget {
                   onPressed: () {},
                   icon: Icon(
                     Icons.favorite_border,
-                    color: Colors.white,
+                    color: kPrimaryColor,
                     size: 30.0,
                   ),
                 ),

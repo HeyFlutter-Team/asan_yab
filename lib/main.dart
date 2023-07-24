@@ -1,32 +1,55 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, unused_import, depend_on_referenced_packages, prefer_const_constructors, deprecated_member_use
-import 'package:easy_finder/pages/main_page.dart';
+import 'dart:ui';
+import 'package:asan_yab/providers/categories_provider.dart';
+import 'package:asan_yab/providers/places_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import '../pages/main_page.dart';
+import '../providers/search_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:intl/intl.dart';
-
-void main() => runApp(const MyApp());
-
+import 'package:provider/provider.dart';
+import 'firebase_options.dart';
+import 'providers/lazy_loading_provider.dart';
+Future<void> main()async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+  runApp(const MyApp());
+}
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    final customTextStyle = TextStyle(fontFamily: 'Persion');
-
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarColor: Colors.white));
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => SearchProvider()),
+        ChangeNotifierProvider(create: (context) => LazyLoadingProvider()),
+        ChangeNotifierProvider(create: (context) => CategoriesProvider()),
+        ChangeNotifierProvider(create: (context)=> PlaceProvider())
       ],
-      supportedLocales: [const Locale('fa')],
-      theme: ThemeData(
-        colorSchemeSeed: Colors.white,
-        useMaterial3: true,
-        textTheme: TextTheme(bodyMedium: customTextStyle),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [Locale('fa')],
+        theme: ThemeData(
+          fontFamily: 'Shabnam',
+          primaryColor: Colors.white,
+          scaffoldBackgroundColor: Colors.white,
+        ),
+        home: const MainPage(),
       ),
-      home: const MainPage(),
     );
   }
 }
