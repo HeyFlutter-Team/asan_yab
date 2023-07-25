@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:sqflite/sqflite.dart';
@@ -26,15 +27,22 @@ class DatabaseHelper {
     )''');
   }
 
-  static Future<int> insertUser(Place databaseModel, bool toggle, Int8List logo,
+  static Future<int> insertUser(
+      Place databaseModel,
+      List<String> addressDataList,
+      List<String> phoneDataList,
+      bool toggle,
+      Int8List logo,
       Int8List coverImage) async {
+    String dataAddress = jsonEncode(addressDataList);
+    String dataPhone = jsonEncode(phoneDataList);
     final db = await _openDatabase();
     final data = {
       'id': databaseModel.id,
       'name': databaseModel.name,
       'dec': databaseModel.description,
-      'phone': databaseModel.adresses[0].phone,
-      'address': databaseModel.adresses[0].address,
+      'phone': dataPhone,
+      'address': dataAddress,
       'image': logo,
       'coverImage': coverImage,
       'toggle': toggle ? 1 : 0,

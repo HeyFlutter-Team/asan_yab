@@ -7,10 +7,14 @@ class Place {
   final String? name;
   final String? description;
   final List<Address> adresses;
-  final List<String?> gallery;
+  final List<String> gallery;
+  final String? category;
+  final String categoryId;
   final Timestamp createdAt;
 
   Place({
+    required this.categoryId,
+    required this.category,
     required this.adresses,
     required this.id,
     required this.logo,
@@ -23,16 +27,17 @@ class Place {
 
   factory Place.fromJson(Map<String, dynamic> json) {
     return Place(
-      createdAt: json['createdAt'],
-      adresses: List<Address>.from(
-          json['addresses'].map((address) => Address.fromJson(address))),
-      id: json['id'],
-      logo: json['logo'],
-      coverImage: json['coverImage'],
-      name: json['name'],
-      description: json['description'],
-      gallery: List<String>.from(json['gallery']),
-    );
+        createdAt: json['createdAt'],
+        adresses: List<Address>.from(
+            json['addresses'].map((address) => Address.fromJson(address))),
+        id: json['id'],
+        logo: json['logo'],
+        coverImage: json['coverImage'],
+        name: json['name'],
+        description: json['description'],
+        gallery: List<String>.from(json['gallery']),
+        category: json['category'],
+        categoryId: json['categoryId']);
   }
 
   Map<String, dynamic> toJson() {
@@ -45,6 +50,8 @@ class Place {
       'name': name,
       'description': description,
       'gallery': gallery,
+      'category': category,
+      'categoryId': categoryId
     };
   }
 }

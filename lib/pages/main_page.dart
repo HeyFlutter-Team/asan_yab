@@ -1,14 +1,9 @@
 import 'dart:io';
-
-import 'package:asan_yab/pages/suggestion.dart';
+import '../pages/suggestion.dart';
 import 'package:flutter/material.dart';
 import 'package:upgrader/upgrader.dart';
-
-import '../utils/kcolors.dart';
 import 'about_us_page.dart';
-
 import 'home_page.dart';
-
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
 
@@ -19,46 +14,46 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int selectedIndex = 0;
 
-  final pages =  [const HomePage(), SuggestionPage(),const AboutUsPage() ];
-  
+  final pages = [const HomePage(), const SuggestionPage(), const AboutUsPage()];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
-      backgroundColor: kPrimaryColor,
+      backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: BottomNavigationBar(
-        selectedFontSize: 20.0,
-        unselectedFontSize: 16.0,
-        currentIndex: selectedIndex,
-        fixedColor: kPrimaryColor,
-        type: BottomNavigationBarType.fixed,
-        onTap: (index) => setState(() => selectedIndex = index),
-        backgroundColor: Colors.teal,
-        items: const [
-          BottomNavigationBarItem(
-            label: 'خانه',
-            icon: Icon(Icons.home),
-          ),
-          BottomNavigationBarItem(
-            label: ' مکان جدید',
-            icon: Icon(Icons.favorite),
-          ),
-          BottomNavigationBarItem(
-            label: 'در باره ما',
-            icon: Icon(Icons.person),
-          ),
-
-        ],
-      ),
+          selectedFontSize: 20.0,
+          unselectedFontSize: 16.0,
+          currentIndex: selectedIndex,
+          selectedItemColor: Colors.red,
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) => setState(() => selectedIndex = index),
+          backgroundColor: Colors.white,
+          items: const [
+            BottomNavigationBarItem(
+              label: 'خانه',
+              icon: Icon(Icons.home),
+            ),
+            BottomNavigationBarItem(
+              label: ' مکان جدید',
+              icon: Icon(Icons.place),
+            ),
+            BottomNavigationBarItem(
+              label: 'در باره ما',
+              icon: Icon(Icons.person),
+            ),
+          ],
+        ),
       body: UpgradeAlert(
         upgrader: Upgrader(
-          shouldPopScope:()=> true,
+          shouldPopScope: () => true,
           canDismissDialog: false,
-          durationUntilAlertAgain: const Duration(days:1),
-           dialogStyle:Platform.isIOS ? UpgradeDialogStyle.cupertino : UpgradeDialogStyle.material,
+          durationUntilAlertAgain: const Duration(days: 1),
+          dialogStyle: Platform.isIOS
+              ? UpgradeDialogStyle.cupertino
+              : UpgradeDialogStyle.material,
         ),
-        child: pages[selectedIndex],),
+        child: pages[selectedIndex],
+      ),
     );
   }
 }

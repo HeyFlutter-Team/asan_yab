@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -12,6 +13,9 @@ class DetailPageOffline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> phoneData = List<String>.from(jsonDecode(favItem['phone']));
+    List<String> addressData =
+        List<String>.from(jsonDecode(favItem['address']));
     final provider = Provider.of<FavoriteProvider>(context, listen: false);
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -36,6 +40,7 @@ class DetailPageOffline extends StatelessWidget {
                     return IconButton(
                       onPressed: () {
                         provider.delete(favItem['id']);
+                        Navigator.pop(context);
                       },
                       icon: value.isExist(favItem['id'])
                           ? const Icon(
@@ -113,7 +118,7 @@ class DetailPageOffline extends StatelessWidget {
                         title: 'مشحصات',
                         child: ListView.builder(
                           padding: EdgeInsets.zero,
-                          itemCount: 1,
+                          itemCount: phoneData.length,
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
@@ -133,7 +138,7 @@ class DetailPageOffline extends StatelessWidget {
                                           width: 3,
                                         ),
                                         Flexible(
-                                          child: Text('${favItem['address']} ',
+                                          child: Text(addressData[index],
                                               maxLines: 4,
                                               overflow: TextOverflow.fade,
                                               style: const TextStyle(
@@ -151,13 +156,13 @@ class DetailPageOffline extends StatelessWidget {
                                             horizontal: 8)),
                                     onPressed: () async {
                                       await FlutterPhoneDirectCaller.callNumber(
-                                        favItem['phone'],
+                                        phoneData[index],
                                       );
                                     },
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        Text(favItem['phone'],
+                                        Text(phoneData[index],
                                             style: const TextStyle(
                                                 fontSize: 16,
                                                 color: Colors.black54)),
