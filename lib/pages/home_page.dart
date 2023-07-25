@@ -16,14 +16,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   void initState() {
     super.initState();
-   startStremaing();
+    startStremaing();
   }
-
-
 
   late ConnectivityResult connectivityResult;
   late StreamSubscription subscription;
@@ -39,33 +36,31 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
-  void showDialogBox(){
+  void showDialogBox() {
     showDialog(
-    barrierDismissible: false,
-    context:context,
-    builder:(context)=> AlertDialog(
-   
-    elevation: 10,
-    icon:const  Icon(Icons.wifi_off),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadiusDirectional.circular(20)
-    ),
-      title: const Text('!انترنیت وجود ندارد'),
-      content: const Text('لطفآ به انترنیت وصل شوید؟'),
-      actions: [
-        OutlinedButton(
-          onPressed:(){
-            Navigator.pop(context);
-            checkInternet();
-          },
-          child:const Text('دوباره سعی کن '),
-          )
-      ],
-    )
-    );
+        barrierDismissible: false,
+        context: context,
+        builder: (context) => AlertDialog(
+              elevation: 10,
+              icon: const Icon(Icons.wifi_off),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadiusDirectional.circular(20)),
+              title: const Text('!انترنیت وجود ندارد'),
+              content: const Text('لطفآ به انترنیت وصل شوید؟'),
+              actions: [
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    checkInternet();
+                  },
+                  child: const Text('دوباره سعی کن '),
+                )
+              ],
+            ));
   }
-  void startStremaing(){
-    subscription = Connectivity().onConnectivityChanged.listen((event) { 
+
+  void startStremaing() {
+    subscription = Connectivity().onConnectivityChanged.listen((event) {
       checkInternet();
     });
   }
