@@ -1,13 +1,13 @@
 import 'dart:typed_data';
 
-import 'package:asan_yab/pages/detials_page_offline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:provider/provider.dart';
+import '../constants/kcolors.dart';
 import '../database/favorite_provider.dart';
 import '../model/favorite.dart';
+import '../pages/detials_page_offline.dart';
 import '../utils/convert_digits_to_farsi.dart';
-import '../utils/kcolors.dart';
 
 class Favorites extends StatefulWidget {
   const Favorites({super.key});

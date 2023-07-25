@@ -1,22 +1,74 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../database/favorite_provider.dart';
-import '../utils/kcolors.dart';
+import '../constants/kcolors.dart';
 import '../widgets/new_places.dart';
 import '../widgets/categories.dart';
 import '../widgets/favorites.dart';
-
+import 'package:connectivity_plus/connectivity_plus.dart';
 import '../widgets/custom_search_bar.dart';
 import 'category_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    startStremaing();
+  }
+
+  late ConnectivityResult connectivityResult;
+  late StreamSubscription subscription;
+  var isConnective = false;
+  void checkInternet() async {
+    connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult != ConnectivityResult.none) {
+      isConnective = true;
+    } else {
+      isConnective = false;
+      showDialogBox();
+    }
+    setState(() {});
+  }
+
+  void showDialogBox() {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) => AlertDialog(
+              elevation: 10,
+              icon: const Icon(Icons.wifi_off),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadiusDirectional.circular(20)),
+              title: const Text('!انترنیت وجود ندارد'),
+              content: const Text('لطفآ به انترنیت وصل شوید؟'),
+              actions: [
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    checkInternet();
+                  },
+                  child: const Text('دوباره سعی کن '),
+                )
+              ],
+            ));
+  }
+
+  void startStremaing() {
+    subscription = Connectivity().onConnectivityChanged.listen((event) {
+      checkInternet();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         backgroundColor: kPrimaryColor,
         elevation: 0.0,
