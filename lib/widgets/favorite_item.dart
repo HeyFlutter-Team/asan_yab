@@ -28,7 +28,7 @@ class _FavoriteItemState extends State<FavoriteItem> {
     final lazyLoading = Provider.of<LazyLoadingProvider>(context);
     return FutureBuilder<List<Place>>(
       future: lazyLoading.fetchDataFromFirebase(widget.id),
-      builder: (context, snapshot){
+      builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.connectionState == ConnectionState.waiting) {
@@ -94,7 +94,7 @@ class _FavoriteItemState extends State<FavoriteItem> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                           items.name!,
+                            items.name!,
                             overflow: TextOverflow.fade,
                             maxLines: 1,
                             style: const TextStyle(
@@ -103,8 +103,7 @@ class _FavoriteItemState extends State<FavoriteItem> {
                           const SizedBox(height: 12.0),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Colors.black.withOpacity(0.3),
+                              backgroundColor: Colors.black.withOpacity(0.3),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
@@ -141,7 +140,7 @@ class _FavoriteItemState extends State<FavoriteItem> {
             },
           );
         }
-        return const SizedBox(height:0);
+        return const SizedBox(height: 0);
       },
     );
   }
