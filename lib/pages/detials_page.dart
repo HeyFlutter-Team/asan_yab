@@ -25,7 +25,8 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   final _pageViewController = PageController(viewportFraction: 0.27);
-
+  late Int8List logo;
+  late Int8List coverImage;
   Future<Int8List> downloadFile(String url) async {
     final bytes = (await NetworkAssetBundle(Uri.parse(url)).load(url))
         .buffer
@@ -33,9 +34,15 @@ class _DetailsPageState extends State<DetailsPage> {
     return bytes;
   }
 
+  Future<void> getImage() async {
+    logo = await downloadFile(widget.places.logo!);
+    coverImage = await downloadFile(widget.places.coverImage!);
+  }
+
   @override
   void initState() {
     super.initState();
+    getImage();
   }
 
   @override
@@ -73,9 +80,6 @@ class _DetailsPageState extends State<DetailsPage> {
                   builder: (context, value, child) {
                     return IconButton(
                       onPressed: () async {
-                        final logo = await downloadFile(widget.places.logo!);
-                        final coverImage =
-                            await downloadFile(widget.places.coverImage!);
                         provider.toggleFavorite(
                             widget.places.id, widget.places, logo, coverImage);
                       },

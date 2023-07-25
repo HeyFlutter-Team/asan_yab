@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 import '../database/firebase_helper/place.dart';
-import '../model/favorite.dart';
+
 import '../pages/detials_page.dart';
-import '../utils/convert_digits_to_farsi.dart';
+
 import '../utils/kcolors.dart';
 
 class FavoriteItem extends StatelessWidget {
