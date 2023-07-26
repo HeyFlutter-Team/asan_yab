@@ -58,15 +58,18 @@ class CategoryPage extends StatelessWidget {
                     itemCount: category.length,
                     itemBuilder: (context, index) {
                       return GestureDetector(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
                               builder: (context) => ListCategoryItem(
-                                    categoryNameCollection:
-                                        category[index].categoryName,
-                                    catId: category[index].id,
-                                  )),
-                        ),
+                                categoryNameCollection:
+                                    category[index].categoryName,
+                                catId: category[index].id,
+                              ),
+                            ),
+                          );
+                        },
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
@@ -97,7 +100,7 @@ class CategoryPage extends StatelessWidget {
               ],
             );
           } else {
-            return const SizedBox(height:0);
+            return const SizedBox(height: 0);
           }
         },
       ),
