@@ -95,11 +95,13 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(color: kSecodaryColor, fontSize: 20.0),
                 ),
                 IconButton(
-                  onPressed: () => Navigator.push(
+                  onPressed: () {
+                    Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const CategoryPage()),
-                  ),
+                  );
+                  } ,
                   icon: Icon(
                     Icons.arrow_circle_left_outlined,
                     size: 32.0,

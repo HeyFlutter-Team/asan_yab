@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -44,8 +43,10 @@ class Categories extends StatelessWidget {
                                 categoryNameCollection:
                                     category[index].categoryName,
                                 catId: category[index].id,
+                                
                               ),
                             ));
+                            debugPrint('CHeck:${category[index].id}');
                       },
                       child: Container(
                         height: screenHeight * 0.2,

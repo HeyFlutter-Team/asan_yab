@@ -15,6 +15,7 @@ class LazyLoadingProvider with ChangeNotifier {
     return Place.fromJson(doc.data());
   }).toList();
    }catch(e){
+    
     debugPrint(e.toString());
    return [];
    }

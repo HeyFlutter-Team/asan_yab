@@ -5,8 +5,10 @@ import '../widgets/favorite_item.dart';
 class ListCategoryItem extends StatefulWidget {
   final String categoryNameCollection;
   final String catId;
+  
+
   const ListCategoryItem(
-      {super.key, required this.categoryNameCollection, required this.catId});
+      {super.key, required this.categoryNameCollection, required this.catId,});
 
   @override
   State<ListCategoryItem> createState() => _ListCategoryItemState();
@@ -32,13 +34,9 @@ class _ListCategoryItemState extends State<ListCategoryItem> {
               size: 30.0,
             )),
       ),
-      body: ListView(
-        children: [
-          FavoriteItem(
-            categoryNameCollection: widget.categoryNameCollection,
-            id:widget.catId ,
-          ),
-        ],
+      body: FavoriteItem(
+        categoryNameCollection: widget.categoryNameCollection,
+        id:widget.catId ,
       ),
     );
   }
