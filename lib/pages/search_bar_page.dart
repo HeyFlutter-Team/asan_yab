@@ -58,56 +58,53 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
       body: Consumer<SearchProvider>(
-        builder: (context, value, child){
-          if(searchResults.isEmpty){
+        builder: (context, value, child) {
+          if (searchResults.isEmpty) {
             return Center(
               child: Image.asset('assets/noInfo.jpg'),
             );
-          }else{
+          } else {
             return Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      final items = searchResults[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: ListTile(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailsPage(
-                                  places: searchResults[index],
+              padding: const EdgeInsets.only(top: 16),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        final items = searchResults[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: ListTile(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      DetailsPage(id: searchResults[index].id),
                                 ),
+                              );
+                            },
+                            title: Text(
+                              items.name!,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 20.0,
                               ),
-                            );
-                          },
-                          title: Text(
-                            items.name!,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 20.0,
+                            ),
+                            leading: CircleAvatar(
+                              radius: 50,
+                              backgroundImage: NetworkImage(items.logo!),
                             ),
                           ),
-                          leading: CircleAvatar(
-                            radius: 50,
-                            backgroundImage: NetworkImage(items.logo!),
-                          ),
-                        ),
-                      );
-                    },
-                    itemCount: searchResults.length,
+                        );
+                      },
+                      itemCount: searchResults.length,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          );
-
+                ],
+              ),
+            );
           }
-          
         },
       ),
     );

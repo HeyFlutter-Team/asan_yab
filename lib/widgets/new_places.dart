@@ -1,5 +1,4 @@
-
-
+// ignore_for_file: unused_import, prefer_const_constructors
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +31,8 @@ class _NewPlacesState extends State<NewPlaces> {
           } else if (snapshot.hasData) {
             List<Place> place = snapshot.data ?? [];
             return place.isEmpty
-                ?const  Padding(
-                    padding:  EdgeInsets.only(top: 30),
+                ? const Padding(
+                    padding: EdgeInsets.only(top: 30),
                     child: Center(
                       child: CircularProgressIndicator(),
                     ),
@@ -41,13 +40,14 @@ class _NewPlacesState extends State<NewPlaces> {
                 : Stack(
                     children: [
                       CarouselSlider.builder(
-                        itemCount:4,
+                        itemCount: 4,
                         itemBuilder: (context, index, realIndex) {
                           final phoneNumberItems =
-                              place[index].adresses[0].phone ?? 'no Phone Number';
+                              place[index].adresses[0].phone ??
+                                  'no Phone Number';
                           final items = place[index];
                           final phoneNumber =
-                             convertDigitsToFarsi(phoneNumberItems);
+                              convertDigitsToFarsi(phoneNumberItems);
                           return GestureDetector(
                             child: Container(
                               margin: const EdgeInsets.all(12.0),
@@ -88,13 +88,14 @@ class _NewPlacesState extends State<NewPlaces> {
                                           ),
                                         ),
                                         onPressed: () async {
-                                          await FlutterPhoneDirectCaller.callNumber(phoneNumber);
+                                          await FlutterPhoneDirectCaller
+                                              .callNumber(phoneNumber);
                                         },
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                           Text(
+                                            Text(
                                               phoneNumber,
                                               style: TextStyle(
                                                 color: kPrimaryColor,

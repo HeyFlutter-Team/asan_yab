@@ -27,7 +27,8 @@ class _CategoryItemState extends State<CategoryItem> {
     Future.delayed(
       Duration.zero,
       () {
-        final provider = Provider.of<CategoriesItemsProvider>(context, listen: false);
+        final provider =
+            Provider.of<CategoriesItemsProvider>(context, listen: false);
         provider.getInitPlaces(widget.id);
       },
     );
@@ -38,10 +39,12 @@ class _CategoryItemState extends State<CategoryItem> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.width;
 
-    return Consumer<CategoriesItemsProvider>(builder: (context, placeProvider, __) {
-
-      if(placeProvider.isLoading) {
-        return const Center(child: CircularProgressIndicator(),);
+    return Consumer<CategoriesItemsProvider>(
+        builder: (context, placeProvider, __) {
+      if (placeProvider.isLoading) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
       }
       final places = placeProvider.places;
 
@@ -59,9 +62,16 @@ class _CategoryItemState extends State<CategoryItem> {
               !placeProvider.isLoading) {
             return Column(
               children: [
-                itemPlace(context, places, index, screenHeight, screenWidth,
-                    items, phoneNumber,),
-                const SizedBox( child: CircularProgressIndicator())
+                itemPlace(
+                  context,
+                  places,
+                  index,
+                  screenHeight,
+                  screenWidth,
+                  items,
+                  phoneNumber,
+                ),
+                const SizedBox(child: CircularProgressIndicator())
               ],
             );
           }
@@ -71,6 +81,7 @@ class _CategoryItemState extends State<CategoryItem> {
       );
     });
   }
+
   Padding itemPlace(
       BuildContext context,
       List<Place> places,
@@ -88,9 +99,7 @@ class _CategoryItemState extends State<CategoryItem> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => DetailsPage(
-                    places: places[index],
-                  ),
+                  builder: (context) => DetailsPage(id: places[index].id),
                 ),
               );
             },
