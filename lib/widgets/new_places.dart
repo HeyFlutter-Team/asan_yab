@@ -24,7 +24,7 @@ class _NewPlacesState extends State<NewPlaces> {
     final carouselController = CarouselController();
     final screenHeight = MediaQuery.of(context).size.height;
     return FutureBuilder(
-        future:Provider.of<PlaceProvider>(context).getPlaces(),
+        future: Provider.of<PlaceProvider>(context).getPlaces(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
@@ -45,7 +45,7 @@ class _NewPlacesState extends State<NewPlaces> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
                           image: DecorationImage(
-                            image: NetworkImage(items.coverImage!),
+                            image: NetworkImage(items.coverImage),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -55,7 +55,8 @@ class _NewPlacesState extends State<NewPlaces> {
                             color: Colors.black.withOpacity(0.3),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 60, right: 10, left:150),
+                            padding: const EdgeInsets.only(
+                                top: 60, right: 10, left: 150),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

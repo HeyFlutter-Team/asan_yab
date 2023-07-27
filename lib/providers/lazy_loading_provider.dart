@@ -8,15 +8,30 @@ import '../database/firebase_helper/place.dart';
 
 class LazyLoadingProvider with ChangeNotifier {
   final database = FirebaseFirestore.instance;
-  Future<List<Place>> fetchDataFromFirebase(String id)async{
-   try{
-  final querySnapshot = await database.collection('Places').where('categoryId',isEqualTo:id).get();
-  return querySnapshot.docs.map((doc){
-    return Place.fromJson(doc.data());
-  }).toList();
-   }catch(e){
-    debugPrint(e.toString());
-   return [];
-   }
+
+  Future<List<Place>> fetchDataFromFirebase(String id) async {
+    try {
+      final querySnapshot = await database
+          .collection('Places')
+          .where('categoryId', isEqualTo: id)
+          .get();
+      return querySnapshot.docs.map((doc) {
+        return Place.fromJson(doc.data());
+      }).toList();
+    } catch (e) {
+      debugPrint(e.toString());
+      return [];
+    }
+  }
+
+  Future<Place?> fetchSinglePlace(String id) async {
+    try {
+      final querySnapshot = await database.collection('Places').doc(id).get();
+      final place = Place.fromJson(querySnapshot.data()!);
+      return place;
+    } catch (e) {
+      debugPrint(e.toString());
+      return null;
+    }
   }
 }

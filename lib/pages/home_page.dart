@@ -38,7 +38,6 @@ class _HomePageState extends State<HomePage> {
 
   void showDialogBox() {
     showDialog(
-        barrierDismissible: false,
         context: context,
         builder: (context) => AlertDialog(
               elevation: 10,
@@ -113,7 +112,7 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(color: kSecodaryColor, fontSize: 20.0),
             ),
           ),
-          const Favorites(),
+          Favorites(isConnected: isConnective),
         ],
       ),
     );
