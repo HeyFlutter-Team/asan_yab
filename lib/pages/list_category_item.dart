@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_search_bar.dart';
-import '../widgets/favorite_item.dart';
+import '../widgets/category_item.dart';
 
 class ListCategoryItem extends StatefulWidget {
-  final String categoryNameCollection;
+ 
   final String catId;
   
 
   const ListCategoryItem(
-      {super.key, required this.categoryNameCollection, required this.catId,});
+      {super.key,  required this.catId,});
 
   @override
   State<ListCategoryItem> createState() => _ListCategoryItemState();
@@ -34,10 +34,7 @@ class _ListCategoryItemState extends State<ListCategoryItem> {
               size: 30.0,
             )),
       ),
-      body: FavoriteItem(
-        categoryNameCollection: widget.categoryNameCollection,
-        id:widget.catId ,
-      ),
+      body: CategoryItem(id: widget.catId),
     );
   }
 }

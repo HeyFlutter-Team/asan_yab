@@ -59,15 +59,18 @@ class CategoryPage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
+                          debugPrint('the id is : ${category[index].id}');
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => ListCategoryItem(
-                                categoryNameCollection:
-                                    category[index].categoryName,
+                             
                                 catId: category[index].id,
+                                
                               ),
+                              
                             ),
+                            
                           );
                         },
                         child: Container(

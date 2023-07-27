@@ -152,7 +152,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             ),
                             TextSpan(
                               text:
-                                  '\n ${widget.places.adresses[0].phone[0]}',
+                                  '\n ${widget.places.adresses[0].phone![0]}',
                               style: TextStyle(
                                 color: Colors.blueGrey.withOpacity(0.7),
                               ),

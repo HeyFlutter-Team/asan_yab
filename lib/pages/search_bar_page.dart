@@ -58,8 +58,13 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
       body: Consumer<SearchProvider>(
-        builder: (context, value, child) {
-          return Padding(
+        builder: (context, value, child){
+          if(searchResults.isEmpty){
+            return Center(
+              child: Image.asset('assets/noInfo.jpg'),
+            );
+          }else{
+            return Padding(
             padding: const EdgeInsets.only(top: 16),
             child: Column(
               children: [
@@ -100,6 +105,9 @@ class _SearchPageState extends State<SearchPage> {
               ],
             ),
           );
+
+          }
+          
         },
       ),
     );

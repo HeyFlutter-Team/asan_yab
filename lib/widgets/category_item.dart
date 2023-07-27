@@ -1,5 +1,4 @@
-import 'package:asan_yab/providers/places_provider.dart';
-
+import 'package:asan_yab/providers/categories_items_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:provider/provider.dart';
@@ -9,29 +8,26 @@ import '../pages/detials_page.dart';
 import '../utils/convert_digits_to_farsi.dart';
 import '.IncrementallyLoadingListView.dart';
 
-class FavoriteItem extends StatefulWidget {
-  final String categoryNameCollection;
+class CategoryItem extends StatefulWidget {
   final String id;
-
-  const FavoriteItem({
+  const CategoryItem({
     Key? key,
-    required this.categoryNameCollection,
     required this.id,
   }) : super(key: key);
 
   @override
-  State<FavoriteItem> createState() => _FavoriteItemState();
+  State<CategoryItem> createState() => _CategoryItemState();
 }
 
-class _FavoriteItemState extends State<FavoriteItem> {
+class _CategoryItemState extends State<CategoryItem> {
   @override
   void initState() {
     super.initState();
-
+    debugPrint('Ramin123: ${widget.id}');
     Future.delayed(
       Duration.zero,
       () {
-        final provider = Provider.of<PlaceProvider>(context, listen: false);
+        final provider = Provider.of<CategoriesItemsProvider>(context, listen: false);
         provider.getInitPlaces(widget.id);
       },
     );
@@ -42,7 +38,7 @@ class _FavoriteItemState extends State<FavoriteItem> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.width;
 
-    return Consumer<PlaceProvider>(builder: (context, placeProvider, __) {
+    return Consumer<CategoriesItemsProvider>(builder: (context, placeProvider, __) {
 
       if(placeProvider.isLoading) {
         return const Center(child: CircularProgressIndicator(),);
@@ -55,7 +51,7 @@ class _FavoriteItemState extends State<FavoriteItem> {
         itemCount: () => places.length,
         loadMore: () async => await placeProvider.getPlaces(widget.id),
         itemBuilder: (context, index) {
-          final phone = '098987879';
+          final phone = places[index].adresses[0].phone ?? 'No phone Number';
           final phoneNumber = convertDigitsToFarsi(phone);
           final items = places[index];
           if (index == places.length - 1 &&
@@ -64,7 +60,7 @@ class _FavoriteItemState extends State<FavoriteItem> {
             return Column(
               children: [
                 itemPlace(context, places, index, screenHeight, screenWidth,
-                    items, phoneNumber),
+                    items, phoneNumber,),
                 const SizedBox( child: CircularProgressIndicator())
               ],
             );
@@ -127,7 +123,7 @@ class _FavoriteItemState extends State<FavoriteItem> {
                   items.name!,
                   overflow: TextOverflow.fade,
                   maxLines: 1,
-                  style: const TextStyle(color: Colors.black, fontSize: 20.0),
+                  style: const TextStyle(color: Colors.black, fontSize: 16.0),
                 ),
                 const SizedBox(height: 12.0),
                 ElevatedButton(

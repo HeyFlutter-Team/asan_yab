@@ -18,10 +18,10 @@ class Categories extends StatelessWidget {
             .getCategories(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
+            return const Center(child: CircularProgressIndicator(),);
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text('Loading...');
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasData) {
             List<Category> category = snapshot.data ?? [];
@@ -36,17 +36,14 @@ class Categories extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
                       onTap: () {
+                        debugPrint('Ramin: ${category[index].id}');
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => ListCategoryItem(
-                                categoryNameCollection:
-                                    category[index].categoryName,
                                 catId: category[index].id,
-                                
                               ),
                             ));
-                            debugPrint('CHeck:${category[index].id}');
                       },
                       child: Container(
                         height: screenHeight * 0.2,
