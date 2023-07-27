@@ -1,26 +1,72 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 
-class FavoriteProvider extends ChangeNotifier {
-  List<String> _dataList = [];
-  List<String> get dataList => _dataList;
+import 'databasehelper.dart';
+import 'firebase_helper/place.dart';
 
-  Future<void> toggleFavorite(String data) async {
-    final isExist = _dataList.contains(data);
-    if (isExist) {
-      _dataList.remove(data);
+class FavoriteProvider extends ChangeNotifier {
+  List<Map<String, dynamic>> _dataList = [];
+  List<Map<String, dynamic>> get dataList => _dataList;
+  List<String> _phoneData = [];
+  List<String> get phoneData => _phoneData;
+  List<String> _addressData = [];
+  List<String> get addressData => _addressData;
+
+  Future<void> toggleFavorite(
+      String data,
+      Place places,
+      List<String> addressDataList,
+      List<String> phoneDataList,
+      Int8List logo,
+      Int8List coverImage) async {
+    final forToggle = isExist(data);
+    if (forToggle) {
+      delete(places.id);
     } else {
-      _dataList.add(data);
+      _saveData(
+          places, addressDataList, phoneDataList, !forToggle, logo, coverImage);
     }
+    fetchUser();
     notifyListeners();
   }
 
   bool isExist(String data) {
-    final isExist = _dataList.contains(data);
-    return isExist;
+    for (Map<String, dynamic> i in _dataList) {
+      bool toggle = i.values.contains(data);
+      if (toggle) {
+        return toggle;
+      }
+      notifyListeners();
+    }
+
+    return false;
   }
 
-  void clearFavorite() {
-    _dataList = [];
+  void _saveData(
+      Place databaseModel,
+      List<String> addressDataList,
+      List<String> phoneDataList,
+      bool toggle,
+      Int8List logo,
+      Int8List coverImage) async {
+    debugPrint("Mahdi: _saveData: $databaseModel");
+    await DatabaseHelper.insertUser(databaseModel, addressDataList,
+        phoneDataList, toggle, logo, coverImage);
+  }
+
+  void delete(String docId) async {
+    await DatabaseHelper.deleteData(docId);
+    List<Map<String, dynamic>> updatedData = await DatabaseHelper.getData();
+
+    _dataList = updatedData;
+
+    notifyListeners();
+  }
+
+  void fetchUser() async {
+    List<Map<String, dynamic>> userList = await DatabaseHelper.getData();
+    _dataList = userList;
     notifyListeners();
   }
 }

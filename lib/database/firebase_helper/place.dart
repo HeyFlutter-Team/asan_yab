@@ -61,7 +61,7 @@ class Address {
   final String address;
   final String lat;
   final String lang;
-  final String? phone;
+  final String phone;
 
   Address({
     required this.branch,
