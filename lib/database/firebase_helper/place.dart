@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Place {
   final String id;
   final String? logo;
-  final String? coverImage;
+  final String coverImage;
   final String? name;
   final String? description;
   final List<Address> adresses;
