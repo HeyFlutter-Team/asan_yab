@@ -20,17 +20,12 @@ class SearchProvider with ChangeNotifier {
   Future<void> performSearch() async {
     final snapShot = await database
         .collection('Places')
-        .where('name', isEqualTo: _searchQuery)
+        .where('name', isGreaterThanOrEqualTo: _searchQuery)
         .get();
     _searchResult =
         snapShot.docs.map((doc) => Place.fromJson(doc.data())).toList();
     notifyListeners();
   }
 
-  @override
-  void dispose() {
-    search.clear();
-    super.dispose();
-    notifyListeners();
-  }
+  
 }

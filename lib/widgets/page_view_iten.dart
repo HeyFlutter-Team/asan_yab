@@ -56,6 +56,7 @@ class ImageView extends StatelessWidget {
           itemCount: gallery.length,
           itemBuilder: (context, index) => InteractiveViewer(
             panEnabled: true,
+
             scaleEnabled: true,
             // constrained: false,
             child: Image.network(

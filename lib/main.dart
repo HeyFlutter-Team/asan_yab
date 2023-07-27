@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:asan_yab/providers/categories_items_provider.dart';
 import 'package:asan_yab/providers/categories_provider.dart';
 import 'package:asan_yab/providers/places_provider.dart';
 
@@ -41,8 +42,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => SearchProvider()),
         ChangeNotifierProvider(create: (context) => LazyLoadingProvider()),
-        ChangeNotifierProvider(create: (context) => CategoriesProvider()),
         ChangeNotifierProvider(create: (context) => PlaceProvider()),
+        ChangeNotifierProvider(create: (context) => CategoriesProvider()),
+        ChangeNotifierProvider(create: (context) => CategoriesItemsProvider()),
         ChangeNotifierProvider(create: (context) => FavoriteProvider()),
       ],
       child: MaterialApp(
