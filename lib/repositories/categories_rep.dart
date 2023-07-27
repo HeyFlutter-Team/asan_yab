@@ -9,14 +9,10 @@ class CategoriesRepository {
   Future<List<Category>> fetchCategories() async {
     try {
       final data = await firebase.collection(_path).get();
-
-      debugPrint('Mahdi: fetchCategories: ${data.docs}');
-
-      final categories = data.docs
-                    .map((doc) => Category.fromJson(doc.data()))
-                    .toList();
-return categories;
-    }catch (e){
+      final categories =
+          data.docs.map((doc) => Category.fromJson(doc.data())).toList();
+      return categories;
+    } catch (e) {
       debugPrint('FetchCategories: Error: $e');
       return [];
     }
