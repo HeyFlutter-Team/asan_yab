@@ -1,5 +1,6 @@
 import 'package:asan_yab/database/firebase_helper/place.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 class PlacesRepository {
   final firebase = FirebaseFirestore.instance;
@@ -7,12 +8,12 @@ class PlacesRepository {
 
   Future<List<Place>> fetchPlaces() async {
     try {
-      final data = await firebase.collection(_path).orderBy('createdAt', descending: true).get();
-      final categories = data.docs
-                    .map((doc) => Place.fromJson(doc.data()))
-                    .toList();
-return categories;
-    }catch (e){
+      final data = await firebase.collection(_path).orderBy('createdAt',descending: true).get();
+      final places =
+          data.docs.map((doc) => Place.fromJson(doc.data())).toList();
+      return places;
+    } catch (e) {
+      debugPrint('FetchCategories: Error: $e');
       return [];
     }
   }

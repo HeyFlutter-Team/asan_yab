@@ -28,6 +28,8 @@ dependencies:
   upgrader: ^7.1.0
   cached_network_image: ^3.2.3
   connectivity_plus: ^4.0.1
+  awesome_snackbar_content: ^0.1.3
+  flutterflow_paginate_firestore: ^1.0.3+1
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:

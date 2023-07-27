@@ -13,9 +13,10 @@ class CategoriesProvider with ChangeNotifier {
   }
   Future<List<Category>> getCategories () async {
     final newCategories = await categoriesRepository.fetchCategories();
-
     _categories = newCategories;
     notifyListeners();
     return _categories;
+    
   }
+ 
 }
