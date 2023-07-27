@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class PageViewItem extends StatelessWidget {
@@ -56,6 +55,8 @@ class ImageView extends StatelessWidget {
           controller: pageController,
           itemCount: gallery.length,
           itemBuilder: (context, index) => InteractiveViewer(
+            panEnabled: true,
+            scaleEnabled: true,
             // constrained: false,
             child: Image.network(
               gallery[index]!,

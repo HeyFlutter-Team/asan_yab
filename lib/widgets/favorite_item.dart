@@ -50,7 +50,7 @@ class _FavoriteItemState extends State<FavoriteItem> {
             itemCount: data.length,
             itemBuilder: (context, index) {
               final phone = data[index].adresses[0].phone;
-              final phoneNumber = convertDigitsToFarsi(phone);
+              final phoneNumber = convertDigitsToFarsi(phone!);
               final items = data[index];
               return Padding(
                 padding: const EdgeInsets.symmetric(
@@ -63,7 +63,7 @@ class _FavoriteItemState extends State<FavoriteItem> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => DetailsPage(
-                              places: data[index],
+                              id: data[index].id,
                             ),
                           ),
                         );
