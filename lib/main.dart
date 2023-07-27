@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:asan_yab/providers/categories_items_provider.dart';
 import 'package:asan_yab/providers/categories_provider.dart';
 import 'package:asan_yab/providers/places_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,7 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import 'providers/lazy_loading_provider.dart';
+
 Future<void> main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -31,9 +32,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => SearchProvider()),
-        ChangeNotifierProvider(create: (context) => LazyLoadingProvider()),
-        ChangeNotifierProvider(create: (context) => CategoriesProvider()),
-        ChangeNotifierProvider(create: (context)=> PlaceProvider())
+        ChangeNotifierProvider(create: (context) => PlaceProvider()),
+        ChangeNotifierProvider(create: (context)=> CategoriesProvider()),
+        ChangeNotifierProvider(create:(context) => CategoriesItemsProvider(),)
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

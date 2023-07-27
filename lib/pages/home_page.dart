@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import '../constants/kcolors.dart';
 import '../widgets/new_places.dart';
 import '../widgets/categories.dart';
 import '../widgets/favorites.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import '../widgets/custom_search_bar.dart';
 import 'category_page.dart';
 
@@ -16,14 +17,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
+  
   @override
   void initState() {
     super.initState();
-   startStremaing();
+    startStremaing();
   }
-
-
 
   late ConnectivityResult connectivityResult;
   late StreamSubscription subscription;
@@ -34,38 +33,31 @@ class _HomePageState extends State<HomePage> {
       isConnective = true;
     } else {
       isConnective = false;
-      showDialogBox();
+      showsSnackBar();
     }
     setState(() {});
   }
 
-  void showDialogBox(){
-    showDialog(
-    barrierDismissible: false,
-    context:context,
-    builder:(context)=> AlertDialog(
-   
-    elevation: 10,
-    icon:const  Icon(Icons.wifi_off),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadiusDirectional.circular(20)
-    ),
-      title: const Text('!انترنیت وجود ندارد'),
-      content: const Text('لطفآ به انترنیت وصل شوید؟'),
-      actions: [
-        OutlinedButton(
-          onPressed:(){
-            Navigator.pop(context);
-            checkInternet();
-          },
-          child:const Text('دوباره سعی کن '),
-          )
-      ],
-    )
+  void showsSnackBar() {
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'انترنیت وصل نیت!',
+        message:
+            'لطفا انترنیت را وصل کنید!',
+        contentType: ContentType.failure,
+      ),
     );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
   }
-  void startStremaing(){
-    subscription = Connectivity().onConnectivityChanged.listen((event) { 
+
+  void startStremaing() {
+    subscription = Connectivity().onConnectivityChanged.listen((event) {
       checkInternet();
     });
   }
@@ -84,7 +76,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           const SizedBox(height: 16.0),
           const NewPlaces(),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.only(left: 16.0, right: 16.0),
             child: Row(
@@ -97,11 +89,11 @@ class _HomePageState extends State<HomePage> {
                 IconButton(
                   onPressed: () {
                     Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CategoryPage()),
-                  );
-                  } ,
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CategoryPage()),
+                    );
+                  },
                   icon: Icon(
                     Icons.arrow_circle_left_outlined,
                     size: 32.0,
@@ -111,7 +103,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          const SizedBox(height: 16.0),
+          const SizedBox(height: 8.0),
           const Categories(),
           Padding(
             padding: const EdgeInsets.only(right: 16.0, top: 12.0),
