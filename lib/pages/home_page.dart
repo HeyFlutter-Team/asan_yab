@@ -17,11 +17,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
+
   @override
   void initState() {
     super.initState();
-    startStremaing();
+   startStremaing();
   }
 
   late ConnectivityResult connectivityResult;
@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           const SizedBox(height: 16.0),
           const NewPlaces(),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.only(left: 16.0, right: 16.0),
             child: Row(
@@ -87,13 +87,11 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(color: kSecodaryColor, fontSize: 20.0),
                 ),
                 IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CategoryPage()),
-                    );
-                  },
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CategoryPage()),
+                  ),
                   icon: Icon(
                     Icons.arrow_circle_left_outlined,
                     size: 32.0,
@@ -103,7 +101,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          const SizedBox(height: 8.0),
+          const SizedBox(height: 16.0),
           const Categories(),
           Padding(
             padding: const EdgeInsets.only(right: 16.0, top: 12.0),
