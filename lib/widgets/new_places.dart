@@ -52,7 +52,7 @@ class _NewPlacesState extends State<NewPlaces> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        DetailsPage(places: place[index]),
+                                        DetailsPage(id: place[index].id),
                                   ));
                             },
                             child: Container(

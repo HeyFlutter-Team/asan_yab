@@ -8,10 +8,6 @@ import 'firebase_helper/place.dart';
 class FavoriteProvider extends ChangeNotifier {
   List<Map<String, dynamic>> _dataList = [];
   List<Map<String, dynamic>> get dataList => _dataList;
-  List<String> _phoneData = [];
-  List<String> get phoneData => _phoneData;
-  List<String> _addressData = [];
-  List<String> get addressData => _addressData;
 
   Future<void> toggleFavorite(
       String data,

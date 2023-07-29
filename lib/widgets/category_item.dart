@@ -97,9 +97,7 @@ class _CategoryItemState extends State<CategoryItem> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => DetailsPage(
-                    places: places[index],
-                  ),
+                  builder: (context) => DetailsPage(id: places[index].id),
                 ),
               );
             },
