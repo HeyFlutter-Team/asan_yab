@@ -1,10 +1,12 @@
-import 'package:asan_yab/providers/categories_items_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:provider/provider.dart';
 import '../constants/kcolors.dart';
 import '../database/firebase_helper/place.dart';
 import '../pages/detials_page.dart';
+import '../providers/categories_items_provider.dart';
 import '../utils/convert_digits_to_farsi.dart';
 import '.IncrementallyLoadingListView.dart';
 
@@ -20,57 +22,64 @@ class CategoryItem extends StatefulWidget {
 }
 
 class _CategoryItemState extends State<CategoryItem> {
+  bool _isLoading = true;
   @override
   void initState() {
     super.initState();
-    debugPrint('Ramin123: ${widget.id}');
-    Future.delayed(
-      Duration.zero,
-      () {
-        final provider = Provider.of<CategoriesItemsProvider>(context, listen: false);
-        provider.getInitPlaces(widget.id);
-      },
-    );
+    Future.delayed(Duration.zero, () async {
+      await Provider.of<CategoriesItemsProvider>(context, listen: false)
+          .getInitPlaces(widget.id);
+      setState(() {
+        _isLoading = false;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.width;
-
-    return Consumer<CategoriesItemsProvider>(builder: (context, placeProvider, __) {
-
-      if(placeProvider.isLoading) {
-        return const Center(child: CircularProgressIndicator(),);
-      }
+    return Consumer<CategoriesItemsProvider>(
+        builder: (context, placeProvider, __) {
       final places = placeProvider.places;
-
-      return IncrementallyLoadingListView(
-        shrinkWrap: true,
-        hasMore: () => placeProvider.hasMore,
-        itemCount: () => places.length,
-        loadMore: () async => await placeProvider.getPlaces(widget.id),
-        itemBuilder: (context, index) {
-          final phone = places[index].adresses[0].phone ?? 'No phone Number';
-          final phoneNumber = convertDigitsToFarsi(phone);
-          final items = places[index];
-          if (index == places.length - 1 &&
-              placeProvider.hasMore &&
-              !placeProvider.isLoading) {
-            return Column(
-              children: [
-                itemPlace(context, places, index, screenHeight, screenWidth,
-                    items, phoneNumber,),
-                const SizedBox( child: CircularProgressIndicator())
-              ],
+      return _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(color: Colors.blue),
+            )
+          : IncrementallyLoadingListView(
+              shrinkWrap: true,
+              hasMore: () => placeProvider.hasMore,
+              itemCount: () => places.length,
+              loadMore: () async => await placeProvider.getPlaces(widget.id),
+              itemBuilder: (context, index) {
+                final phone = places[index].adresses[0].phone;
+                final phoneNumber = convertDigitsToFarsi(phone);
+                final items = places[index];
+                if (index == places.length - 1 &&
+                    placeProvider.hasMore &&
+                    !placeProvider.isLoading) {
+                  return Column(
+                    children: [
+                      itemPlace(
+                        context,
+                        places,
+                        index,
+                        screenHeight,
+                        screenWidth,
+                        items,
+                        phoneNumber,
+                      ),
+                      const SizedBox(child: CircularProgressIndicator())
+                    ],
+                  );
+                }
+                return itemPlace(context, places, index, screenHeight,
+                    screenWidth, items, phoneNumber);
+              },
             );
-          }
-          return itemPlace(context, places, index, screenHeight, screenWidth,
-              items, phoneNumber);
-        },
-      );
     });
   }
+
   Padding itemPlace(
       BuildContext context,
       List<Place> places,
@@ -101,7 +110,7 @@ class _CategoryItemState extends State<CategoryItem> {
                 borderRadius: BorderRadius.circular(12.0),
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: NetworkImage('${items.logo}'),
+                  image: CachedNetworkImageProvider('${items.logo}'),
                 ),
               ),
               child: Container(
@@ -137,14 +146,11 @@ class _CategoryItemState extends State<CategoryItem> {
                     await FlutterPhoneDirectCaller.callNumber(phoneNumber);
                   },
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
                         phoneNumber,
-                        style: TextStyle(
-                          color: kPrimaryColor,
-                          fontSize: 20.0,
-                        ),
+                        style: TextStyle(color: kPrimaryColor, fontSize: 20.0),
                       ),
                       const SizedBox(width: 12),
                       const Icon(
