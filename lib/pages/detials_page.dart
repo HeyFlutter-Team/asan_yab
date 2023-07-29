@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:asan_yab/providers/lazy_loading_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
@@ -10,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../database/favorite_provider.dart';
 // import '../database/firebase_helper/place.dart';
 
+import '../providers/places_provider.dart';
 import '../widgets/page_view_iten.dart';
 import 'detials_page_offline.dart';
 
@@ -79,7 +79,7 @@ class _DetailsPageState extends State<DetailsPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: FutureBuilder(
-          future: Provider.of<LazyLoadingProvider>(context, listen: false)
+          future: Provider.of<PlaceProvider>(context, listen: false)
               .fetchSinglePlace(widget.id),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
