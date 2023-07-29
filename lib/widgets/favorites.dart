@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -6,7 +7,6 @@ import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:provider/provider.dart';
 import '../constants/kcolors.dart';
 import '../database/favorite_provider.dart';
-import '../model/favorite.dart';
 import '../pages/detials_page.dart';
 import '../pages/detials_page_offline.dart';
 import '../utils/convert_digits_to_farsi.dart';
@@ -24,6 +24,7 @@ class _FavoritesState extends State<Favorites> {
   void initState() {
     super.initState();
     Provider.of<FavoriteProvider>(context, listen: false).fetchUser();
+    setState(() {});
   }
 
   @override
@@ -52,8 +53,10 @@ class _FavoritesState extends State<Favorites> {
             itemBuilder: (context, index) {
               final toggle =
                   value.dataList[index]['toggle'] == 1 ? true : false;
-              final items = favorites[index];
-              final phoneNumber = convertDigitsToFarsi(items.phone);
+              final items = value.dataList[index];
+              List<String> phoneData =
+                  List<String>.from(jsonDecode(items['phone']));
+              final phoneNumber = convertDigitsToFarsi(phoneData[0]);
               return Stack(
                 children: [
                   Card(
@@ -150,25 +153,21 @@ class _FavoritesState extends State<Favorites> {
                   Positioned(
                     left: 10.0,
                     top: 10.0,
-                    child: Consumer<FavoriteProvider>(
-                      builder: (context, value, child) {
-                        return IconButton(
-                          onPressed: () {
-                            value.delete(value.dataList[index]['id']);
-                          },
-                          icon: toggle
-                              ? const Icon(
-                                  Icons.favorite,
-                                  color: Colors.red,
-                                  size: 30.0,
-                                )
-                              : Icon(
-                                  Icons.favorite_border,
-                                  color: kPrimaryColor,
-                                  size: 30.0,
-                                ),
-                        );
+                    child: IconButton(
+                      onPressed: () {
+                        value.delete(value.dataList[index]['id']);
                       },
+                      icon: toggle
+                          ? const Icon(
+                              Icons.favorite,
+                              color: Colors.red,
+                              size: 30.0,
+                            )
+                          : Icon(
+                              Icons.favorite_border,
+                              color: kPrimaryColor,
+                              size: 30.0,
+                            ),
                     ),
                   ),
                 ],
