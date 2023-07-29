@@ -1,16 +1,19 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:provider/provider.dart';
 import '../constants/kcolors.dart';
 import '../database/favorite_provider.dart';
 import '../model/favorite.dart';
+import '../pages/detials_page.dart';
 import '../pages/detials_page_offline.dart';
 import '../utils/convert_digits_to_farsi.dart';
 
 class Favorites extends StatefulWidget {
-  const Favorites({super.key});
+  final bool isConnected;
+  const Favorites({super.key, required this.isConnected});
 
   @override
   State<Favorites> createState() => _FavoritesState();
@@ -21,6 +24,11 @@ class _FavoritesState extends State<Favorites> {
   void initState() {
     super.initState();
     Provider.of<FavoriteProvider>(context, listen: false).fetchUser();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -51,12 +59,21 @@ class _FavoritesState extends State<Favorites> {
                   Card(
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DetailPageOffline(
-                                  favItem: value.dataList[index]),
-                            ));
+                        if (widget.isConnected) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailsPage(
+                                    id: value.dataList[index]['id']),
+                              ));
+                        } else {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailPageOffline(
+                                    favItem: value.dataList[index]),
+                              ));
+                        }
                       },
                       child: Container(
                         decoration: BoxDecoration(

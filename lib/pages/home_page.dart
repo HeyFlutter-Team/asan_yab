@@ -17,11 +17,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   void initState() {
     super.initState();
-   startStremaing();
+    startStremaing();
   }
 
   late ConnectivityResult connectivityResult;
@@ -45,8 +44,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.transparent,
       content: AwesomeSnackbarContent(
         title: 'انترنیت وصل نیت!',
-        message:
-            'لطفا انترنیت را وصل کنید!',
+        message: 'لطفا انترنیت را وصل کنید!',
         contentType: ContentType.failure,
       ),
     );
@@ -110,7 +108,7 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(color: kSecodaryColor, fontSize: 20.0),
             ),
           ),
-          const Favorites(),
+          Favorites(isConnected: isConnective),
         ],
       ),
     );
