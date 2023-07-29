@@ -21,16 +21,4 @@ class CategoriesProvider with ChangeNotifier {
     notifyListeners();
     return _categories;
   }
-
-  Future<Place?> fetchSinglePlace(String id) async {
-    final database = FirebaseFirestore.instance;
-    try {
-      final querySnapshot = await database.collection('Places').doc(id).get();
-      final place = Place.fromJson(querySnapshot.data()!);
-      return place;
-    } catch (e) {
-      debugPrint(e.toString());
-      return null;
-    }
-  }
 }

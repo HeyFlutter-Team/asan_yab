@@ -1,5 +1,5 @@
-// ignore_for_file: unused_import, prefer_const_constructors
-
+import 'package:asan_yab/pages/detials_page.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
@@ -9,10 +9,10 @@ import '../database/firebase_helper/place.dart';
 import '../providers/places_provider.dart';
 import '../utils/convert_digits_to_farsi.dart';
 import '../constants/kcolors.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 
 class NewPlaces extends StatefulWidget {
   const NewPlaces({super.key});
-
   @override
   State<NewPlaces> createState() => _NewPlacesState();
 }
@@ -21,7 +21,6 @@ class _NewPlacesState extends State<NewPlaces> {
   int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
-    final carouselController = CarouselController();
     final screenHeight = MediaQuery.of(context).size.height;
     return FutureBuilder(
         future: Provider.of<PlaceProvider>(context).getplaces(),
@@ -40,21 +39,29 @@ class _NewPlacesState extends State<NewPlaces> {
                 : Stack(
                     children: [
                       CarouselSlider.builder(
-                        itemCount: 4,
+                        itemCount: 5,
                         itemBuilder: (context, index, realIndex) {
                           final phoneNumberItems =
-                              place[index].adresses[0].phone ??
-                                  'no Phone Number';
+                              place[index].adresses[0].phone;
                           final items = place[index];
                           final phoneNumber =
                               convertDigitsToFarsi(phoneNumberItems);
                           return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        DetailsPage(id: place[index].id),
+                                  ));
+                            },
                             child: Container(
                               margin: const EdgeInsets.all(12.0),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                                 image: DecorationImage(
-                                  image: NetworkImage(items.logo!),
+                                  image:
+                                      CachedNetworkImageProvider(items.logo!),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -93,7 +100,7 @@ class _NewPlacesState extends State<NewPlaces> {
                                         },
                                         child: Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                              MainAxisAlignment.spaceEvenly,
                                           children: [
                                             Text(
                                               phoneNumber,
@@ -138,31 +145,20 @@ class _NewPlacesState extends State<NewPlaces> {
                         ),
                       ),
                       Positioned(
-                        bottom: 30,
-                        left: 25,
-                        right: 0,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: place.asMap().entries.map((entries) {
-                            return GestureDetector(
-                              onTap: () =>
-                                  carouselController.animateToPage(entries.key),
-                              child: Container(
-                                width: currentIndex == entries.key ? 7 : 7,
-                                height: 7.0,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 3.0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: currentIndex == entries.key
-                                      ? Colors.white
-                                      : Colors.white30,
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
+                          bottom: 30,
+                          left: 35,
+                          child: DotsIndicator(
+                            dotsCount: 5,
+                            position: currentIndex,
+                            decorator: DotsDecorator(
+                              size: const Size.square(9.0),
+                              activeSize: const Size(18.0, 9.0),
+                              activeShape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0)),
+                              color: Colors.white30,
+                              activeColor: Colors.white,
+                            ),
+                          )),
                     ],
                   );
           }

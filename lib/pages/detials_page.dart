@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../database/favorite_provider.dart';
 
 import '../providers/categories_provider.dart';
+import '../providers/places_provider.dart';
 import '../widgets/page_view_iten.dart';
 import 'detials_page_offline.dart';
 
@@ -78,7 +79,7 @@ class _DetailsPageState extends State<DetailsPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: FutureBuilder(
-          future: Provider.of<CategoriesProvider>(context, listen: false)
+          future: Provider.of<PlaceProvider>(context, listen: false)
               .fetchSinglePlace(widget.id),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
