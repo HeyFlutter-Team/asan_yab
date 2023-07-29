@@ -1,14 +1,14 @@
+import 'package:asan_yab/pages/search_bar_page.dart';
 import 'package:flutter/material.dart';
 import '../widgets/custom_search_bar.dart';
 import '../widgets/category_item.dart';
 
 class ListCategoryItem extends StatefulWidget {
- 
   final String catId;
-  
+  final String categoryName;
 
   const ListCategoryItem(
-      {super.key,  required this.catId,});
+      {super.key, required this.catId, required this.categoryName});
 
   @override
   State<ListCategoryItem> createState() => _ListCategoryItemState();
@@ -17,22 +17,35 @@ class ListCategoryItem extends StatefulWidget {
 class _ListCategoryItemState extends State<ListCategoryItem> {
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: SizedBox(
-          width: screenWidth * 0.99,
-          child: const CustomSearchBar(),
+        title: Text(
+          widget.categoryName,
+          style: const TextStyle(color: Colors.black),
         ),
         elevation: 0.0,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(left:30),
+            child: IconButton(
+              onPressed:(){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SearchPage(),));
+              },
+              icon:const Icon(Icons.search , color: Colors.black,size:30,)
+              ),
+          )
+        ],
         leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-              size: 30.0,
-            )),
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+            size: 30.0,
+          ),
+        ),
       ),
       body: CategoryItem(id: widget.catId),
     );
