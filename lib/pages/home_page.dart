@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:asan_yab/database/favorite_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../constants/kcolors.dart';
 import '../widgets/new_places.dart';
 import '../widgets/categories.dart';
@@ -101,12 +103,18 @@ class _HomePageState extends State<HomePage> {
           ),
           const SizedBox(height: 16.0),
           const Categories(),
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0, top: 12.0),
-            child: Text(
-              'موارد دلخواه',
-              style: TextStyle(color: kSecodaryColor, fontSize: 20.0),
-            ),
+          Consumer<FavoriteProvider>(
+            builder: (context, value, child) {
+              return value.dataList.isEmpty
+                  ? const SizedBox()
+                  : Padding(
+                      padding: const EdgeInsets.only(right: 16.0, top: 12.0),
+                      child: Text(
+                        'موارد دلخواه',
+                        style: TextStyle(color: kSecodaryColor, fontSize: 20.0),
+                      ),
+                    );
+            },
           ),
           Favorites(isConnected: isConnective),
         ],

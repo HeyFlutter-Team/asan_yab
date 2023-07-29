@@ -23,15 +23,4 @@ class LazyLoadingProvider with ChangeNotifier {
       return [];
     }
   }
-
-  Future<Place?> fetchSinglePlace(String id) async {
-    try {
-      final querySnapshot = await database.collection('Places').doc(id).get();
-      final place = Place.fromJson(querySnapshot.data()!);
-      return place;
-    } catch (e) {
-      debugPrint(e.toString());
-      return null;
-    }
-  }
 }
