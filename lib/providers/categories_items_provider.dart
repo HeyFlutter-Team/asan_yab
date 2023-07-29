@@ -8,14 +8,14 @@ class CategoriesItemsProvider with ChangeNotifier{
   final placeRepository = CategoriesItemsRepository();
   final List<Place> _places = [];
   List<Place> get places => _places;
-
-
   bool hasMore = true;
-  bool isLoading = false;
+  bool _isLoading = false;
+  bool get isLoading=> _isLoading;
+  
   DocumentSnapshot? lastItem;
 
   Future<void> getPlaces( String id) async {
-    if (isLoading || !hasMore) {
+    if (_isLoading || !hasMore) {
       return;
     }
 
@@ -28,18 +28,18 @@ class CategoriesItemsProvider with ChangeNotifier{
       if (placesReponse.totalItem <= _places.length) {
         hasMore = false;
       }
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
 
-  void getInitPlaces(String id) {
+  Future<void> getInitPlaces(String id) async {
     lastItem = null;
     hasMore = true;
     _places.clear();
-    isLoading = false;
+    _isLoading = false;
     notifyListeners();
-    getPlaces(id);
+    await getPlaces(id);
   }
  
 }
