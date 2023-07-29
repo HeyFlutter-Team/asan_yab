@@ -4,14 +4,9 @@ import 'package:provider/provider.dart';
 import '../providers/search_provider.dart';
 import 'detials_page.dart';
 
-class SearchPage extends StatefulWidget {
+class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
 
-  @override
-  State<SearchPage> createState() => _SearchPageState();
-}
-
-class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<SearchProvider>(context);

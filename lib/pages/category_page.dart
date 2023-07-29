@@ -17,9 +17,9 @@ class CategoryPage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: kPrimaryColor,
-        title: Text(
+        title: const Text(
           'دسته بندی ها',
-          style: TextStyle(color: kSecodaryColor),
+          style: TextStyle(color: Colors.black),
         ),
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
@@ -37,7 +37,9 @@ class CategoryPage extends StatelessWidget {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text('Loading...');
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           } else if (snapshot.hasData) {
             final category = snapshot.data ?? [];
             return ListView(
@@ -64,13 +66,10 @@ class CategoryPage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ListCategoryItem(
-                             
                                 catId: category[index].id,
-                                
+                                categoryName: category[index].categoryName,
                               ),
-                              
                             ),
-                            
                           );
                         },
                         child: Container(

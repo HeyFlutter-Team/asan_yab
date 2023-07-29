@@ -6,7 +6,7 @@ import '../database/firebase_helper/place_response.dart';
 class CategoriesItemsRepository{
   final firebase = FirebaseFirestore.instance;
   final _path = 'Places';
-  final pageSize = 10;
+  final pageSize = 10 ;
   Future<PlaceReponse?> fetchPlaces(
       {DocumentSnapshot? lastItem, String? id}) async {
     try {
@@ -15,7 +15,8 @@ class CategoriesItemsRepository{
           .where('categoryId', isEqualTo: id)
           .count()
           .get();
-      var query =  firebase.collection(_path).limit(pageSize);
+      var query =  firebase.collection(_path)
+         .where('categoryId', isEqualTo: id).limit(pageSize);
 
       if (lastItem != null) {
         query = query.startAfterDocument(lastItem);

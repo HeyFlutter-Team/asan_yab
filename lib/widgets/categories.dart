@@ -18,9 +18,10 @@ class Categories extends StatelessWidget {
             .getCategories(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Center(child: CircularProgressIndicator(),);
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasData) {
@@ -42,6 +43,7 @@ class Categories extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (context) => ListCategoryItem(
                                 catId: category[index].id,
+                                categoryName: category[index].categoryName,
                               ),
                             ));
                       },
