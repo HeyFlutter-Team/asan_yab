@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:asan_yab/utils/convert_digits_to_farsi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:provider/provider.dart';
@@ -80,7 +81,7 @@ class DetailPageOffline extends StatelessWidget {
                             ),
                           ],
                           image: DecorationImage(
-                              fit: BoxFit.fitWidth,
+                              fit: BoxFit.cover,
                               image: MemoryImage(
                                   Uint8List.fromList(favItem['coverImage']))),
                         ),
@@ -101,21 +102,8 @@ class DetailPageOffline extends StatelessWidget {
                         title: 'توضیحات',
                         child: Text(favItem['dec']),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.library_books,
-                              color: Colors.black54,
-                            ),
-                            SizedBox(width: 8),
-                            SizedBox(height: 12)
-                          ],
-                        ),
-                      ),
                       CustomCard(
-                        title: 'مشحصات',
+                        title: 'مشخصات',
                         child: ListView.builder(
                           padding: EdgeInsets.zero,
                           itemCount: phoneData.length,
@@ -162,10 +150,13 @@ class DetailPageOffline extends StatelessWidget {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        Text(phoneData[index],
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black54)),
+                                        Text(
+                                          convertDigitsToFarsi(
+                                              phoneData[index]),
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black54),
+                                        ),
                                         const SizedBox(width: 8),
                                         const Icon(
                                           Icons.phone_android_sharp,

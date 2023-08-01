@@ -1,14 +1,15 @@
 import 'dart:typed_data';
 
+import 'package:asan_yab/utils/convert_digits_to_farsi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../database/favorite_provider.dart';
 
-import '../providers/categories_provider.dart';
 import '../providers/places_provider.dart';
 import '../widgets/page_view_iten.dart';
 import 'detials_page_offline.dart';
@@ -96,9 +97,9 @@ class _DetailsPageState extends State<DetailsPage> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 35),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -112,7 +113,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         Consumer<FavoriteProvider>(
                           builder: (context, value, child) {
                             return IconButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 if (!value.isExist(places.id)) {
                                   getImage(places.logo, places.coverImage)
                                       .whenComplete(() {
@@ -262,12 +263,17 @@ class _DetailsPageState extends State<DetailsPage> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Expanded(
-                                                  flex: 1,
-                                                  child: (places.adresses[index]
-                                                          .address.isEmpty)
-                                                      ? const SizedBox(
-                                                          height: 0)
-                                                      : Row(
+                                                flex: 1,
+                                                child: (places.adresses[index]
+                                                        .address.isEmpty)
+                                                    ? const SizedBox(height: 0)
+                                                    : InkWell(
+                                                        onTap: () async {
+                                                          var uri = Uri.parse(
+                                                              "google.navigation:q=${places.adresses[index].lat},${places.adresses[index].lang}&mode=d");
+                                                          launchUrl(uri);
+                                                        },
+                                                        child: Row(
                                                           crossAxisAlignment:
                                                               CrossAxisAlignment
                                                                   .start,
@@ -276,23 +282,25 @@ class _DetailsPageState extends State<DetailsPage> {
                                                                 child: Icon(Icons
                                                                     .location_on_outlined)),
                                                             const SizedBox(
-                                                              width: 3,
-                                                            ),
+                                                                width: 3),
                                                             Flexible(
                                                               child: Text(
-                                                                  '${places.adresses[index].address} ',
-                                                                  maxLines: 4,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .fade,
-                                                                  style: const TextStyle(
-                                                                      fontSize:
-                                                                          14,
-                                                                      color: Colors
-                                                                          .black54)),
+                                                                '${places.adresses[index].address} ',
+                                                                maxLines: 4,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .fade,
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .black54),
+                                                              ),
                                                             ),
                                                           ],
-                                                        )),
+                                                        ),
+                                                      ),
+                                              ),
                                               (places.adresses[index].phone
                                                       .isEmpty)
                                                   ? const SizedBox(height: 0)
@@ -321,15 +329,18 @@ class _DetailsPageState extends State<DetailsPage> {
                                                                   .end,
                                                           children: [
                                                             Text(
-                                                                places
-                                                                    .adresses[
-                                                                        index]
-                                                                    .phone,
-                                                                style: const TextStyle(
-                                                                    fontSize:
-                                                                        16,
-                                                                    color: Colors
-                                                                        .black54)),
+                                                              convertDigitsToFarsi(
+                                                                  places
+                                                                      .adresses[
+                                                                          index]
+                                                                      .phone),
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 16,
+                                                                color: Colors
+                                                                    .black54,
+                                                              ),
+                                                            ),
                                                             const SizedBox(
                                                                 width: 8),
                                                             const Icon(

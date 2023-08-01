@@ -26,25 +26,22 @@ class _ListCategoryItemState extends State<ListCategoryItem> {
         ),
         elevation: 0.0,
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(left:30),
-            child: IconButton(
-              onPressed:(){
+          IconButton(
+              onPressed: () {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SearchPage(),));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SearchPage()));
               },
-              icon:const Icon(Icons.search , color: Colors.black,size:30,)
-              ),
-          )
+              icon: const Icon(
+                Icons.search,
+                color: Colors.black,
+                size: 25,
+              ))
         ],
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-            size: 30.0,
-          ),
+          icon: const Icon(Icons.arrow_back, color: Colors.black, size: 25.0),
         ),
       ),
       body: CategoryItem(id: widget.catId),

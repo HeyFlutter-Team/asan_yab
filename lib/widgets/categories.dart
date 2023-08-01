@@ -22,7 +22,11 @@ class Categories extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: CircularProgressIndicator(
+              color: Colors.blueGrey,
+              strokeWidth: 5,
+            ));
           }
           if (snapshot.hasData) {
             List<Category> category = snapshot.data ?? [];

@@ -4,28 +4,42 @@ import 'package:flutter/material.dart';
 
 class SearchProvider with ChangeNotifier {
   final database = FirebaseFirestore.instance;
-
   final search = TextEditingController();
-  final firebaseDatabase = FirebaseFirestore.instance;
-  String _searchQuery = '';
-  List<Place> _searchResult = [];
-  String get searchQuery => _searchQuery;
-  List<Place> get searchResult => _searchResult;
 
-  void setSearchQuery(String query) {
-    _searchQuery = query;
+  List<Place> _placesItems = [];
+  List<Place> _searchedPlacesItems = [];
+  List<Place> get searchedPlacesItems => _searchedPlacesItems;
+  String? _serachQuery;
+  String? get searchQuery => _serachQuery;
+  set searchQuery(String? value) {
+    if (value != searchQuery) {
+      _serachQuery = value;
+      notifyListeners();
+    }
+  }
+
+  List<Place> get placesItems => _placesItems;
+  Future<void> fetchAllPlaces() async {
+    final QuerySnapshot snapshot = await database.collection('Places').get();
+    _placesItems = snapshot.docs
+        .map((doc) => Place.fromJson(doc.data() as Map<String, dynamic>))
+        .toList();
     notifyListeners();
   }
 
-  Future<void> performSearch() async {
-    final snapShot = await database
-        .collection('Places')
-        .where('name', isGreaterThanOrEqualTo: _searchQuery)
-        .get();
-    _searchResult =
-        snapShot.docs.map((doc) => Place.fromJson(doc.data())).toList();
+  void performSearch(String query) {
+    if (query.isEmpty) {
+      return;
+    }
+    final filteredList = _placesItems.where((place) {
+      return place.name!.toLowerCase().contains(query.toLowerCase());
+    }).toList();
+    _searchedPlacesItems = filteredList;
     notifyListeners();
   }
 
-  
+  void resetSearch() {
+    _searchedPlacesItems.clear();
+    notifyListeners();
+  }
 }
