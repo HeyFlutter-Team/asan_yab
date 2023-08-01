@@ -4,13 +4,25 @@ import 'package:provider/provider.dart';
 import '../providers/search_provider.dart';
 import 'detials_page.dart';
 
-class SearchPage extends StatelessWidget {
+class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
+
+  @override
+  State<SearchPage> createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<SearchProvider>(context, listen: false).fetchAllPlaces();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<SearchProvider>(context);
-    final searchResults = provider.searchResult;
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
@@ -25,8 +37,11 @@ class SearchPage extends StatelessWidget {
               hintText: 'جستجو ',
             ),
             onChanged: (value) {
-              provider.setSearchQuery(value);
-              provider.performSearch();
+              provider.searchQuery = value;
+              provider.performSearch(value);
+              if (value.isEmpty) {
+                provider.resetSearch();
+              }
             }),
         actions: [
           Padding(
@@ -45,16 +60,12 @@ class SearchPage extends StatelessWidget {
         ],
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-            size: 30.0,
-          ),
+          icon: const Icon(Icons.arrow_back, color: Colors.black, size: 25.0),
         ),
       ),
       body: Consumer<SearchProvider>(
         builder: (context, value, child) {
-          if (searchResults.isEmpty) {
+          if (provider.searchedPlacesItems.isEmpty) {
             return Center(
               child: Image.asset('assets/noInfo.jpg'),
             );
@@ -66,7 +77,7 @@ class SearchPage extends StatelessWidget {
                   Expanded(
                     child: ListView.builder(
                       itemBuilder: (context, index) {
-                        final items = searchResults[index];
+                        final items = provider.searchedPlacesItems[index];
                         return Padding(
                           padding: const EdgeInsets.only(top: 10),
                           child: ListTile(
@@ -74,8 +85,9 @@ class SearchPage extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      DetailsPage(id: searchResults[index].id),
+                                  builder: (context) => DetailsPage(
+                                      id: provider
+                                          .searchedPlacesItems[index].id),
                                 ),
                               );
                             },
@@ -88,12 +100,12 @@ class SearchPage extends StatelessWidget {
                             ),
                             leading: CircleAvatar(
                               radius: 50,
-                              backgroundImage: NetworkImage(items.logo!),
+                              backgroundImage: NetworkImage(items.logo),
                             ),
                           ),
                         );
                       },
-                      itemCount: searchResults.length,
+                      itemCount: provider.searchedPlacesItems.length,
                     ),
                   ),
                 ],

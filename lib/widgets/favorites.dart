@@ -124,7 +124,7 @@ class _FavoritesState extends State<Favorites> {
                                   OutlinedButton(
                                     onPressed: () async {
                                       await FlutterPhoneDirectCaller.callNumber(
-                                          value.dataList[index][phoneNumber]);
+                                          phoneNumber);
                                     },
                                     child: Row(
                                       mainAxisAlignment:
@@ -138,7 +138,7 @@ class _FavoritesState extends State<Favorites> {
                                           ),
                                         ),
                                         const Icon(Icons.phone_android,
-                                            color: Colors.teal),
+                                            color: Colors.green),
                                       ],
                                     ),
                                   ),

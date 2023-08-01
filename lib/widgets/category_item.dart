@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:provider/provider.dart';
 import '../constants/kcolors.dart';
@@ -44,7 +44,10 @@ class _CategoryItemState extends State<CategoryItem> {
       final places = placeProvider.places;
       return _isLoading
           ? const Center(
-              child: CircularProgressIndicator(color: Colors.blue),
+              child: CircularProgressIndicator(
+                color: Colors.blueGrey,
+                strokeWidth: 5,
+              ),
             )
           : IncrementallyLoadingListView(
               shrinkWrap: true,
@@ -114,30 +117,30 @@ class _CategoryItemState extends State<CategoryItem> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12.0),
-                  color: Colors.black.withOpacity(0.4),
+                  color: Colors.black.withOpacity(0.3),
                 ),
               ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(
-              right: 10.0,
+              right: 12.0,
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   items.name!,
                   overflow: TextOverflow.fade,
                   maxLines: 1,
-                  style: const TextStyle(color: Colors.black, fontSize: 16.0),
+                  style: const TextStyle(color: Colors.black, fontSize: 20.0),
                 ),
                 const SizedBox(height: 12.0),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black.withOpacity(0.3),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
                   onPressed: () async {

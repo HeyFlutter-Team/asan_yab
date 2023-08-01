@@ -19,6 +19,7 @@ class NewPlaces extends StatefulWidget {
 
 class _NewPlacesState extends State<NewPlaces> {
   int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -28,105 +29,115 @@ class _NewPlacesState extends State<NewPlaces> {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else if (snapshot.hasData) {
-            List<Place> place = snapshot.data ?? [];
-            return place.isEmpty
+            List<Place> places = snapshot.data ?? [];
+
+            return places.isEmpty
                 ? const Padding(
                     padding: EdgeInsets.only(top: 30),
                     child: Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(
+                        color: Colors.blueGrey,
+                        strokeWidth: 5,
+                      ),
                     ),
                   )
                 : Stack(
                     children: [
                       CarouselSlider.builder(
-                        itemCount: 5,
+                        itemCount: places.length >= 5 ? 5 : places.length,
                         itemBuilder: (context, index, realIndex) {
                           final phoneNumberItems =
-                              place[index].adresses[0].phone;
-                          final items = place[index];
+                              places[index].adresses[0].phone;
+                          final items = places[index];
                           final phoneNumber =
                               convertDigitsToFarsi(phoneNumberItems);
                           return GestureDetector(
                             onTap: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        DetailsPage(id: place[index].id),
-                                  ));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      DetailsPage(id: places[index].id),
+                                ),
+                              );
                             },
                             child: Container(
-                              margin: const EdgeInsets.all(12.0),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 12),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                image: DecorationImage(
-                                  image:
-                                      CachedNetworkImageProvider(items.logo!),
-                                  fit: BoxFit.cover,
-                                ),
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  color: Colors.black.withOpacity(0.3),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 60, right: 10, left: 170),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        items.name!,
-                                        style: TextStyle(
-                                          color: kPrimaryColor,
-                                          fontSize: 16.0,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 16),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              Colors.black.withOpacity(0.3),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(16.0),
+                              child: Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Image.network(
+                                      items.coverImage,
+                                      fit: BoxFit.cover,
+                                      height: double.infinity,
+                                      width: double.infinity,
+                                    ),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.3),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 40,
+                                    right: 40,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.5,
+                                          child: Text(
+                                            items.name!,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontSize: 24,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
-                                        onPressed: () async {
-                                          await FlutterPhoneDirectCaller
-                                              .callNumber(phoneNumber);
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Text(
-                                              phoneNumber,
-                                              style: TextStyle(
-                                                color: kPrimaryColor,
-                                                fontSize: 20.0,
+                                        const SizedBox(height: 24),
+                                        OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            foregroundColor: Colors.white,
+                                            backgroundColor:
+                                                Colors.black.withOpacity(0.3),
+                                            elevation: 4,
+                                          ),
+                                          onPressed: () async {
+                                            await FlutterPhoneDirectCaller
+                                                .callNumber(phoneNumber);
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Text(phoneNumber),
+                                              const Icon(
+                                                Icons.phone_android,
+                                                color: Colors.green,
                                               ),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            const Icon(
-                                              Icons.phone_android,
-                                              color: Colors.green,
-                                              size: 30,
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
                             ),
                           );
                         },
                         options: CarouselOptions(
-                          height: screenHeight * 0.26,
+                          height: screenHeight * 0.25,
                           enlargeCenterPage: true,
                           reverse: false,
                           autoPlayInterval: const Duration(seconds: 5),
@@ -148,7 +159,7 @@ class _NewPlacesState extends State<NewPlaces> {
                           bottom: 30,
                           left: 35,
                           child: DotsIndicator(
-                            dotsCount: 5,
+                            dotsCount: places.length >= 5 ? 5 : places.length,
                             position: currentIndex,
                             decorator: DotsDecorator(
                               size: const Size.square(9.0),

@@ -46,7 +46,6 @@ class FavoriteProvider extends ChangeNotifier {
       bool toggle,
       Int8List logo,
       Int8List coverImage) async {
-    debugPrint("Mahdi: _saveData: $databaseModel");
     await DatabaseHelper.insertUser(databaseModel, addressDataList,
         phoneDataList, toggle, logo, coverImage);
   }
