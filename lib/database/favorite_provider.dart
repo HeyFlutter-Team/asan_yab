@@ -8,6 +8,12 @@ import 'firebase_helper/place.dart';
 class FavoriteProvider extends ChangeNotifier {
   List<Map<String, dynamic>> _dataList = [];
   List<Map<String, dynamic>> get dataList => _dataList;
+  late bool _toggle;
+  bool get toggle => _toggle;
+
+  set toggle(bool toggle) {
+    _toggle = toggle;
+  }
 
   Future<void> toggleFavorite(
       String data,
@@ -19,9 +25,11 @@ class FavoriteProvider extends ChangeNotifier {
     final forToggle = isExist(data);
     if (forToggle) {
       delete(places.id);
+      _toggle = false;
     } else {
       _saveData(
           places, addressDataList, phoneDataList, !forToggle, logo, coverImage);
+      _toggle = true;
     }
     fetchUser();
     notifyListeners();
@@ -46,7 +54,6 @@ class FavoriteProvider extends ChangeNotifier {
       bool toggle,
       Int8List logo,
       Int8List coverImage) async {
-    debugPrint("Mahdi: _saveData: $databaseModel");
     await DatabaseHelper.insertUser(databaseModel, addressDataList,
         phoneDataList, toggle, logo, coverImage);
   }

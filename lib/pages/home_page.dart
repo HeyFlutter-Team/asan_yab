@@ -77,30 +77,6 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(height: 16.0),
           const NewPlaces(),
           const SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'دسته بندی ها',
-                  style: TextStyle(color: kSecodaryColor, fontSize: 20.0),
-                ),
-                IconButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CategoryPage()),
-                  ),
-                  icon: Icon(
-                    Icons.arrow_circle_left_outlined,
-                    size: 32.0,
-                    color: kSecodaryColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
           const SizedBox(height: 16.0),
           const Categories(),
           Consumer<FavoriteProvider>(
