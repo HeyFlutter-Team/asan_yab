@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:upgrader/upgrader.dart';
 import 'about_us_page.dart';
 import 'home_page.dart';
+
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
 
@@ -20,29 +21,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      bottomNavigationBar: BottomNavigationBar(
-          selectedFontSize: 20.0,
-          unselectedFontSize: 16.0,
-          currentIndex: selectedIndex,
-          selectedItemColor: Colors.red,
-          type: BottomNavigationBarType.fixed,
-          onTap: (index) => setState(() => selectedIndex = index),
-          backgroundColor: Colors.white,
-          items: const [
-            BottomNavigationBarItem(
-              label: 'خانه',
-              icon: Icon(Icons.home),
-            ),
-            BottomNavigationBarItem(
-              label: ' مکان جدید',
-              icon: Icon(Icons.place),
-            ),
-            BottomNavigationBarItem(
-              label: 'در باره ما',
-              icon: Icon(Icons.person),
-            ),
-          ],
-        ),
+      bottomNavigationBar: buildBottomNavigationBar(),
       body: UpgradeAlert(
         upgrader: Upgrader(
           shouldPopScope: () => true,
@@ -52,8 +31,35 @@ class _MainPageState extends State<MainPage> {
               ? UpgradeDialogStyle.cupertino
               : UpgradeDialogStyle.material,
         ),
-        child: pages[selectedIndex],
+        child: IndexedStack(
+          index: selectedIndex,
+          children: const [HomePage(), SuggestionPage(), AboutUsPage()],
+        ),
       ),
     );
   }
+
+  Widget buildBottomNavigationBar() => BottomNavigationBar(
+        selectedFontSize: 20.0,
+        unselectedFontSize: 16.0,
+        currentIndex: selectedIndex,
+        selectedItemColor: Colors.red,
+        type: BottomNavigationBarType.fixed,
+        onTap: (index) => setState(() => selectedIndex = index),
+        backgroundColor: Colors.white,
+        items: const [
+          BottomNavigationBarItem(
+            label: 'خانه',
+            icon: Icon(Icons.home),
+          ),
+          BottomNavigationBarItem(
+            label: ' مکان جدید',
+            icon: Icon(Icons.place),
+          ),
+          BottomNavigationBarItem(
+            label: 'در باره ما',
+            icon: Icon(Icons.person),
+          ),
+        ],
+      );
 }

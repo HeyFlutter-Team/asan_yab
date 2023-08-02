@@ -23,11 +23,7 @@ class CategoryPage extends StatelessWidget {
         ),
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-            size: 30,
-          ),
+          icon: const Icon(Icons.arrow_back, color: Colors.black, size: 25),
         ),
       ),
       body: FutureBuilder(
@@ -38,7 +34,10 @@ class CategoryPage extends StatelessWidget {
             return Text('Error: ${snapshot.error}');
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                strokeWidth: 5,
+                color: Colors.blueGrey,
+              ),
             );
           } else if (snapshot.hasData) {
             final category = snapshot.data ?? [];
@@ -81,8 +80,10 @@ class CategoryPage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                IconData(int.parse(category[index].iconCode),
-                                    fontFamily: 'MaterialIcons'),
+                                IconData(
+                                  int.parse(category[index].iconCode),
+                                  fontFamily: 'MaterialIcons',
+                                ),
                                 size: 40.0,
                                 color: Colors.white,
                               ),

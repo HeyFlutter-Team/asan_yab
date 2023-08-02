@@ -33,7 +33,7 @@ class _SuggestionPageState extends State<SuggestionPage> {
       appBar: AppBar(
         title: const Text(
           'درخواست مکان جدید',
-          style: TextStyle(color: Colors.grey),
+          style: TextStyle(color: Colors.black),
         ),
         elevation: 0,
         backgroundColor: Colors.white,

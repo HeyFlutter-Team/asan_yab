@@ -119,26 +119,24 @@ class _FavoritesState extends State<Favorites> {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
-                                        color: Colors.black, fontSize: 20.0),
+                                        color: Colors.black, fontSize: 16.0),
                                   ),
                                   OutlinedButton(
                                     onPressed: () async {
                                       await FlutterPhoneDirectCaller.callNumber(
-                                          value.dataList[index][phoneNumber]);
+                                          phoneNumber);
                                     },
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          phoneNumber,
-                                          style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16.0,
-                                          ),
-                                        ),
+                                        Text(phoneNumber,
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16.0,
+                                            )),
                                         const Icon(Icons.phone_android,
-                                            color: Colors.teal),
+                                            color: Colors.green),
                                       ],
                                     ),
                                   ),
