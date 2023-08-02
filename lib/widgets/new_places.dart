@@ -27,7 +27,12 @@ class _NewPlacesState extends State<NewPlaces> {
         future: Provider.of<PlaceProvider>(context).getplaces(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Colors.blueGrey,
+                strokeWidth: 5,
+              ),
+            );
           } else if (snapshot.hasData) {
             List<Place> places = snapshot.data ?? [];
 
@@ -69,10 +74,21 @@ class _NewPlacesState extends State<NewPlaces> {
                               ),
                               child: Stack(
                                 children: [
+                                  // ClipRRect(
+                                  //   borderRadius: BorderRadius.circular(12),
+                                  //   child: Image.network(
+                                  //     items.coverImage,
+                                  //     fit: BoxFit.cover,
+                                  //     height: double.infinity,
+                                  //     width: double.infinity,
+                                  //   ),
+                                  // ),
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(12),
-                                    child: Image.network(
-                                      items.coverImage,
+                                    child: CachedNetworkImage(
+                                      placeholder: (context, url) =>
+                                          Image.asset('assets/asan_yab.png'),
+                                      imageUrl: items.coverImage,
                                       fit: BoxFit.cover,
                                       height: double.infinity,
                                       width: double.infinity,
@@ -80,7 +96,7 @@ class _NewPlacesState extends State<NewPlaces> {
                                   ),
                                   Container(
                                     decoration: BoxDecoration(
-                                      color: Colors.black.withOpacity(0.3),
+                                      color: Colors.black.withOpacity(0.5),
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
@@ -95,7 +111,7 @@ class _NewPlacesState extends State<NewPlaces> {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              0.5,
+                                              0.7,
                                           child: Text(
                                             items.name!,
                                             maxLines: 2,
@@ -103,31 +119,34 @@ class _NewPlacesState extends State<NewPlaces> {
                                             style: const TextStyle(
                                               fontSize: 24,
                                               color: Colors.white,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                         ),
                                         const SizedBox(height: 24),
-                                        OutlinedButton(
-                                          style: OutlinedButton.styleFrom(
-                                            foregroundColor: Colors.white,
-                                            backgroundColor:
-                                                Colors.black.withOpacity(0.3),
-                                            elevation: 4,
-                                          ),
-                                          onPressed: () async {
-                                            await FlutterPhoneDirectCaller
-                                                .callNumber(phoneNumber);
-                                          },
-                                          child: Row(
-                                            children: [
-                                              Text(phoneNumber),
-                                              const Icon(
-                                                Icons.phone_android,
-                                                color: Colors.green,
+                                        phoneNumber.isEmpty
+                                            ? const SizedBox()
+                                            : OutlinedButton(
+                                                style: OutlinedButton.styleFrom(
+                                                  foregroundColor: Colors.white,
+                                                  backgroundColor: Colors.black
+                                                      .withOpacity(0.3),
+                                                  elevation: 4,
+                                                ),
+                                                onPressed: () async {
+                                                  await FlutterPhoneDirectCaller
+                                                      .callNumber(phoneNumber);
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    Text(phoneNumber),
+                                                    const Icon(
+                                                      Icons.phone_android,
+                                                      color: Colors.green,
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                            ],
-                                          ),
-                                        ),
                                       ],
                                     ),
                                   ),

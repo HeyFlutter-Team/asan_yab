@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -14,7 +17,7 @@ class PageViewItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         Navigator.push(
             context,
@@ -30,10 +33,8 @@ class PageViewItem extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(50),
-          child: Image.network(
-            gallery[selectedIndex]!,
-            fit: BoxFit.cover,
-          ),
+          child: CachedNetworkImage(
+              imageUrl: gallery[selectedIndex]!, fit: BoxFit.cover),
         ),
       ),
     );
@@ -54,40 +55,43 @@ class ImageView extends StatefulWidget {
 }
 
 class _ImageViewState extends State<ImageView> {
-  int currentIndex = 0;
+  late int currentIndex;
+  late PageController pageController;
 
   @override
   void initState() {
     super.initState();
+    pageController = PageController(initialPage: widget.selectedIndex);
   }
 
   @override
   void dispose() {
     super.dispose();
+    pageController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final pageController = PageController(initialPage: widget.selectedIndex);
-    return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.black),
-      body: Stack(
+    return Material(
+      child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          PageView.builder(
-            controller: pageController,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: widget.gallery.length,
-            itemBuilder: (context, index) {
-              currentIndex = index;
-              return Center(
-                child: PhotoView(
-                  maxScale: 3.0,
-                  minScale: 0.5,
-                  imageProvider: NetworkImage(widget.gallery[currentIndex]!),
-                ),
+          PhotoViewGallery.builder(
+            scrollPhysics: const BouncingScrollPhysics(),
+            builder: (BuildContext context, int index) {
+              return PhotoViewGalleryPageOptions(
+                initialScale: PhotoViewComputedScale.contained,
+                minScale: PhotoViewComputedScale.contained * 0.8,
+                maxScale: PhotoViewComputedScale.covered * 2.0,
+                imageProvider: NetworkImage(widget.gallery[index]!),
+                heroAttributes:
+                    PhotoViewHeroAttributes(tag: widget.gallery[index]!),
               );
             },
+            itemCount: widget.gallery.length,
+
+            pageController: pageController,
+            // onPageChanged: onPageChanged,
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 10),
@@ -99,58 +103,28 @@ class _ImageViewState extends State<ImageView> {
               },
               controller: pageController,
               count: widget.gallery.length,
-              effect: const WormEffect(
-                  dotHeight: 12,
-                  dotWidth: 12,
-                  type: WormType.thinUnderground,
-                  activeDotColor: Colors.white,
-                  dotColor: Colors.white30),
+              effect: const ScrollingDotsEffect(
+                dotHeight: 12,
+                dotWidth: 12,
+                activeDotColor: Colors.white,
+                dotColor: Colors.white30,
+              ),
             ),
           ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: IconForPage(
-              pageController: pageController,
-              movePage: () {
-                debugPrint('Ramin: $currentIndex');
-                if (currentIndex == 0) {
-                  pageController.animateToPage(
-                    widget.gallery.length,
-                    duration: const Duration(milliseconds: 150),
-                    curve: Curves.easeIn,
-                  );
-                } else {
-                  pageController.previousPage(
-                    duration: const Duration(milliseconds: 150),
-                    curve: Curves.easeIn,
-                  );
-                }
-              },
-              icon: Icons.arrow_back_ios_sharp,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 12),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(
+                    Icons.arrow_back_ios_sharp,
+                    color: Colors.white,
+                  )),
             ),
-          ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: IconForPage(
-              pageController: pageController,
-              icon: Icons.arrow_forward_ios_sharp,
-              movePage: () {
-                debugPrint('Ramin1: $currentIndex');
-                if (currentIndex + 1 == widget.gallery.length) {
-                  pageController.animateToPage(
-                    0,
-                    duration: const Duration(milliseconds: 150),
-                    curve: Curves.easeIn,
-                  );
-                } else {
-                  pageController.nextPage(
-                    duration: const Duration(milliseconds: 150),
-                    curve: Curves.easeIn,
-                  );
-                }
-              },
-            ),
-          ),
+          )
         ],
       ),
     );

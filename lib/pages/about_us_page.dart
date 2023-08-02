@@ -77,7 +77,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                                   text: 'HeyFlutter.com',
                                   style: const TextStyle(
                                       color: Colors.blue,
-                                      fontSize: 20,
+                                      fontSize: 16,
                                       decoration: TextDecoration.underline),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
@@ -89,14 +89,14 @@ class _AboutUsPageState extends State<AboutUsPage> {
                                     ' helps you to learn Flutter, Dart, Firebase and App development in one place for all platforms Android, iOS, Web and Desktop. On ',
                                 style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 20,
+                                  fontSize: 16,
                                 ),
                               ),
                               TextSpan(
                                   text: 'HeyFlutter.com',
                                   style: const TextStyle(
                                       color: Colors.blue,
-                                      fontSize: 20,
+                                      fontSize: 16,
                                       decoration: TextDecoration.underline),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
@@ -108,7 +108,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                                     ' website you can explore our 12 weeks Flutter Training that includes many Flutter Courses that help you to learn Flutter efficiently based on your current Flutter skill level from Newbie until Advanced level. This is just the future of learning Flutter! ⚡⚡',
                                 style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 20,
+                                  fontSize: 16,
                                 ),
                               ),
                             ]),
@@ -226,15 +226,15 @@ class _BuildLinkWidget extends StatelessWidget {
               Image.asset(
                 image,
                 fit: BoxFit.cover,
-                width: 25,
-                height: 25,
+                width: 20,
+                height: 20,
               ),
               const SizedBox(width: 5),
               TextButton(
                 onPressed: followLink,
                 child: Text(
                   name,
-                  style: const TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 14),
                 ),
               ),
             ],
