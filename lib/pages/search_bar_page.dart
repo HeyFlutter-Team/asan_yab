@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -50,8 +51,8 @@ class _SearchPageState extends State<SearchPage> {
                 ? IconButton(
                     onPressed: () => provider.search.clear(),
                     icon: const Icon(
-                      Icons.cancel,
-                      size: 28.0,
+                      Icons.close,
+                      size: 25.0,
                       color: Colors.black,
                     ),
                   )
@@ -70,46 +71,52 @@ class _SearchPageState extends State<SearchPage> {
               child: Image.asset('assets/noInfo.jpg'),
             );
           } else {
-            return Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        final items = provider.searchedPlacesItems[index];
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: ListTile(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => DetailsPage(
-                                      id: provider
-                                          .searchedPlacesItems[index].id),
-                                ),
-                              );
-                            },
-                            title: Text(
-                              items.name!,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 20.0,
-                              ),
-                            ),
-                            leading: CircleAvatar(
-                              radius: 50,
-                              backgroundImage: NetworkImage(items.logo),
-                            ),
+            return ListView.separated(
+              padding: const EdgeInsets.all(12),
+              itemCount: provider.searchedPlacesItems.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 8),
+              itemBuilder: (context, index) {
+                final items = provider.searchedPlacesItems[index];
+
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailsPage(
+                            id: provider.searchedPlacesItems[index].id),
+                      ),
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(60),
+                        child: CachedNetworkImage(
+                          imageUrl: items.logo,
+                          fit: BoxFit.cover,
+                          height: 60,
+                          width: 60,
+                          placeholder: (context, url) =>
+                              Image.asset('assets/asan_yab.png'),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          items.name!,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 18.0,
                           ),
-                        );
-                      },
-                      itemCount: provider.searchedPlacesItems.length,
-                    ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             );
           }
         },

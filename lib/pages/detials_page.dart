@@ -1,17 +1,19 @@
 import 'dart:typed_data';
 
 import 'package:asan_yab/utils/convert_digits_to_farsi.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 import 'package:provider/provider.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 import '../database/favorite_provider.dart';
 
 import '../providers/places_provider.dart';
-import '../widgets/page_view_iten.dart';
+import '../widgets/page_view_item.dart';
 import 'detials_page_offline.dart';
 
 class DetailsPage extends StatefulWidget {
@@ -27,10 +29,10 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
-  final _pageViewController = PageController(viewportFraction: 0.27);
   Int8List logo = Int8List(0);
   Int8List coverImage = Int8List(0);
   late bool isLoading = true;
+  late bool toggle;
   Future<Int8List> downloadFile(String url) async {
     final bytes = (await NetworkAssetBundle(Uri.parse(url)).load(url))
         .buffer
@@ -47,11 +49,14 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final provider = Provider.of<FavoriteProvider>(context, listen: false);
+      provider.toggle = provider.isExist(widget.id);
+    });
   }
 
   @override
   void dispose() {
-    _pageViewController.dispose();
     super.dispose();
   }
 
@@ -59,13 +64,34 @@ class _DetailsPageState extends State<DetailsPage> {
     showDialog(
         barrierDismissible: false,
         context: context,
-        builder: (context) => AlertDialog(
-              elevation: 10,
-              icon: const Icon(Icons.favorite_sharp),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadiusDirectional.circular(20)),
-              title: const Text('لطفا صبر کنید!'),
-              // content: const Text('لطفآ به انترنیت وصل شوید؟'),
+        builder: (context) => SizedBox(
+              height: 100,
+              child: AlertDialog(
+                elevation: 4,
+                content: const Row(
+                  children: [
+                    SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: CircularProgressIndicator(
+                          color: Colors.blueGrey, strokeWidth: 3.0),
+                    ),
+                    SizedBox(width: 12),
+                    Text(
+                      'لطفا صبر کنید...',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusDirectional.circular(12)),
+                // title: const Text('لطفا صبر کنید!'),
+                // content: const Text('لطفآ به انترنیت وصل شوید؟'),
+              ),
             ));
   }
 
@@ -113,8 +139,8 @@ class _DetailsPageState extends State<DetailsPage> {
                         Consumer<FavoriteProvider>(
                           builder: (context, value, child) {
                             return IconButton(
-                              onPressed: () async {
-                                if (!value.isExist(places.id)) {
+                              onPressed: () {
+                                if (!value.isExist(places!.id)) {
                                   getImage(places.logo, places.coverImage)
                                       .whenComplete(() {
                                     Navigator.pop(context);
@@ -131,7 +157,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                       addressData, phoneData, logo, coverImage);
                                 }
                               },
-                              icon: value.isExist(places!.id)
+                              icon: value.toggle
                                   ? const Icon(
                                       Icons.favorite,
                                       color: Colors.red,
@@ -155,14 +181,10 @@ class _DetailsPageState extends State<DetailsPage> {
                               (places!.coverImage == '')
                                   ? const CircularProgressIndicator()
                                   : Container(
-                                      width: size.width * 0.93,
-                                      height: size.height * 0.31,
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 12),
                                       decoration: BoxDecoration(
-                                        border: Border.all(
-                                          width: 0.22,
-                                          color: Colors.black.withOpacity(0.5),
-                                        ),
-                                        borderRadius: BorderRadius.circular(15),
+                                        borderRadius: BorderRadius.circular(12),
                                         boxShadow: [
                                           BoxShadow(
                                             color: Colors.grey.withOpacity(0.5),
@@ -171,10 +193,19 @@ class _DetailsPageState extends State<DetailsPage> {
                                             offset: const Offset(0, 3),
                                           ),
                                         ],
-                                        image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: NetworkImage(
-                                                places.coverImage)),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: CachedNetworkImage(
+                                          imageUrl: places.coverImage,
+                                          width: double.infinity,
+                                          height: size.height * 0.31,
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) =>
+                                              Image.asset(
+                                            'assets/asan_yab.png',
+                                          ),
+                                        ),
                                       ),
                                     ),
                               const SizedBox(height: 20),
@@ -225,10 +256,11 @@ class _DetailsPageState extends State<DetailsPage> {
                                   ? const SizedBox(height: 0)
                                   : SizedBox(
                                       height: size.height * 0.25,
-                                      child: PageView.builder(
-                                        controller: _pageViewController,
+                                      child: ListView.builder(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 12),
+                                        scrollDirection: Axis.horizontal,
                                         itemCount: places.gallery.length,
-                                        padEnds: false,
                                         itemBuilder: (context, index) {
                                           return Padding(
                                             padding: const EdgeInsets.only(
