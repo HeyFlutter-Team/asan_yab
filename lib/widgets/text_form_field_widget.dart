@@ -5,23 +5,27 @@ class TextFieldWidget extends StatelessWidget {
   final String labelName;
   final bool hiddenText;
   final Function validator;
+  final int? line;
   const TextFieldWidget(
       {super.key,
       required this.validator,
       required this.addController,
       required this.labelName,
-      this.hiddenText = false});
+      this.hiddenText = false,
+      this.line});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      maxLines: line,
       cursorColor: Colors.black,
       style: const TextStyle(
         color: Colors.black,
         fontSize: 16,
       ),
       controller: addController,
-      validator:(value)=>validator(value),
+      validator: (value) => validator(value),
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.blueGrey.withOpacity(0.1),

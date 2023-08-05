@@ -256,24 +256,31 @@ class _DetailsPageState extends State<DetailsPage> {
                                   ? const SizedBox(height: 0)
                                   : SizedBox(
                                       height: size.height * 0.25,
-                                      child: ListView.builder(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 12),
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: places.gallery.length,
-                                        itemBuilder: (context, index) {
-                                          return Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 6,
-                                                left: 2,
-                                                right: 2,
-                                                bottom: 18),
-                                            child: PageViewItem(
-                                                selectedIndex: index,
-                                                gallery: places.gallery),
-                                          );
-                                        },
-                                      ),
+                                      child: places.gallery.isEmpty
+                                          ? const CircularProgressIndicator(
+                                              color: Colors.blueGrey,
+                                              strokeWidth: 3,
+                                            )
+                                          : ListView.builder(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 12),
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount: places.gallery.length,
+                                              itemBuilder: (context, index) {
+                                                return Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 6,
+                                                          left: 2,
+                                                          right: 2,
+                                                          bottom: 18),
+                                                  child: PageViewItem(
+                                                      selectedIndex: index,
+                                                      gallery: places.gallery),
+                                                );
+                                              },
+                                            ),
                                     ),
                               (places.adresses.isEmpty)
                                   ? const SizedBox()
