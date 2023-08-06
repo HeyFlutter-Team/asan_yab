@@ -5,6 +5,7 @@ import 'package:asan_yab/providers/places_provider.dart';
 import 'package:asan_yab/database/favorite_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import '../pages/main_page.dart';
 import '../providers/search_provider.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,8 @@ import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Future.delayed(const Duration(seconds: 2));
+  FlutterNativeSplash.remove();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
@@ -30,8 +33,6 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(statusBarColor: Colors.white));
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => SearchProvider()),

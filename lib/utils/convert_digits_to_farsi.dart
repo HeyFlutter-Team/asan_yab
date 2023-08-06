@@ -6,5 +6,5 @@ String convertDigitsToFarsi(String input) {
   for (int i = 0; i < english.length; i++) {
     input = input.replaceAll(english[i], farsi[i]);
   }
-  return input;
+  return input.replaceAll(' ', '');
 }

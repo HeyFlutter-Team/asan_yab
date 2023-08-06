@@ -34,7 +34,11 @@ class PageViewItem extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(50),
           child: CachedNetworkImage(
-              imageUrl: gallery[selectedIndex]!, fit: BoxFit.cover),
+            imageUrl: gallery[selectedIndex]!,
+            fit: BoxFit.cover,
+            errorWidget: (context, url, error) =>
+                Image.asset('assets/asan_yab.png'),
+          ),
         ),
       ),
     );
@@ -78,18 +82,32 @@ class _ImageViewState extends State<ImageView> {
         children: [
           PhotoViewGallery.builder(
             scrollPhysics: const BouncingScrollPhysics(),
+            loadingBuilder: (context, event) {
+              return Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    color: Colors.black,
+                  ),
+                  const CircularProgressIndicator(
+                    strokeWidth: 3,
+                    color: Colors.white,
+                  ),
+                ],
+              );
+            },
             builder: (BuildContext context, int index) {
               return PhotoViewGalleryPageOptions(
+                tightMode: true,
                 initialScale: PhotoViewComputedScale.contained,
                 minScale: PhotoViewComputedScale.contained * 0.8,
                 maxScale: PhotoViewComputedScale.covered * 2.0,
                 imageProvider: NetworkImage(widget.gallery[index]!),
-                heroAttributes:
-                    PhotoViewHeroAttributes(tag: widget.gallery[index]!),
               );
             },
             itemCount: widget.gallery.length,
-
             pageController: pageController,
             // onPageChanged: onPageChanged,
           ),

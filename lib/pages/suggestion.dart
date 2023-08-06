@@ -42,7 +42,6 @@ class _SuggestionPageState extends State<SuggestionPage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Form(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
             key: _key,
             child: Padding(
               padding: const EdgeInsets.all(12.0),
@@ -51,32 +50,42 @@ class _SuggestionPageState extends State<SuggestionPage> {
                 children: [
                   const SizedBox(height: 15),
                   TextFieldWidget(
+                      line: 1,
                       addController: nameController,
                       labelName: 'نام مکان ',
                       validator: (value) => value != null && value.isEmpty
-                          ? 'مکان خود را وارد کنید؟'
+                          ? 'مکان خود را وارد کنید!'
                           : null),
                   const SizedBox(height: 10),
                   TextFieldWidget(
+                      line: 1,
                       addController: addressController,
                       labelName: 'ادرس مکان ',
                       validator: (value) => value != null && value.isEmpty
-                          ? 'ادرس خود را وارد کنید؟'
+                          ? 'ادرس خود را وارد کنید!'
                           : null),
                   const SizedBox(height: 10),
                   TextFieldWidget(
+                      line: 1,
                       addController: phoneController,
                       labelName: ' شماره های تماس',
                       validator: (value) => value != null && value.isEmpty
-                          ? 'شماره خود را وارد کنید؟'
+                          ? 'شماره خود را وارد کنید!'
                           : null),
                   const SizedBox(height: 10),
                   TextFieldWidget(
+                      line: 2,
                       addController: typeController,
-                      labelName: 'چه نوع تجارتی دارید؟ ',
+                      labelName: 'توضیجات مکان ',
                       validator: (value) => value != null && value.isEmpty
-                          ? 'نوع تجارت خود را وارد کنید؟'
+                          ? 'توضیجات مکان را بنویسید'
                           : null),
+                  const SizedBox(height: 10),
+                  const CustomCard(
+                    title: 'توضیحات',
+                    child: Text(
+                        'در بخش توضیحات, شما میتوانید در مورد مشکلات مکان های برنامه به ما اطلاع بدید ,\n اگر مکان جدیدی را میخواهید معرفی کنید مشخصات کامل ان را وارد نمایید....'),
+                  ),
                   const SizedBox(height: 10),
                   ButtonWidget(
                     onClicked: () {
@@ -129,6 +138,78 @@ class CustomDialog extends StatelessWidget {
           },
         ),
       ],
+    );
+  }
+}
+
+class CustomCard extends StatelessWidget {
+  const CustomCard({
+    super.key,
+    required this.title,
+    this.description,
+    this.child,
+  });
+
+  final String title;
+  final String? description;
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 12),
+      child: Column(
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: Card(
+              margin: EdgeInsets.zero,
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 4),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.library_books,
+                            color: Colors.black54,
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            title,
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black54),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Divider(
+                      thickness: 0.5,
+                      color: Colors.grey,
+                    ),
+                    const SizedBox(height: 4),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: child,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+        ],
+      ),
     );
   }
 }
