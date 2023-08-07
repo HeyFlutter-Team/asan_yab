@@ -4,6 +4,14 @@ import '../database/firebase_helper/place.dart';
 import '../repositories/places_rep.dart';
 
 class PlaceProvider with ChangeNotifier {
+  int _currentIndex = 0;
+
+  int get currentIndex => _currentIndex;
+  set currentIndex(int index) {
+    _currentIndex = index;
+    notifyListeners();
+  }
+
   final placeRepository = PlacesRepository();
 
   List<Place> _places = [];

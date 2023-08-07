@@ -7,14 +7,14 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:525036166886:android:e77723bb4cdd4fd6fea527",
+        "mobilesdk_app_id": "1:525036166886:android:0f4cce6f7e5e1e1bfea527",
         "android_client_info": {
-          "package_name": "com.example.asan_yab"
+          "package_name": "com.heyflutter.asanYab"
         }
       },
       "oauth_client": [
         {
-          "client_id": "525036166886-nofco8i66dsus0297on1r822hfno5alb.apps.googleusercontent.com",
+          "client_id": "525036166886-gl45ok66knlp76uhsi0h0mlhv39op37m.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,14 +27,14 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "525036166886-nofco8i66dsus0297on1r822hfno5alb.apps.googleusercontent.com",
+              "client_id": "525036166886-gl45ok66knlp76uhsi0h0mlhv39op37m.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "525036166886-t77sn7nj4bkg3o7aoc00pfharddh4dds.apps.googleusercontent.com",
+              "client_id": "525036166886-9f60m1i8sgg0icqsl70v1aum4olcp501.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.easyFinder"
+                "bundle_id": "com.heyflutter.asanYab"
               }
             }
           ]
