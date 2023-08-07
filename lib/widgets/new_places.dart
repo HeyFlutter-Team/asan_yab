@@ -19,7 +19,6 @@ class NewPlaces extends StatefulWidget {
 
 class _NewPlacesState extends State<NewPlaces> {
   final CarouselController pageController = CarouselController();
-  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -160,9 +159,8 @@ class _NewPlacesState extends State<NewPlaces> {
                                 const Duration(milliseconds: 500),
                             viewportFraction: 1,
                             onPageChanged: (index, reason) {
-                              setState(() {
-                                currentIndex = index;
-                              });
+                              Provider.of<PlaceProvider>(context, listen: false)
+                                  .currentIndex = index;
                             },
                           ),
                         ),
@@ -171,7 +169,9 @@ class _NewPlacesState extends State<NewPlaces> {
                             left: 35,
                             child: AnimatedSmoothIndicator(
                               count: places.length >= 5 ? 5 : places.length,
-                              activeIndex: currentIndex,
+                              activeIndex: Provider.of<PlaceProvider>(context,
+                                      listen: true)
+                                  .currentIndex,
                               effect: const ExpandingDotsEffect(
                                 dotHeight: 12,
                                 dotWidth: 12,
