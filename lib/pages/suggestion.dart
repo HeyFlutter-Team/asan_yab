@@ -27,6 +27,16 @@ class _SuggestionPageState extends State<SuggestionPage> {
   }
 
   @override
+  void dispose() {
+    nameController.dispose();
+    addressController.dispose();
+    phoneController.dispose();
+    typeController.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
@@ -50,7 +60,6 @@ class _SuggestionPageState extends State<SuggestionPage> {
                 children: [
                   const SizedBox(height: 15),
                   TextFieldWidget(
-                      line: 1,
                       addController: nameController,
                       labelName: 'نام مکان ',
                       validator: (value) => value != null && value.isEmpty
@@ -58,7 +67,6 @@ class _SuggestionPageState extends State<SuggestionPage> {
                           : null),
                   const SizedBox(height: 10),
                   TextFieldWidget(
-                      line: 1,
                       addController: addressController,
                       labelName: 'ادرس مکان ',
                       validator: (value) => value != null && value.isEmpty
@@ -66,7 +74,6 @@ class _SuggestionPageState extends State<SuggestionPage> {
                           : null),
                   const SizedBox(height: 10),
                   TextFieldWidget(
-                      line: 1,
                       addController: phoneController,
                       labelName: ' شماره های تماس',
                       validator: (value) => value != null && value.isEmpty
@@ -90,20 +97,22 @@ class _SuggestionPageState extends State<SuggestionPage> {
                   ButtonWidget(
                     onClicked: () {
                       final isValid = _key.currentState!.validate();
-                      if (!isValid) return;
-                      FirebaseSuggestionCreate create =
-                          FirebaseSuggestionCreate();
-                      create
-                          .createSuggestion(
-                              nameController.text,
-                              addressController.text,
-                              phoneController.text,
-                              typeController.text)
-                          .whenComplete(() => showDialog(
-                                context: context,
-                                builder: (context) => const CustomDialog(),
-                              ));
-                      controllerClear();
+
+                      if (isValid) {
+                        FirebaseSuggestionCreate create =
+                            FirebaseSuggestionCreate();
+                        create
+                            .createSuggestion(
+                                nameController.text,
+                                addressController.text,
+                                phoneController.text,
+                                typeController.text)
+                            .whenComplete(() => showDialog(
+                                  context: context,
+                                  builder: (context) => const CustomDialog(),
+                                ));
+                        controllerClear();
+                      }
                     },
                     titleName: 'ارسال درخواست',
                     textColor1: Colors.white,
@@ -134,6 +143,7 @@ class CustomDialog extends StatelessWidget {
                 color: Colors.blueAccent,
               )),
           onPressed: () {
+            FocusScope.of(context).unfocus();
             Navigator.of(context).pop(); // Close the dialog
           },
         ),
