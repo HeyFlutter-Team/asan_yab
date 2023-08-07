@@ -19,10 +19,7 @@ import 'detials_page_offline.dart';
 class DetailsPage extends StatefulWidget {
   final String id;
 
-  const DetailsPage({
-    super.key,
-    required this.id,
-  });
+  const DetailsPage({super.key, required this.id});
 
   @override
   State<DetailsPage> createState() => _DetailsPageState();

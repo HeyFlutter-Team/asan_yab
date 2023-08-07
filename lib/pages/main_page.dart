@@ -45,7 +45,10 @@ class _MainPageState extends State<MainPage> {
         currentIndex: selectedIndex,
         selectedItemColor: Colors.red,
         type: BottomNavigationBarType.fixed,
-        onTap: (index) => setState(() => selectedIndex = index),
+        onTap: (index) {
+          FocusScope.of(context).unfocus();
+          setState(() => selectedIndex = index);
+        },
         backgroundColor: Colors.white,
         items: const [
           BottomNavigationBarItem(
