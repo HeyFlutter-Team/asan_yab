@@ -1,18 +1,15 @@
 import 'dart:async';
 
-import 'package:asan_yab/database/favorite_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
 import '../constants/kcolors.dart';
-import '../providers/categories_provider.dart';
-import '../providers/places_provider.dart';
+
 import '../widgets/new_places.dart';
 import '../widgets/categories.dart';
 import '../widgets/favorites.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import '../widgets/custom_search_bar.dart';
-import 'category_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -92,10 +89,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> onRefresh() async {
     await Future.delayed(const Duration(seconds: 2));
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   Provider.of<CategoriesProvider>(context, listen: false).getCategories();
-    //   Provider.of<PlaceProvider>(context, listen: false).getplaces();
-    // });
+
     setState(() {});
   }
 
@@ -109,8 +103,10 @@ class _HomePageState extends State<HomePage> {
         title: const CustomSearchBar(),
       ),
       body: RefreshIndicator(
+        triggerMode: RefreshIndicatorTriggerMode.onEdge,
         onRefresh: onRefresh,
         child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
