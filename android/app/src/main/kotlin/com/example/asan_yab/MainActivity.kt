@@ -1,4 +1,4 @@
-package com.example.asan_yab
+package com.heyflutter.asanYab
 
 import io.flutter.embedding.android.FlutterActivity
 

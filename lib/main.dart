@@ -18,7 +18,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Future.delayed(const Duration(seconds: 2));
   FlutterNativeSplash.remove();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
