@@ -5,11 +5,14 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../constants/kcolors.dart';
+import '../providers/categories_provider.dart';
+import '../providers/places_provider.dart';
 import '../widgets/new_places.dart';
 import '../widgets/categories.dart';
 import '../widgets/favorites.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import '../widgets/custom_search_bar.dart';
+import 'category_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,21 +25,23 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    onRefresh();
     startStremaing();
   }
 
   late ConnectivityResult connectivityResult;
   late StreamSubscription subscription;
-  bool isConnective = true;
+  bool isConnected = true;
   void checkInternet() async {
     connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult != ConnectivityResult.none &&
-        (isConnective == false)) {
+        (isConnected == false)) {
+      isConnected = true;
       showsSnackBarForConnect();
     } else if (connectivityResult != ConnectivityResult.none) {
-      isConnective = true;
+      isConnected = true;
     } else {
-      isConnective = false;
+      isConnected = false;
       showsSnackBarForDisconnect();
     }
 
@@ -87,10 +92,11 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> onRefresh() async {
     await Future.delayed(const Duration(seconds: 2));
-    startStremaing();
-    setState(() {
-      debugPrint('set State is working');
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   Provider.of<CategoriesProvider>(context, listen: false).getCategories();
+    //   Provider.of<PlaceProvider>(context, listen: false).getplaces();
+    // });
+    setState(() {});
   }
 
   @override
@@ -104,35 +110,17 @@ class _HomePageState extends State<HomePage> {
       ),
       body: RefreshIndicator(
         onRefresh: onRefresh,
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            const SizedBox(height: 16.0),
-            NewPlaces(onRefresh: onRefresh),
-            const SizedBox(height: 16),
-            const SizedBox(height: 16.0),
-            isConnective
-                ? Categories(
-                    onRefresh: onRefresh,
-                  )
-                : const SizedBox(),
-            Consumer<FavoriteProvider>(
-              builder: (context, value, child) {
-                debugPrint('listview rebuild');
-                return value.dataList.isEmpty
-                    ? const SizedBox()
-                    : Padding(
-                        padding: const EdgeInsets.only(right: 16.0, top: 12.0),
-                        child: Text(
-                          'موارد دلخواه',
-                          style:
-                              TextStyle(color: kSecodaryColor, fontSize: 20.0),
-                        ),
-                      );
-              },
-            ),
-            Favorites(isConnected: isConnective),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16.0),
+              NewPlaces(onRefresh: onRefresh),
+              const SizedBox(height: 32),
+              isConnected ? Categories(onRefresh: onRefresh) : const SizedBox(),
+              Favorites(isConnected: isConnected),
+            ],
+          ),
         ),
       ),
     );
