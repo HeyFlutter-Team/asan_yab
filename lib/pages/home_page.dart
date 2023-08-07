@@ -5,6 +5,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../constants/kcolors.dart';
+import '../providers/categories_provider.dart';
+import '../providers/places_provider.dart';
 import '../widgets/new_places.dart';
 import '../widgets/categories.dart';
 import '../widgets/favorites.dart';
@@ -22,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    onRefresh();
     startStremaing();
   }
 
@@ -32,6 +35,7 @@ class _HomePageState extends State<HomePage> {
     connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult != ConnectivityResult.none &&
         (isConnective == false)) {
+      isConnective = true;
       showsSnackBarForConnect();
     } else if (connectivityResult != ConnectivityResult.none) {
       isConnective = true;
@@ -87,10 +91,11 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> onRefresh() async {
     await Future.delayed(const Duration(seconds: 2));
-    startStremaing();
-    setState(() {
-      debugPrint('set State is working');
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   Provider.of<CategoriesProvider>(context, listen: false).getCategories();
+    //   Provider.of<PlaceProvider>(context, listen: false).getplaces();
+    // });
+    setState(() {});
   }
 
   @override
