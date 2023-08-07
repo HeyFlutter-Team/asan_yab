@@ -84,7 +84,8 @@ class _SearchPageState extends State<SearchPage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => DetailsPage(
-                            id: provider.searchedPlacesItems[index].id),
+                          id: provider.searchedPlacesItems[index].id,
+                        ),
                       ),
                     );
                   },

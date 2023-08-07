@@ -22,7 +22,10 @@ class CategoryPage extends StatelessWidget {
           style: TextStyle(color: Colors.black),
         ),
         leading: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            FocusScope.of(context).unfocus();
+            Navigator.pop(context);
+          },
           icon: const Icon(Icons.arrow_back, color: Colors.black, size: 25),
         ),
       ),
