@@ -293,7 +293,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                           phoneData.add(
                                               places.adresses[index].phone);
                                           addressData.add(
-                                              places.adresses[index].address);
+                                              '${places.adresses[index].branch}: ${places.adresses[index].address}');
                                           return Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
@@ -314,18 +314,18 @@ class _DetailsPageState extends State<DetailsPage> {
                                                               CrossAxisAlignment
                                                                   .start,
                                                           children: [
-                                                            const Flexible(
-                                                                child: Icon(Icons
-                                                                    .location_on_outlined)),
+                                                            const Icon(Icons
+                                                                .location_on_outlined),
                                                             const SizedBox(
                                                                 width: 3),
                                                             Flexible(
+                                                              flex: 2,
                                                               child: Text(
-                                                                '${places.adresses[index].address} ',
+                                                                '${places.adresses[index].branch}: ${places.adresses[index].address}',
                                                                 maxLines: 4,
                                                                 overflow:
                                                                     TextOverflow
-                                                                        .fade,
+                                                                        .ellipsis,
                                                                 style: const TextStyle(
                                                                     fontSize:
                                                                         14,
