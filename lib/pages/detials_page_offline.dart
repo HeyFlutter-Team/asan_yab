@@ -119,9 +119,7 @@ class DetailPageOffline extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const Flexible(
-                                            child: Icon(
-                                                Icons.location_on_outlined)),
+                                        const Icon(Icons.location_on_outlined),
                                         const SizedBox(
                                           width: 3,
                                         ),
