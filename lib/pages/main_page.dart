@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:io';
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 import '../pages/suggestion.dart';
 import 'package:flutter/material.dart';
-import 'package:upgrader/upgrader.dart';
+
 import 'about_us_page.dart';
 import 'home_page.dart';
 
@@ -86,7 +86,7 @@ class _MainPageState extends State<MainPage> {
 
   int selectedIndex = 0;
 
-  final pages = [HomePage(), const SuggestionPage(), const AboutUsPage()];
+  final pages = [const HomePage(), const SuggestionPage(), const AboutUsPage()];
   @override
   void dispose() {
     subscription.cancel();
@@ -96,25 +96,16 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // key: _scaffoldKey,
       backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: buildBottomNavigationBar(),
-      body: UpgradeAlert(
-        upgrader: Upgrader(
-          shouldPopScope: () => true,
-          canDismissDialog: false,
-          durationUntilAlertAgain: const Duration(days: 1),
-          dialogStyle: Platform.isIOS
-              ? UpgradeDialogStyle.cupertino
-              : UpgradeDialogStyle.material,
-        ),
-        child: IndexedStack(
-          index: selectedIndex,
-          children: [
-            HomePage(isConnected: isConnected),
-            SuggestionPage(),
-            AboutUsPage()
-          ],
-        ),
+      body: IndexedStack(
+        index: selectedIndex,
+        children: [
+          HomePage(isConnected: isConnected),
+          const SuggestionPage(),
+          const AboutUsPage()
+        ],
       ),
     );
   }
