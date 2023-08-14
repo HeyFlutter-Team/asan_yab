@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:asan_yab/providers/categories_items_provider.dart';
 import 'package:asan_yab/providers/categories_provider.dart';
@@ -6,6 +7,8 @@ import 'package:asan_yab/database/favorite_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:upgrader/upgrader.dart';
+
 import '../pages/main_page.dart';
 import '../providers/search_provider.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +21,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Future.delayed(const Duration(seconds: 2));
   FlutterNativeSplash.remove();
+  await Upgrader.clearSavedSettings();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
@@ -31,6 +35,7 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -54,7 +59,16 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.white,
           scaffoldBackgroundColor: Colors.white,
         ),
-        home: const MainPage(),
+        home: UpgradeAlert(
+          upgrader: Upgrader(
+            shouldPopScope: () => false,
+            canDismissDialog: false,
+            dialogStyle: Platform.isIOS
+                ? UpgradeDialogStyle.cupertino
+                : UpgradeDialogStyle.material,
+          ),
+          child: const MainPage(),
+        ),
       ),
     );
   }
