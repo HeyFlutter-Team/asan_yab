@@ -1,6 +1,6 @@
 import 'package:asan_yab/pages/search_bar_page.dart';
 import 'package:flutter/material.dart';
-import '../widgets/custom_search_bar.dart';
+
 import '../widgets/category_item.dart';
 
 class ListCategoryItem extends StatefulWidget {
