@@ -1,7 +1,7 @@
 name: asan_yab
 description: A new Flutter project.
 publish_to: 'none'
-version: 1.0.0+1
+version:  1.0.2+14
 environment:
   sdk: '>=3.0.5 <4.0.0'
 
@@ -35,6 +35,8 @@ dependencies:
   url_launcher: ^6.1.12
   flutter_native_splash: ^2.3.1
   change_app_package_name: ^1.1.0
+
+
 flutter_native_splash:
   color: '#ffffff'
   image: 'assets/asan_yab.png'
