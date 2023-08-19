@@ -44,11 +44,16 @@ class _HomePageState extends State<HomePage> {
             barrierDismissible: false,
             context: context,
             builder: (BuildContext context) {
-              return UpdateDialog(
-                allowDismissal: false,
-                description: status.releaseNotes!,
-                version: status.storeVersion,
-                appLink: status.appStoreLink,
+              return WillPopScope(
+                onWillPop: () async {
+                  return false;
+                },
+                child: UpdateDialog(
+                  allowDismissal: false,
+                  description: status.releaseNotes!,
+                  version: status.storeVersion,
+                  appLink: status.appStoreLink,
+                ),
               );
             },
           );
