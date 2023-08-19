@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 import 'package:asan_yab/providers/categories_items_provider.dart';
 import 'package:asan_yab/providers/categories_provider.dart';
@@ -7,7 +6,6 @@ import 'package:asan_yab/database/favorite_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:upgrader/upgrader.dart';
 
 import '../pages/main_page.dart';
 import '../providers/search_provider.dart';
@@ -58,16 +56,7 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.white,
           scaffoldBackgroundColor: Colors.white,
         ),
-        home: UpgradeAlert(
-          upgrader: Upgrader(
-            shouldPopScope: () => false,
-            canDismissDialog: false,
-            dialogStyle: Platform.isIOS
-                ? UpgradeDialogStyle.cupertino
-                : UpgradeDialogStyle.material,
-          ),
-          child: const MainPage(),
-        ),
+        home: const MainPage(),
       ),
     );
   }

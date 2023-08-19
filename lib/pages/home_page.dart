@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:new_version_plus/new_version_plus.dart';
 
 import '../constants/kcolors.dart';
 
@@ -9,6 +10,7 @@ import '../widgets/categories.dart';
 import '../widgets/favorites.dart';
 
 import '../widgets/custom_search_bar.dart';
+import '../widgets/updatedialog.dart';
 
 class HomePage extends StatefulWidget {
   final bool? isConnected;
@@ -22,8 +24,37 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    final newVersion = NewVersionPlus(
+      androidId: 'com.heyflutter.asanYab',
+    );
+
+    Timer(const Duration(milliseconds: 800), () {
+      checkNewVersion(newVersion);
+    });
 
     onRefresh();
+  }
+
+  Future<void> checkNewVersion(NewVersionPlus newVersion) async {
+    final status = await newVersion.getVersionStatus();
+    if (status != null) {
+      if (status.canUpdate) {
+        if (context.mounted) {
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (BuildContext context) {
+              return UpdateDialog(
+                allowDismissal: false,
+                description: status.releaseNotes!,
+                version: status.storeVersion,
+                appLink: status.appStoreLink,
+              );
+            },
+          );
+        }
+      }
+    }
   }
 
   Future<void> onRefresh() async {
