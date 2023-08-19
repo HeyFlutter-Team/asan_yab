@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:new_version_plus/new_version_plus.dart';
 
 import '../pages/suggestion.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/updatedialog.dart';
 import 'about_us_page.dart';
 import 'home_page.dart';
 
