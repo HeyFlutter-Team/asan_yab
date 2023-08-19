@@ -321,7 +321,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                                             Flexible(
                                                               flex: 2,
                                                               child: Text(
-                                                                '${places.adresses[index].branch}: ${places.adresses[index].address}',
+                                                                '${places.adresses[index].branch.isNotEmpty ? ' ${places.adresses[index].branch}: ' : ''} ${places.adresses[index].address}',
                                                                 maxLines: 4,
                                                                 overflow:
                                                                     TextOverflow
