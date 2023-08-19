@@ -1,3 +1,4 @@
+import 'package:asan_yab/utils/convert_digits_to_farsi.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -7,12 +8,13 @@ class UpdateDialog extends StatefulWidget {
   final String appLink;
   final bool allowDismissal;
 
-  const UpdateDialog({Key? key,
-    this.version = " ",
-    required this.description,
-    required this.appLink,
-    required this.allowDismissal
-  }) : super(key: key);
+  const UpdateDialog(
+      {Key? key,
+      this.version = " ",
+      required this.description,
+      required this.appLink,
+      required this.allowDismissal})
+      : super(key: key);
 
   @override
   State<UpdateDialog> createState() => _UpdateDialogState();
@@ -24,7 +26,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
 
   @override
   void dispose() {
-    if(!widget.allowDismissal) {
+    if (!widget.allowDismissal) {
       print("EXIT APP");
       // SystemNavigator.pop(); this will close the app
     }
@@ -62,7 +64,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
               topRight: Radius.circular(20),
               topLeft: Radius.circular(20),
             ),
-            color: Colors.indigo,
+            color: Colors.redAccent,
           ),
           child: const Center(
             child: Icon(
@@ -103,18 +105,16 @@ class _UpdateDialogState extends State<UpdateDialog> {
                           child: Stack(
                             children: [
                               const Align(
-                                alignment: Alignment.centerLeft,
+                                alignment: Alignment.centerRight,
                                 child: Text(
-                                  "ABOUT UPDATE",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  "درباره نسخه جدید",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),
                               Align(
-                                alignment: Alignment.centerRight,
+                                alignment: Alignment.centerLeft,
                                 child: Text(
-                                  widget.version,
+                                  convertDigitsToFarsi(widget.version),
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -123,12 +123,13 @@ class _UpdateDialogState extends State<UpdateDialog> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 12,),
+                        const SizedBox(height: 12),
                         Expanded(
                           flex: 5,
                           child: SingleChildScrollView(
                             child: Text(
                               widget.description,
+                              textDirection: TextDirection.rtl,
                             ),
                           ),
                         ),
@@ -142,44 +143,51 @@ class _UpdateDialogState extends State<UpdateDialog> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       children: [
-                        widget.allowDismissal ? Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Container(
-                              height: 30,
-                              width: 120,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.indigo,
-                                ),
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  "LATER",
-                                  style: TextStyle(
-                                    color: Colors.indigo,
-                                    fontWeight: FontWeight.bold,
+                        widget.allowDismissal
+                            ? Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Container(
+                                    height: 30,
+                                    width: 120,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.indigo,
+                                      ),
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    child: const Center(
+                                      child: Text(
+                                        "LATER",
+                                        style: TextStyle(
+                                          color: Colors.indigo,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ),
-                        ) : const SizedBox(),
-                        SizedBox(width: widget.allowDismissal ? 16 : 0,),
+                              )
+                            : const SizedBox(),
+                        SizedBox(
+                          width: widget.allowDismissal ? 16 : 0,
+                        ),
                         Expanded(
                           child: GestureDetector(
                             onTap: () async {
-                              await launchUrl(Uri.parse(widget.appLink));
+                              await launchUrl(
+                                Uri.parse(widget.appLink),
+                                mode: LaunchMode.externalApplication,
+                              );
                             },
                             child: Container(
                               height: 30,
                               width: 120,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(50),
-                                color: Colors.indigo,
+                                color: Colors.redAccent.withOpacity(0.7),
                                 boxShadow: const [
                                   BoxShadow(
                                     color: Colors.indigo,
@@ -190,7 +198,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
                               ),
                               child: const Center(
                                 child: Text(
-                                  "UPDATE",
+                                  "بروزرسانی",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
