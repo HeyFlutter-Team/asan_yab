@@ -24,8 +24,8 @@ jobs:
         run: |
           flutter pub get
           echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > key.json
-          export GOOGLE_APPLICATION_CREDENTIALS=$(cat key.json)
           fastlane deploy_android
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          GOOGLE_APPLICATION_CREDENTIALS: key.json
+          # GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
         working-directory: android
