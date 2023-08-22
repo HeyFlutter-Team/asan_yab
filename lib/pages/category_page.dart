@@ -82,11 +82,12 @@ class CategoryPage extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(
-                                IconData(
-                                  int.parse(category[index].iconCode),
-                                  fontFamily: 'MaterialIcons',
-                                ),
+                              const Icon(
+                                Icons.abc_outlined,
+                                // IconData(
+                                //   int.parse(category[index].iconCode),
+                                //   fontFamily: 'MaterialIcons',
+                                // ),
                                 size: 40.0,
                                 color: Colors.white,
                               ),

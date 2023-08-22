@@ -99,11 +99,12 @@ class Categories extends StatelessWidget {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(
-                                      IconData(
-                                          int.parse(category[index].iconCode),
-                                          fontFamily: 'MaterialIcons'),
-                                      color: kPrimaryColor,
+                                  const Icon(
+                                    Icons.abc,
+                                      // IconData(
+                                      //     int.parse(category[index].iconCode),
+                                      //     fontFamily: 'MaterialIcons'),
+                                      // color: kPrimaryColor,
                                       size: 45.0),
                                   const SizedBox(height: 4),
                                   Text(category[index].categoryName,
