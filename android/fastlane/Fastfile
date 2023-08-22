@@ -16,13 +16,10 @@ platform :android do
         new_version_code = version_codes.last + 1
         puts "Determined new version code #{new_version_code}"
 
-
-        Dir.chdir "../.."  sh("flutter", "build", "appbundle", "--release")  #build app
-
         # Build app bundle
         gradle(
         task: 'bundle',
-        project_dir: 'android/',
+        project_dir: "../android",
         build_type: 'Release',
         properties: {
           "android.injected.version.code" => new_version_code,
