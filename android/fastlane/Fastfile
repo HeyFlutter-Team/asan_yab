@@ -10,7 +10,7 @@ platform :android do
         # Determine new version of track
         version_codes = google_play_track_version_codes(
             track: "#{track}",
-            json_key: ENV["GOOGLE_APPLICATION_CREDENTIALS"]
+            json_key_data: ENV["GOOGLE_APPLICATION_CREDENTIALS"]
         )
         new_version_code = version_codes.last + 1
         puts "Determined new version code #{new_version_code}"
