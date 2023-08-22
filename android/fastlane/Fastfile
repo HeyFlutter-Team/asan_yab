@@ -1,0 +1,34 @@
+default_platform(:android)
+
+platform :android do
+   desc "Deploy app bundle to play store"
+      lane :deploy_android do |options|
+        # Determine track
+        track = options[:production] ? 'production' : options[:alpha] ? 'alpha' : 'beta'
+        puts "Determined track #{track}"
+
+        # Determine new version of track
+        version_codes = google_play_track_version_codes(
+            track: "#{track}"
+        )
+        new_version_code = version_codes.last + 1
+        puts "Determined new version code #{new_version_code}"
+
+        # Build app bundle
+        gradle(
+        task: 'bundle',
+        build_type: 'Release',
+        properties: {
+          "android.injected.version.code" => new_version_code,
+        }
+      )
+
+        # Upload to PlayStore
+        upload_to_play_store(
+             track: "#{track}",
+             aab: '../build/app/outputs/bundle/release/app-release.aab',
+             skip_upload_images: true,
+             skip_upload_screenshots: true,
+        )
+    end
+end
