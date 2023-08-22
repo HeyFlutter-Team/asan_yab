@@ -20,6 +20,6 @@ jobs:
       - name: Build and Deploy to Google Play
         run: |
           flutter pub get
-          fastlane deploy_android
+          fastlane deploy_android --non-interactive 
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
