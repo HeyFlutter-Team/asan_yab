@@ -23,7 +23,7 @@ jobs:
       - name: Build and Deploy to Google Play
         run: |
           flutter pub get
-          echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" | base64 --decode > key.json
+          echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > key.json
           fastlane deploy_android
         env:
           GOOGLE_APPLICATION_CREDENTIALS: key.json
