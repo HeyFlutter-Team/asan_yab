@@ -17,14 +17,21 @@ platform :android do
         puts "Determined new version code #{new_version_code}"
 
         # Build app bundle
-        gradle(
-        task: 'bundle',
-        project_dir: "../android",
-        build_type: 'Release',
-        properties: {
-          "android.injected.version.code" => new_version_code,
-        }
+
+        flutter_build(
+        platform: 'appbundle',
+        build_number: new_version_code,
+        build_name: "1.0.0"
       )
+
+      #   gradle(
+      #   task: 'bundle',
+      #   project_dir: "../android",
+      #   build_type: 'Release',
+      #   properties: {
+      #     "android.injected.version.code" => new_version_code,
+      #   }
+      # )
 
         # Upload to PlayStore
         upload_to_play_store(
