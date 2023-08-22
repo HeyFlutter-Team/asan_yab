@@ -10,8 +10,6 @@ platform :android do
         # Determine new version of track
         version_codes = google_play_track_version_codes(
             track: "#{track}",
-            json_key: ENV["GOOGLE_APPLICATION_CREDENTIALS"],
-            package_name: "com.heyflutter.asanYab",
         )
         new_version_code = version_codes.last + 1
         puts "Determined new version code #{new_version_code}"
