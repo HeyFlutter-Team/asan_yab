@@ -17,7 +17,7 @@ platform :android do
         puts "Determined new version code #{new_version_code}"
 
 
-        Dir.chdir "../.." { sh("flutter", "build", "appbundle", "--release") } #build app
+        Dir.chdir "../.."  sh("flutter", "build", "appbundle", "--release")  #build app
 
         # Build app bundle
         gradle(
