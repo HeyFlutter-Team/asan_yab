@@ -21,7 +21,6 @@ platform :android do
         flutter_build(
         platform: 'appbundle',
         build_number: new_version_code,
-        build_name: "1.0.0"
       )
 
       #   gradle(
