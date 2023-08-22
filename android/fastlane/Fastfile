@@ -4,13 +4,13 @@ platform :android do
    desc "Deploy app bundle to play store"
       lane :deploy_android do |options|
         # Determine track
-        track = options[:production] ? 'production' : options[:alpha] ? 'alpha' : 'beta'
+        track = options[:production] ? 'production' : options[:alpha] ? 'alpha' : 'internal'
         puts "Determined track #{track}"
 
         validate_play_store_json_key(
-          json_key_data: ENV["GOOGLE_APPLICATION_CREDENTIALS"]
+          # json_key_data: ENV["GOOGLE_APPLICATION_CREDENTIALS"]
         )
-        
+
         # Determine new version of track
         version_codes = google_play_track_version_codes(
             track: "#{track}",
