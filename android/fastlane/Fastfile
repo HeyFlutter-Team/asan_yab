@@ -9,7 +9,8 @@ platform :android do
 
         # Determine new version of track
         version_codes = google_play_track_version_codes(
-            track: "#{track}"
+            track: "#{track}",
+            json_key: ENV["GOOGLE_APPLICATION_CREDENTIALS"]
         )
         new_version_code = version_codes.last + 1
         puts "Determined new version code #{new_version_code}"
@@ -29,7 +30,7 @@ platform :android do
              aab: '../build/app/outputs/bundle/release/app-release.aab',
              skip_upload_images: true,
              skip_upload_screenshots: true,
-            #  json_key: ENV["GOOGLE_APPLICATION_CREDENTIALS"]
+             json_key: ENV["GOOGLE_APPLICATION_CREDENTIALS"]
         )
     end
 end
