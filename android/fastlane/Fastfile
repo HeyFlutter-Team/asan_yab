@@ -9,7 +9,7 @@ platform :android do
 
         # Determine new version of track
         version_codes = google_play_track_version_codes(
-            track: 'beta' #"#{track}"
+            track: "#{track}"
         )
         new_version_code = version_codes.last + 1
         puts "Determined new version code #{new_version_code}"
