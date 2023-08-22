@@ -29,7 +29,7 @@ platform :android do
              aab: '../build/app/outputs/bundle/release/app-release.aab',
              skip_upload_images: true,
              skip_upload_screenshots: true,
-             json_key: ENV["GOOGLE_APPLICATION_CREDENTIALS"]
+            #  json_key: ENV["GOOGLE_APPLICATION_CREDENTIALS"]
         )
     end
 end
