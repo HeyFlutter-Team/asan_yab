@@ -18,10 +18,7 @@ platform :android do
 
         # Build app bundle
 
-        flutter_build(
-        platform: 'appbundle',
-        build_number: new_version_code,
-      )
+        sh "flutter build appbundle"
 
       #   gradle(
       #   task: 'bundle',
