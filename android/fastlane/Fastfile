@@ -18,7 +18,7 @@ platform :android do
 
         # Build app bundle
 
-        sh "flutter build appbundle --build-number #{new_version_code} --no-tree-shake-icons"
+        sh "flutter build appbundle --build-number #{new_version_code}"#--no-tree-shake-icons"
 
       #   gradle(
       #   task: 'bundle',
