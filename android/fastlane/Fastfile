@@ -14,7 +14,7 @@ platform :android do
             track: "#{track}",
         )
         new_version_code = version_codes.last + 1
-        puts "Determined new version code is : #{new_version_code}"
+        puts "Determined new version code is #{new_version_code}"
 
         # Build app bundle
 
