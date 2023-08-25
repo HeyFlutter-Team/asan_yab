@@ -17,7 +17,7 @@ platform :android do
         puts "Determined new version code is #{new_version_code}"
 
         # Build app bundle
-        sh "pwd && cd /home/runner/work/aladeen/aladeen && flutter build appbundle --build-number #{new_version_code}"
+        sh "pwd && cd /home/runner/work/asan_yab/asan_yab && flutter build appbundle --build-number #{new_version_code}"
         # sh "flutter build appbundle --build-number #{new_version_code}"#--no-tree-shake-icons"
 
       #   gradle(
