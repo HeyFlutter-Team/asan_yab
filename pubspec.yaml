@@ -1,7 +1,7 @@
 name: asan_yab
 description: A new Flutter project.
 publish_to: 'none'
-version:  1.0.3+20
+version:  1.0.3+23
 environment:
   sdk: '>=3.0.5 <4.0.0'
 
