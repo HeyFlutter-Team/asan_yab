@@ -4,7 +4,7 @@ platform :android do
    desc "Deploy app bundle to play store"
       lane :deploy_android do |options|
         # Determine track
-        track = options[:production] ? 'production' : options[:alpha] ? 'alpha' : 'internal'
+        track = options[:production] ? 'production' : options[:internal] ? 'internal' : 'beta'
         puts "Determined track #{track}"
 
         validate_play_store_json_key()
@@ -17,8 +17,8 @@ platform :android do
         puts "Determined new version code is #{new_version_code}"
 
         # Build app bundle
-
-        sh "flutter build appbundle --build-number #{new_version_code}"#--no-tree-shake-icons"
+        sh "cd /home/runner/work/aladeen/aladeen && flutter build appbundle --build-number #{new_version_code}"
+        # sh "flutter build appbundle --build-number #{new_version_code}"#--no-tree-shake-icons"
 
       #   gradle(
       #   task: 'bundle',
