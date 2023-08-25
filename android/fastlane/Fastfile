@@ -4,7 +4,7 @@ platform :android do
    desc "Deploy app bundle to play store"
       lane :deploy_android do |options|
         # Determine track
-        track = options[:production] ? 'production' : options[:internal] ? 'internal' : 'beta'
+        track = options[:production] ? 'production' : options[:alpha] ? 'alpha' : 'internal'
         puts "Determined track #{track}"
 
         validate_play_store_json_key()
