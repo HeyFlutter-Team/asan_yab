@@ -36,6 +36,7 @@ class _HomePageState extends State<HomePage> {
   }
 
 //hello test for update with github
+  // fixed
   Future<void> checkNewVersion(NewVersionPlus newVersion) async {
     final status = await newVersion.getVersionStatus();
     if (status != null) {
