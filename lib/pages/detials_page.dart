@@ -26,6 +26,7 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
+
   Int8List logo = Int8List(0);
   Int8List coverImage = Int8List(0);
   late bool isLoading = true;
@@ -42,6 +43,7 @@ class _DetailsPageState extends State<DetailsPage> {
     logo = await downloadFile(urlLogo);
     coverImage = await downloadFile(coverImage1);
   }
+
 
   @override
   void initState() {
