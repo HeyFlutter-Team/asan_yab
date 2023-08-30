@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     final newVersion = NewVersionPlus(
       androidId: 'com.heyflutter.asanYab',
+      iOSId: 'com.heyflutter.asanYab',
     );
 
     Timer(const Duration(milliseconds: 800), () {
