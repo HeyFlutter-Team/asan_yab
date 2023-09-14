@@ -1,25 +1,28 @@
-import 'dart:ui';
-import 'package:asan_yab/providers/categories_items_provider.dart';
-import 'package:asan_yab/providers/categories_provider.dart';
-import 'package:asan_yab/providers/places_provider.dart';
-import 'package:asan_yab/database/favorite_provider.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'dart:io';
 
-import '../pages/main_page.dart';
-import '../providers/search_provider.dart';
+import 'package:asan_yab/presentation/pages/main_page.dart';
+
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:typesense/typesense.dart';
+
+import 'firebase_options.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart';
-import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Future.delayed(const Duration(seconds: 2));
   FlutterNativeSplash.remove();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
@@ -27,7 +30,8 @@ Future<void> main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
-  runApp(const MyApp());
+
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -35,29 +39,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => SearchProvider()),
-        ChangeNotifierProvider(create: (context) => PlaceProvider()),
-        ChangeNotifierProvider(create: (context) => CategoriesProvider()),
-        ChangeNotifierProvider(create: (context) => CategoriesItemsProvider()),
-        ChangeNotifierProvider(create: (context) => FavoriteProvider()),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [Locale('fa')],
-        theme: ThemeData(
-          fontFamily: 'Shabnam',
-          primaryColor: Colors.white,
-          scaffoldBackgroundColor: Colors.white,
-        ),
-        home: const MainPage(),
+      supportedLocales: const [Locale('fa')],
+      theme: ThemeData(
+        fontFamily: 'Shabnam',
+        primaryColor: Colors.white,
+        scaffoldBackgroundColor: Colors.white,
       ),
+      home: const MainPage(),
     );
   }
 }
