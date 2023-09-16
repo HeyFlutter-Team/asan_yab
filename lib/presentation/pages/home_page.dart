@@ -72,6 +72,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     // ref.refresh(refreshNewPlacesProvider);
     // ignore: unused_result
     ref.refresh(refreshCategoriesProvider);
+    ref.refresh(nearbyPlace.notifier).refresh();
   }
 
   @override
@@ -94,7 +95,9 @@ class _HomePageState extends ConsumerState<HomePage> {
               const SizedBox(height: 16.0),
               NewPlaces(onRefresh: onRefresh),
               const SizedBox(height: 32),
-              NearbyPlaceWidget(),
+              ref.watch(nearbyPlace).isEmpty
+                  ? SizedBox(height: 0)
+                  : NearbyPlaceWidget(),
               const SizedBox(height: 32),
               widget.isConnected!
                   ? Categories(onRefresh: onRefresh)

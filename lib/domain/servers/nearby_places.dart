@@ -59,19 +59,12 @@ class NearbyPlace extends StateNotifier<List<Place>> {
 
     const double maxDistance = 0.8; // Maximum distance in kilometers
     final locationsRef = await placeRepository.fetchPlaces();
-    // final CollectionReference locationsRef =
-    //     FirebaseFirestore.instance.collection('Places');
-// final List<Place> snapshot = locationsRef;
-    // final QuerySnapshot snapshot = await locationsRef.get();
-
-    // final List<DocumentSnapshot> nearestLocations = [];
-    // snapshot.map((doc) => Place.fromJson(doc.data())).toList();
 
     for (var doc in locationsRef) {
       final double lat = double.parse(doc.adresses[0].lat);
       final double lng = double.parse(doc.adresses[0].lang);
       final double distance = calculateDistance(
-          currentLocation!.latitude, currentLocation.longitude, lat, lng);
+          currentLocation.latitude, currentLocation.longitude, lat, lng);
 
       if (distance <= maxDistance) {
         nearestLocations.add(doc);
@@ -79,8 +72,16 @@ class NearbyPlace extends StateNotifier<List<Place>> {
       }
     }
 
-    // nearestLocations.sort((a, b) => a.compareTo(b['distance']));
-
     return nearestLocations.take(5).toList();
+  }
+
+  Future<void> refresh() async {
+    if (nearestLocations.isEmpty) {
+      await getNearestLocations();
+    } else {
+      nearestLocations.clear();
+    }
+
+    nearPlace();
   }
 }
