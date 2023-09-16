@@ -1,3 +1,4 @@
+import 'package:asan_yab/presentation/pages/all_nearby_place.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -33,11 +34,28 @@ class _NearbyPlaceWidgetState extends ConsumerState<NearbyPlaceWidget> {
         : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.0),
-                child: Text(
-                  'مکان های نزدیک',
-                  style: TextStyle(color: Colors.grey, fontSize: 20.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'مکان های نزدیک',
+                      style: TextStyle(color: Colors.grey, fontSize: 20.0),
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NearbyPlacePage()),
+                      ),
+                      icon: const Icon(
+                        Icons.arrow_circle_left_outlined,
+                        size: 32.0,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 10),
@@ -45,9 +63,8 @@ class _NearbyPlaceWidgetState extends ConsumerState<NearbyPlaceWidget> {
                 height: screenHeight * 0.25,
                 width: screenWidth,
                 child: ListView.separated(
-                    padding: const EdgeInsets.only(left: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     scrollDirection: Axis.horizontal,
-                    reverse: true,
                     itemBuilder: (context, index) => SizedBox(
                           height: screenHeight * 0.25,
                           width: screenWidth * 0.5,
@@ -83,15 +100,16 @@ class _NearbyPlaceWidgetState extends ConsumerState<NearbyPlaceWidget> {
                                           shape: BoxShape.rectangle,
                                           image: DecorationImage(
                                               fit: BoxFit.cover,
-                                              image: NetworkImage(
-                                                  place[index].coverImage))),
+                                              image: NetworkImage(ref
+                                                  .watch(nearbyPlace)[index]
+                                                  .coverImage))),
                                     ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 4),
+                                        horizontal: 12),
                                     child: Text(
-                                      place[index].category!,
+                                      ref.watch(nearbyPlace)[index].category!,
                                       style: const TextStyle(
                                           color: Colors.black,
                                           fontSize: 16,
@@ -101,16 +119,16 @@ class _NearbyPlaceWidgetState extends ConsumerState<NearbyPlaceWidget> {
                                   const SizedBox(height: 10),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 4),
+                                        horizontal: 12),
                                     child: Text(
-                                      place[index].name!,
+                                      ref.watch(nearbyPlace)[index].name!,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         color: Colors.indigo.withOpacity(0.6),
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 20),
+                                  const SizedBox(height: 10),
                                   Row(
                                     children: [
                                       const Icon(
@@ -119,7 +137,10 @@ class _NearbyPlaceWidgetState extends ConsumerState<NearbyPlaceWidget> {
                                       ),
                                       Flexible(
                                         child: Text(
-                                          place[index].adresses[0].address,
+                                          ref
+                                              .watch(nearbyPlace)[index]
+                                              .adresses[0]
+                                              .address,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
                                               color: Colors.grey,
@@ -129,7 +150,7 @@ class _NearbyPlaceWidgetState extends ConsumerState<NearbyPlaceWidget> {
                                       )
                                     ],
                                   ),
-                                  const SizedBox(height: 20),
+                                  const SizedBox(height: 10),
                                 ],
                               ),
                             ),
@@ -138,7 +159,9 @@ class _NearbyPlaceWidgetState extends ConsumerState<NearbyPlaceWidget> {
                     separatorBuilder: (context, index) => const SizedBox(
                           width: 5,
                         ),
-                    itemCount: place.length >= 5 ? 5 : place.length),
+                    itemCount: ref.watch(nearbyPlace).length >= 5
+                        ? 5
+                        : ref.watch(nearbyPlace).length),
               ),
             ],
           );
