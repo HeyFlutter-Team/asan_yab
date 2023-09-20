@@ -26,15 +26,6 @@ class _UpdateDialogState extends State<UpdateDialog> {
   double screenWidth = 0;
 
   @override
-  void dispose() {
-    if (!widget.allowDismissal) {
-      print("EXIT APP");
-      // SystemNavigator.pop(); this will close the app
-    }
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;

@@ -11,6 +11,7 @@ class Place {
   final String? category;
   final String categoryId;
   final Timestamp createdAt;
+  int distance;
 
   Place({
     required this.categoryId,
@@ -23,6 +24,7 @@ class Place {
     required this.description,
     required this.gallery,
     required this.createdAt,
+    this.distance = 1,
   });
 
   factory Place.fromJson(Map<String, dynamic> json) {

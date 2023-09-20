@@ -14,28 +14,19 @@ import '../../data/models/place.dart';
 import '../../domain/riverpod/data/places_provider.dart';
 import '../pages/detials_page.dart';
 
-class NewPlaces extends ConsumerStatefulWidget {
+class NewPlaces extends ConsumerWidget {
   final RefreshCallback onRefresh;
-  const NewPlaces({super.key, required this.onRefresh});
+  NewPlaces({super.key, required this.onRefresh});
 
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _NewPlacesState();
-}
-
-class _NewPlacesState extends ConsumerState<NewPlaces> {
   final CarouselController pageController = CarouselController();
-  @override
-  void initState() {
-    super.initState();
-  }
 
   //
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return RefreshIndicator(
-      onRefresh: widget.onRefresh,
+      onRefresh: onRefresh,
       child: FutureBuilder(
           future: ref.read(placeProvider.notifier).getPlaces(),
           builder: (context, snapshot) {

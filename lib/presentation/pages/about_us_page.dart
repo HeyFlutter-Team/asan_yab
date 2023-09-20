@@ -5,14 +5,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/res/image_res.dart';
 
-class AboutUsPage extends StatefulWidget {
+class AboutUsPage extends StatelessWidget {
   const AboutUsPage({super.key});
 
-  @override
-  State<AboutUsPage> createState() => _AboutUsPageState();
-}
-
-class _AboutUsPageState extends State<AboutUsPage> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -127,36 +122,6 @@ class _AboutUsPageState extends State<AboutUsPage> {
                         url: 'https://www.youtube.com/@HeyFlutter',
                         image: ImageRes.youtube,
                         name: 'Follow YouTube',
-                      ),
-                      _BuildLinkWidget(
-                        url: 'https://www.instagram.com/heyflutter',
-                        image: ImageRes.instagram,
-                        name: 'Follow Instagram',
-                      ),
-                      _BuildLinkWidget(
-                        url: 'https://twitter.com/HeyFlutter',
-                        image: ImageRes.twitter,
-                        name: 'Follow Twitter',
-                      ),
-                      _BuildLinkWidget(
-                        url: 'https://github.com/JohannesMilke',
-                        image: ImageRes.code,
-                        name: 'Follow GitHub',
-                      ),
-                      _BuildLinkWidget(
-                        url: 'https://www.linkedin.com/company/heyflutter',
-                        image: ImageRes.linkedin,
-                        name: 'Follow Linkedin',
-                      ),
-                      _BuildLinkWidget(
-                        url: 'https://www.facebook.com/heyflutter',
-                        image: ImageRes.facebook,
-                        name: 'Follow Facebook',
-                      ),
-                      _BuildLinkWidget(
-                        url: 'https://www.tiktok.com/@heyflutter.com',
-                        image: ImageRes.tiktok,
-                        name: 'Follow TikTok',
                       ),
                       const SizedBox(height: 12),
                       Center(

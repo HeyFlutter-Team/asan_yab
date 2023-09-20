@@ -1,22 +1,16 @@
 import 'package:asan_yab/domain/riverpod/data/categories_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 
 import '../../core/res/colors.dart';
 import 'list_category_item.dart';
 
-class CategoryPage extends ConsumerStatefulWidget {
+class CategoryPage extends ConsumerWidget {
   const CategoryPage({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _CategoryPageState();
-}
-
-class _CategoryPageState extends ConsumerState<CategoryPage> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(

@@ -1,31 +1,24 @@
+import 'package:asan_yab/presentation/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 
+import '../../core/utils/convert_digits_to_farsi.dart';
 import '../../data/models/place.dart';
+import '../../domain/riverpod/screen/drop_Down_Buton.dart';
 import '../../domain/servers/nearby_places.dart';
 import '../pages/detials_page.dart';
 
-class NearbyPlacePage extends ConsumerStatefulWidget {
+final isConnectedLocation = StateProvider<bool>((ref) => false);
+
+class NearbyPlacePage extends ConsumerWidget {
   const NearbyPlacePage({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _NearbyPlaceState();
-}
-
-class _NearbyPlaceState extends ConsumerState<NearbyPlacePage> {
-  late List<Place> place;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final List<Place> place;
     place = ref.watch(nearbyPlace);
-    // place.take(5);
-    // final screenWidth = MediaQuery.of(context).size.width;
-    // final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
@@ -42,34 +35,90 @@ class _NearbyPlaceState extends ConsumerState<NearbyPlacePage> {
             icon: const Icon(Icons.arrow_back, color: Colors.black, size: 25),
           ),
         ),
-        body: ref.watch(nearbyPlace).isEmpty
-            ? const SizedBox()
+        body: place.isEmpty
+            ? Center(
+                child: ref.watch(isConnectedLocation)
+                    ? const CircularProgressIndicator()
+                    : Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        child: ButtonWidget(
+                            onClicked: () async {
+                              await ref.refresh(nearbyPlace.notifier).refresh();
+                            },
+                            titleName: 'لوکشن خود را فعال کنید',
+                            textColor1: Colors.white,
+                            btnColor: Colors.black26),
+                      ))
             : RefreshIndicator(
-                onRefresh: () async =>
-                    ref.refresh(nearbyPlace.notifier).refresh(),
+                onRefresh: () async {
+                  ref.refresh(nearbyPlace.notifier).refresh();
+                  ref.read(isConnectedLocation.notifier).state =
+                      await Geolocator.isLocationServiceEnabled();
+                  await Future.delayed(const Duration(seconds: 2));
+                },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
                   verticalDirection: VerticalDirection.down,
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14),
+                      child: Row(
+                        children: [
+                          const Text('فاصله مورد نظر خود را انتخاب کنید'),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          DropdownButton(
+                              iconSize: 24,
+                              value: ref.watch(valueOfDropButtonProvider),
+                              items: ref
+                                  .read(valueOfDropButtonProvider.notifier)
+                                  .distance
+                                  .map((e) {
+                                return DropdownMenuItem(
+                                    onTap: () async {
+                                      ref
+                                          .refresh(nearbyPlace.notifier)
+                                          .refresh();
+                                      ref
+                                              .read(isConnectedLocation.notifier)
+                                              .state =
+                                          await Geolocator
+                                              .isLocationServiceEnabled();
+                                      await Future.delayed(
+                                          const Duration(seconds: 2));
+                                    },
+                                    value: e,
+                                    child: Text(
+                                        "  ${convertDigitsToFarsi(e.toString())} کیلومتر"));
+                              }).toList(),
+                              onChanged: (value) {
+                                ref
+                                    .read(valueOfDropButtonProvider.notifier)
+                                    .choiceDistacne(value!);
+                              }),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
                     Flexible(
                       child: GridView.builder(
                           shrinkWrap: true,
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           gridDelegate:
                               const SliverGridDelegateWithMaxCrossAxisExtent(
-                                  maxCrossAxisExtent: 200,
-                                  crossAxisSpacing: 20,
-                                  mainAxisSpacing: 20),
+                                  childAspectRatio: 0.7,
+                                  maxCrossAxisExtent: 300,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10),
                           itemBuilder: (context, index) => InkWell(
                                 onTap: () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => DetailsPage(
-                                            id: ref
-                                                .watch(nearbyPlace)[index]
-                                                .id),
+                                        builder: (context) =>
+                                            DetailsPage(id: place[index].id),
                                       ));
                                 },
                                 child: Card(
@@ -81,6 +130,7 @@ class _NearbyPlaceState extends ConsumerState<NearbyPlacePage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Flexible(
+                                        flex: 3,
                                         child: Container(
                                           width: 200,
                                           height: 200,
@@ -98,30 +148,28 @@ class _NearbyPlaceState extends ConsumerState<NearbyPlacePage> {
                                               shape: BoxShape.rectangle,
                                               image: DecorationImage(
                                                   fit: BoxFit.cover,
-                                                  image: NetworkImage(ref
-                                                      .watch(nearbyPlace)[index]
-                                                      .coverImage))),
+                                                  image: NetworkImage(
+                                                      place[index]
+                                                          .coverImage))),
                                         ),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 12),
                                         child: Text(
-                                          ref
-                                              .watch(nearbyPlace)[index]
-                                              .category!,
+                                          '${place[index].category}',
                                           style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ),
-                                      const SizedBox(height: 5),
+                                      const SizedBox(height: 10),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 12),
                                         child: Text(
-                                          ref.watch(nearbyPlace)[index].name!,
+                                          place[index].name!,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                             color:
@@ -129,7 +177,7 @@ class _NearbyPlaceState extends ConsumerState<NearbyPlacePage> {
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(height: 5),
+                                      const SizedBox(height: 10),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 12),
@@ -141,8 +189,7 @@ class _NearbyPlaceState extends ConsumerState<NearbyPlacePage> {
                                             ),
                                             Flexible(
                                               child: Text(
-                                                ref
-                                                    .watch(nearbyPlace)[index]
+                                                place[index]
                                                     .adresses[0]
                                                     .address,
                                                 overflow: TextOverflow.ellipsis,
@@ -157,11 +204,33 @@ class _NearbyPlaceState extends ConsumerState<NearbyPlacePage> {
                                         ),
                                       ),
                                       const SizedBox(height: 10),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.redAccent
+                                                  .withOpacity(0.7),
+                                              borderRadius:
+                                                  BorderRadius.circular(8)),
+                                          padding: const EdgeInsets.all(8),
+                                          child: Text(
+                                            place[index].distance < 1000
+                                                ? '${convertDigitsToFarsi(place[index].distance.toString())} متر تا مقصد '
+                                                : '${convertDigitsToFarsi((place[index].distance / 1000).toStringAsFixed(1))} کیلومتر تا مقصد',
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
                                     ],
                                   ),
                                 ),
                               ),
-                          itemCount: ref.watch(nearbyPlace).length),
+                          itemCount: place.length),
                     ),
                   ],
                 ),

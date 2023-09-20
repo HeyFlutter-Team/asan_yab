@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,39 +49,21 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCj3JNQjtnDdynI47d3oC-OnsNDeV67sJ8',
-    appId: '1:669397322687:web:e333fa9076974fb18faf0a',
-    messagingSenderId: '669397322687',
-    projectId: 'asan-yab-356f7',
-    authDomain: 'asan-yab-356f7.firebaseapp.com',
-    storageBucket: 'asan-yab-356f7.appspot.com',
-    measurementId: 'G-WLBL10JPR1',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBuoy2gkv9K0CdBcW1K7wCcgOm8C8_GaIg',
-    appId: '1:669397322687:android:31d9317949ff3b3f8faf0a',
-    messagingSenderId: '669397322687',
-    projectId: 'asan-yab-356f7',
-    storageBucket: 'asan-yab-356f7.appspot.com',
+    apiKey: 'AIzaSyANccJ4SzQJxS5jGzN8zNEOigxQ0_nWdFU',
+    appId: '1:525036166886:android:0f4cce6f7e5e1e1bfea527',
+    messagingSenderId: '525036166886',
+    projectId: 'asan-yab',
+    storageBucket: 'asan-yab.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBar4vPOSw96fu-NWYW5dgQLRXfx8dToZE',
-    appId: '1:669397322687:ios:ce04c094137eaf218faf0a',
-    messagingSenderId: '669397322687',
-    projectId: 'asan-yab-356f7',
-    storageBucket: 'asan-yab-356f7.appspot.com',
-    iosBundleId: 'com.example.asanYab',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBar4vPOSw96fu-NWYW5dgQLRXfx8dToZE',
-    appId: '1:669397322687:ios:ce04c094137eaf218faf0a',
-    messagingSenderId: '669397322687',
-    projectId: 'asan-yab-356f7',
-    storageBucket: 'asan-yab-356f7.appspot.com',
+    apiKey: 'AIzaSyD2tdf6l1bd-_hdACjG8dYqk2_0WddZMRk',
+    appId: '1:525036166886:ios:ae6d471349e26af8fea527',
+    messagingSenderId: '525036166886',
+    projectId: 'asan-yab',
+    storageBucket: 'asan-yab.appspot.com',
+    iosClientId: '525036166886-5n9hitf45b78qsdgulq4a4k51e7bcrs9.apps.googleusercontent.com',
     iosBundleId: 'com.example.asanYab',
   );
 }
