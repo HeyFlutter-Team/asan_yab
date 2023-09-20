@@ -22,7 +22,6 @@ dependencies:
   http: ^1.1.0
   intl: any
   path_provider: ^2.0.15
-  provider: ^6.0.5
   smooth_page_indicator: ^1.1.0
   sqflite: ^2.2.8+4
 
@@ -36,6 +35,16 @@ dependencies:
   flutter_native_splash: ^2.3.1
   change_app_package_name: ^1.1.0
   new_version_plus: ^0.0.11
+  flutter_riverpod: ^2.4.0
+  logging: ^1.2.0
+  geolocator: ^10.0.1
+  geocoding: ^2.1.0
+  google_maps_flutter: ^2.5.0
+  location: ^5.0.3
+  typesense: ^0.4.0
+
+
+
 
 
 flutter_native_splash:

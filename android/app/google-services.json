@@ -31,10 +31,10 @@
               "client_type": 3
             },
             {
-              "client_id": "525036166886-9f60m1i8sgg0icqsl70v1aum4olcp501.apps.googleusercontent.com",
+              "client_id": "525036166886-5n9hitf45b78qsdgulq4a4k51e7bcrs9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.heyflutter.asanYab"
+                "bundle_id": "com.example.asanYab"
               }
             }
           ]
