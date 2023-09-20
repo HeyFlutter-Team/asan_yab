@@ -1,20 +1,22 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../../data/models/place.dart';
 import '../../data/repositoris/places_rep.dart';
+import '../riverpod/screen/drop_Down_Buton.dart';
 
-final nearbyPlace =
-    StateNotifierProvider<NearbyPlace, List<Place>>((ref) => NearbyPlace([]));
+final nearbyPlace = StateNotifierProvider<NearbyPlace, List<Place>>(
+    (ref) => NearbyPlace([], ref));
 
 class NearbyPlace extends StateNotifier<List<Place>> {
+  final Ref ref;
   final placeRepository = PlacesRepository();
-  final List<Place> nearestLocations = [];
+  List<Place> nearestLocations = [];
   void nearPlace() => state = nearestLocations;
-  NearbyPlace(super.state);
+  NearbyPlace(super.state, this.ref);
   double degreesToRadians(double degrees) {
     return degrees * pi / 180.0;
   }
@@ -57,22 +59,34 @@ class NearbyPlace extends StateNotifier<List<Place>> {
 
     currentLocation = await getCurrentLocation();
 
-    const double maxDistance = 0.8; // Maximum distance in kilometers
+    double maxDistance =
+        ref.watch(valueOfDropButtonProvider); // Maximum distance in kilometers
     final locationsRef = await placeRepository.fetchPlaces();
 
-    for (var doc in locationsRef) {
-      final double lat = double.parse(doc.adresses[0].lat);
-      final double lng = double.parse(doc.adresses[0].lang);
-      final double distance = calculateDistance(
-          currentLocation.latitude, currentLocation.longitude, lat, lng);
+    for (final doc in locationsRef) {
+      for (final addressN in doc.adresses) {
+        debugPrint(' ${doc.name}');
+        if (addressN.lat.isNotEmpty) {
+          final double lat = double.parse(addressN.lat);
+          final double lng = double.parse(addressN.lang);
+          final double distance = calculateDistance(
+              currentLocation.latitude, currentLocation.longitude, lat, lng);
 
-      if (distance <= maxDistance) {
-        nearestLocations.add(doc);
-        nearPlace();
+          if (distance <= maxDistance) {
+            debugPrint(
+                'hello it place that near you  ${doc.name} distance : ${distance},id: ${doc.id} lang:${doc.adresses[0].lang} , lat:${doc.adresses[0].lat} ');
+            doc.distance = (distance * 1000).round();
+            nearestLocations.add(doc);
+            debugPrint(' ${doc.distance}');
+          }
+        } else {
+          debugPrint('hello it null ${doc.name}');
+        }
       }
     }
-
-    return nearestLocations.take(5).toList();
+    removeDuplicates();
+    nearPlace();
+    return nearestLocations.toList();
   }
 
   Future<void> refresh() async {
@@ -83,5 +97,12 @@ class NearbyPlace extends StateNotifier<List<Place>> {
     }
 
     nearPlace();
+  }
+
+  List removeDuplicates() {
+    Set<Place> uniqueData = Set<Place>.from(nearestLocations);
+    nearestLocations = uniqueData.toList();
+    nearestLocations.sort((a, b) => a.distance.compareTo(b.distance));
+    return nearestLocations;
   }
 }

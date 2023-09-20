@@ -1,3 +1,4 @@
+import 'package:asan_yab/core/utils/convert_digits_to_farsi.dart';
 import 'package:asan_yab/presentation/pages/all_nearby_place.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,27 +7,14 @@ import '../../data/models/place.dart';
 import '../../domain/servers/nearby_places.dart';
 import '../pages/detials_page.dart';
 
-class NearbyPlaceWidget extends ConsumerStatefulWidget {
+class NearbyPlaceWidget extends ConsumerWidget {
   const NearbyPlaceWidget({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _NearbyPlaceWidgetState();
-}
-
-class _NearbyPlaceWidgetState extends ConsumerState<NearbyPlaceWidget> {
-  late List<Place> place;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final List<Place> place;
     place = ref.watch(nearbyPlace);
 
-    // place.take(5);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return place.isEmpty
@@ -60,13 +48,12 @@ class _NearbyPlaceWidgetState extends ConsumerState<NearbyPlaceWidget> {
               ),
               const SizedBox(height: 10),
               SizedBox(
-                height: screenHeight * 0.25,
+                height: screenHeight * 0.3,
                 width: screenWidth,
                 child: ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) => SizedBox(
-                          height: screenHeight * 0.25,
                           width: screenWidth * 0.5,
                           child: InkWell(
                             onTap: () {
@@ -147,8 +134,28 @@ class _NearbyPlaceWidgetState extends ConsumerState<NearbyPlaceWidget> {
                                               fontSize: 12,
                                               fontWeight: FontWeight.w300),
                                         ),
-                                      )
+                                      ),
                                     ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color:
+                                              Colors.redAccent.withOpacity(0.7),
+                                          borderRadius:
+                                              BorderRadius.circular(8)),
+                                      padding: const EdgeInsets.all(8),
+                                      child: Text(
+                                        '${convertDigitsToFarsi(place[index].distance.toString())} متر تا مقصد ',
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
                                   ),
                                   const SizedBox(height: 10),
                                 ],

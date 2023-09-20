@@ -38,8 +38,6 @@ class _MainPageState extends ConsumerState<MainPage> {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = ref.watch(buttonNavigationProvider);
-    debugPrint(
-        'bool price is :${ref.watch(internetConnectivityCheckerProvider)}');
     return Scaffold(
       // key: _scaffoldKey,
       backgroundColor: Theme.of(context).primaryColor,

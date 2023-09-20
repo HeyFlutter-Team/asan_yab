@@ -30,9 +30,6 @@ class _SearchPageState extends ConsumerState<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    // List<SearchModel> matchQuerry = [];
-    // final provider = ref.watch(searchProvider);
-
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(

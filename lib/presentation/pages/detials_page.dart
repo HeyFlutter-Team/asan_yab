@@ -1,5 +1,4 @@
-import 'dart:typed_data';
-
+import 'package:asan_yab/core/utils/download_image.dart';
 import 'package:asan_yab/domain/riverpod/data/toggle_favorite.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,8 @@ import '../../core/res/image_res.dart';
 
 import '../../core/utils/convert_digits_to_farsi.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
-import '../../domain/riverpod/data/places_provider.dart';
+
+import '../../domain/riverpod/data/single_place_provider.dart';
 import '../widgets/page_view_item.dart';
 import 'detials_page_offline.dart';
 
@@ -27,23 +27,6 @@ class DetailsPage extends ConsumerStatefulWidget {
 }
 
 class _DetailsPageState extends ConsumerState<DetailsPage> {
-  Int8List logo = Int8List(0);
-  Int8List coverImage = Int8List(0);
-  late bool isLoading = true;
-  late bool toggle;
-  Future<Int8List> downloadFile(String url) async {
-    final bytes = (await NetworkAssetBundle(Uri.parse(url)).load(url))
-        .buffer
-        .asInt8List();
-    return bytes;
-  }
-
-  Future<void> getImage(String urlLogo, String coverImage1) async {
-    showDialogBox();
-    logo = await downloadFile(urlLogo);
-    coverImage = await downloadFile(coverImage1);
-  }
-
   @override
   void initState() {
     super.initState();
@@ -60,41 +43,6 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
     super.dispose();
   }
 
-  void showDialogBox() {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) => SizedBox(
-              height: 100,
-              child: AlertDialog(
-                elevation: 4,
-                content: const Row(
-                  children: [
-                    SizedBox(
-                      height: 30,
-                      width: 30,
-                      child: CircularProgressIndicator(
-                          color: Colors.blueGrey, strokeWidth: 3.0),
-                    ),
-                    SizedBox(width: 12),
-                    Text(
-                      'لطفا صبر کنید...',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusDirectional.circular(12)),
-                // title: const Text('لطفا صبر کنید!'),
-                // content: const Text('لطفآ به انترنیت وصل شوید؟'),
-              ),
-            ));
-  }
-
   @override
   Widget build(BuildContext context) {
     List<String> phoneData = [];
@@ -106,7 +54,8 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: FutureBuilder(
-          future: ref.watch(placeProvider.notifier).fetchSinglePlace(widget.id),
+          future:
+              ref.read(getSingleProvider.notifier).fetchSinglePlace(widget.id),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
@@ -118,7 +67,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                 ),
               );
             } else if (snapshot.hasData) {
-              final places = snapshot.data;
+              final places = ref.watch(getSingleProvider);
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -140,15 +89,26 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                             if (!ref
                                 .watch(favoriteProvider.notifier)
                                 .isExist(places!.id)) {
-                              getImage(places.logo, places.coverImage)
+                              DownloadImage.getImage(
+                                      places.logo, places.coverImage, context)
                                   .whenComplete(() {
                                 Navigator.pop(context);
-                                provider.toggleFavorite(places.id, places,
-                                    addressData, phoneData, logo, coverImage);
+                                provider.toggleFavorite(
+                                    places.id,
+                                    places,
+                                    addressData,
+                                    phoneData,
+                                    DownloadImage.logo,
+                                    DownloadImage.coverImage);
                               });
                             } else {
-                              provider.toggleFavorite(places.id, places,
-                                  addressData, phoneData, logo, coverImage);
+                              provider.toggleFavorite(
+                                  places.id,
+                                  places,
+                                  addressData,
+                                  phoneData,
+                                  DownloadImage.logo,
+                                  DownloadImage.coverImage);
                             }
                           },
                           icon: ref.watch(toggleProvider)
