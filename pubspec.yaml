@@ -79,7 +79,7 @@ flutter:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/asan_yab.png"
+  image_path: "assets/asan_yab.jpg"
   background_color: "#ffffff"
 
 

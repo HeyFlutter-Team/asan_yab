@@ -84,7 +84,7 @@ class CategoryPage extends ConsumerWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(
+                             Icon(
                                 IconData(
                                   int.parse(category[index].iconCode),
                                   fontFamily: 'MaterialIcons',
