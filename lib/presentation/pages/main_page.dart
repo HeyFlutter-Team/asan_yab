@@ -39,7 +39,6 @@ class _MainPageState extends ConsumerState<MainPage> {
   Widget build(BuildContext context) {
     final selectedIndex = ref.watch(buttonNavigationProvider);
     return Scaffold(
-      // key: _scaffoldKey,
       backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: buildBottomNavigationBar(),
       body: IndexedStack(
@@ -65,7 +64,6 @@ class _MainPageState extends ConsumerState<MainPage> {
         onTap: (index) {
           FocusScope.of(context).unfocus();
           ref.read(buttonNavigationProvider.notifier).selectedIndex(index);
-          print(' page : $index');
         },
         backgroundColor: Colors.white,
         items: const [

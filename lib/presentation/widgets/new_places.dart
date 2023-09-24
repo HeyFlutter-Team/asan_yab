@@ -23,167 +23,145 @@ class NewPlaces extends ConsumerWidget {
   //
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.read(placeProvider.notifier).getPlaces();
     final screenHeight = MediaQuery.of(context).size.height;
-
+    List<Place> places = ref.watch(placeProvider);
     return RefreshIndicator(
       onRefresh: onRefresh,
-      child: FutureBuilder(
-          future: ref.read(placeProvider.notifier).getPlaces(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return const Center(
-                child: Text('Error'),
-              );
-            } else if (snapshot.hasData) {
-              List<Place> places = ref.watch(placeProvider);
-              // List<Place> places = snapshot.data ?? [];
-              // debugPrint('place?? is rebuild every time');
-              return places.isEmpty
-                  ? const Center(
-                      child: Text('Null'),
-                    )
-                  : Stack(
-                      children: [
-                        CarouselSlider.builder(
-                          itemCount: places.length >= 5 ? 5 : places.length,
-                          itemBuilder: (context, index, realIndex) {
-                            final phoneNumberItems =
-                                places[index].adresses[0].phone;
-                            final items = places[index];
-                            final phoneNumber =
-                                convertDigitsToFarsi(phoneNumberItems);
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        DetailsPage(id: places[index].id),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 12),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(12),
-                                      child: CachedNetworkImage(
-                                        placeholder: (context, url) =>
-                                            Image.asset(ImageRes.asanYab),
-                                        imageUrl: items.coverImage,
-                                        fit: BoxFit.cover,
-                                        height: double.infinity,
-                                        width: double.infinity,
-                                      ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.black.withOpacity(0.5),
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 40,
-                                      right: 40,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.7,
-                                            child: Text(
-                                              items.name!,
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                fontSize: 24,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(height: 24),
-                                          phoneNumber.isEmpty
-                                              ? const SizedBox()
-                                              : OutlinedButton(
-                                                  style:
-                                                      OutlinedButton.styleFrom(
-                                                    foregroundColor:
-                                                        Colors.white,
-                                                    backgroundColor: Colors
-                                                        .black
-                                                        .withOpacity(0.3),
-                                                    elevation: 4,
-                                                  ),
-                                                  onPressed: () async {
-                                                    await FlutterPhoneDirectCaller
-                                                        .callNumber(
-                                                            phoneNumber);
-                                                  },
-                                                  child: Row(
-                                                    children: [
-                                                      Text(phoneNumber),
-                                                      const Icon(
-                                                        Icons.phone_android,
-                                                        color: Colors.green,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                          carouselController: pageController,
-                          options: CarouselOptions(
-                            height: screenHeight * 0.25,
-                            enlargeCenterPage: true,
-                            reverse: false,
-                            autoPlayInterval: const Duration(seconds: 4),
-                            autoPlay: true,
-                            aspectRatio: 16 / 9,
-                            autoPlayCurve: Curves.fastOutSlowIn,
-                            enableInfiniteScroll: true,
-                            autoPlayAnimationDuration:
-                                const Duration(milliseconds: 500),
-                            viewportFraction: 1,
-                            onPageChanged: (index, reason) {
-                              ref
-                                  .read(activeIndexNotifier.notifier)
-                                  .activeIndex(index);
-                            },
+      child: places.isEmpty
+          ? const Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 5,
+                color: Colors.blueGrey,
+              ),
+            )
+          : Stack(
+              children: [
+                CarouselSlider.builder(
+                  itemCount: places.length >= 5 ? 5 : places.length,
+                  itemBuilder: (context, index, realIndex) {
+                    final phoneNumberItems = places[index].adresses[0].phone;
+                    final items = places[index];
+                    final phoneNumber = convertDigitsToFarsi(phoneNumberItems);
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                DetailsPage(id: places[index].id),
                           ),
+                        );
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        Positioned(
-                            bottom: 30,
-                            left: 35,
-                            child: AnimatedSmoothIndicator(
-                              count: places.length >= 5 ? 5 : places.length,
-                              activeIndex: ref.watch(activeIndexNotifier),
-                              effect: const ExpandingDotsEffect(
-                                dotHeight: 12,
-                                dotWidth: 12,
-                                activeDotColor: Colors.white,
-                                dotColor: Colors.white30,
+                        child: Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: CachedNetworkImage(
+                                placeholder: (context, url) =>
+                                    Image.asset(ImageRes.asanYab),
+                                imageUrl: items.coverImage,
+                                fit: BoxFit.cover,
+                                height: double.infinity,
+                                width: double.infinity,
                               ),
-                            )),
-                      ],
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            Positioned(
+                              top: 40,
+                              right: 40,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.7,
+                                    child: Text(
+                                      items.name!,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 24),
+                                  phoneNumber.isEmpty
+                                      ? const SizedBox()
+                                      : OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            foregroundColor: Colors.white,
+                                            backgroundColor:
+                                                Colors.black.withOpacity(0.3),
+                                            elevation: 4,
+                                          ),
+                                          onPressed: () async {
+                                            await FlutterPhoneDirectCaller
+                                                .callNumber(phoneNumber);
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Text(phoneNumber),
+                                              const Icon(
+                                                Icons.phone_android,
+                                                color: Colors.green,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     );
-            }
-            return const SizedBox();
-          }),
+                  },
+                  carouselController: pageController,
+                  options: CarouselOptions(
+                    height: screenHeight * 0.25,
+                    enlargeCenterPage: true,
+                    reverse: false,
+                    autoPlayInterval: const Duration(seconds: 4),
+                    autoPlay: true,
+                    aspectRatio: 16 / 9,
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enableInfiniteScroll: true,
+                    autoPlayAnimationDuration:
+                        const Duration(milliseconds: 500),
+                    viewportFraction: 1,
+                    onPageChanged: (index, reason) {
+                      ref.read(activeIndexNotifier.notifier).activeIndex(index);
+                    },
+                  ),
+                ),
+                Positioned(
+                    bottom: 30,
+                    left: 35,
+                    child: AnimatedSmoothIndicator(
+                      count: places.length >= 5 ? 5 : places.length,
+                      activeIndex: ref.watch(activeIndexNotifier),
+                      effect: const ExpandingDotsEffect(
+                        dotHeight: 12,
+                        dotWidth: 12,
+                        activeDotColor: Colors.white,
+                        dotColor: Colors.white30,
+                      ),
+                    )),
+              ],
+            ),
     );
   }
 }

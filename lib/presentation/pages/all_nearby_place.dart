@@ -38,7 +38,12 @@ class NearbyPlacePage extends ConsumerWidget {
         body: place.isEmpty
             ? Center(
                 child: ref.watch(isConnectedLocation)
-                    ? const CircularProgressIndicator()
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 5,
+                          color: Colors.blueGrey,
+                        ),
+                      )
                     : Container(
                         padding: const EdgeInsets.symmetric(horizontal: 40),
                         child: ButtonWidget(
@@ -51,10 +56,11 @@ class NearbyPlacePage extends ConsumerWidget {
                       ))
             : RefreshIndicator(
                 onRefresh: () async {
-                  ref.refresh(nearbyPlace.notifier).refresh();
+                  await Future.delayed(const Duration(seconds: 2)).then(
+                      (value) => ref.watch(nearbyPlace.notifier).refresh());
+
                   ref.read(isConnectedLocation.notifier).state =
                       await Geolocator.isLocationServiceEnabled();
-                  await Future.delayed(const Duration(seconds: 2));
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,11 +93,11 @@ class NearbyPlacePage extends ConsumerWidget {
                                           await Geolocator
                                               .isLocationServiceEnabled();
                                       await Future.delayed(
-                                          const Duration(seconds: 2));
+                                          const Duration(seconds: 1));
                                     },
                                     value: e,
                                     child: Text(
-                                        "  ${convertDigitsToFarsi(e.toString())} کیلومتر"));
+                                        "  ${convertDigitsToFarsi((e < 1 ? (e * 1000).toInt().toString() : e.toInt().toString()))} ${e < 1 ? 'متر' : "کیلومتر"}"));
                               }).toList(),
                               onChanged: (value) {
                                 ref
