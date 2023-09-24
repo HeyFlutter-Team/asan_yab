@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
@@ -93,12 +94,20 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
     String phoneNumber,
   ) {
     return InkWell(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => DetailsPage(id: places[index].id),
-        ),
-      ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailsPage(id: places[index].id),
+          ),
+        );
+        FirebaseAnalytics.instance.logEvent(
+          name: 'humm_1',
+          parameters: <String, dynamic>{
+            'clicked_on': "${places[index].name}",
+          },
+        );
+      },
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Row(
