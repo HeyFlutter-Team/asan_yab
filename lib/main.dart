@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -30,7 +28,6 @@ Future<void> main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
-
   runApp(const ProviderScope(child: MyApp()));
 }
 

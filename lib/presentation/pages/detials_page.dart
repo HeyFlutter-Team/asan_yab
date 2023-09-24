@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:asan_yab/core/utils/download_image.dart';
 import 'package:asan_yab/domain/riverpod/data/toggle_favorite.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -252,9 +254,30 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                   ? const SizedBox(height: 0)
                                                   : InkWell(
                                                       onTap: () async {
-                                                        var uri = Uri.parse(
-                                                            "google.navigation:q=${places.adresses[index].lat},${places.adresses[index].lang}&mode=d");
-                                                        launchUrl(uri);
+                                                        if (Platform
+                                                            .isAndroid) {
+                                                          var uri = Uri.parse(
+                                                              "google.navigation:q=${places.adresses[index].lat},${places.adresses[index].lang}&mode=d");
+                                                          launchUrl(uri);
+                                                        } else {
+                                                          final urlAppleMaps =
+                                                              Uri.parse(
+                                                                  'https://maps.apple.com/?q=${places.adresses[index].lat},${places.adresses[index].lang}');
+                                                          var uri = Uri.parse(
+                                                              'comgooglemaps://?saddr=&daddr=${places.adresses[index].lat},${places.adresses[index].lang}&directionsmode=driving');
+                                                          // launchUrl(uri);
+                                                          if (await canLaunchUrl(
+                                                              uri)) {
+                                                            await launchUrl(
+                                                                uri);
+                                                          } else if (await canLaunchUrl(
+                                                              urlAppleMaps)) {
+                                                            await launchUrl(
+                                                                urlAppleMaps);
+                                                          } else {
+                                                            throw 'Could not launch $uri';
+                                                          }
+                                                        }
                                                       },
                                                       child: Row(
                                                         crossAxisAlignment:
