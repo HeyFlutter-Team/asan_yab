@@ -62,7 +62,7 @@ class NearbyPlace extends StateNotifier<List<Place>> {
     double maxDistance =
         ref.watch(valueOfDropButtonProvider); // Maximum distance in kilometers
     final locationsRef = await placeRepository.fetchPlaces();
-
+    nearestLocations.clear();
     for (final doc in locationsRef) {
       for (final addressN in doc.adresses) {
         debugPrint(' ${doc.name}');
@@ -90,13 +90,7 @@ class NearbyPlace extends StateNotifier<List<Place>> {
   }
 
   Future<void> refresh() async {
-    if (nearestLocations.isEmpty) {
-      await getNearestLocations();
-    } else {
-      nearestLocations.clear();
-    }
-
-    nearPlace();
+    await getNearestLocations();
   }
 
   List removeDuplicates() {

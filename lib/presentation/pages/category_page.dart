@@ -11,6 +11,8 @@ class CategoryPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.read(categoriesProvider.notifier).getCategories();
+    final category = ref.watch(categoriesProvider);
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
@@ -28,25 +30,14 @@ class CategoryPage extends ConsumerWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.black, size: 25),
         ),
       ),
-      body: FutureBuilder(
-        // Provider.of<CategoriesProvider>(context, listen: false)
-        // .getCategories()
-        future: ref.read(categoriesProvider.notifier).getCategories(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
+      body: category.isEmpty
+          ? const Center(
               child: CircularProgressIndicator(
                 strokeWidth: 5,
                 color: Colors.blueGrey,
               ),
-            );
-          } else if (snapshot.hasData) {
-            final category = ref.read(categoriesProvider);
-            // final category = category1.map((e) => e).toList();
-            // final category = snapshot.data ?? [];
-            return ListView(
+            )
+          : ListView(
               shrinkWrap: true,
               children: [
                 Padding(
@@ -84,7 +75,7 @@ class CategoryPage extends ConsumerWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                             Icon(
+                              Icon(
                                 IconData(
                                   int.parse(category[index].iconCode),
                                   fontFamily: 'MaterialIcons',
@@ -106,12 +97,7 @@ class CategoryPage extends ConsumerWidget {
                   ),
                 )
               ],
-            );
-          } else {
-            return const SizedBox(height: 0);
-          }
-        },
-      ),
+            ),
     );
   }
 }
