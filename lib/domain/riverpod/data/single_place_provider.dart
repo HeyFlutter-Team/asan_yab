@@ -14,6 +14,7 @@ class SingleProvider extends StateNotifier<Place?> {
     final database = FirebaseFirestore.instance;
     try {
       final querySnapshot = await database.collection('Places').doc(id).get();
+
       final place = Place.fromJson(querySnapshot.data()!);
       state = place;
       return state;

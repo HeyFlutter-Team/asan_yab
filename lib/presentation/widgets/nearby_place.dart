@@ -94,7 +94,8 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 12),
+                                            horizontal: 12)
+                                        .copyWith(top: 10),
                                     child: Text(
                                       ref.watch(nearbyPlace)[index].category!,
                                       style: const TextStyle(
