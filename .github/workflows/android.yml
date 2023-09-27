@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - production
 
 jobs:
   build:
@@ -23,7 +24,12 @@ jobs:
       - name: Build and Deploy to Google Play
         run: |
           flutter pub get
-          fastlane deploy_android
+          if [ ${{ github.ref }} = 'refs/heads/production' ]; then
+          fastlane deploy_android production:true
+          else
+            fastlane deploy_android
+          fi
+          # fastlane deploy_android
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
           KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}

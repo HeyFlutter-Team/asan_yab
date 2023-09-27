@@ -3,38 +3,10 @@ default_platform(:android)
 platform :android do
    desc "Deploy app bundle to play store"
       lane :deploy_android do |options|
-        # Determine track
         track = options[:production] ? 'production' : options[:alpha] ? 'alpha' : 'internal'
         puts "Determined track #{track}"
-
-        validate_play_store_json_key()
-
-        # Determine new version of track
         version_codes = google_play_track_version_codes(
-            track: "#{track}",
-        )
-        new_version_code = version_codes.last + 1
-        puts "Determined new version code is #{new_version_code}"
-
-        # Build app bundle
-        sh "pwd && cd /home/runner/work/asan_yab/asan_yab && flutter build appbundle --build-number #{new_version_code} --no-tree-shake-icons"
-        # sh "flutter build appbundle --build-number #{new_version_code}"#--no-tree-shake-icons"
-
-      #   gradle(
-      #   task: 'bundle',
-      #   project_dir: "../android",
-      #   build_type: 'Release',
-      #   properties: {
-      #     "android.injected.version.code" => new_version_code,
-      #   }
-      # )
-
-        # Upload to PlayStore
-        upload_to_play_store(
-             track: "#{track}",
-             aab: '../build/app/outputs/bundle/release/app-release.aab',
-             skip_upload_images: true,
-             skip_upload_screenshots: true,
+          track: "#{track}",
         )
     end
 end
