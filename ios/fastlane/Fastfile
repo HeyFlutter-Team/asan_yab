@@ -6,8 +6,8 @@ platform :ios do
 #     sh "flutter clean"
 #     sh "flutter pub get"
 #       sh "pod deintegrate"
-      sh "pod update"
-      sh "pod install"
+#       sh "pod update"
+#       sh "pod install"
 #     sh "gem update cocoapods --pre"
 #     sh "pod update"
 #     version_codes = app_store_build_number(
@@ -21,17 +21,27 @@ platform :ios do
 #     sh "ls"
 #     sh "pwd && fvm flutter build ipa --build-number #{new_version_code} --no-tree-shake-icons --verbose"
 # flutter build ipa --release --no-tree-shake-icons
-
-    build_app(
-      scheme: "Runner",
+    gym(
+      configuration: "Release",
       workspace: "Runner.xcworkspace",
+      scheme: "Runner",
       export_method: "app-store",
       export_xcargs: "-allowProvisioningUpdates",
       export_options: {
-        signingStyle: "automatic",
-        "tree_shake_icons": false
+      "tree_shake_icons": false,
+      signingStyle: "automatic",
       }
     )
+#     build_app(
+#       scheme: "Runner",
+#       workspace: "Runner.xcworkspace",
+#       export_method: "app-store",
+#       export_xcargs: "-allowProvisioningUpdates",
+#       export_options: {
+#         signingStyle: "automatic",
+#         "tree_shake_icons": false
+#       }
+#     )
   end
 
   def generate_api_key
