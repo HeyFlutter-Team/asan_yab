@@ -31,7 +31,7 @@ platform :ios do
     app_store_connect_api_key(
       key_id: "FLUCGL7SRZ",
       issuer_id: "7ca7cab7-f3fd-4fb6-a1ed-5fe1a20c2db0",
-      key_filepath: "/Users/harisatiq/Downloads/AuthKey_FLUCGL7SRZ.p8",
+      key_filepath: "AuthKey_FLUCGL7SRZ.p8", //"/Users/harisatiq/Downloads/AuthKey_FLUCGL7SRZ.p8",
       duration: 1200, # optional (maximum 1200)
       in_house: false # optional but may be required if using match/sigh
     )
