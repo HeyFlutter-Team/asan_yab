@@ -23,6 +23,10 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.10.6
+      - name: pod install
+        run: pod install
+      - run: flutter clean
+      - run: flutter pub get
       - name: Build and Deploy to App Store
         run: |
           flutter pub get
