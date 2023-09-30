@@ -3,6 +3,11 @@ default_platform(:ios)
 platform :ios do
   def common_build_actions
     enable_automatic_code_signing()
+    sh "flutter clean"
+    sh "flutter pub get"
+    sh "gem update cocoapods --pre"
+    sh "pod update"
+    sh "flutter clean"
 #     version_codes = app_store_build_number(
 #       live: false,
 #       app_identifier: "com.heyflutter.asanYab",
