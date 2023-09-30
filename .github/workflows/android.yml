@@ -25,9 +25,9 @@ jobs:
         run: |
           flutter pub get
           if [ ${{ github.ref }} = 'refs/heads/production' ]; then
-          fastlane deploy_android production:true
+          fastlane deploy_android production:true && fastlane deployToTestFlight
           else
-            fastlane deploy_android
+            fastlane deploy_android && fastlane deployToTestFlight
           fi
           # fastlane deploy_android
         env:
