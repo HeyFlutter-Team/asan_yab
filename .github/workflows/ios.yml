@@ -25,13 +25,14 @@ jobs:
           flutter-version: 3.10.6
       - name: Build and Deploy to App Store
         run: |
-          flutter pub get
-          if [ ${{ github.ref }} = 'refs/heads/production' ]; then
-            fastlane deployToTestFlight
-          else
-            fastlane deployToTestFlight
-          fi
-          # fastlane deployToTestFlight
+          set -x
+          fastlane deployToTestFlight
+#          if [ ${{ github.ref }} = 'refs/heads/production' ]; then
+#            fastlane deployToTestFlight
+#          else
+#            fastlane deployToTestFlight
+#          fi
+#          # fastlane deployToTestFlight
         env:
           APPLICATION_ID: ${{ secrets.APPLICATION_ID }}
           BUNDLE_IDENTIFIER: ${{ secrets.BUNDLE_IDENTIFIER }}
