@@ -5,6 +5,9 @@ platform :ios do
     enable_automatic_code_signing()
 #     sh "flutter clean"
 #     sh "flutter pub get"
+      sh "pod deintegrate"
+      sh "pod update"
+      sh "pod install"
 #     sh "gem update cocoapods --pre"
 #     sh "pod update"
 #     version_codes = app_store_build_number(
