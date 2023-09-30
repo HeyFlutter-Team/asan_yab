@@ -7,7 +7,6 @@ platform :ios do
     sh "flutter pub get"
     sh "gem update cocoapods --pre"
     sh "pod update"
-    sh "flutter clean"
 #     version_codes = app_store_build_number(
 #       live: false,
 #       app_identifier: "com.heyflutter.asanYab",
