@@ -6,7 +6,7 @@ platform :ios do
     # sh "fastlane match appstore -a com.heyflutter.asanYab"
     # match(type: "appstore", readonly: true)
     update_code_signing_settings(
-      use_automatic_signing: true,
+      use_automatic_signing: false,
     )
     # enable_automatic_code_signing()
     # sh "fastlane match appstore -a com.heyflutter.asanYab"
@@ -50,7 +50,7 @@ platform :ios do
       export_method: "app-store",
       export_xcargs: "-allowProvisioningUpdates",
       export_options: {
-        signingStyle: "automatic",
+        # signingStyle: "automatic",
         "tree_shake_icons": false
       }
     )
