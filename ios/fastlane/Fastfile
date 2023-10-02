@@ -51,7 +51,10 @@ platform :ios do
       export_xcargs: "-allowProvisioningUpdates",
       export_options: {
         # signingStyle: "automatic",
-        "tree_shake_icons": false
+        "tree_shake_icons": false,
+        provisioningProfiles: {
+            "com.heyflutter.asanYab" => "match AppStore com.heyflutter.asanYab"
+          }
       }
     )
   end
