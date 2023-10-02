@@ -36,7 +36,7 @@ jobs:
         with:
           flutter-version: 3.10.6
       - name: Github Login
-        run: gh auth login --with-token ${{ secrets.GIT_AUTHORIZATION }}
+        run: gh auth login --with-token ${{ secrets.PERSONAL_TOKEN }}
 
       - name: Build and Deploy to App Store
         run: |
