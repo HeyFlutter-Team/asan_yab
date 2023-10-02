@@ -48,7 +48,7 @@ platform :ios do
       scheme: "Runner",
       workspace: "Runner.xcworkspace",
       export_method: "app-store",
-      export_xcargs: "-allowProvisioningUpdates",
+      # export_xcargs: "-allowProvisioningUpdates",
       export_options: {
         # signingStyle: "automatic",
         "tree_shake_icons": false,
