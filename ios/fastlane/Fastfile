@@ -3,7 +3,7 @@ default_platform(:ios)
 platform :ios do
   def common_build_actions
     update_code_signing_settings(
-      use_automatic_signing: true,
+      use_automatic_signing: false,
     )
 #     sh "flutter clean"
 #     sh "flutter pub get"
@@ -31,7 +31,7 @@ platform :ios do
       export_xcargs: "-allowProvisioningUpdates",
       export_options: {
       "tree_shake_icons": false,
-      signingStyle: "automatic",
+      # signingStyle: "automatic",
       }
     )
     # build_app(
