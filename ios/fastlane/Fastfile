@@ -9,6 +9,7 @@ platform :ios do
       use_automatic_signing: false,
     )
     # enable_automatic_code_signing()
+    export FASTLANE_SESSION=$FASTLANE_SESSION
     sh "fastlane match appstore -a com.heyflutter.asanYab"
     create_keychain(
       name: ENV['TEMP_KEYCHAIN_USER'],
