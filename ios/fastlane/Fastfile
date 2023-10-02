@@ -9,7 +9,7 @@ platform :ios do
       use_automatic_signing: false,
     )
     # enable_automatic_code_signing()
-    # sh "fastlane match appstore -a com.heyflutter.asanYab"
+    sh "fastlane match appstore -a com.heyflutter.asanYab"
     create_keychain(
       name: ENV['TEMP_KEYCHAIN_USER'],
       password: ENV['TEMP_KEYCHAIN_PASSWORD'],
