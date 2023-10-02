@@ -5,10 +5,10 @@ platform :ios do
     # sh "git clone git@github.com:HarisAtiq2762/ios-certificates.git"
     # sh "fastlane match appstore -a com.heyflutter.asanYab"
     # match(type: "appstore", readonly: true)
-    # update_code_signing_settings(
-    #   use_automatic_signing: true,
-    # )
-    enable_automatic_code_signing()
+    update_code_signing_settings(
+      use_automatic_signing: true,
+    )
+    # enable_automatic_code_signing()
     # sh "fastlane match appstore -a com.heyflutter.asanYab"
     create_keychain(
       name: ENV['TEMP_KEYCHAIN_USER'],
