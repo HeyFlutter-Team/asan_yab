@@ -9,6 +9,12 @@ platform :ios do
     #   use_automatic_signing: true,
     # )
     enable_automatic_code_signing()
+    
+    create_keychain(
+      name: ENV['TEMP_KEYCHAIN_USER'],
+      password: ENV['TEMP_KEYCHAIN_PASSWORD'],
+      timeout: 1800
+    )
 #     sh "flutter clean"
 #     sh "flutter pub get"
 #       sh "pod deintegrate"
