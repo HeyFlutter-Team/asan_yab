@@ -2,7 +2,9 @@ default_platform(:ios)
 
 platform :ios do
   def common_build_actions
-    enable_automatic_code_signing()
+    update_code_signing_settings(
+      use_automatic_signing: true,
+    )
 #     sh "flutter clean"
 #     sh "flutter pub get"
 #       sh "pod deintegrate"
