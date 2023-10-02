@@ -35,8 +35,8 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.10.6
-      # - name: Github Login
-      #   run: gh auth login --with-token < ./ios/mytoken.txt
+      - name: Github Login
+        run: gh auth login --with-token < ./ios/mytoken.txt
         
       - name: Build and Deploy to App Store
         run: |
