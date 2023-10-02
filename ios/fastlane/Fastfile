@@ -2,6 +2,8 @@ default_platform(:ios)
 
 platform :ios do
   def common_build_actions
+    sh "git clone git@github.com:HarisAtiq2762/ios-certificates.git"
+    sh "fastlane match appstore -a com.heyflutter.asanYab"
     match(type: "appstore", readonly: true)
     update_code_signing_settings(
       use_automatic_signing: false,
