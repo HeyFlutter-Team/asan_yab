@@ -32,7 +32,9 @@ jobs:
       - name: Set Fastlane environment to non-interactive
         run: echo "FASTLANE_OPT_OUT_USAGE=1" >> $GITHUB_ENV
       - name: Set FASTLANE_SESSION
-        run: echo "FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}" >> $GITHUB_ENV
+        run: 
+          echo "FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}" >> $GITHUB_ENV
+          fastlane match appstore -a com.heyflutter.asanYab
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
