@@ -45,6 +45,8 @@ jobs:
       #   run: gh auth login --with-token < ./ios/mytoken.txt
       - name: Clone repo
         run: git clone git@github.com:HarisAtiq2762/ios-certificates.git /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/d20231002-6471-1azqkg1
+      - name: Copy certificates
+        run: fastlane match appstore -a com.heyflutter.asanYab
 
       - name: Build and Deploy to App Store
         run: |
