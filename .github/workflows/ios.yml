@@ -20,7 +20,13 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.10.6
-
+      - name: Set FASTLANE_SESSION
+        run: echo "FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}" >> $GITHUB_ENV
+      - name: Setup SSH
+        uses: MrSquaare/ssh-setup-action@v1
+        with:
+          host: github.com
+          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Build and Deploy to Google Play
         run: |
           fastlane deployToTestFlight
@@ -79,9 +85,9 @@ jobs:
 #       #     java-version: "12.x"
 #       - name: Set Fastlane environment to non-interactive
 #         run: echo "FASTLANE_OPT_OUT_USAGE=1" >> $GITHUB_ENV
-#       - name: Set FASTLANE_SESSION
-#         run: 
-#           echo "FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}" >> $GITHUB_ENV
+      # - name: Set FASTLANE_SESSION
+      #   run: 
+      #     echo "FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}" >> $GITHUB_ENV
 #       # - name: Setup Flutter
 #       #   uses: subosito/flutter-action@v2
 #       #   with:
@@ -94,11 +100,11 @@ jobs:
 #       #      channel: 'stable'
 #       # - run: flutter --version
 
-#       - name: Setup SSH
-#         uses: MrSquaare/ssh-setup-action@v1
-#         with:
-#           host: github.com
-#           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      # - name: Setup SSH
+      #   uses: MrSquaare/ssh-setup-action@v1
+      #   with:
+      #     host: github.com
+      #     private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
 #       - name: Clone repo
 #         run: git clone git@github.com:HarisAtiq2762/ios-certificates.git /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/d20231002-6471-1azqkg1
