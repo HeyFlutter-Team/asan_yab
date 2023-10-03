@@ -20,7 +20,11 @@ platform :ios do
     #   timeout: 1800
     # )
 
-    sh "find src"
+    sh "find Users"
+    sh "find runner"
+    sh "find work"
+    sh ".pub-cache"
+
 
     build_app(
       scheme: "Runner",
