@@ -35,7 +35,7 @@ jobs:
         with:
           host: github.com
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          
+
       - name: Build and Deploy to App store
         run: |
           fastlane deployToTestFlight
