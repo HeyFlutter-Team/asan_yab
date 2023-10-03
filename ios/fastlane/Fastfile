@@ -5,15 +5,15 @@ platform :ios do
     # sh "git clone git@github.com:HarisAtiq2762/ios-certificates.git"
     # sh "fastlane match appstore -a com.heyflutter.asanYab"
     # match(type: "appstore", readonly: true)
-    sh "flutter clean"
+    # sh "flutter clean"
     sh "flutter pub get"
     # sh "ls -a"
     # sh "cd ios"
     sh "ls -a"
     sh "gem install cocoapods"
     sh "pod install"
-    sh "gem update cocoapods --pre"
-    sh "pod install --repo-update"
+    # sh "gem update cocoapods --pre"
+    # sh "pod install --repo-update"
     update_code_signing_settings(
       use_automatic_signing: false,
     )
