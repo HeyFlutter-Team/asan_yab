@@ -32,6 +32,8 @@ platform :ios do
     #   podfile: "./Podfile"
     # )
 
+    setup_ci(force: true)
+
     build_app(
       scheme: "Runner",
       workspace: "Runner.xcworkspace",
