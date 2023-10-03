@@ -27,10 +27,10 @@ platform :ios do
     # sh "find work"
     # sh "ls"
 
-    cocoapods(
-      clean_install: true,
-      podfile: "./Podfile"
-    )
+    # cocoapods(
+    #   clean_install: true,
+    #   podfile: "./Podfile"
+    # )
 
     build_app(
       scheme: "Runner",
