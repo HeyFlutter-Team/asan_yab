@@ -41,8 +41,8 @@ jobs:
   
       - name: Build and Deploy to App store
         run: |
-          gem install cocoapods
           pwd
+          gem install cocoapods
           cd ..
           bundle exec pod install --repo-update
           fastlane deployToTestFlight
