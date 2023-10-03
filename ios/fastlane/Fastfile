@@ -6,7 +6,7 @@ platform :ios do
     # sh "fastlane match appstore -a com.heyflutter.asanYab"
     # match(type: "appstore", readonly: true)
     # sh "flutter clean"
-    sh "ls -a"
+    sh "cd .. && cd .. && ls -a"
     sh "cd .. && ls -a"
     # sh "echo again"
     # sh "cd .. && ls -a"
@@ -23,6 +23,8 @@ platform :ios do
     # sh "rm Podfile"
     # sh "rm Podfile.lock"
     # sh "ls -a"
+    sh "flutter clean"
+    sh "flutter pub get"
     sh "cd .. && rm -rf Pods && pod install --repo-update"
 
     # sh "pod install"
