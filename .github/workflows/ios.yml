@@ -46,7 +46,8 @@ jobs:
           ls
           gem install cocoapods
           bundle install
-          bundle exec pod install --repo-update
+          bundle info
+          pod install --repo-update
           fastlane deployToTestFlight
         shell: bash
         env:
