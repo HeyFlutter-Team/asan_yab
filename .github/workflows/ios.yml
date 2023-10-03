@@ -42,6 +42,11 @@ jobs:
       - name: Build and Deploy to App store
       #pwd ===> /Users/runner/work/asan_yab/asan_yab/ios
         run: |
+          cd ..
+          pwd
+          flutter clean
+          flutter pub get
+          cd ios
           pwd 
           ls
           gem install cocoapods
