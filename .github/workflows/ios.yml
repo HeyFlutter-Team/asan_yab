@@ -41,6 +41,11 @@ jobs:
   
       - name: Build and Deploy to App store
         run: |
+          pwd
+          gem install cocoapods
+          cd ..
+          bundle install
+          bundle exec pod install --repo-update
           fastlane deployToTestFlight
         shell: bash
         env:
@@ -62,13 +67,7 @@ jobs:
         working-directory: ios
 
 
-# ====
-# pwd
-# gem install cocoapods
-# cd ..
-# bundle install
-# bundle exec pod install --repo-update
-# ==
+
 
 
 #         - name: Checkout code
