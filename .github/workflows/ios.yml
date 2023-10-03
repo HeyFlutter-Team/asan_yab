@@ -35,10 +35,12 @@ jobs:
         with:
           host: github.com
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      
+      - name: Pod install
+        run: cd ios && pod install
 
       - name: Build and Deploy to App store
         run: |
-          pod install
           fastlane deployToTestFlight
         env:
           APPLICATION_ID: ${{ secrets.APPLICATION_ID }}
