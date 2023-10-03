@@ -23,7 +23,7 @@ platform :ios do
     # sh "rm Podfile"
     # sh "rm Podfile.lock"
     # sh "ls -a"
-    sh "cd .. && rm Podfile.lock && rm -rf Pods && pod install --repo-update"
+    sh "cd .. && rm -rf Pods && pod install --repo-update"
 
     # sh "pod install"
     # sh "gem update cocoapods --pre"
