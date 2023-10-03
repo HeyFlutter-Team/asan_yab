@@ -18,7 +18,7 @@ platform :ios do
     # sh "pod deintegrate"
     # sh "pod clean"
     # sh "cd . && ls -a"
-    sh "cd .."
+    # sh "cd .."
     sh "ls -a"
     sh "rm Podfile"
     sh "rm Podfile.lock"
