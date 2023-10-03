@@ -31,7 +31,7 @@ jobs:
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Build and Deploy to Google Play
         run: |
-          fastlane deployToTestFlight
+          bundle exec fastlane deployToTestFlight
         env:
           APPLICATION_ID: ${{ secrets.APPLICATION_ID }}
           BUNDLE_IDENTIFIER: ${{ secrets.BUNDLE_IDENTIFIER }}
