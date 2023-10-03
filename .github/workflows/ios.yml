@@ -46,7 +46,7 @@ jobs:
           ls
           gem install cocoapods
           bundle install
-          pod install
+          echo running lane now
           fastlane deployToTestFlight
         shell: bash
         env:
