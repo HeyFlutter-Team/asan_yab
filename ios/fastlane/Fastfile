@@ -23,7 +23,7 @@ platform :ios do
     # sh "find Users"
     # sh "find runner"
     # sh "find work"
-    sh ".pub-cache"
+    # sh "ls"
 
 
     build_app(
