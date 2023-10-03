@@ -20,9 +20,9 @@ platform :ios do
     #   timeout: 1800
     # )
 
-    sh "find Users"
-    sh "find runner"
-    sh "find work"
+    # sh "find Users"
+    # sh "find runner"
+    # sh "find work"
     sh ".pub-cache"
 
 
