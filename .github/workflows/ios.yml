@@ -48,8 +48,12 @@ jobs:
           bundle install
           pwd 
           ls
+          echo installing pods
+          gem pod install
+          echo updating pods
+          gem pod install --repo-update
           echo running lane now
-          fastlane deployToTestFlight
+          bundle exec fastlane deployToTestFlight
         shell: bash
         env:
           APPLICATION_ID: ${{ secrets.APPLICATION_ID }}
