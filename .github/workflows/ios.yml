@@ -43,7 +43,7 @@ jobs:
         run: |
           gem install cocoapods
           cd ios
-          pod install --repo-update
+          bundle exec pod install --repo-update
           fastlane deployToTestFlight
         shell: bash
         env:
