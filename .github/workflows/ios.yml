@@ -10,19 +10,17 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v2
 
       - name: Set Fastlane environment to non-interactive
         run: echo "FASTLANE_OPT_OUT_USAGE=1" >> $GITHUB_ENV
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+      - name: Install Flutter SDK
+        uses: mobiledevops/flutter-sdk-action@v1.0.0
         with:
-          flutter-version: 3.10.6
-          channel: 'stable'
-          architecture: arm64
+          flutter-sdk-version: 3.7.7
       - run: flutter --version
+
       - name: Set FASTLANE_SESSION
         run: echo "FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}" >> $GITHUB_ENV
       - name: Setup SSH
