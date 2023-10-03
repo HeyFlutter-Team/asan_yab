@@ -10,6 +10,7 @@ platform :ios do
     # sh "ls -a"
     # sh "cd ios"
     sh "ls -a"
+    sh "gem install cocoapods"
     sh "pod install"
     sh "gem update cocoapods --pre"
     sh "pod install --repo-update"
