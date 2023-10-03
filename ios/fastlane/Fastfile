@@ -7,8 +7,9 @@ platform :ios do
     sh "cd .. && gem install cocoapods"
     sh "cd .. && rm Podfile.lock && ls -a"
     sh "flutter clean"
+    sh "flutter pub cache clean"
     sh "flutter pub get"
-    sh "flutter pub cache repair"
+    # sh "flutter pub cache repair"
     update_code_signing_settings(
       use_automatic_signing: false,
     )
