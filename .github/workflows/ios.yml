@@ -25,7 +25,8 @@ jobs:
           # cache-path: '${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:' # optional, change this to specify the cache path
           architecture: arm64 # optional, x64 or arm64
       # - run: flutter --version
-
+      - name: Set FLUTTER_ROOT
+        run: echo "FLUTTER_ROOT=$(flutter sdk-path)" >> $GITHUB_ENV
       # - name: Set up Ruby
       #   uses: actions/setup-ruby@v1
       #   with:
