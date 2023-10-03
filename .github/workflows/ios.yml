@@ -23,15 +23,19 @@ jobs:
         with:
           flutter-version: '3.10.6'
       - run: flutter --version
-  
+
+      - name: Set FLUTTER_ROOT
+        run: echo "FLUTTER_ROOT=$(flutter sdk-path)" >> $GITHUB_ENV
 
       - name: Set FASTLANE_SESSION
         run: echo "FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}" >> $GITHUB_ENV
+
       - name: Setup SSH
         uses: MrSquaare/ssh-setup-action@v1
         with:
           host: github.com
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
       - name: Build and Deploy to App store
         run: |
           fastlane deployToTestFlight
