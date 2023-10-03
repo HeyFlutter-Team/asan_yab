@@ -44,6 +44,7 @@ jobs:
           pwd
           gem install cocoapods
           cd ..
+          bundle install
           bundle exec pod install --repo-update
           fastlane deployToTestFlight
         shell: bash
