@@ -45,48 +45,13 @@ jobs:
           host: github.com
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      #  - name: Github Login
-      #   run: gh auth login --with-token < ./ios/mytoken.txt
       - name: Clone repo
         run: git clone git@github.com:HarisAtiq2762/ios-certificates.git /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/d20231002-6471-1azqkg1
-        
-
-      # - name: Install the Apple certificate and provisioning profile
-      #   run: |
-      #     # create variables
-      #     CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-      #     PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
-      #     KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
-
-      #     # import certificate and provisioning profile from secrets
-      #     echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
-      #     echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
-
-      #     # create temporary keychain
-      #     security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-      #     security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-      #     security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-
-      #     # import certificate to keychain
-      #     security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-      #     security list-keychain -d user -s $KEYCHAIN_PATH
-
-      #     # apply provisioning profile
-      #     mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-      #     cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
       - name: Build and Deploy to App Store
         run: |
-          # flutter pub get
           fastlane deployToTestFlight
 
-
-#          if [ ${{ github.ref }} = 'refs/heads/production' ]; then
-#            fastlane deployToTestFlight
-#          else
-#            fastlane deployToTestFlight
-#          fi
-#          # fastlane deployToTestFlight
         env:
           APPLICATION_ID: ${{ secrets.APPLICATION_ID }}
           BUNDLE_IDENTIFIER: ${{ secrets.BUNDLE_IDENTIFIER }}
@@ -104,58 +69,5 @@ jobs:
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
           # KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         working-directory: ios
-
-
-#name: iOS Deploy
-#on:
-#  push:
-#    branches:
-#      - master
-#      - production
-#
-#jobs:
-#  build:
-#    runs-on: macos-latest
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v2
-#
-#      - name: Set up Ruby
-#        uses: actions/setup-ruby@v1
-#        with:
-#          ruby-version: 2.7
-#
-#      - name: Install bundler
-#        run: gem install bundler
-#
-#      - name: Install Fastlane
-#        run: bundle install
-#
-#      - name: Bundle install
-#        run: cd ./ios && bundle install
-#
-#      - name: Set Fastlane environment to non-interactive
-#        run: echo "FASTLANE_OPT_OUT_USAGE=1" >> $GITHUB_ENV
-#
-#      - name: Setup Flutter
-#        uses: subosito/flutter-action@v2
-#        with:
-#          flutter-version: 3.10.6
-#
-#      - name: Build and Deploy to TestFlight
-#        run: |
-#          flutter pub get
-#          bundle exec fastlane deployToTestFlight
-#        env:
-#          APPLICATION_ID: ${{ secrets.APPLICATION_ID }}
-#          BUNDLE_IDENTIFIER: ${{ secrets.BUNDLE_IDENTIFIER }}
-#          FASTLANE_APPLE_EMAIL_ID: ${{ secrets.FASTLANE_APPLE_EMAIL_ID }}
-#          GIT_AUTHORIZATION: ${{ secrets.GIT_AUTHORIZATION }}
-#          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-#          TEMP_KEYCHAIN_PASSWORD: ${{ secrets.TEMP_KEYCHAIN_PASSWORD }}
-#          TEMP_KEYCHAIN_USER: ${{ secrets.TEMP_KEYCHAIN_USER }}
-#          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-#        working-directory: ios
 
 
