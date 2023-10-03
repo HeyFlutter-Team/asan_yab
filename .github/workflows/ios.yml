@@ -48,10 +48,8 @@ jobs:
           bundle install
           pwd 
           ls
-          echo installing pods
-          gem pod install
           echo updating pods
-          gem pod install --repo-update
+          /usr/local/bin/pod install --repo-update
           echo running lane now
           bundle exec fastlane deployToTestFlight
         shell: bash
