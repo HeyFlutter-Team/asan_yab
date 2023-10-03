@@ -21,6 +21,7 @@ platform :ios do
     build_app(
       scheme: "Runner",
       workspace: "Runner.xcworkspace",
+      clean: true,
       export_method: "app-store",
       export_options: {
         "tree_shake_icons": false,
