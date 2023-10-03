@@ -12,6 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: install fastlane
+        run: sudo gem install fastlane
+        
       - name: Set Fastlane environment to non-interactive
         run: echo "FASTLANE_OPT_OUT_USAGE=1" >> $GITHUB_ENV
 
@@ -31,7 +34,7 @@ jobs:
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Build and Deploy to Google Play
         run: |
-          bundle exec fastlane deployToTestFlight
+          fastlane deployToTestFlight
         env:
           APPLICATION_ID: ${{ secrets.APPLICATION_ID }}
           BUNDLE_IDENTIFIER: ${{ secrets.BUNDLE_IDENTIFIER }}
