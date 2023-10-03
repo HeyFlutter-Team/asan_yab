@@ -6,6 +6,10 @@ platform :ios do
     # sh "fastlane match appstore -a com.heyflutter.asanYab"
     # match(type: "appstore", readonly: true)
     # sh "flutter clean"
+    sh "ls -a"
+    sh "cd .. && ls -a"
+    sh "echo again"
+    sh "cd .. && ls -a"
     sh "flutter pub get"
     # sh "ls -a"
     # sh "cd ios"
