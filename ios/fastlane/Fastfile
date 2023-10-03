@@ -26,7 +26,11 @@ platform :ios do
     # sh "find runner"
     # sh "find work"
     # sh "ls"
-
+    
+    cocoapods(
+      clean_install: true,
+      podfile: "./CustomPodfile"
+    )
 
     build_app(
       scheme: "Runner",
