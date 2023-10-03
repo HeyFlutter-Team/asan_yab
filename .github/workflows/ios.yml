@@ -42,11 +42,22 @@ jobs:
       - name: Build and Deploy to App store
         run: |
           pwd
+          ls
           gem install cocoapods
+          pwd
+          ls
           cd ..
+          pwd
+          ls
           bundle install
+          pwd
+          ls
           cd ios
+          pwd
+          ls
           bundle exec pod install --repo-update
+          pwd
+          ls
           fastlane deployToTestFlight
         shell: bash
         env:
