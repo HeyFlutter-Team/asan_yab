@@ -77,10 +77,10 @@ jobs:
 
       - name: Build and Deploy to App Store
         run: |
-          # flutter pub get
-          # cd ./ios && pod install
-          # set -x
+          flutter pub get
           fastlane deployToTestFlight
+
+
 #          if [ ${{ github.ref }} = 'refs/heads/production' ]; then
 #            fastlane deployToTestFlight
 #          else
