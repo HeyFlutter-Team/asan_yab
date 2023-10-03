@@ -11,7 +11,10 @@ platform :ios do
     # sh "cd ios"
     sh "ls -a"
     sh "gem install cocoapods"
+    sh "pod deintegrate"
+    sh "pod clean"
     sh "pod install"
+    # sh "pod install"
     # sh "gem update cocoapods --pre"
     # sh "pod install --repo-update"
     update_code_signing_settings(
