@@ -20,6 +20,8 @@ platform :ios do
     #   timeout: 1800
     # )
 
+    sh "find src"
+
     build_app(
       scheme: "Runner",
       workspace: "Runner.xcworkspace",
