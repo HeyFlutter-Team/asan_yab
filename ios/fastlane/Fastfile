@@ -18,7 +18,7 @@ platform :ios do
     # sh "pod deintegrate"
     # sh "pod clean"
     # sh "cd . && ls -a"
-    sh "rm Podfile"
+    sh "ls -a && rm Podfile"
     sh "rm Podfile.lock"
     sh "ls -a"
     sh "pod install --repo-update"
