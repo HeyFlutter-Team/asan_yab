@@ -25,7 +25,7 @@ platform :ios do
     # sh "ls -a"
     sh "flutter clean"
     sh "flutter pub get"
-    sh "cd .. && rm -rf Pods && pod install --repo-update"
+    # sh "cd .. && rm -rf Pods && pod install --repo-update"
 
     # sh "pod install"
     # sh "gem update cocoapods --pre"
