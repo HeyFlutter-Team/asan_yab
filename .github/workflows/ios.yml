@@ -16,20 +16,20 @@ jobs:
         with:
           xcode-version: "13.4"
 
-      - name: Set up Ruby
-        uses: actions/setup-ruby@v1
-        with:
-          ruby-version: 2.7
+      # - name: Set up Ruby
+      #   uses: actions/setup-ruby@v1
+      #   with:
+      #     ruby-version: 2.7
         
 #      - name: Select Xcode version
 #        run: sudo xcode-select -s '/Applications/Xcode_11.3.app/Contents/Developer'
       - name: Bundle install
         run: cd ./ios && gem install bundler:2.4.10
         # run: cd ./ios && bundle install
-      - name: Setup JDK
-        uses: actions/setup-java@v1
-        with:
-          java-version: "12.x"
+      # - name: Setup JDK
+      #   uses: actions/setup-java@v1
+      #   with:
+      #     java-version: "12.x"
       - name: Set Fastlane environment to non-interactive
         run: echo "FASTLANE_OPT_OUT_USAGE=1" >> $GITHUB_ENV
       - name: Set FASTLANE_SESSION

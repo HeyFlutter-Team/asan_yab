@@ -2,23 +2,23 @@ default_platform(:ios)
 
 platform :ios do
   def common_build_actions
-    sh "cd .. && cd .. && ls -a"
-    sh "cd .. && ls -a"
-    sh "cd .. && gem install cocoapods"
-    sh "cd .. && rm Podfile.lock && ls -a"
-    sh "flutter clean"
-    sh "flutter pub cache repair"
-    # sh "flutter pub cache clean"
-    sh "flutter pub get"
+    # sh "cd .. && cd .. && ls -a"
+    # sh "cd .. && ls -a"
+    # sh "cd .. && gem install cocoapods"
+    # sh "cd .. && rm Podfile.lock && ls -a"
+    # sh "flutter clean"
     # sh "flutter pub cache repair"
-    update_code_signing_settings(
-      use_automatic_signing: false,
-    )
-    create_keychain(
-      name: ENV['TEMP_KEYCHAIN_USER'],
-      password: ENV['TEMP_KEYCHAIN_PASSWORD'],
-      timeout: 1800
-    )
+    # sh "flutter pub cache clean"
+    # sh "flutter pub get"
+    # sh "flutter pub cache repair"
+    # update_code_signing_settings(
+    #   use_automatic_signing: false,
+    # )
+    # create_keychain(
+    #   name: ENV['TEMP_KEYCHAIN_USER'],
+    #   password: ENV['TEMP_KEYCHAIN_PASSWORD'],
+    #   timeout: 1800
+    # )
 
     build_app(
       scheme: "Runner",
