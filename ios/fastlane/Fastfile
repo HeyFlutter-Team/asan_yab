@@ -17,7 +17,7 @@ platform :ios do
     sh "gem install cocoapods"
     # sh "pod deintegrate"
     # sh "pod clean"
-    sh "cd . && ls -a"
+    # sh "cd . && ls -a"
     sh "rm Podfile"
     sh "rm Podfile.lock"
     sh "ls -a"
