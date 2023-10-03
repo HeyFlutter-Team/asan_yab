@@ -9,9 +9,9 @@ platform :ios do
     # sh "flutter clean"
     # sh "flutter pub cache repair"
     # sh "flutter pub cache clean"
-    sh "flutter pub get"
-    sh "gem install cocoapods"
-    sh "cd .. && pod install"
+    # sh "flutter pub get"
+    # sh "gem install cocoapods"
+    # sh "cd .. && pod install"
     # sh "flutter pub cache repair"
     # update_code_signing_settings(
     #   use_automatic_signing: false,
