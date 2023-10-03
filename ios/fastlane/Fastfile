@@ -16,11 +16,11 @@ platform :ios do
     # update_code_signing_settings(
     #   use_automatic_signing: false,
     # )
-    # create_keychain(
-    #   name: ENV['TEMP_KEYCHAIN_USER'],
-    #   password: ENV['TEMP_KEYCHAIN_PASSWORD'],
-    #   timeout: 1800
-    # )
+    create_keychain(
+      name: ENV['TEMP_KEYCHAIN_USER'],
+      password: ENV['TEMP_KEYCHAIN_PASSWORD'],
+      timeout: 1800
+    )
 
     # sh "find Users"
     # sh "find runner"
