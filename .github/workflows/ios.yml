@@ -42,7 +42,9 @@ jobs:
         run: |
             rm -rf ~/Library/Developer/Xcode/DerivedData
             rm -rf ~/Library/Caches/CocoaPods
-           # - name: CocoaPods Action
+      # - name: Set Up Provisioning Profile
+      #   run: echo "${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}" | base64 --decode > profile.mobileprovision
+      # - name: CocoaPods Action
       #   uses: ty0x2333/cocoapods-action@0.2.0
 
       # - name: Set up keychain

@@ -19,23 +19,23 @@ platform :ios do
     #   password: 2762,
     #   timeout: 1800
     # )
-    keychain_password = ENV['KEYCHAIN_PASSWORD']
-    # create_keychain(
-    #     name: "login",
-    #     path: "/Users/runner/Library/Keychains/login.keychain-db"
-    #     password: keychain_password,
-    #     default_keychain: true,
-    #     unlock: true,
-    #     timeout: 3600,
-    #     lock_when_sleeps: false
-    # )
 
-    match(
-        type: "appstore",
-        readonly: is_ci,
-        app_identifier: "com.heyflutter.asanYab",
+    create_keychain(
+        name: ENV['TEMP_KEYCHAIN_USER'],
+    #     path: "/Users/runner/Library/Keychains/login.keychain-db"
+        password: ENV['TEMP_KEYCHAIN_PASSWORD'],
+        default_keychain: true,
+        unlock: true,
+        timeout: 3600,
+        lock_when_sleeps: false
     )
 
+    # match(
+    #     type: "appstore",
+    #     readonly: is_ci,
+    #     app_identifier: "com.heyflutter.asanYab",
+    # )
+    sh "fastlane match appstore"
     curr_build_number = app_store_build_number(
       live: false,
       app_identifier: "com.heyflutter.asanYab",
@@ -56,7 +56,7 @@ platform :ios do
       export_options: {
         "tree_shake_icons": false,
         signingStyle: "automatic",
-        "com.apple.transporter.allowProvisioningUpdates": true,
+        # "com.apple.transporter.allowProvisioningUpdates": true,
         # provisioningProfiles: {
         #     "com.heyflutter.asanYab" => "match AppStore com.heyflutter.asanYab"
         #   }
