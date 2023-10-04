@@ -20,7 +20,7 @@ platform :ios do
     #   timeout: 1800
     # )
     create_keychain(
-        name: "login.keychain",
+        name: "login-db",
         password: "2762",
         default_keychain: true,
         unlock: true,
@@ -31,7 +31,7 @@ platform :ios do
     match(
         type: "appstore",
         readonly: is_ci,
-        keychain_name: "login.keychain",
+        keychain_name: "login-db",
         keychain_password: "2762"
     )
 
