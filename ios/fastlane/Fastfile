@@ -43,7 +43,9 @@ platform :ios do
       app_identifier: "com.heyflutter.asanYab",
       username: "dev.milkejohannes@gmail.com"
     )
+
     sh "echo ${curr_build_number}"
+    sh "${curr_build_number}"
 
     increment_build_number(
       build_number: curr_build_number + 1,
