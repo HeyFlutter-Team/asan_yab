@@ -31,7 +31,7 @@ jobs:
         run: echo "FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}" >> $GITHUB_ENV
 
       - name: Set keychain password
-        run: echo "keychain_password=${2762}" >> $GITHUB_ENV
+        run: echo "keychain_password=${{ secrets.KEYCHAIN_PASSWORD }}" >> $GITHUB_ENV
 
       - name: Setup SSH
         uses: MrSquaare/ssh-setup-action@v1
@@ -78,7 +78,7 @@ jobs:
           # BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
           # P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
-          # KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         working-directory: ios
 
 
