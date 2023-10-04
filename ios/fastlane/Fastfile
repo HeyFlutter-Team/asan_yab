@@ -30,12 +30,17 @@ platform :ios do
         lock_when_sleeps: false
     )
 
-    # match(
-    #     type: "appstore",
-    #     readonly: is_ci,
-    #     app_identifier: "com.heyflutter.asanYab",
-    # )
-    sh "fastlane match appstore"
+    match(
+        type: "appstore",
+        readonly: is_ci,
+        name: ENV['TEMP_KEYCHAIN_USER'],
+    #     path: "/Users/runner/Library/Keychains/login.keychain-db"
+        password: ENV['TEMP_KEYCHAIN_PASSWORD'],
+        # app_identifier: "com.heyflutter.asanYab",
+    )
+
+    # sh "fastlane match appstore"
+
     curr_build_number = app_store_build_number(
       live: false,
       app_identifier: "com.heyflutter.asanYab",
