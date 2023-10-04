@@ -44,7 +44,8 @@ jobs:
 
       # - name: CocoaPods Action
       #   uses: ty0x2333/cocoapods-action@0.2.0
-  
+      - name: Set up keychain
+        run: fastlane run create_keychain name:login.keychain password:2762
       - name: Build and Deploy to App store
       #pwd ===> /Users/runner/work/asan_yab/asan_yab/ios
         run: |
