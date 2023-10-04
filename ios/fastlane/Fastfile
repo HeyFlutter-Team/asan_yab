@@ -33,9 +33,9 @@ platform :ios do
     match(
         type: "appstore",
         readonly: is_ci,
-        name: ENV['TEMP_KEYCHAIN_USER'],
+        keychain_name: ENV['TEMP_KEYCHAIN_USER'],
     #     path: "/Users/runner/Library/Keychains/login.keychain-db"
-        password: ENV['TEMP_KEYCHAIN_PASSWORD'],
+        keychain_password: ENV['TEMP_KEYCHAIN_PASSWORD'],
         # app_identifier: "com.heyflutter.asanYab",
     )
 
