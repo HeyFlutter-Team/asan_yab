@@ -19,6 +19,7 @@ platform :ios do
     #   password: 2762,
     #   timeout: 1800
     # )
+    ENV['KEYCHAIN_PASSWORD'] = "2762"
     create_keychain(
         name: "login-db",
         password: "2762",
