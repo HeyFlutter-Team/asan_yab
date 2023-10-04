@@ -53,9 +53,9 @@ platform :ios do
     build_app(
       scheme: "Runner",
       workspace: "Runner.xcworkspace",
-      clean: false,
+      # clean: false,
       export_method: "app-store",
-      export_xcargs: "-allowProvisioningUpdates",
+      # export_xcargs: "-allowProvisioningUpdates",
       # keychain_password: "2762",
       export_options: {
         "tree_shake_icons": false,
