@@ -38,7 +38,11 @@ jobs:
         with:
           host: github.com
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
+      - name: Clear Xcode Cache
+        run: |
+            rm -rf ~/Library/Developer/Xcode/DerivedData
+            rm -rf ~/Library/Caches/CocoaPods
+        
       # - name: CocoaPods Action
       #   uses: ty0x2333/cocoapods-action@0.2.0
 
