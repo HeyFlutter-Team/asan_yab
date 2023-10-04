@@ -29,7 +29,8 @@ jobs:
       - run: flutter --version
 
       - name: Set FLUTTER_ROOT
-        run: echo "FLUTTER_ROOT=$(flutter sdk-path)" >> $GITHUB_ENV
+        # run: echo "FLUTTER_ROOT=$(flutter --version | awk -F ': ' '/Flutter/{print $2}')" >> $GITHUB_ENV
+        run: echo "FLUTTER_ROOT=/Users/runner/hostedtoolcache/flutter/stable-3.10.6-x64" >> $GITHUB_ENV
 
       - name: Set FASTLANE_SESSION
         run: echo "FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}" >> $GITHUB_ENV
