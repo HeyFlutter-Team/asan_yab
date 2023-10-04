@@ -11,7 +11,7 @@ platform :ios do
     # )
 
     update_code_signing_settings(
-      use_automatic_signing: true,
+      use_automatic_signing: false,
     )
 
         # create_keychain(
@@ -59,11 +59,11 @@ platform :ios do
       # keychain_password: "2762",
       export_options: {
         "tree_shake_icons": false,
-        signingStyle: "automatic",
-        "com.apple.transporter.allowProvisioningUpdates": true,
-        # provisioningProfiles: {
-        #     "com.heyflutter.asanYab" => "match AppStore com.heyflutter.asanYab"
-        #   }
+        # signingStyle: "automatic",
+        # "com.apple.transporter.allowProvisioningUpdates": true,
+        provisioningProfiles: {
+            "com.heyflutter.asanYab" => "match AppStore com.heyflutter.asanYab"
+          }
       }
     )
   end
