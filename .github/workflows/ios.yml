@@ -30,6 +30,9 @@ jobs:
       - name: Set FASTLANE_SESSION
         run: echo "FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}" >> $GITHUB_ENV
 
+      - name: Set keychain password
+        run: echo "keychain_password=${2762}" >> $GITHUB_ENV
+
       - name: Setup SSH
         uses: MrSquaare/ssh-setup-action@v1
         with:
