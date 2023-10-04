@@ -3,12 +3,12 @@ default_platform(:ios)
 platform :ios do
   def common_build_actions
 
-    setup_ci(force: true)
+    # setup_ci(force: true)
 
-    sync_code_signing(  
-      type: "appstore",
-      readonly: is_ci
-    )
+    # sync_code_signing(  
+    #   type: "appstore",
+    #   readonly: is_ci
+    # )
     curr_build_number = app_store_build_number(
       live: false,
       app_identifier: "com.heyflutter.asanYab",
