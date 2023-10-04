@@ -3,12 +3,12 @@ default_platform(:ios)
 platform :ios do
   def common_build_actions
 
-    # setup_ci(force: true)
+    setup_ci(force: true)
 
-    # sync_code_signing(  
-    #   type: "appstore",
-    #   readonly: is_ci
-    # )
+    sync_code_signing(  
+      type: "appstore",
+      readonly: is_ci
+    )
     curr_build_number = app_store_build_number(
       live: false,
       app_identifier: "com.heyflutter.asanYab",
@@ -25,12 +25,13 @@ platform :ios do
       clean: false,
       export_method: "app-store",
       export_xcargs: "-allowProvisioningUpdates",
+      keychain_password: "2762",
       export_options: {
         "tree_shake_icons": false,
-        signingStyle: "automatic",
-        # provisioningProfiles: {
-        #     "com.heyflutter.asanYab" => "match AppStore com.heyflutter.asanYab"
-        #   }
+        # signingStyle: "automatic",
+        provisioningProfiles: {
+            "com.heyflutter.asanYab" => "match AppStore com.heyflutter.asanYab"
+          }
       }
     )
   end
