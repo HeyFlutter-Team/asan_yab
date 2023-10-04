@@ -13,9 +13,9 @@ platform :ios do
     # sh "gem install cocoapods"
     # sh "cd .. && pod install"
     # sh "flutter pub cache repair"
-    # update_code_signing_settings(
-    #   use_automatic_signing: true,
-    # )
+    update_code_signing_settings(
+      use_automatic_signing: true,
+    )
     # create_keychain(
     #   name: ENV['TEMP_KEYCHAIN_USER'],
     #   password: ENV['TEMP_KEYCHAIN_PASSWORD'],
@@ -32,18 +32,18 @@ platform :ios do
     #   podfile: "./Podfile"
     # )
 
-    setup_ci(force: true)
+    # setup_ci(force: true)
 
-    sync_code_signing(  
-      type: "appstore",
-      readonly: is_ci
-    )
+    # sync_code_signing(  
+    #   type: "appstore",
+    #   readonly: is_ci
+    # )
     curr_build_number = app_store_build_number(
       live: false,
       app_identifier: "com.heyflutter.asanYab",
       username: "dev.milkejohannes@gmail.com"
     )
-    sh "echo curr_build_number"
+    sh "echo ${curr_build_number}"
 
     increment_build_number(
       build_number: app_store_build_number + 1,
@@ -55,7 +55,7 @@ platform :ios do
       clean: false,
       export_method: "app-store",
       export_options: {
-        # signingStyle: "automatic",
+        signingStyle: "automatic",
         "tree_shake_icons": false,
         provisioningProfiles: {
             "com.heyflutter.asanYab" => "match AppStore com.heyflutter.asanYab"
