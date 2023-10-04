@@ -56,6 +56,7 @@ platform :ios do
       export_options: {
         "tree_shake_icons": false,
         signingStyle: "automatic",
+        "com.apple.transporter.allowProvisioningUpdates": true,
         # provisioningProfiles: {
         #     "com.heyflutter.asanYab" => "match AppStore com.heyflutter.asanYab"
         #   }
