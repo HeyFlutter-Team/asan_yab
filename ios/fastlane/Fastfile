@@ -19,6 +19,21 @@ platform :ios do
     #   password: 2762,
     #   timeout: 1800
     # )
+    create_keychain(
+        name: "login.keychain",
+        password: "2762",
+        default_keychain: true,
+        unlock: true,
+        timeout: 3600,
+        lock_when_sleeps: false
+    )
+
+    match(
+        type: "appstore",
+        readonly: is_ci,
+        keychain_name: "login.keychain",
+        keychain_password: "2762"
+    )
 
     curr_build_number = app_store_build_number(
       live: false,
