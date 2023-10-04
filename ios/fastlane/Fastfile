@@ -39,6 +39,7 @@ platform :ios do
       readonly: is_ci
     )
     curr_build_number = app_store_build_number(
+      live: false,
       app_identifier: "com.heyflutter.asanYab",
       username: "dev.milkejohannes@gmail.com"
     )
