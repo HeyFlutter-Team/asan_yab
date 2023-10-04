@@ -13,9 +13,9 @@ platform :ios do
     # sh "gem install cocoapods"
     # sh "cd .. && pod install"
     # sh "flutter pub cache repair"
-    # update_code_signing_settings(
-    #   use_automatic_signing: false,
-    # )
+    update_code_signing_settings(
+      use_automatic_signing: true,
+    )
     # create_keychain(
     #   name: ENV['TEMP_KEYCHAIN_USER'],
     #   password: ENV['TEMP_KEYCHAIN_PASSWORD'],
@@ -45,6 +45,7 @@ platform :ios do
       clean: false,
       export_method: "app-store",
       export_options: {
+        signingStyle: "automatic",
         "tree_shake_icons": false,
         provisioningProfiles: {
             "com.heyflutter.asanYab" => "match AppStore com.heyflutter.asanYab"
