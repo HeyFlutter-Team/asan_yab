@@ -19,21 +19,21 @@ platform :ios do
     #   password: 2762,
     #   timeout: 1800
     # )
-    ENV['KEYCHAIN_PASSWORD'] = "2762"
-    create_keychain(
-        name: "login-db",
-        password: "2762",
-        default_keychain: true,
-        unlock: true,
-        timeout: 3600,
-        lock_when_sleeps: false
-    )
+    keychain_password = ENV['KEYCHAIN_PASSWORD']
+    # create_keychain(
+    #     name: "login",
+    #     path: "/Users/runner/Library/Keychains/login.keychain-db"
+    #     password: keychain_password,
+    #     default_keychain: true,
+    #     unlock: true,
+    #     timeout: 3600,
+    #     lock_when_sleeps: false
+    # )
 
     match(
         type: "appstore",
         readonly: is_ci,
-        keychain_name: "login-db",
-        keychain_password: "2762"
+        app_identifier: "com.heyflutter.asanYab",
     )
 
     curr_build_number = app_store_build_number(
