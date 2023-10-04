@@ -2,35 +2,6 @@ default_platform(:ios)
 
 platform :ios do
   def common_build_actions
-    # sh "cd .. && cd .. && ls -a"
-    # sh "cd .. && ls -a"
-    # sh "cd .. && gem install cocoapods"
-    # sh "cd .. && rm Podfile.lock && ls -a"
-    # sh "flutter clean"
-    # sh "flutter pub cache repair"
-    # sh "flutter pub cache clean"
-    # sh "flutter pub get"
-    # sh "gem install cocoapods"
-    # sh "cd .. && pod install"
-    # sh "flutter pub cache repair"
-    # update_code_signing_settings(
-    #   use_automatic_signing: true,
-    # )
-    # create_keychain(
-    #   name: ENV['TEMP_KEYCHAIN_USER'],
-    #   password: ENV['TEMP_KEYCHAIN_PASSWORD'],
-    #   timeout: 1800
-    # )
-
-    # sh "find Users"
-    # sh "find runner"
-    # sh "find work"
-    # sh "ls"
-
-    # cocoapods(
-    #   clean_install: true,
-    #   podfile: "./Podfile"
-    # )
 
     setup_ci(force: true)
 
@@ -43,9 +14,6 @@ platform :ios do
       app_identifier: "com.heyflutter.asanYab",
       username: "dev.milkejohannes@gmail.com"
     )
-
-    sh "echo ${curr_build_number}"
-    sh "${curr_build_number}"
 
     increment_build_number(
       build_number: curr_build_number + 1,
@@ -60,9 +28,9 @@ platform :ios do
       export_options: {
         "tree_shake_icons": false,
         signingStyle: "automatic",
-        provisioningProfiles: {
-            "com.heyflutter.asanYab" => "match AppStore com.heyflutter.asanYab"
-          }
+        # provisioningProfiles: {
+        #     "com.heyflutter.asanYab" => "match AppStore com.heyflutter.asanYab"
+        #   }
       }
     )
   end
