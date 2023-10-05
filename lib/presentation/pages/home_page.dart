@@ -68,13 +68,13 @@ class _HomePageState extends ConsumerState<HomePage> {
               const SizedBox(height: 16.0),
               NewPlaces(onRefresh: onRefresh),
               const SizedBox(height: 32),
-              ref.watch(nearbyPlace).isEmpty
-                  ? const SizedBox(height: 0)
-                  : const NearbyPlaceWidget(),
-              const SizedBox(height: 32),
               widget.isConnected!
                   ? Categories(onRefresh: onRefresh)
                   : const SizedBox(),
+              const SizedBox(height: 32),
+              ref.watch(nearbyPlace).isEmpty
+                  ? const SizedBox(height: 0)
+                  : const NearbyPlaceWidget(),
               Favorites(isConnected: widget.isConnected!),
             ],
           ),

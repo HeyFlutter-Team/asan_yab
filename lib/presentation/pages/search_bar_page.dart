@@ -1,3 +1,4 @@
+import 'package:asan_yab/domain/riverpod/screen/search_load_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +17,7 @@ class SearchPage extends ConsumerStatefulWidget {
 
 class _SearchPageState extends ConsumerState<SearchPage> {
   final searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -37,21 +39,33 @@ class _SearchPageState extends ConsumerState<SearchPage> {
           shadowColor: Colors.blue,
           backgroundColor: Theme.of(context).primaryColor,
           title: TextFormField(
-              controller: searchController,
-              autofocus: true,
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                hintText: 'جستجو ',
-              ),
-              onChanged: (value) {
-                ref.read(searchTypeSenseProvider.notifier).search(value);
-              }),
+            controller: searchController,
+            // autofocus: true,
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              hintText: 'جستجو ',
+            ),
+            onChanged: (value) {
+              ref.read(searchTypeSenseProvider.notifier).search(value);
+              if (value.isEmpty) {
+                ref.refresh(searchTypeSenseProvider.notifier).clear;
+              }
+              if (value.isNotEmpty) {
+                ref.refresh(searchLoadingProvider.notifier).state = true;
+              } else {
+                ref.refresh(searchLoadingProvider.notifier).state = false;
+              }
+            },
+          ),
           actions: [
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
-              child: searchController.text.isNotEmpty
+              child: ref.watch(searchLoadingProvider)
                   ? IconButton(
-                      onPressed: () => searchController.clear(),
+                      onPressed: () {
+                        searchController.clear();
+                        ref.refresh(searchTypeSenseProvider.notifier).clear;
+                      },
                       icon: const Icon(
                         Icons.close,
                         size: 25.0,
@@ -62,7 +76,10 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             ),
           ],
           leading: IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(context);
+              ref.refresh(searchTypeSenseProvider.notifier).clear;
+            },
             icon: const Icon(Icons.arrow_back, color: Colors.black, size: 25.0),
           ),
         ),
