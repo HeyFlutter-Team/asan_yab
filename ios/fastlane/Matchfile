@@ -1,0 +1,9 @@
+git_url("git@github.com:HarisAtiq2762/ios-certificates.git")
+
+storage_mode("git")
+
+type("appstore") # The default type, can be: appstore, adhoc, enterprise or development
+
+app_identifier("com.heyflutter.asanYab")
+
+username("dev.milkejohannes@gmail.com")

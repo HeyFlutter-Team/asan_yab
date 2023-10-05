@@ -42,3 +42,5 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+ios/Runner.xcworkspace/xcuserdata/harisatiq.xcuserdatad/UserInterfaceState.xcuserstate
+ios/Runner.xcworkspace/xcuserdata/harisatiq.xcuserdatad/UserInterfaceState.xcuserstate

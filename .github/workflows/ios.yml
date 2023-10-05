@@ -1,0 +1,180 @@
+name: iOS Deploy
+on:
+  push:
+    branches:
+      - master
+      - production
+
+jobs:
+  build:
+    runs-on: macos-13-xlarge
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: "14.2"
+
+      - name: install fastlane
+        run: sudo gem install fastlane
+
+      - name: Set Fastlane environment to non-interactive
+        run: echo "FASTLANE_OPT_OUT_USAGE=1" >> $GITHUB_ENV
+
+      - name: Flutter action
+        uses: subosito/flutter-action@v2.10.0
+        with:
+          flutter-version: '3.10.6'
+          cache: true 
+      - run: flutter --version
+
+      - name: Set FLUTTER_ROOT
+        # run: echo "FLUTTER_ROOT=$(flutter --version | awk -F ': ' '/Flutter/{print $2}')" >> $GITHUB_ENV
+        run: echo "FLUTTER_ROOT=/Users/runner/hostedtoolcache/flutter/stable-3.10.6-x64" >> $GITHUB_ENV
+
+      - name: Set FASTLANE_SESSION
+        run: echo "FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}" >> $GITHUB_ENV
+
+      - name: Setup SSH
+        uses: MrSquaare/ssh-setup-action@v1
+        with:
+          host: github.com
+          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Clear Xcode Cache
+        run: |
+            rm -rf ~/Library/Developer/Xcode/DerivedData
+            rm -rf ~/Library/Caches/CocoaPods
+      - name: Set Up Provisioning Profile
+        run: |
+          # create variables
+
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/login.keychain-db
+
+          # import certificate and provisioning profile from secrets
+
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
+
+          # create temporary keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          # apply provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+          
+      # - name: CocoaPods Action
+      #   uses: ty0x2333/cocoapods-action@0.2.0
+
+      # - name: Set up keychain
+      #   run: fastlane run create_keychain name:login.keychain password:2762
+      - name: Build and Deploy to App store
+      #pwd ===> /Users/runner/work/asan_yab/asan_yab/ios
+        run: |
+          cd ..
+          pwd
+          flutter clean
+          flutter pub get
+          cd ios
+          pwd 
+          ls
+          gem install cocoapods
+          bundle install
+          pwd 
+          ls
+          echo installing pods
+          pod install
+          echo updating pods
+
+          echo running lane now
+          bundle exec fastlane deployToTestFlight
+        shell: bash
+        env:
+          APPLICATION_ID: ${{ secrets.APPLICATION_ID }}
+          BUNDLE_IDENTIFIER: ${{ secrets.BUNDLE_IDENTIFIER }}
+          FASTLANE_APPLE_EMAIL_ID: ${{ secrets.FASTLANE_APPLE_EMAIL_ID }}
+          GIT_AUTHORIZATION: ${{ secrets.GIT_AUTHORIZATION }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          TEMP_KEYCHAIN_PASSWORD: ${{ secrets.TEMP_KEYCHAIN_PASSWORD }}
+          TEMP_KEYCHAIN_USER: ${{ secrets.TEMP_KEYCHAIN_USER }}
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+          # BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          # P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        working-directory: ios
+
+
+
+
+
+#         - name: Checkout code
+#         uses: actions/checkout@v2
+#       - uses: maxim-lobanov/setup-xcode@v1
+#         with:
+#           xcode-version: "13.4"
+#       - uses: actions/checkout@v3
+#       - uses: subosito/flutter-action@v2
+#         with:
+#           flutter-version: '3.10.6'
+#           channel: 'stable'
+#           # cache: true
+#           # cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:' # optional, change this to force refresh cache
+#           # cache-path: '${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:' # optional, change this to specify the cache path
+#           architecture: arm64 # optional, x64 or arm64
+#       # - run: flutter --version
+#       - name: Set FLUTTER_ROOT
+#         run: echo "FLUTTER_ROOT=$(flutter sdk-path)" >> $GITHUB_ENV
+#       # - name: Set up Ruby
+#       #   uses: actions/setup-ruby@v1
+#       #   with:
+#       #     ruby-version: 2.7
+        
+# #      - name: Select Xcode version
+# #        run: sudo xcode-select -s '/Applications/Xcode_11.3.app/Contents/Developer'
+#       - name: Bundle install
+#         run: cd ./ios && gem install bundler:2.4.10
+#         # run: cd ./ios && bundle install
+#       # - name: Setup JDK
+#       #   uses: actions/setup-java@v1
+#       #   with:
+#       #     java-version: "12.x"
+#       - name: Set Fastlane environment to non-interactive
+#         run: echo "FASTLANE_OPT_OUT_USAGE=1" >> $GITHUB_ENV
+      # - name: Set FASTLANE_SESSION
+      #   run: 
+      #     echo "FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}" >> $GITHUB_ENV
+#       # - name: Setup Flutter
+#       #   uses: subosito/flutter-action@v2
+#       #   with:
+#       #     flutter-version: 3.10.6
+      
+#       # - uses: actions/checkout@v3
+#       # - uses: subosito/flutter-action@v2
+#       #   with:
+#       #      flutter-version: '3.10.6'
+#       #      channel: 'stable'
+#       # - run: flutter --version
+
+      # - name: Setup SSH
+      #   uses: MrSquaare/ssh-setup-action@v1
+      #   with:
+      #     host: github.com
+      #     private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+#       - name: Clone repo
+#         run: git clone git@github.com:HarisAtiq2762/ios-certificates.git /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/d20231002-6471-1azqkg1
+
+#       - name: Build and Deploy to App Store
+#         run: |
+#           fastlane deployToTestFlight
+#           echo CACHE-PATH=${{ steps.flutter-action.outputs.CACHE-PATH }}
+#           echo CACHE-KEY=${{ steps.flutter-action.outputs.CACHE-KEY }}
+#           echo CHANNEL=${{ steps.flutter-action.outputs.CHANNEL }}
+#           echo VERSION=${{ steps.flutter-action.outputs.VERSION }}
+#           echo ARCHITECTURE=${{ steps.flutter-action.outputs.ARCHITECTURE }}
+#         shell: bash

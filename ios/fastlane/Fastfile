@@ -1,0 +1,99 @@
+default_platform(:ios)
+
+platform :ios do
+  def common_build_actions
+
+    # setup_ci(force: true)
+
+    # sync_code_signing(  
+    #   type: "appstore",
+    #   readonly: is_ci
+    # )
+
+    update_code_signing_settings(
+      use_automatic_signing: false,
+    )
+
+        # create_keychain(
+    #   name: login.keychain,
+    #   password: 2762,
+    #   timeout: 1800
+    # )
+
+    # create_keychain(
+    #     name: ENV['TEMP_KEYCHAIN_USER'],
+    # #     path: "/Users/runner/Library/Keychains/login.keychain-db"
+    #     password: ENV['TEMP_KEYCHAIN_PASSWORD'],
+    #     default_keychain: true,
+    #     unlock: true,
+    #     timeout: 3600,
+    #     lock_when_sleeps: false
+    # )
+
+    # match(
+    #     type: "appstore",
+    #     readonly: is_ci,
+    #     keychain_name: ENV['TEMP_KEYCHAIN_USER'],
+    # #     path: "/Users/runner/Library/Keychains/login.keychain-db"
+    #     keychain_password: ENV['TEMP_KEYCHAIN_PASSWORD'],
+    #     # app_identifier: "com.heyflutter.asanYab",
+    # )
+
+
+    curr_build_number = app_store_build_number(
+      live: false,
+      app_identifier: "com.heyflutter.asanYab",
+      username: "dev.milkejohannes@gmail.com"
+    )
+
+    increment_build_number(
+      build_number: curr_build_number + 1,
+    )
+
+    build_app(
+      scheme: "Runner",
+      workspace: "Runner.xcworkspace",
+      # clean: false,
+      export_method: "app-store",
+      # export_xcargs: "-allowProvisioningUpdates",
+      # keychain_password: "2762",
+      export_options: {
+        "tree_shake_icons": false,
+        # signingStyle: "automatic",
+        # "com.apple.transporter.allowProvisioningUpdates": true,
+        provisioningProfiles: {
+            "com.heyflutter.asanYab" => "match AppStore com.heyflutter.asanYab"
+          }
+      }
+    )
+  end
+
+  def generate_api_key
+    app_store_connect_api_key(
+      key_id: "FLUCGL7SRZ",
+      issuer_id: "7ca7cab7-f3fd-4fb6-a1ed-5fe1a20c2db0",
+      key_filepath: "./AuthKey_FLUCGL7SRZ.p8", #"/Users/harisatiq/Downloads/AuthKey_FLUCGL7SRZ.p8",
+      duration: 1200, # optional (maximum 1200)
+      in_house: false # optional but may be required if using match/sigh
+    )
+  end
+
+  lane :deployToTestFlight do
+    ENV['FASTLANE_SESSION']='---\n- !ruby/object:HTTP::Cookie\n  name: myacinfo\n  value: DAWTKNV323952cf8084a204fb20ab2508441a07d02d3ffd89bbbff161a4da3938d36004c843aed4fa5466ff0710dbbf2757dab89e7c2841b82e2e6885fdd0584f062d3b9e189a79d499dfca268f7ca4d51844c36708bd9da0b0659bddaee6a1911858a687d1a8a9fa88f954f65c4ca34897084466e29d02b43af975628e2127495e9ea7bff17fdc2fc0d7b9afe4416660955672da4fecbb2ff12283a5fb6493096a0eb849272532489aa39671b50cc0f5bc131f35e44c903050fee8e8f6cbc910106dc2a513a1726c7acc4576d3ad003c64e24247dd550c15ab606009f9bbf688bddada7f4cb93395c63714df616e1c54164ec79454f491bce45a1cd8157c1574ed82b3d1d7232e43a10fdf3ed9446a69b19701559b7e68c56d0722c9d8f80db02fa665c05247f07f57ad6413520653109b48151af56d1f4cc3014a464749e67b59d9b04733ae384ad00380e950c6904cc5a0cb8eb4b2ccaecfe9a1858fd47740e03f3be63c71ec0c90b9111785b099545567576547388b660d4e34bc7b20ccc91e78aac4add417341c60cb16e8bc2e2cdb419cda2188905924a1e8dc71ce4cef6d405a4d4ec16ed4453cde7a35ab77b82207a6e0d8958ed4aeaa2cd913b1bcc5f095be1f0f782ee94411bf27dd0044106a24254c65a17b3885c28c8c4f0d9eb965bdcb3119b0ef499e1512af9c7ea42d1d2d739af1fbacc9ded669476323c8d0d88160344617e63b66c9d9b04499e9c8a3aa4134b71585a47V3\n  domain: apple.com\n  for_domain: true\n  path: "/"\n  secure: true\n  httponly: true\n  expires:\n  max_age:\n  created_at: 2023-10-05 00:10:39.337488000 +05:00\n  accessed_at: 2023-10-05 00:10:39.338412000 +05:00\n- !ruby/object:HTTP::Cookie\n  name: DES54f4569f652c4e652e4350a154ed2ed6f\n  value: HSARMTKNSRVXWFlattMHRVOBq7WjU83yVGNit0/Q9G/jRuBEtPpwEUY2tGT/2WT9/n1agL7U1n/rjXZ4qYW4N/mxezYbpdzrULMjnLABOEpv7K9Hj5mQpCICa43hczP1w2QW8inq931qIGNp4AVIFszDq1EF0OiUM69f1FiA3B3vB4wekPRikqnhi/xR6zZEtolsPIUQALTHZGLtFtwxV0Ye6pSSmGQ+x4o3m94+iCM=SRVX\n  domain: idmsa.apple.com\n  for_domain: true\n  path: "/"\n  secure: true\n  httponly: true\n  expires:\n  max_age: 2592000\n  created_at: 2023-09-28 19:32:32.682038000 +05:00\n  accessed_at: 2023-10-05 00:10:37.652721000 +05:00\n- !ruby/object:HTTP::Cookie\n  name: dqsid\n  value: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTY0NDY2NDAsImp0aSI6Ikx1RDdQNDVUbjl5RG85Vk1ydjN3d1EifQ.LLDyAtYqWQMhjtjQrUSYIwGn-paQ2BtNelPlYlTrnmA\n  domain: appstoreconnect.apple.com\n  for_domain: false\n  path: "/"\n  secure: true\n  httponly: true\n  expires:\n  max_age: 1800\n  created_at: &1 2023-10-05 00:10:40.576763000 +05:00\n  accessed_at: *1\n'
+    # sh "fastlane match init"
+    sh "fastlane match appstore -a com.heyflutter.asanYab"
+    common_build_actions
+    api_key = generate_api_key
+    upload_to_testflight(api_key: api_key,)
+  end
+
+  lane :deployToAppStore do
+    common_build_actions
+    api_key = generate_api_key
+    upload_to_app_store(
+      api_key: api_key,
+      force: true,
+      run_precheck_before_submit: false
+    )
+  end
+end
