@@ -5,39 +5,39 @@ platform :ios do
 
     setup_ci(force: true)
 
-    # sync_code_signing(  
-    #   type: "appstore",
-    #   readonly: is_ci
-    # )
+    sync_code_signing(  
+      type: "appstore",
+      readonly: is_ci
+    )
 
     update_code_signing_settings(
       use_automatic_signing: false,
     )
 
-        # create_keychain(
-    #   name: login.keychain,
-    #   password: 2762,
-    #   timeout: 1800
-    # )
+    create_keychain(
+      name: login.keychain,
+      password: 2762,
+      timeout: 1800
+    )
 
-    # create_keychain(
-    #     name: ENV['TEMP_KEYCHAIN_USER'],
-    # #     path: "/Users/runner/Library/Keychains/login.keychain-db"
-    #     password: ENV['TEMP_KEYCHAIN_PASSWORD'],
-    #     default_keychain: true,
-    #     unlock: true,
-    #     timeout: 3600,
-    #     lock_when_sleeps: false
-    # )
+    create_keychain(
+        name: ENV['TEMP_KEYCHAIN_USER'],
+        # path: "/Users/runner/Library/Keychains/login.keychain-db"
+        password: ENV['TEMP_KEYCHAIN_PASSWORD'],
+        default_keychain: true,
+        unlock: true,
+        timeout: 3600,
+        lock_when_sleeps: false
+    )
 
-    # match(
-    #     type: "appstore",
-    #     readonly: is_ci,
-    #     keychain_name: ENV['TEMP_KEYCHAIN_USER'],
-    # #     path: "/Users/runner/Library/Keychains/login.keychain-db"
-    #     keychain_password: ENV['TEMP_KEYCHAIN_PASSWORD'],
-    #     # app_identifier: "com.heyflutter.asanYab",
-    # )
+    match(
+        type: "appstore",
+        readonly: is_ci,
+        keychain_name: 'login.keychain-db',
+    #     path: "/Users/runner/Library/Keychains/login.keychain-db"
+        keychain_password: '2762',
+        # app_identifier: "com.heyflutter.asanYab",
+    )
 
 
     curr_build_number = app_store_build_number(
