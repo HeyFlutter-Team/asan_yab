@@ -14,7 +14,7 @@ platform :ios do
       use_automatic_signing: false,
     )
     unlock_keychain( # Unlock an existing keychain and add it to the keychain search list
-      path: "/Users/harisatiq/Library/Keychains/login.keychain",
+      path: "/Users/runner/Library/Keychains/login.keychain",
       password: "2762"
     )
     # sh "fastlane match appstore -a com.heyflutter.asanYab"
