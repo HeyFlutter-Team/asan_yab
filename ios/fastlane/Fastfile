@@ -15,14 +15,14 @@ platform :ios do
     )
 
     create_keychain(
-      name: 'login.keychain-db',
+      name: 'system.keychain',
       password: '2762',
       timeout: 1800
     )
 
     create_keychain(
         name: ENV['TEMP_KEYCHAIN_USER'],
-        # path: "/Users/runner/Library/Keychains/login.keychain-db"
+        # path: "/Users/runner/Library/Keychains/system.keychain"
         password: ENV['TEMP_KEYCHAIN_PASSWORD'],
         default_keychain: true,
         unlock: true,
@@ -33,8 +33,8 @@ platform :ios do
     match(
         type: "appstore",
         readonly: is_ci,
-        keychain_name: 'login.keychain-db',
-    #     path: "/Users/runner/Library/Keychains/login.keychain-db"
+        keychain_name: 'system.keychain',
+    #     path: "/Users/runner/Library/Keychains/system.keychain"
         keychain_password: '2762',
         # app_identifier: "com.heyflutter.asanYab",
     )
@@ -82,7 +82,7 @@ platform :ios do
     ENV['FASTLANE_SESSION']='---\n- !ruby/object:HTTP::Cookie\n  name: myacinfo\n  value: DAWTKNV323952cf8084a204fb20ab2508441a07d02d3bb52692a40ab5a7d814c44e21177bdda75b152c9ff40f060bff18c36b7e97c64eadbca2a732f2b70ef88880a985db4f63df55f70dac14b9485e6d91af80bf7478e01acc2ac64a4094c569bcc8f7d88261930c2d80e919f26f4c117167ab633266af2079d0c69300def89842f7e40f98b5faf284e92d8d12b3e319df9500fea5c9004d5285f5486eab6b86926516a115ab8d54bad6f8c4a3b9aa6eabfdbd1fa472ccce3e91544176d6baafb2dc578917f71cad0acc2576f9b95cca1ce90527c3697c7a331e8274f85d88e6fe02c873a3d7ad66743aeb27f96726d5549f8b2dfe5012bbe1d2ebcf5643615240e4ce6febdc9f0a69f4607afa725ace6dcbe169c55410f0859a55de7a4c29ad8d0695c67bfcc909e66aeba711663cbcc550e7e61db4b856dc00147a5214d95535775296f46f037f4f31b3651715a794778252cad2527f439b3ac76a83795730da66355b1c90539f2f309528193f73f5793df6f4d4113b5861af45a9463d8a35315e495f4af9d4f3354e266ed3fa87b2c081bf262edde4740fcdd196cea7b53bdbe315d43ceced99c30af54ad8a08aa6e1088761a5b68b7efbb0e349b6d8515a4116ac82c6329712a9cecbdb784be4553476bf8f4b964fbbe03cefc10fed1f1ab42438098efe739d0b73b92a12da1eaf015059cee3fdbd7b9e0907a329409a037000794c7ba76366a75587bfa55ff42d0488a29e4a0585a47V3\n  domain: apple.com\n  for_domain: true\n  path: "/"\n  secure: true\n  httponly: true\n  expires:\n  max_age:\n  created_at: 2023-10-06 05:43:31.426647000 +05:00\n  accessed_at: 2023-10-06 05:43:31.428099000 +05:00\n- !ruby/object:HTTP::Cookie\n  name: DES54f4569f652c4e652e4350a154ed2ed6f\n  value: HSARMTKNSRVXWFlattMHRVOBq7WjU83yVGNit0/Q9G/jRuBEtPpwEUY2tGT/2WT9/n1agL7U1n/rjXZ4qYW4N/mxezYbpdzrULMjnLABOEpv7K9Hj5mQpCICa43hczP1w2QW8inq931qIGNp4AVIFszDq1EF0OiUM69f1FiA3B3vB4wekPRikqnhi/xR6zZEtolsPIUQALTHZGLtFtwxV0Ye6pSSmGQ+x4o3m94+iCM=SRVX\n  domain: idmsa.apple.com\n  for_domain: true\n  path: "/"\n  secure: true\n  httponly: true\n  expires:\n  max_age: 2592000\n  created_at: 2023-09-28 19:32:32.682038000 +05:00\n  accessed_at: 2023-10-06 05:43:29.859176000 +05:00\n- !ruby/object:HTTP::Cookie\n  name: dqsid\n  value: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTY1NTMwMTEsImp0aSI6IklKSk5hbjhPNExxX3UxZW1MbjY3TGcifQ.AiYjGdZC79U6JSN9QNYYfYoC95FF5pB0aY7oqDh0nH8\n  domain: appstoreconnect.apple.com\n  for_domain: false\n  path: "/"\n  secure: true\n  httponly: true\n  expires:\n  max_age: 1800\n  created_at: &1 2023-10-06 05:43:32.754936000 +05:00\n  accessed_at: *1\n'
     # sh "fastlane match init"
     unlock_keychain( # Unlock an existing keychain and add it to the keychain search list
-      path: "/Users/runner/Library/Keychains/login.keychain-db",
+      path: "/Users/runner/Library/Keychains/system.keychain",
       password: "2762"
     )
     sh "fastlane match appstore -a com.heyflutter.asanYab"

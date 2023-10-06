@@ -49,7 +49,7 @@ jobs:
           # create variables
 
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
-          KEYCHAIN_PATH=$RUNNER_TEMP/login.keychain-db
+          KEYCHAIN_PATH=$RUNNER_TEMP/system.keychain
 
           # import certificate and provisioning profile from secrets
 
