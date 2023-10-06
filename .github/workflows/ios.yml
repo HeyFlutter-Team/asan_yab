@@ -29,7 +29,6 @@ jobs:
       - run: flutter --version
 
       - name: Set FLUTTER_ROOT
-        # run: echo "FLUTTER_ROOT=$(flutter --version | awk -F ': ' '/Flutter/{print $2}')" >> $GITHUB_ENV
         run: echo "FLUTTER_ROOT=/Users/runner/hostedtoolcache/flutter/stable-3.10.6-x64" >> $GITHUB_ENV
 
       - name: Set FASTLANE_SESSION
@@ -46,19 +45,13 @@ jobs:
             rm -rf ~/Library/Caches/CocoaPods
 
       - name: Build and Deploy to App store
-      #pwd ===> /Users/runner/work/asan_yab/asan_yab/ios
         run: |
           cd ..
-          pwd
           flutter clean
           flutter pub get
           cd ios
-          pwd 
-          ls
           gem install cocoapods
           bundle install
-          pwd 
-          ls
           echo installing pods
           pod install
           echo updating pods
@@ -78,79 +71,6 @@ jobs:
           PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
-          # BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
-          # P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         working-directory: ios
-
-
-
-
-
-#         - name: Checkout code
-#         uses: actions/checkout@v2
-#       - uses: maxim-lobanov/setup-xcode@v1
-#         with:
-#           xcode-version: "13.4"
-#       - uses: actions/checkout@v3
-#       - uses: subosito/flutter-action@v2
-#         with:
-#           flutter-version: '3.10.6'
-#           channel: 'stable'
-#           # cache: true
-#           # cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:' # optional, change this to force refresh cache
-#           # cache-path: '${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:' # optional, change this to specify the cache path
-#           architecture: arm64 # optional, x64 or arm64
-#       # - run: flutter --version
-#       - name: Set FLUTTER_ROOT
-#         run: echo "FLUTTER_ROOT=$(flutter sdk-path)" >> $GITHUB_ENV
-#       # - name: Set up Ruby
-#       #   uses: actions/setup-ruby@v1
-#       #   with:
-#       #     ruby-version: 2.7
-        
-# #      - name: Select Xcode version
-# #        run: sudo xcode-select -s '/Applications/Xcode_11.3.app/Contents/Developer'
-#       - name: Bundle install
-#         run: cd ./ios && gem install bundler:2.4.10
-#         # run: cd ./ios && bundle install
-#       # - name: Setup JDK
-#       #   uses: actions/setup-java@v1
-#       #   with:
-#       #     java-version: "12.x"
-#       - name: Set Fastlane environment to non-interactive
-#         run: echo "FASTLANE_OPT_OUT_USAGE=1" >> $GITHUB_ENV
-      # - name: Set FASTLANE_SESSION
-      #   run: 
-      #     echo "FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}" >> $GITHUB_ENV
-#       # - name: Setup Flutter
-#       #   uses: subosito/flutter-action@v2
-#       #   with:
-#       #     flutter-version: 3.10.6
-      
-#       # - uses: actions/checkout@v3
-#       # - uses: subosito/flutter-action@v2
-#       #   with:
-#       #      flutter-version: '3.10.6'
-#       #      channel: 'stable'
-#       # - run: flutter --version
-
-      # - name: Setup SSH
-      #   uses: MrSquaare/ssh-setup-action@v1
-      #   with:
-      #     host: github.com
-      #     private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-#       - name: Clone repo
-#         run: git clone git@github.com:HarisAtiq2762/ios-certificates.git /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/d20231002-6471-1azqkg1
-
-#       - name: Build and Deploy to App Store
-#         run: |
-#           fastlane deployToTestFlight
-#           echo CACHE-PATH=${{ steps.flutter-action.outputs.CACHE-PATH }}
-#           echo CACHE-KEY=${{ steps.flutter-action.outputs.CACHE-KEY }}
-#           echo CHANNEL=${{ steps.flutter-action.outputs.CHANNEL }}
-#           echo VERSION=${{ steps.flutter-action.outputs.VERSION }}
-#           echo ARCHITECTURE=${{ steps.flutter-action.outputs.ARCHITECTURE }}
-#         shell: bash
