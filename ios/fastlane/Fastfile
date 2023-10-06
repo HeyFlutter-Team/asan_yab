@@ -15,8 +15,8 @@ platform :ios do
     )
 
     create_keychain(
-      name: login.keychain,
-      password: 2762,
+      name: 'login.keychain-db',
+      password: '2762',
       timeout: 1800
     )
 
