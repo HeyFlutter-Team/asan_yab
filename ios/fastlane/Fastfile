@@ -3,41 +3,27 @@ default_platform(:ios)
 platform :ios do
   def common_build_actions
 
-    # setup_ci(force: true)
+    setup_ci(force: true)
 
-    # sync_code_signing(  
-    #   type: "appstore",
-    #   readonly: is_ci
-    # )
+    sync_code_signing(  
+      type: "appstore",
+      readonly: is_ci
+    )
 
     update_code_signing_settings(
       use_automatic_signing: false,
     )
+    unlock_keychain(
+      path: "/Users/runner/Library/Keychains/login.keychain",
+      password: "2762"
+    )
 
-        # create_keychain(
-    #   name: login.keychain,
-    #   password: 2762,
-    #   timeout: 1800
-    # )
-
-    # create_keychain(
-    #     name: ENV['TEMP_KEYCHAIN_USER'],
-    # #     path: "/Users/runner/Library/Keychains/login.keychain-db"
-    #     password: ENV['TEMP_KEYCHAIN_PASSWORD'],
-    #     default_keychain: true,
-    #     unlock: true,
-    #     timeout: 3600,
-    #     lock_when_sleeps: false
-    # )
-
-    # match(
-    #     type: "appstore",
-    #     readonly: is_ci,
-    #     keychain_name: ENV['TEMP_KEYCHAIN_USER'],
-    # #     path: "/Users/runner/Library/Keychains/login.keychain-db"
-    #     keychain_password: ENV['TEMP_KEYCHAIN_PASSWORD'],
-    #     # app_identifier: "com.heyflutter.asanYab",
-    # )
+    match(
+        type: "appstore",
+        readonly: is_ci,
+        keychain_name: 'login.keychain',
+        keychain_password: '2762',
+    )
 
 
     curr_build_number = app_store_build_number(
@@ -53,14 +39,9 @@ platform :ios do
     build_app(
       scheme: "Runner",
       workspace: "Runner.xcworkspace",
-      # clean: false,
       export_method: "app-store",
-      # export_xcargs: "-allowProvisioningUpdates",
-      # keychain_password: "2762",
       export_options: {
         "tree_shake_icons": false,
-        # signingStyle: "automatic",
-        # "com.apple.transporter.allowProvisioningUpdates": true,
         provisioningProfiles: {
             "com.heyflutter.asanYab" => "match AppStore com.heyflutter.asanYab"
           }
@@ -72,16 +53,14 @@ platform :ios do
     app_store_connect_api_key(
       key_id: "FLUCGL7SRZ",
       issuer_id: "7ca7cab7-f3fd-4fb6-a1ed-5fe1a20c2db0",
-      key_filepath: "./AuthKey_FLUCGL7SRZ.p8", #"/Users/harisatiq/Downloads/AuthKey_FLUCGL7SRZ.p8",
-      duration: 1200, # optional (maximum 1200)
-      in_house: false # optional but may be required if using match/sigh
+      key_filepath: "./AuthKey_FLUCGL7SRZ.p8",
+      duration: 1200,
+      in_house: false 
     )
   end
 
   lane :deployToTestFlight do
-    ENV['FASTLANE_SESSION']='---\n- !ruby/object:HTTP::Cookie\n  name: myacinfo\n  value: DAWTKNV323952cf8084a204fb20ab2508441a07d02d3ffd89bbbff161a4da3938d36004c843aed4fa5466ff0710dbbf2757dab89e7c2841b82e2e6885fdd0584f062d3b9e189a79d499dfca268f7ca4d51844c36708bd9da0b0659bddaee6a1911858a687d1a8a9fa88f954f65c4ca34897084466e29d02b43af975628e2127495e9ea7bff17fdc2fc0d7b9afe4416660955672da4fecbb2ff12283a5fb6493096a0eb849272532489aa39671b50cc0f5bc131f35e44c903050fee8e8f6cbc910106dc2a513a1726c7acc4576d3ad003c64e24247dd550c15ab606009f9bbf688bddada7f4cb93395c63714df616e1c54164ec79454f491bce45a1cd8157c1574ed82b3d1d7232e43a10fdf3ed9446a69b19701559b7e68c56d0722c9d8f80db02fa665c05247f07f57ad6413520653109b48151af56d1f4cc3014a464749e67b59d9b04733ae384ad00380e950c6904cc5a0cb8eb4b2ccaecfe9a1858fd47740e03f3be63c71ec0c90b9111785b099545567576547388b660d4e34bc7b20ccc91e78aac4add417341c60cb16e8bc2e2cdb419cda2188905924a1e8dc71ce4cef6d405a4d4ec16ed4453cde7a35ab77b82207a6e0d8958ed4aeaa2cd913b1bcc5f095be1f0f782ee94411bf27dd0044106a24254c65a17b3885c28c8c4f0d9eb965bdcb3119b0ef499e1512af9c7ea42d1d2d739af1fbacc9ded669476323c8d0d88160344617e63b66c9d9b04499e9c8a3aa4134b71585a47V3\n  domain: apple.com\n  for_domain: true\n  path: "/"\n  secure: true\n  httponly: true\n  expires:\n  max_age:\n  created_at: 2023-10-05 00:10:39.337488000 +05:00\n  accessed_at: 2023-10-05 00:10:39.338412000 +05:00\n- !ruby/object:HTTP::Cookie\n  name: DES54f4569f652c4e652e4350a154ed2ed6f\n  value: HSARMTKNSRVXWFlattMHRVOBq7WjU83yVGNit0/Q9G/jRuBEtPpwEUY2tGT/2WT9/n1agL7U1n/rjXZ4qYW4N/mxezYbpdzrULMjnLABOEpv7K9Hj5mQpCICa43hczP1w2QW8inq931qIGNp4AVIFszDq1EF0OiUM69f1FiA3B3vB4wekPRikqnhi/xR6zZEtolsPIUQALTHZGLtFtwxV0Ye6pSSmGQ+x4o3m94+iCM=SRVX\n  domain: idmsa.apple.com\n  for_domain: true\n  path: "/"\n  secure: true\n  httponly: true\n  expires:\n  max_age: 2592000\n  created_at: 2023-09-28 19:32:32.682038000 +05:00\n  accessed_at: 2023-10-05 00:10:37.652721000 +05:00\n- !ruby/object:HTTP::Cookie\n  name: dqsid\n  value: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTY0NDY2NDAsImp0aSI6Ikx1RDdQNDVUbjl5RG85Vk1ydjN3d1EifQ.LLDyAtYqWQMhjtjQrUSYIwGn-paQ2BtNelPlYlTrnmA\n  domain: appstoreconnect.apple.com\n  for_domain: false\n  path: "/"\n  secure: true\n  httponly: true\n  expires:\n  max_age: 1800\n  created_at: &1 2023-10-05 00:10:40.576763000 +05:00\n  accessed_at: *1\n'
-    # sh "fastlane match init"
-    sh "fastlane match appstore -a com.heyflutter.asanYab"
+    ENV['FASTLANE_SESSION']='---\n- !ruby/object:HTTP::Cookie\n  name: myacinfo\n  value: DAWTKNV323952cf8084a204fb20ab2508441a07d02d3166e396a267f8b7d5f5760c8b43300123da81f226d47e44d92c08485749cd9b42476e2b78a612b48187f335c66c378df5c41719c293432db66cbb1a66254985d7499a2ce5eac59e8e859f561359a159d43f0209b836c4597d8e32f2a05e75fc0322f1818292d3e421589879a54a8166c811b614509f17a3442bed8600ebb6e0d4d25c203bc406f6a1cbe1b479497d585390bcc0ab39c244068163c2992ddb5d614df45049631c626d73e1a63dee1733ee79fdb0ee4d255da450f5809acd8cd921c9bfe45c2146c3b75b22d254fa269fd3dbe9056993a26923e7241546def185288d6f3c888224d91cbb6b89768dfa336806539853a563d893c79043f4cca7cb867b1d99dcee5f97e00e86a5a72a0631bab9de07bc845bee1fae4fbb11197758c3f29ff2ed1333f14c036385892f7b3aca951485112a435e30a9e15e781836a6a93822a168c66a455c0848855652b46bf788fd099e4592d2bf428901fe49dfe9810d72b42586bda02162bca0f86737939870d49f23bc1a13ceabe5cdf30b1ba85de1b7aba6edb74fbcf27453b14f272b5041240b5268c28636dde202a1f12ac268546e40e94e45d319ebbae3f734792fc107e23ca853fc65de8edcdc741babb71b8c53564a95cd220f703e5eb9cb856ed7e18f4389a1d60c2d328476aba6ef6b07b26d2ff87de5163e3be7b1c7ccb23f7a958c7108da0c535a1bf534997f20fa8585a47V3\n  domain: apple.com\n  for_domain: true\n  path: "/"\n  secure: true\n  httponly: true\n  expires:\n  max_age:\n  created_at: 2023-10-06 17:37:14.769196000 +05:00\n  accessed_at: 2023-10-06 17:37:14.770358000 +05:00\n- !ruby/object:HTTP::Cookie\n  name: DES54f4569f652c4e652e4350a154ed2ed6f\n  value: HSARMTKNSRVXWFlattMHRVOBq7WjU83yVGNit0/Q9G/jRuBEtPpwEUY2tGT/2WT9/n1agL7U1n/rjXZ4qYW4N/mxezYbpdzrULMjnLABOEpv7K9Hj5mQpCICa43hczP1w2QW8inq931qIGNp4AVIFszDq1EF0OiUM69f1FiA3B3vB4wekPRikqnhi/xR6zZEtolsPIUQALTHZGLtFtwxV0Ye6pSSmGQ+x4o3m94+iCM=SRVX\n  domain: idmsa.apple.com\n  for_domain: true\n  path: "/"\n  secure: true\n  httponly: true\n  expires:\n  max_age: 2592000\n  created_at: 2023-09-28 19:32:32.682038000 +05:00\n  accessed_at: 2023-10-06 17:37:13.128275000 +05:00\n- !ruby/object:HTTP::Cookie\n  name: dqsid\n  value: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTY1OTU4MzUsImp0aSI6ImZfUUVDUkYzbUI5R2lXMXFOMUlRUmcifQ.XKGX358ITCPgq-GeZsX9VjyI_G4T0qBiUEJJK6bs6e8\n  domain: appstoreconnect.apple.com\n  for_domain: false\n  path: "/"\n  secure: true\n  httponly: true\n  expires:\n  max_age: 1800\n  created_at: &1 2023-10-06 17:37:16.002897000 +05:00\n  accessed_at: *1\n'
     common_build_actions
     api_key = generate_api_key
     upload_to_testflight(api_key: api_key,)
