@@ -36,7 +36,7 @@ platform :ios do
         keychain_password: '2762',
     )
 
-
+    api_key = generate_api_key
     curr_build_number = app_store_build_number(
       live: false,
       api_key: api_key,
