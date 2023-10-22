@@ -6,7 +6,7 @@
    <application
         android:label="آسان یاب"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/asan_yab">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -36,5 +36,11 @@
        <meta-data
            android:name="com.google.android.geo.API_KEY"
            android:value="AIzaSyA6blH3zODGI-73Rt3RD7xG-zhiubjTjMs"/>
+       <meta-data
+           android:name="firebase_messaging_auto_init_enabled"
+           android:value="false" />
+       <meta-data
+           android:name="firebase_analytics_collection_enabled"
+           android:value="false" />
     </application>
 </manifest>

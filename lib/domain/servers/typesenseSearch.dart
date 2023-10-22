@@ -10,11 +10,11 @@ class SearchInstance {
   //constructor to initilize client
   SearchInstance() {
     config = Configuration(
-      'Nv5QMjIHPQe4tpXR5VGbIFOi8naPyXgy', //api key from text file
+      '8IW8Vtvr2d99tU6No3KCcnjtoHqrPPx1', //api key from text file
       nodes: {
         Node(
           Protocol.https, // For Typesense Cloud use https
-          "yn9pmsvhj82fw4qlp-1.a1.typesense.net", // For Typesense Cloud use xxx.a1.typesense.net
+          "a3dj2cfs1gmi58b6p-1.a1.typesense.net", // For Typesense Cloud use xxx.a1.typesense.net
           port: 443, // For Typesense Cloud use 443
         ),
       },

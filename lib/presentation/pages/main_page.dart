@@ -1,3 +1,5 @@
+import 'package:asan_yab/data/repositoris/local_rep/notification.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/riverpod/config/internet_connectivity_checker.dart';
@@ -8,6 +10,8 @@ import 'package:flutter/material.dart';
 
 import 'about_us_page.dart';
 import 'home_page.dart';
+
+// String? notifTitle, notifBody;
 
 class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
@@ -20,6 +24,7 @@ class _MainPageState extends ConsumerState<MainPage> {
   @override
   void initState() {
     super.initState();
+
     ref
         .read(internetConnectivityCheckerProvider.notifier)
         .startStremaing(context);
