@@ -73,14 +73,14 @@ class NearbyPlace extends StateNotifier<List<Place>> {
               currentLocation.latitude, currentLocation.longitude, lat, lng);
 
           if (distance <= maxDistance) {
-            debugPrint(
-                'hello it place that near you  ${doc.name} distance : ${distance},id: ${doc.id} lang:${doc.adresses[0].lang} , lat:${doc.adresses[0].lat} ');
+            // debugPrint(
+            //     'hello it place that near you  ${doc.name} distance : ${distance},id: ${doc.id} lang:${doc.adresses[0].lang} , lat:${doc.adresses[0].lat} ');
             doc.distance = (distance * 1000).round();
             nearestLocations.add(doc);
             debugPrint(' ${doc.distance}');
           }
         } else {
-          debugPrint('hello it null ${doc.name}');
+          // debugPrint('hello it null ${doc.name}');
         }
       }
     }
