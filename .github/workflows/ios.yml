@@ -57,7 +57,14 @@ jobs:
           echo updating pods
 
           echo running lane now
-          bundle exec fastlane deployToTestFlight
+
+          if [ ${{ github.ref }} = 'refs/heads/production' ]; then
+            bundle exec fastlane deployToAppStore
+          else
+            bundle exec fastlane deployToTestFlight
+          fi
+
+          
         shell: bash
         env:
           APPLICATION_ID: ${{ secrets.APPLICATION_ID }}
