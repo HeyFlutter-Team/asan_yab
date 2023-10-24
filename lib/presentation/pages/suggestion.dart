@@ -60,38 +60,43 @@ class _SuggestionPageState extends State<SuggestionPage> {
                 children: [
                   const SizedBox(height: 15),
                   TextFieldWidget(
-                      addController: nameController,
-                      labelName: 'نام مکان ',
-                      validator: (value) => value != null && value.isEmpty
-                          ? 'مکان خود را وارد کنید!'
-                          : null),
+                    addController: nameController,
+                    labelName: 'نام مکان',
+                    validator: (value) => value != null && value.isEmpty
+                        ? 'مکان خود را وارد کنید!'
+                        : null,
+                  ),
                   const SizedBox(height: 10),
                   TextFieldWidget(
-                      addController: addressController,
-                      labelName: 'ادرس مکان ',
-                      validator: (value) => value != null && value.isEmpty
-                          ? 'ادرس خود را وارد کنید!'
-                          : null),
+                    addController: addressController,
+                    labelName: 'آدرس مکان',
+                    validator: (value) => value != null && value.isEmpty
+                        ? 'آدرس خود را وارد کنید!'
+                        : null,
+                  ),
                   const SizedBox(height: 10),
                   TextFieldWidget(
-                      addController: phoneController,
-                      labelName: ' شماره های تماس',
-                      validator: (value) => value != null && value.isEmpty
-                          ? 'شماره خود را وارد کنید!'
-                          : null),
+                    line: 2,
+                    addController: typeController,
+                    labelName: 'توضیجات مکان',
+                    validator: (value) => value != null && value.isEmpty
+                        ? 'توضیجات مکان را بنویسید'
+                        : null,
+                  ),
                   const SizedBox(height: 10),
                   TextFieldWidget(
-                      line: 2,
-                      addController: typeController,
-                      labelName: 'توضیجات مکان ',
-                      validator: (value) => value != null && value.isEmpty
-                          ? 'توضیجات مکان را بنویسید'
-                          : null),
-                  const SizedBox(height: 10),
+                    addController: phoneController,
+                    labelName: 'شماره تماس',
+                    validator: (value) => value != null && value.isEmpty
+                        ? 'شماره خود را وارد کنید!'
+                        : null,
+                  ),
+                  const SizedBox(height: 20),
                   const CustomCard(
-                    title: 'توضیحات',
+                    title: 'نوت',
                     child: Text(
-                        'در بخش توضیحات, شما میتوانید در مورد مشکلات مکان های برنامه به ما اطلاع بدید ,\n اگر مکان جدیدی را میخواهید معرفی کنید مشخصات کامل ان را وارد نمایید....'),
+                      ' در این بخش شما میتوانید به ما در باره مکان مورد نظر خود درخواست بدهید، تا ما آن را در آسان یاب قرار دهیم \n\n همچنان، شما میتوانید برای آپدیت اطلاعات مکان های درج شده در آسان یاب به ما درخواست بدهید',
+                    ),
                   ),
                   const SizedBox(height: 10),
                   ButtonWidget(
@@ -166,60 +171,57 @@ class CustomCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12),
-      child: Column(
-        children: [
-          SizedBox(
-            width: double.infinity,
-            child: Card(
-              margin: EdgeInsets.zero,
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 4),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.library_books,
-                            color: Colors.black54,
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            title,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black54),
-                          ),
-                        ],
-                      ),
+    return Column(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          child: Card(
+            margin: EdgeInsets.zero,
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 4),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.info_outline,
+                          color: Colors.black54,
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          title,
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black54),
+                        ),
+                      ],
                     ),
-                    const Divider(
-                      thickness: 0.5,
-                      color: Colors.grey,
-                    ),
-                    const SizedBox(height: 4),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: child,
-                    ),
-                  ],
-                ),
+                  ),
+                  const Divider(
+                    thickness: 0.5,
+                    color: Colors.grey,
+                  ),
+                  const SizedBox(height: 4),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: child,
+                  ),
+                ],
               ),
             ),
           ),
-          const SizedBox(height: 24),
-        ],
-      ),
+        ),
+        const SizedBox(height: 24),
+      ],
     );
   }
 }
