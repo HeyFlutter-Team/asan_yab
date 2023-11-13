@@ -4,17 +4,17 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>Headers/FLTPackageInfoPlusPlugin.h</key>
+		<key>Headers/FPPPackageInfoPlusPlugin.h</key>
 		<data>
-		9EyQUN4L/s5/QspxhLatiiV+By4=
+		TDgjwrW3MT/E6oBIQZm5Rf5hiGY=
 		</data>
 		<key>Headers/package_info_plus-umbrella.h</key>
 		<data>
-		Y2Q1x93Gds7gaD4X0jC1px7j0XI=
+		fFQUgSJsy+2G96LV/IyC3eyjqtY=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		b7VYPGhCmy3OpkFuMDbych0MCVo=
+		1gOEuFjNkObRwIEb5hyEbw/Rlzc=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -23,18 +23,18 @@
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>Headers/FLTPackageInfoPlusPlugin.h</key>
+		<key>Headers/FPPPackageInfoPlusPlugin.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Sq4KpNVjcJb38Wxrc12czitn1bfSZoRJ9lC6vgwu8P8=
+			+WFPcqsAmfwPEEeo6bRxfoLIQHlhGx3V6+j5osKtISo=
 			</data>
 		</dict>
 		<key>Headers/package_info_plus-umbrella.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			NIZz1vBKNsK9jpjIIY1xaR8XzpBnwkpgcoUhDAgBhkM=
+			SorXThepFuMKhQ6KUvz89q09dVtsnzNG4S5ii7+e0JY=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

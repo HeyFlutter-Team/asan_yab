@@ -1,6 +1,7 @@
 import 'package:asan_yab/domain/riverpod/config/notification_repo.dart';
 
 import 'package:asan_yab/presentation/pages/main_page.dart';
+// import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -58,7 +59,13 @@ Future<void> main() async {
   //firebase messegaing
   await FirebaseApi().initNotification();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(const ProviderScope(child: MyApp())
+      // DevicePreview(
+      //   enabled: !kReleaseMode,
+      //   builder: (context) =>
+      //       const ProviderScope(child: MyApp()), // Wrap your app
+      // ),
+      );
 }
 
 class MyApp extends StatelessWidget {
@@ -70,6 +77,9 @@ class MyApp extends StatelessWidget {
     FirebaseApi().getToken();
 
     return MaterialApp(
+      useInheritedMediaQuery: true,
+      // locale: DevicePreview.locale(context),
+      // builder: DevicePreview.appBuilder,
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
       ],

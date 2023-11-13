@@ -10,6 +10,8 @@
 #endif
 #endif
 
+#import "CustomPigeonHeaderFirestore.h"
+#import "FirestoreMessages.g.h"
 #import "FLTFirebaseFirestorePlugin.h"
 
 FOUNDATION_EXPORT double cloud_firestoreVersionNumber;
