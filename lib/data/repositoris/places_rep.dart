@@ -8,10 +8,7 @@ class PlacesRepository {
 
   Future<List<Place>> fetchPlaces() async {
     try {
-      final data = await firebase
-          .collection(_path)
-          .orderBy('createdAt', descending: true)
-          .get();
+      final data = await firebase.collection(_path).get();
       final places =
           data.docs.map((doc) => Place.fromJson(doc.data())).toList();
 
