@@ -45,6 +45,11 @@ dependencies:
   firebase_analytics: ^10.5.0
   firebase_messaging: ^14.6.9
   flutter_local_notifications: ^16.1.0
+  firebase_auth: ^4.15.0
+  email_validator: ^2.1.17
+  shared_preferences: ^2.2.2
+  image_picker: ^1.0.4
+  file_picker: ^6.1.1
 
 
 
