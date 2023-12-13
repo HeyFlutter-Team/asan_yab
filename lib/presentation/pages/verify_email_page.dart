@@ -7,7 +7,6 @@ import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../main.dart';
 
 class VerifyEmailPage extends ConsumerStatefulWidget {
@@ -28,8 +27,10 @@ Timer? timer;
       if(!ref.read(isEmailVerifieds.notifier).state){
         ref.read(sendVirificationEmail.notifier).sendVerificationEmail(ref,context);
         timer= Timer.periodic(const Duration(seconds: 3),
-                (timer)=>ref.read(checkEmailVerifiedProvider.notifier).checkEmailVerified(ref, timer).then((value) =>  navigatorKey.currentState
-                !.popUntil((route) => route.isFirst)));
+                (timer)=>ref.read(checkEmailVerifiedProvider.notifier).checkEmailVerified(ref, timer).whenComplete(() => navigatorKey.currentState
+                !.popUntil((route) => route.isFirst)
+                )
+                );
       }
 
     });
@@ -41,11 +42,11 @@ Timer? timer;
     timer?.cancel();
     super.dispose();
   }
-  
+
 
 
   @override
-  Widget build(BuildContext context)=> Scaffold(
+  Widget build(BuildContext context)=>  Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red.shade900,
         title: const Text('تایید ایمیل'),

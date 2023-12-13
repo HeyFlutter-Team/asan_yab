@@ -2,7 +2,7 @@ import 'package:asan_yab/domain/riverpod/config/notification_repo.dart';
 import 'package:asan_yab/presentation/pages/auth_page.dart';
 
 import 'package:asan_yab/presentation/pages/main_page.dart';
-import 'package:asan_yab/presentation/pages/profile_page.dart';
+
 import 'package:asan_yab/presentation/pages/verify_email_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -21,7 +21,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'domain/riverpod/config/internet_connectivity_checker.dart';
 import 'domain/riverpod/data/verify_page_provider.dart';
 import 'firebase_options.dart';
-import 'presentation/pages/sign_in_page.dart';
+
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   debugPrint('Handler a background message ${message.notification} ');
@@ -80,22 +80,27 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   @override
   void initState() {
-    // TODO: implement initState
     if(FirebaseAuth.instance.currentUser != null){
       ref
           .read(internetConnectivityCheckerProvider.notifier)
           .startStremaing(context);
+          // ref.read(isEmailVerifieds)
+          //       ?const MainPage()
+          //       :const VerifyEmailPage();
     }
     super.initState();
+
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     if(FirebaseAuth.instance.currentUser != null){
       ref
           .read(internetConnectivityCheckerProvider.notifier)
           .subscription
           .cancel();
+          // ref.watch(isEmailVerifieds)
+          //       ?const MainPage()
+          //       :const VerifyEmailPage();
     }
     super.dispose();
 
@@ -122,8 +127,8 @@ class _MyAppState extends ConsumerState<MyApp> {
         primaryColor: Colors.white,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home:FutureBuilder<User?>(
-        future: FirebaseAuth.instance.authStateChanges().first,
+      home:StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
         builder:(context, snapshot) {
           if(snapshot.connectionState==ConnectionState.waiting){
             return const Center(child: CircularProgressIndicator(),);
@@ -131,8 +136,7 @@ class _MyAppState extends ConsumerState<MyApp> {
             return const Center(child: Text('خطا در اتصال'),);
           }
           else if(snapshot.hasData){
-            return
-            ref.watch(isEmailVerifieds)
+            return ref.watch(isEmailVerifieds)
                 ?const MainPage()
                 : VerifyEmailPage();
 

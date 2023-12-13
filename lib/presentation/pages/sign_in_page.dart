@@ -1,13 +1,14 @@
 // ignore_for_file: avoid_print
 
-import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/sign_up_page.dart';
 import 'package:asan_yab/presentation/widgets/custom_text_field.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/riverpod/data/sign_in_provider.dart';
+import '../../main.dart';
 
 class LogInPage extends ConsumerStatefulWidget {
   final Function()? onClickedSignUp;
@@ -144,7 +145,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
                   final isValid=formKey.currentState!.validate();
                   if(!isValid)return;
                   ref.read(SignInProvider.notifier).signIn(
-                      formKey, context, emailController, passwordController).whenComplete(() => Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(),)));
+                      formKey, context, emailController, passwordController);
                 },
                 child: const Text('ورود'),
               ),
@@ -190,4 +191,24 @@ class _LogInPageState extends ConsumerState<LogInPage>
       ),
     );
   }
+  // Future signIn()async{
+  //   final isValid = formKey.currentState!.validate();
+  //   if (!isValid) return;
+
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) => const Center(
+  //       child: CircularProgressIndicator(),
+  //     ),
+  //   );
+  //   try{
+  //     FirebaseAuth.instance.signInWithEmailAndPassword(
+  //         email: emailController.text.trim(),
+  //         password: passwordController.text.trim());
+  //   }on FirebaseAuthException catch(e){
+  //     print(e);
+  //   }
+  //   navigatorKey.currentState
+  //   !.popUntil((route) => route.isFirst);
+  // }
 }

@@ -1,8 +1,9 @@
 
 
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +11,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../data/models/users.dart';
 
-class UserDetails extends StateNotifier{
+class UserDetails extends StateNotifier<Users?>{
   UserDetails(super.state);
 
   Future<Users?> getCurrentUserData() async {
@@ -21,7 +22,8 @@ class UserDetails extends StateNotifier{
         final userSnapshot =
         await FirebaseFirestore.instance.collection('User').doc(user.uid).get();
         if (userSnapshot.exists) {
-          return Users.fromJson(userSnapshot.data()!);
+       state = Users.fromJson(userSnapshot.data()!);
+        return state;
         } else {
           return null;
         }
@@ -35,7 +37,7 @@ class UserDetails extends StateNotifier{
   }
 }
 
-final userDetailsProvider=StateNotifierProvider((ref) => UserDetails(ref));
+final userDetailsProvider=StateNotifierProvider<UserDetails,Users?>((ref) => UserDetails(null));
 
 
 class ImageState {
@@ -94,7 +96,6 @@ class ImageNotifier  extends StateNotifier<ImageState>{
       final snapshot = await state.uploadTask!.whenComplete(() {});
       final uploadedImageUrl = await snapshot.ref.getDownloadURL();
 
-      // Update the user profile in Firestore with the new image URL
       FirebaseFirestore.instance.collection('User').doc(user.uid).update({
         'imageUrl': uploadedImageUrl,
       });

@@ -1,15 +1,13 @@
  import 'package:asan_yab/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 final SignInProvider = StateNotifierProvider((ref) => SignIn(ref) );
 class SignIn extends StateNotifier{
   SignIn(super.state);
 
-  Future signIn(GlobalKey<FormState> key,BuildContext context ,TextEditingController emailController,TextEditingController passwordController)async{
-    final isValid=key.currentState!.validate();
+  Future signIn(GlobalKey<FormState> formKey,BuildContext context ,TextEditingController emailController,TextEditingController passwordController)async{
+    final isValid=formKey.currentState!.validate();
     if(!isValid)return;
     showDialog(
       context: context,
@@ -36,10 +34,10 @@ class SignIn extends StateNotifier{
             const SnackBar(content: Text('برای درخواست اشتباه مکرر اکانت شما بلاک شده است لطفا بعدا امتحان کنید'))
         );
       }
-
     }
-    // navigatorKey.currentState
-    // !.popUntil((route) => route.isFirst);
+    navigatorKey.currentState
+    !.popUntil((route) => route.isFirst);
+
   }
 }
 

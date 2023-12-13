@@ -1,6 +1,5 @@
 import 'package:asan_yab/presentation/pages/about_us_page.dart';
 import 'package:asan_yab/presentation/pages/edit_profile_page.dart';
-import 'package:asan_yab/presentation/pages/sign_in_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -20,9 +19,14 @@ class ProfilePage extends ConsumerStatefulWidget {
 
 class _ProfilePageState extends ConsumerState<ProfilePage> {
 
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero,() => ref.read(userDetailsProvider.notifier).getCurrentUserData(),);
+  }
+ 
 
   final userName = FirebaseAuth.instance.currentUser;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,8 +39,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               return const Center(child: Text('No user data available'));
             } else {
               Users usersData = snapshot.data!;
-              debugPrint('Younis image${usersData.imageUrl}');
-
+              // debugPrint('Younis image${usersData.imageUrl}');
+              // debugPrint('Younis riverpod Image ${ref.watch(imageProvider).imageUrl}');
               return Column(
                 children: [
                   SizedBox(
@@ -107,7 +111,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                               : CircleAvatar(
                                   maxRadius: 80,
                                   backgroundImage: NetworkImage(
-                                    '${ref.watch(imageProvider).imageUrl}',
+                                    '${ref.watch(userDetailsProvider)!.imageUrl}',
                                   ),
                                 ),
                         ),
@@ -115,8 +119,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           padding: const EdgeInsets.only(top: 38.0,right: 15),
                           child: IconButton(
                               onPressed: () {
-                                FirebaseAuth.instance.signOut().whenComplete(() => Navigator.push(context, MaterialPageRoute(builder: (context) => LogInPage(),)));
-                                
+                                FirebaseAuth.instance.signOut();
+                                navigatorKey.currentState!.popUntil((route) => route.isFirst);
                               },
                               icon: const Icon(Icons.logout,color: Colors.white,)),
                         ),

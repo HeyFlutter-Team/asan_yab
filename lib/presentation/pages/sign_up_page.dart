@@ -1,17 +1,12 @@
 // ignore_for_file: avoid_print
 
-import 'package:asan_yab/data/models/users.dart';
-import 'package:asan_yab/presentation/pages/verify_email_page.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:asan_yab/domain/riverpod/data/sign_up_provider.dart';
-import 'package:asan_yab/main.dart';
 import 'package:asan_yab/presentation/widgets/custom_text_field.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import '../../domain/riverpod/data/sign_in_provider.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
@@ -32,7 +27,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     nameController.dispose();
     lastNameController.dispose();
@@ -93,7 +87,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   obscureText: ref.watch(isObscureProvider),
                   suffixIcon: IconButton(
                       onPressed: () => ref.read(isObscureProvider.notifier).isObscure(),
-                      icon: Icon(Icons.remove_red_eye_outlined)),
+                      icon: const Icon(Icons.remove_red_eye_outlined)),
                   label: 'رمز',
                   controller: passwordController,
                   hintText: 'رمز خود را وارد کنید',
@@ -111,6 +105,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       return 'رمز خود را مکررا وارد کنید';
                     }else if(p0 != passwordController.text){
                      return 'رمز ها برابری نمیکنند';
+                    }else{
+                      return null;
                     }
                   },
 
@@ -145,8 +141,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   onPressed: () {
                     final isValid = signUpFormKey.currentState!.validate();
                     if (!isValid) return;
-                   Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyEmailPage(),));
-
+                   ref.read(signUpNotifierProvider.notifier).signUp(signUpFormKey,context,emailController,passwordController).whenComplete(() =>
+                       ref.read(userDetailsProvider.notifier).userDetails(emailController,lastNameController,nameController,context),
+                   );
 
                   },
                   child: const Text('ساخت'),
