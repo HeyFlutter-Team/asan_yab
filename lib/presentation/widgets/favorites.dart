@@ -7,6 +7,7 @@ import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/utils/convert_digits_to_farsi.dart';
+import '../../domain/riverpod/data/ali_favorite_provider.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
 import '../pages/detials_page.dart';
 import '../pages/detials_page_offline.dart';
@@ -24,6 +25,7 @@ class _FavoritesState extends ConsumerState<Favorites> {
   void initState() {
     super.initState();
     ref.read(favoriteProvider.notifier).fetchUser();
+    // ref.read(getInformationProvider).getFavorite();
   }
 
   @override
@@ -62,6 +64,7 @@ class _FavoritesState extends ConsumerState<Favorites> {
                   ),
                   itemCount: value.length,
                   itemBuilder: (context, index) {
+                    print(value[index]);
                     final toggle = value[index]['toggle'] == 1 ? true : false;
                     final items = value[index];
                     List<String> phoneData =
@@ -167,6 +170,7 @@ class _FavoritesState extends ConsumerState<Favorites> {
                               ref
                                   .read(favoriteProvider.notifier)
                                   .delete(value[index]['id']);
+                              print(value[index]['id']);
                             },
                             icon: toggle
                                 ? const Icon(
