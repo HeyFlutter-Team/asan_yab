@@ -3,12 +3,10 @@
 import 'package:asan_yab/presentation/pages/sign_up_page.dart';
 import 'package:asan_yab/presentation/widgets/custom_text_field.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/riverpod/data/sign_in_provider.dart';
-import '../../main.dart';
 
 class LogInPage extends ConsumerStatefulWidget {
   final Function()? onClickedSignUp;
@@ -20,6 +18,11 @@ class LogInPage extends ConsumerStatefulWidget {
 
 class _LogInPageState extends ConsumerState<LogInPage>
     with SingleTickerProviderStateMixin {
+  final emailCTRL=TextEditingController();
+  final passwordCTRL=TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  late AnimationController _controller;
+
   @override
   void initState() {
     super.initState();
@@ -33,14 +36,10 @@ class _LogInPageState extends ConsumerState<LogInPage>
   void dispose() {
     _controller.dispose();
     super.dispose();
-    emailController.dispose();
-    passwordController.dispose();
+    emailCTRL.dispose();
+    passwordCTRL.dispose();
   }
 
-  final formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  late AnimationController _controller;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +64,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
               ),
               CustomTextField(
                 label: 'ایمیل',
-                controller: emailController,
+                controller:emailCTRL,
                 hintText: 'ایمیل خود را وارد کنید',
                 validator: (p0) {
                   if(p0!.isEmpty){
@@ -83,7 +82,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
               SizedBox(height: 20,),
               CustomTextField(
                   label: 'رمز',
-                  controller: passwordController,
+                  controller: passwordCTRL,
                   hintText: 'رمز خود را وارد کنید',
                   obscureText: ref.watch(isObscureProvider),
                   suffixIcon: IconButton(
@@ -144,8 +143,8 @@ class _LogInPageState extends ConsumerState<LogInPage>
                 onPressed: (){
                   final isValid=formKey.currentState!.validate();
                   if(!isValid)return;
-                  ref.read(SignInProvider.notifier).signIn(
-                      formKey, context, emailController, passwordController);
+                  ref.read(SignInProvider.notifier).signIn(context:context,email:emailCTRL.text,password: passwordCTRL.text);
+                  // .whenComplete(() => Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(),)));
                 },
                 child: const Text('ورود'),
               ),
@@ -172,9 +171,11 @@ class _LogInPageState extends ConsumerState<LogInPage>
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SignUpPage(
-                          onClickedSignIn: widget.onClickedSignUp,
-                        ),
+                        builder: (context) =>SignUpPage()
+
+                            // SignUpPage(
+                          // onClickedSignIn: widget.onClickedSignUp,
+                        // ),
                       ));
                 },
                 child: Text(

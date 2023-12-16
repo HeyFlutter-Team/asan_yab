@@ -1,23 +1,26 @@
- import 'package:asan_yab/main.dart';
+ import 'package:asan_yab/domain/riverpod/data/controllers_provider.dart';
+import 'package:asan_yab/main.dart';
+import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-final SignInProvider = StateNotifierProvider((ref) => SignIn(ref) );
+final SignInProvider = StateNotifierProvider((ref) => SignIn(ref,ref) );
 class SignIn extends StateNotifier{
-  SignIn(super.state);
+  final Ref ref;
+  SignIn(super.state, this.ref);
 
-  Future signIn(GlobalKey<FormState> formKey,BuildContext context ,TextEditingController emailController,TextEditingController passwordController)async{
-    final isValid=formKey.currentState!.validate();
-    if(!isValid)return;
-    showDialog(
-      context: context,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),);
+  Future signIn({required BuildContext context,required String email,required String password})async{
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Signing in...')),
+    );
     try{
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim()
+          email:email.trim(),
+          password:password
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainPage()),
       );
     }on FirebaseAuthException catch(e){
       print('Younis$e');
@@ -25,18 +28,24 @@ class SignIn extends StateNotifier{
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('ایمیل شما در دیتابیس ثبت نشده است'))
         );
+
       }else if(e.code=='wrong-password'){
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('رمز شما اشتباه است'))
         );
+
       }else if(e.code=='too-many-requests'){
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('برای درخواست اشتباه مکرر اکانت شما بلاک شده است لطفا بعدا امتحان کنید'))
         );
+
       }
+      // else if(e.code!='user-not-found'&&e.code!='wrong-password'&&e.code!='too-many-requests'){
+      // return  Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(),));
+      // }
+    }catch (e){
+      print('younis general errors $e');
     }
-    navigatorKey.currentState
-    !.popUntil((route) => route.isFirst);
 
   }
 }

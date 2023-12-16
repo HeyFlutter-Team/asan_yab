@@ -45,7 +45,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   //     message.notification?.body, platformChannelSpecifics,
   //     payload: message.data['id']);
 }
-final navigatorKey=GlobalKey<NavigatorState>();
+// final navigatorKey=GlobalKey<NavigatorState>();
 Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   WidgetsFlutterBinding.ensureInitialized();
@@ -111,7 +111,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     FirebaseApi().getToken();
 
     return MaterialApp(
-      navigatorKey: navigatorKey,
+      // navigatorKey: navigatorKey,
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
       ],
@@ -136,9 +136,8 @@ class _MyAppState extends ConsumerState<MyApp> {
             return const Center(child: Text('خطا در اتصال'),);
           }
           else if(snapshot.hasData){
-            return ref.watch(isEmailVerifieds)
-                ?const MainPage()
-                : VerifyEmailPage();
+            return  MainPage();
+              // VerifyEmailPage();
 
           }else{
             return const AuthPage();

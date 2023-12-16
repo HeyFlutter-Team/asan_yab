@@ -22,12 +22,12 @@ class Users{
     'imageUrl':imageUrl
   };
 
-  factory Users.fromJson(Map<String, dynamic> json) {
+  factory Users.fromMap(Map<String, dynamic> json) {
     return Users(
-      name: json['name'],
-      lastName: json['lastName'],
-      email: json['email'],
-      createdAt: json['createdAt'],
+      name: json['name']??'',
+      lastName: json['lastName']??'',
+      email: json['email']??'',
+      createdAt: json['createdAt']??'',
       imageUrl: json['imageUrl'],
     );
   }

@@ -1,5 +1,7 @@
+import 'package:asan_yab/domain/riverpod/screen/botton_navigation_provider.dart';
 import 'package:asan_yab/presentation/pages/about_us_page.dart';
 import 'package:asan_yab/presentation/pages/edit_profile_page.dart';
+import 'package:asan_yab/presentation/pages/sign_in_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -8,7 +10,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../data/models/users.dart';
 import '../../domain/riverpod/data/profile_data_provider.dart';
-import '../../main.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
@@ -22,25 +23,29 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero,() => ref.read(userDetailsProvider.notifier).getCurrentUserData(),);
+    Future.delayed(Duration.zero,(){
+      ref.read(userDetailsProvider.notifier).getCurrentUserData();
+      ref.read(userDetailsProvider.notifier).state?.imageUrl;
+
+    },);
   }
+
  
 
   final userName = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-          future: ref.read(userDetailsProvider.notifier).getCurrentUserData(),
+      body:
+      StreamBuilder<Users?>(
+          stream: ref.read(userDetailsProvider.notifier).getCurrentUserData(),
           builder: (context, snapshot) {
-             if (snapshot.hasError) {
+            if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data == null) {
-              return const Center(child: Text('No user data available'));
+              return const Center(child: Text('اطلاعات در دسترس نیست'));
             } else {
               Users usersData = snapshot.data!;
-              // debugPrint('Younis image${usersData.imageUrl}');
-              // debugPrint('Younis riverpod Image ${ref.watch(imageProvider).imageUrl}');
               return Column(
                 children: [
                   SizedBox(
@@ -111,7 +116,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                               : CircleAvatar(
                                   maxRadius: 80,
                                   backgroundImage: NetworkImage(
-                                    '${ref.watch(userDetailsProvider)!.imageUrl}',
+                                    ref.watch(userDetailsProvider)!.imageUrl,
                                   ),
                                 ),
                         ),
@@ -119,8 +124,12 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           padding: const EdgeInsets.only(top: 38.0,right: 15),
                           child: IconButton(
                               onPressed: () {
-                                FirebaseAuth.instance.signOut();
-                                navigatorKey.currentState!.popUntil((route) => route.isFirst);
+                                FirebaseAuth.instance.signOut()
+                                .whenComplete((){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInPage(),));
+                                  ref.read(buttonNavigationProvider.notifier).selectedIndex(0);
+                                });
+                                // navigatorKey.currentState!.popUntil((route) => route.isFirst);
                               },
                               icon: const Icon(Icons.logout,color: Colors.white,)),
                         ),
@@ -182,7 +191,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     onPressed: (){
                       Navigator.push(context,
                       MaterialPageRoute(builder:
-                      (context) => EditProfilePage(userData: usersData,),));
+                      (context) => EditProfilePage(userData: usersData,),)).then((value) =>
+                          ref.read(userDetailsProvider.notifier).getCurrentUserData());
                     },
                     child: const Text('ویرایش'),
                   ),

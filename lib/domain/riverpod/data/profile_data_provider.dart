@@ -14,25 +14,31 @@ import '../../../data/models/users.dart';
 class UserDetails extends StateNotifier<Users?>{
   UserDetails(super.state);
 
-  Future<Users?> getCurrentUserData() async {
+  Stream<Users?> getCurrentUserData() async* {
     try {
       User? user = FirebaseAuth.instance.currentUser;
 
       if (user != null) {
         final userSnapshot =
-        await FirebaseFirestore.instance.collection('User').doc(user.uid).get();
+        await FirebaseFirestore
+            .instance
+            .collection('User')
+            .doc(user.uid)
+            .get();
         if (userSnapshot.exists) {
-       state = Users.fromJson(userSnapshot.data()!);
-        return state;
+       state = Users.fromMap(userSnapshot.data()!);
+        yield state;
+
         } else {
-          return null;
+          yield null;
         }
       } else {
-        return null;
+        yield null;
       }
     } catch (e) {
       print('Younis Error fetching current user data: $e');
-      return null;
+      print('younis: state $state');
+      yield null;
     }
   }
 }

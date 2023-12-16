@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:asan_yab/data/models/users.dart';
+import 'package:asan_yab/domain/riverpod/data/edit_profile_page_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -21,41 +22,41 @@ class EditProfilePage extends ConsumerStatefulWidget {
 
 class _EditProfilePageState extends ConsumerState<EditProfilePage> {
   final user=FirebaseAuth.instance.currentUser;
-  TextEditingController nameController=TextEditingController();
-  TextEditingController lastNameController=TextEditingController();
-  
-  TextEditingController emailController=TextEditingController();
+  final nameController=TextEditingController();
+  final lastNameController=TextEditingController();
   @override
   void initState() {
     super.initState();
+  Future.delayed(Duration.zero,(){
     nameController.text=widget.userData.name;
-    emailController.text=widget.userData.email;
     lastNameController.text=widget.userData.lastName;
-    editData();
+   ref.read(editProfilePageProvider.notifier).editData(nameController, lastNameController);
+    ref.read(imageProvider.notifier).state?.imageUrl;
+  },);
 
   }
 
 // Assuming you have access to FirebaseAuth instance and nameController
 
-Future editData() async {
-  try {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      await FirebaseFirestore.instance.collection('User').doc(user.uid).update({
-        'name': nameController.text,
-        'lastName':lastNameController.text
-        // Add other fields you want to update here
-      });
-      print('Data updated successfully!');
-    } else {
-      print('User is not authenticated!');
-      // Handle case when user is not authenticated
-    }
-  } catch (error) {
-    print('Error updating data: $error');
-    // Handle error when updating data fails
-  }
-}
+// Future editData() async {
+//   try {
+//     User? user = FirebaseAuth.instance.currentUser;
+//     if (user != null) {
+//       await FirebaseFirestore.instance.collection('User').doc(user.uid).update({
+//         'name': nameController.text,
+//         'lastName':lastNameController.text
+//         // Add other fields you want to update here
+//       });
+//       print('Data updated successfully!');
+//     } else {
+//       print('User is not authenticated!');
+//       // Handle case when user is not authenticated
+//     }
+//   } catch (error) {
+//     print('Error updating data: $error');
+//     // Handle error when updating data fails
+//   }
+// }
 
 
   @override
@@ -83,14 +84,17 @@ Future editData() async {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 48.0,right: 4),
-                  child: IconButton(onPressed: (){
-                    setState(() {
-                      editData();
-                    });
+                  child: TextButton(
+                      child: Text('Save'),
+                      onPressed: (){
+
+                    ref.read(userDetailsProvider.notifier).getCurrentUserData();
+
                      Navigator.pop(context);
 
                   },
-                      icon: const Icon(Icons.arrow_back,size: 35,color: Colors.white,)),
+                      // icon: const Icon(Icons.arrow_back,size: 35,color: Colors.white,)
+                    ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 118.0, right: 116),
@@ -133,7 +137,7 @@ Future editData() async {
                           CircleAvatar(
                             maxRadius: 80,
                             backgroundImage: NetworkImage(
-                              '${ref.watch(imageProvider).imageUrl}',
+                              ref.watch(userDetailsProvider)!.imageUrl,
                             ),
                           ),
                           Padding(
@@ -180,6 +184,12 @@ Future editData() async {
                             size: 30,
                           ),
                         ),
+                 onChanged: (value) {
+                   ref.read(editProfilePageProvider.notifier)
+                       .editData(
+                       nameController,
+                       lastNameController);
+                 },
                       ),
                       TextField(
                         controller: lastNameController,
@@ -192,15 +202,21 @@ Future editData() async {
                             size: 30,
                           ),
                         ),
+                        onChanged: (value) {
+                          ref.read(editProfilePageProvider.notifier)
+                              .editData(
+                              nameController,
+                              lastNameController);
+                        },
                       ),
-                      ListTile(
-                      title: Text(widget.userData.email),
-                      leading: const Icon(
-                        color: Colors.red,
-                        Icons.mail_outline,
-                        size: 30,
-                      ),
-                    ),
+                    //   ListTile(
+                    //   title: Text(widget.userData.email),
+                    //   leading: const Icon(
+                    //     color: Colors.red,
+                    //     Icons.mail_outline,
+                    //     size: 30,
+                    //   ),
+                    // ),
                     const Divider(
                       color: Colors.grey,
                     ),

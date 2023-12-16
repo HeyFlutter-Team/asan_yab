@@ -1,3 +1,4 @@
+import 'package:asan_yab/presentation/pages/personal_information_page.dart';
 import 'package:asan_yab/presentation/pages/sign_in_page.dart';
 import 'package:asan_yab/presentation/pages/sign_up_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,7 +18,7 @@ class AuthPage extends ConsumerWidget {
             onClickedSignUp: () => ref.read(authPageStateProvider.notifier).toggleLoginState(),
           )
         : SignUpPage(
-            onClickedSignIn: () => ref.read(authPageStateProvider.notifier).toggleLoginState(),
-          );
+      onClickedSignIn: () => ref.read(authPageStateProvider.notifier).toggleLoginState(),
+    );
   }
 }
