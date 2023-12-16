@@ -28,22 +28,6 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   debugPrint('Title : ${message.notification!.title}');
   debugPrint('body : ${message.notification!.body}');
   debugPrint('PayLoad : ${message.data}');
-
-  // BigTextStyleInformation bigPictureStyleInformation = BigTextStyleInformation(
-  //     message.notification!.body.toString(),
-  //     htmlFormatBigText: true,
-  //     contentTitle: message.notification!.title.toString(),
-  //     htmlFormatContentTitle: true);
-  // AndroidNotificationDetails androidNotificationDetails =
-  //     AndroidNotificationDetails('asan_yab', 'asan_yab',
-  //         importance: Importance.high,
-  //         styleInformation: bigPictureStyleInformation,
-  //         priority: Priority.high,
-  //         playSound: true);
-  // NotificationDetails(android: androidNotificationDetails);
-  // FlutterLocalNotificationsPlugin().show(0, message.notification?.title,
-  //     message.notification?.body, platformChannelSpecifics,
-  //     payload: message.data['id']);
 }
 // final navigatorKey=GlobalKey<NavigatorState>();
 Future<void> main() async {
@@ -111,7 +95,6 @@ class _MyAppState extends ConsumerState<MyApp> {
     FirebaseApi().getToken();
 
     return MaterialApp(
-      // navigatorKey: navigatorKey,
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
       ],
