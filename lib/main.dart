@@ -1,7 +1,10 @@
 import 'package:asan_yab/domain/riverpod/config/notification_repo.dart';
+import 'package:asan_yab/presentation/pages/auth_page.dart';
 
 import 'package:asan_yab/presentation/pages/main_page.dart';
-// import 'package:device_preview/device_preview.dart';
+
+import 'package:asan_yab/presentation/pages/verify_email_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -15,7 +18,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'domain/riverpod/config/internet_connectivity_checker.dart';
+import 'domain/riverpod/data/verify_page_provider.dart';
 import 'firebase_options.dart';
+
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   debugPrint('Handler a background message ${message.notification} ');
@@ -23,8 +29,9 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   debugPrint('body : ${message.notification!.body}');
   debugPrint('PayLoad : ${message.data}');
 }
-
+// final navigatorKey=GlobalKey<NavigatorState>();
 Future<void> main() async {
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   WidgetsFlutterBinding.ensureInitialized();
   await Future.delayed(const Duration(seconds: 2));
   FlutterNativeSplash.remove();
@@ -43,27 +50,51 @@ Future<void> main() async {
   //firebase messegaing
   await FirebaseApi().initNotification();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  runApp(const ProviderScope(child: MyApp())
-      // DevicePreview(
-      //   enabled: !kReleaseMode,
-      //   builder: (context) =>
-      //       const ProviderScope(child: MyApp()), // Wrap your app
-      // ),
-      );
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
+  @override
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+
+  @override
+  void initState() {
+    if(FirebaseAuth.instance.currentUser != null){
+      ref
+          .read(internetConnectivityCheckerProvider.notifier)
+          .startStremaing(context);
+          // ref.read(isEmailVerifieds)
+          //       ?const MainPage()
+          //       :const VerifyEmailPage();
+    }
+    super.initState();
+
+  }
+  @override
+  void dispose() {
+    if(FirebaseAuth.instance.currentUser != null){
+      ref
+          .read(internetConnectivityCheckerProvider.notifier)
+          .subscription
+          .cancel();
+          // ref.watch(isEmailVerifieds)
+          //       ?const MainPage()
+          //       :const VerifyEmailPage();
+    }
+    super.dispose();
+
+  }
   @override
   Widget build(BuildContext context) {
     FirebaseApi().initInfo(context);
     FirebaseApi().getToken();
 
     return MaterialApp(
-      useInheritedMediaQuery: true,
-      // locale: DevicePreview.locale(context),
-      // builder: DevicePreview.appBuilder,
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
       ],
@@ -79,7 +110,23 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: const MainPage(),
+      home:StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder:(context, snapshot) {
+          if(snapshot.connectionState==ConnectionState.waiting){
+            return const Center(child: CircularProgressIndicator(),);
+          }else if(snapshot.hasError){
+            return const Center(child: Text('خطا در اتصال'),);
+          }
+          else if(snapshot.hasData){
+            return  MainPage();
+              // VerifyEmailPage();
+
+          }else{
+            return const AuthPage();
+
+          }
+        }, )
     );
   }
 }

@@ -2,7 +2,9 @@
 
 import 'dart:async';
 
+import 'package:asan_yab/presentation/pages/sign_in_page.dart';
 import 'package:asan_yab/presentation/widgets/nearby_place.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -56,6 +58,15 @@ class _HomePageState extends ConsumerState<HomePage> {
         backgroundColor: Colors.white,
         elevation: 0.0,
         title: const CustomSearchBar(),
+        actions: [
+          IconButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut()
+                    .whenComplete(() => Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInPage(),)));
+                // navigatorKey.currentState!.popUntil((route) => route.isFirst);
+              },
+              icon: const Icon(Icons.logout,color: Colors.black,)),
+        ],
       ),
       body: RefreshIndicator(
         triggerMode: RefreshIndicatorTriggerMode.onEdge,
