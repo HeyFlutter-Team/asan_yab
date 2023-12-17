@@ -1,4 +1,6 @@
 import 'package:asan_yab/data/repositoris/local_rep/notification.dart';
+import 'package:asan_yab/presentation/pages/profile_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,24 +23,28 @@ class MainPage extends ConsumerStatefulWidget {
 }
 
 class _MainPageState extends ConsumerState<MainPage> {
-  @override
-  void initState() {
-    super.initState();
+//   @override
+//   void initState() {
+//     super.initState();
+// if(FirebaseAuth.instance.currentUser != null){
+//   ref
+//       .read(internetConnectivityCheckerProvider.notifier)
+//       .startStremaing(context);
+// }
+//
+//   }
 
-    ref
-        .read(internetConnectivityCheckerProvider.notifier)
-        .startStremaing(context);
-  }
-
-  final pages = [const HomePage(), const SuggestionPage(), const AboutUsPage()];
-  @override
-  void dispose() {
-    ref
-        .read(internetConnectivityCheckerProvider.notifier)
-        .subscription
-        .cancel();
-    super.dispose();
-  }
+  final pages = [const HomePage(), const SuggestionPage(), const ProfilePage()];
+  // @override
+  // void dispose() {
+  //   if(FirebaseAuth.instance.currentUser != null){
+  //   ref
+  //       .read(internetConnectivityCheckerProvider.notifier)
+  //       .subscription
+  //       .cancel();
+  //   }
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +60,7 @@ class _MainPageState extends ConsumerState<MainPage> {
                   .watch(internetConnectivityCheckerProvider.notifier)
                   .isConnected),
           const SuggestionPage(),
-          const AboutUsPage()
+          const ProfilePage()
         ],
       ),
     );
@@ -81,7 +87,7 @@ class _MainPageState extends ConsumerState<MainPage> {
             icon: Icon(Icons.place),
           ),
           BottomNavigationBarItem(
-            label: 'در باره ما',
+            label: 'پروفایل',
             icon: Icon(Icons.person),
           ),
         ],

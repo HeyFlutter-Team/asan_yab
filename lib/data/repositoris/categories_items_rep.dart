@@ -5,7 +5,7 @@ import '../models/place_response.dart';
 
 class CategoriesItemsRepository {
   final firebase = FirebaseFirestore.instance;
-  final _path = 'Places';
+  final _path = 'Users';
   final pageSize = 10;
   Future<PlaceReponse?> fetchPlaces(
       {DocumentSnapshot? lastItem, String? id}) async {

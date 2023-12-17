@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/res/image_res.dart';
+import '../../main.dart';
 
 class AboutUsPage extends StatelessWidget {
   const AboutUsPage({super.key});
@@ -21,6 +24,9 @@ class AboutUsPage extends StatelessWidget {
         ),
         backgroundColor: Colors.white,
         elevation: 0,
+        leading:  IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.arrow_back,color: Colors.black,)),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -157,6 +163,7 @@ class AboutUsPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 24),
+
                     ],
                   ),
                 ),
@@ -210,4 +217,5 @@ class _BuildLinkWidget extends StatelessWidget {
       ],
     );
   }
+
 }
