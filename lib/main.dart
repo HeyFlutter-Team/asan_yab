@@ -1,27 +1,22 @@
 import 'package:asan_yab/domain/riverpod/config/notification_repo.dart';
-
 import 'package:asan_yab/presentation/pages/main_page.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 // import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
 import 'package:flutter/foundation.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'firebase_options.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  debugPrint('Handler a background message ${message.notification} ');
-  debugPrint('Title : ${message.notification!.title}');
-  debugPrint('body : ${message.notification!.body}');
-  debugPrint('PayLoad : ${message.data}');
+  print('Handling a background message ${message.data['id']}');
 }
 
 Future<void> main() async {
@@ -41,8 +36,9 @@ Future<void> main() async {
     return true;
   };
   //firebase messegaing
-  await FirebaseApi().initNotification();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  await FirebaseApi().initNotification();
+
   runApp(const ProviderScope(child: MyApp())
       // DevicePreview(
       //   enabled: !kReleaseMode,
@@ -57,10 +53,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseApi().initInfo(context);
+    FirebaseApi().initInfo();
     FirebaseApi().getToken();
-
+    FirebaseApi().initialize(context);
     return MaterialApp(
+      navigatorKey: navigatorKey,
       useInheritedMediaQuery: true,
       // locale: DevicePreview.locale(context),
       // builder: DevicePreview.appBuilder,

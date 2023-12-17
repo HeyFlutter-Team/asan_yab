@@ -1,8 +1,7 @@
 import 'package:asan_yab/data/repositoris/local_rep/notification.dart';
+import 'package:asan_yab/main.dart';
 import 'package:asan_yab/presentation/pages/detials_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -10,6 +9,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class FirebaseApi {
   final _firebaseMessaging = FirebaseMessaging.instance;
+
   // late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
   //     FlutterLocalNotificationsPlugin();
   String? token = '';
@@ -31,26 +31,27 @@ class FirebaseApi {
     final fcmToken = await _firebaseMessaging.getToken();
     token = fcmToken;
     NotificationUpdate().saveToken(token);
-    // debugPrint('tokken  token $token');
+    debugPrint('tokken  token $token');
   }
 
-  void initInfo(BuildContext context) {
+  void initInfo() {
     const androidInitialize = AndroidInitializationSettings('asan_yab');
-    const iOSInitialize = DarwinInitializationSettings();
+    const iOSInitialize =
+        DarwinInitializationSettings(defaultPresentBanner: true);
     const initializationsSetting =
         InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
     FlutterLocalNotificationsPlugin().initialize(
       initializationsSetting,
       onDidReceiveNotificationResponse: (details) async {
         try {
+          debugPrint(' id ${details.id}');
+          debugPrint('playyy load ${details.payload}');
           if (details.payload != null) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      DetailsPage(id: details.payload.toString()),
-                ));
-          } else {}
+            navigatorKey.currentState?.push(MaterialPageRoute(
+              builder: (context) =>
+                  DetailsPage(id: details.payload!.toString()),
+            ));
+          }
         } catch (e) {}
       },
     );
@@ -76,5 +77,36 @@ class FirebaseApi {
           message.notification?.body, platformChannelSpecifics,
           payload: message.data['id']);
     });
+  }
+
+  Future<void> initialize(BuildContext context) async {
+    // Request permission for receiving messages (for iOS)
+    NotificationSettings settings =
+        await _firebaseMessaging.requestPermission();
+    print("User granted permission: ${settings.authorizationStatus}");
+
+    // Handle messages when the app is in the background and opened by the user
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print("Background Message: ${message.notification?.title}");
+      // Handle the message when the app is in the background
+
+      _handleNotificationClick(message);
+    });
+
+    // Get the token
+    String? token = await _firebaseMessaging.getToken();
+    print("FCM Token: $token");
+  }
+
+  void _handleNotificationClick(RemoteMessage message) {
+    // Extract information from the message, e.g., route to navigate
+    String? screenToNavigate = message.data['id'];
+
+    if (screenToNavigate != null) {
+      // Navigate to the desired screen
+      navigatorKey.currentState?.push(MaterialPageRoute(
+        builder: (context) => DetailsPage(id: screenToNavigate),
+      ));
+    }
   }
 }

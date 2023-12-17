@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../data/models/place.dart';
@@ -22,13 +21,20 @@ class CategoriesItemsProvider extends StateNotifier<List<Place>> {
     final placesReponse =
         await placeRepository.fetchPlaces(lastItem: lastItem, id: id);
 
-    if (placesReponse != null) {
-      state.addAll(placesReponse.docs);
-      lastItem = placesReponse.lastItem;
+    try {
+      ref.read(loadingDataProvider.notifier).state = true;
+      if (placesReponse != null) {
+        state.addAll(placesReponse.docs);
+        lastItem = placesReponse.lastItem;
 
-      if (placesReponse.totalItem <= state.length) {
-        ref.read(hasMore.notifier).state = false;
+        if (placesReponse.totalItem <= state.length) {
+          ref.read(hasMore.notifier).state = false;
+        }
       }
+    } catch (e) {
+      rethrow;
+    } finally {
+      ref.read(loadingDataProvider.notifier).state = false;
     }
   }
 
@@ -45,4 +51,7 @@ class CategoriesItemsProvider extends StateNotifier<List<Place>> {
 
 final hasMore = StateProvider<bool>((ref) {
   return true;
+});
+final loadingDataProvider = StateProvider<bool>((ref) {
+  return false;
 });
