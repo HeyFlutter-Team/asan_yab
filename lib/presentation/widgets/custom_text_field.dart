@@ -25,7 +25,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.17,
+      height: MediaQuery.of(context).size.height * 0.16,
       width: MediaQuery.of(context).size.width * 0.9,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +36,7 @@ class CustomTextField extends StatelessWidget {
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
           ),
           const SizedBox(
-            height: 10,
+            height: 2,
           ),
           TextFormField(
             textCapitalization: textCapitalization,

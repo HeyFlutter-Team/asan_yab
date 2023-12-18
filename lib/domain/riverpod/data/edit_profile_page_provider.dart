@@ -39,6 +39,13 @@ class EditProfilePage extends StateNotifier<EditProfileState>{
       // Handle error when updating data fails
     }
   }
+   updateName(String newName) {
+    state.name = newName;
+  }
+
+   updateLastName(String newLastName) {
+    state.lastName = newLastName;
+  }
 
 }
 

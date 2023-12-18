@@ -98,6 +98,12 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "clipboard",
+      "rootUri": "file:///C:/Users/E%20H%20C/AppData/Local/Pub/Cache/hosted/pub.dev/clipboard-0.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "clock",
       "rootUri": "file:///C:/Users/E%20H%20C/AppData/Local/Pub/Cache/hosted/pub.dev/clock-1.1.1",
       "packageUri": "lib/",
@@ -1088,7 +1094,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-12-16T07:03:17.806659Z",
+  "generated": "2023-12-18T10:47:39.326159Z",
   "generator": "pub",
   "generatorVersion": "3.0.6"
 }

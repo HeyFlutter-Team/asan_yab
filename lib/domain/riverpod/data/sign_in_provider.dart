@@ -1,84 +1,83 @@
- import 'package:asan_yab/domain/riverpod/data/controllers_provider.dart';
-import 'package:asan_yab/main.dart';
+// ignore_for_file: use_build_context_synchronously, avoid_print
+
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-final SignInProvider = StateNotifierProvider((ref) => SignIn(ref,ref) );
-class SignIn extends StateNotifier{
+
+//Sign In method
+final SignInProvider = StateNotifierProvider((ref) => SignIn(ref, ref));
+
+class SignIn extends StateNotifier {
   final Ref ref;
   SignIn(super.state, this.ref);
 
-  Future signIn({required BuildContext context,required String email,required String password})async{
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Signing in...')),
+  Future signIn(
+      {required BuildContext context,
+      required String email,
+      required String password}) async {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(
+          color: Colors.red,
+        ),
+      ),
     );
-    try{
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email:email.trim(),
-          password:password
-      );
+
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email.trim(), password: password);
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MainPage()),
+        MaterialPageRoute(builder: (context) => const MainPage()),
       );
-    }on FirebaseAuthException catch(e){
+    } on FirebaseAuthException catch (e) {
       print('Younis$e');
-      if(e.code=='user-not-found'){
+      if (e.code == 'user-not-found') {
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('ایمیل شما در دیتابیس ثبت نشده است'))
-        );
+            const SnackBar(content: Text('ایمیل شما در دیتابیس ثبت نشده است')));
+        Navigator.pop(context);
+      } else if (e.code == 'wrong-password') {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('رمز شما اشتباه است')));
+        Navigator.pop(context);
 
-      }else if(e.code=='wrong-password'){
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('رمز شما اشتباه است'))
-        );
-
-      }else if(e.code=='too-many-requests'){
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('برای درخواست اشتباه مکرر اکانت شما بلاک شده است لطفا بعدا امتحان کنید'))
-        );
+      } else if (e.code == 'too-many-requests') {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+                'برای درخواست اشتباه مکرر اکانت شما بلاک شده است لطفا بعدا امتحان کنید')));
+        Navigator.pop(context);
 
       }
-      // else if(e.code!='user-not-found'&&e.code!='wrong-password'&&e.code!='too-many-requests'){
-      // return  Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(),));
-      // }
-    }catch (e){
+    } catch (e) {
       print('younis general errors $e');
     }
-
   }
 }
 
- class IsCheckNotifier extends StateNotifier<bool> {
-   IsCheckNotifier() : super(false);
+//Cheak box method
+class IsCheckNotifier extends StateNotifier<bool> {
+  IsCheckNotifier() : super(false);
 
-   void setIsCheck(bool value) {
-     state = value;
-   }
+  void setIsCheck(bool value) {
+    state = value;
+  }
+}
 
-   // void rememberGmail(String email)async{
-   //
-   //     SharedPreferences prefs=await SharedPreferences.getInstance();
-   //     await prefs.setString('SaveEmail', email);
-   //     final emails=prefs.getString('SaveEmail');
-   //     print('younis :its the saved email $emails');
-   //
-   // }
- }
+final isCheckProvider = StateNotifierProvider<IsCheckNotifier, bool>((ref) {
+  return IsCheckNotifier();
+});
 
- final isCheckProvider = StateNotifierProvider<IsCheckNotifier, bool>((ref) {
-   return IsCheckNotifier();
- });
+class ObscureBool extends StateNotifier<bool> {
+  ObscureBool() : super(true);
 
-
-class ObscureBool extends StateNotifier<bool>{
-  ObscureBool(): super(true);
-
-  void isObscure(){
-    state=!state;
+  void isObscure() {
+    state = !state;
     print('younis obscure = $state');
   }
 }
 
-final isObscureProvider=StateNotifierProvider<ObscureBool, bool>((ref) => ObscureBool());
+final isObscureProvider =
+    StateNotifierProvider<ObscureBool, bool>((ref) => ObscureBool());

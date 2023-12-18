@@ -12,14 +12,7 @@ import '../../domain/riverpod/data/sign_in_provider.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
   final Function()? onClickedSignIn;
-  // final TextEditingController nameController;
-  // final TextEditingController lastNameController;
-  const SignUpPage(
-      // TextEditingController nameController,
-      // this.nameController,
-      // this.lastNameController,
-      {super.key,
-      this.onClickedSignIn});
+  const SignUpPage({super.key, this.onClickedSignIn});
 
   @override
   ConsumerState<SignUpPage> createState() => _SignUpPageState();
@@ -27,8 +20,6 @@ class SignUpPage extends ConsumerStatefulWidget {
 
 class _SignUpPageState extends ConsumerState<SignUpPage> {
   final signUpFormKey = GlobalKey<FormState>();
-  // final nameController = TextEditingController();
-  // final lastNameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
@@ -36,11 +27,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   @override
   void dispose() {
     super.dispose();
-    // nameController.dispose();
-    // lastNameController.dispose();
-    // emailController.dispose();
-    // passwordController.dispose();
-    // confirmPasswordController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
   }
 
   @override
@@ -60,26 +49,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   height: 200,
                   width: 200,
                 ),
-                const SizedBox(
-                  height: 2,
-                ),
-                // CustomTextField(
-                //   textCapitalization: TextCapitalization.words,
-                //   label: 'اسم',
-                //   controller: nameController,
-                //   hintText: 'اسم خود را وارد کنید',
-                //   validator: (p0) => p0!.isEmpty ? 'اسم خالی است' : null,
-                // ),
-                // CustomTextField(
-                //   textCapitalization: TextCapitalization.words,
-                //   label: 'تخلص',
-                //   controller: lastNameController,
-                //   hintText: 'تخلص خود را وارد کنید',
-                //   validator: (p0) => p0!.isEmpty ? 'تخلص خالی است' : null,
-                // ),
                 CustomTextField(
                     label: 'ایمیل',
-                    controller:emailController,
+                    controller: emailController,
                     hintText: 'ایمیل خود را وارد کنید',
                     validator: (p0) {
                       if (p0!.isEmpty ||
@@ -99,7 +71,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                           ref.read(isObscureProvider.notifier).isObscure(),
                       icon: const Icon(Icons.remove_red_eye_outlined)),
                   label: 'رمز',
-                  controller:passwordController,
+                  controller: passwordController,
                   hintText: 'رمز خود را وارد کنید',
                   validator: (p0) =>
                       p0!.length < 6 ? 'رمز باید بیشتر از 6 عدد باشد' : null,
@@ -107,36 +79,36 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 CustomTextField(
                   obscureText: true,
                   label: 'تایید رمز',
-                  controller:confirmPasswordController,
+                  controller: confirmPasswordController,
                   hintText: 'تکرار رمز',
                   validator: (p0) {
                     if (p0!.isEmpty) {
                       return 'رمز خود را مکررا وارد کنید';
-                    } else if (p0 !=passwordController.text) {
+                    } else if (p0 != passwordController.text) {
                       return 'رمز ها برابری نمیکنند';
                     } else {
                       return null;
                     }
                   },
                 ),
-                // RichText(
-                //   text: TextSpan(
-                //     children: [
-                //       const TextSpan(
-                //         text: '  قبلا اکانت داشتید؟',
-                //         style: TextStyle(color: Colors.black),
-                //       ),
-                //       TextSpan(
-                //         text: '  ورود',
-                //         style: const TextStyle(color: Colors.blue),
-                //         recognizer: TapGestureRecognizer()
-                //           ..onTap = () {
-                //             Navigator.pop(context);
-                //           },
-                //       ),
-                //     ],
-                //   ),
-                // ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      const TextSpan(
+                        text: '  قبلا اکانت داشتید؟',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      TextSpan(
+                        text: '  ورود',
+                        style: const TextStyle(color: Colors.blue),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.pop(context);
+                          },
+                      ),
+                    ],
+                  ),
+                ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -150,20 +122,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     final isValid = signUpFormKey.currentState!.validate();
                     if (!isValid) return;
 
-                    ref
-                        .read(signUpNotifierProvider.notifier)
-                        .signUp(context: context,
+                    ref.read(signUpNotifierProvider.notifier).signUp(
+                        context: context,
                         email: emailController.text,
                         password: passwordController.text);
-                    // .whenComplete(() =>  Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => VerifyEmailPage(
-                    //           email: emailController.text,
-                    //         ))));
                   },
-
-
                   child: const Text('ساخت'),
                 ),
                 const SizedBox(
