@@ -1,7 +1,6 @@
+import 'package:asan_yab/data/models/suggestion.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-
-import 'package:asan_yab/data/models/suggestion.dart';
 
 class FirebaseSuggestionCreate {
   Future createSuggestion(

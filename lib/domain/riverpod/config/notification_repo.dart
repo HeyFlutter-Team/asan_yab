@@ -1,9 +1,10 @@
+import 'package:asan_yab/data/repositoris/local_rep/notification.dart';
 import 'package:asan_yab/presentation/pages/detials_page.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_messaging/firebase_messagingtino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-import '../../../data/repositoris/local_rep/notification.dart';
+// }
 
 class FirebaseApi {
   final _firebaseMessaging = FirebaseMessaging.instance;

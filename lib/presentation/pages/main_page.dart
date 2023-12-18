@@ -1,9 +1,10 @@
+import 'package:asan_yab/domain/riverpod/config/notification_repo.dart';
+import 'package:asan_yab/presentation/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/riverpod/config/internet_connectivity_checker.dart';
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
-import 'about_us_page.dart';
 import 'home_page.dart';
 import 'suggestion.dart';
 
@@ -17,28 +18,14 @@ class MainPage extends ConsumerStatefulWidget {
 }
 
 class _MainPageState extends ConsumerState<MainPage> {
-  @override
-  void initState() {
-    super.initState();
-
-    ref
-        .read(internetConnectivityCheckerProvider.notifier)
-        .startStremaing(context);
-  }
-
-  final pages = [const HomePage(), const SuggestionPage(), const AboutUsPage()];
-  @override
-  void dispose() {
-    ref
-        .read(internetConnectivityCheckerProvider.notifier)
-        .subscription
-        .cancel();
-    super.dispose();
-  }
+  final pages = [const HomePage(), const SuggestionPage(), const ProfilePage()];
 
   @override
   Widget build(BuildContext context) {
     final selectedIndex = ref.watch(buttonNavigationProvider);
+    FirebaseApi().initInfo();
+    FirebaseApi().getToken();
+    FirebaseApi().initialize(context);
     return Scaffold(
       //backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: buildBottomNavigationBar(),
@@ -50,7 +37,7 @@ class _MainPageState extends ConsumerState<MainPage> {
                   .watch(internetConnectivityCheckerProvider.notifier)
                   .isConnected),
           const SuggestionPage(),
-          const AboutUsPage()
+          const ProfilePage()
         ],
       ),
     );

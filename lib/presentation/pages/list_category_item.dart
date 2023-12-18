@@ -14,6 +14,7 @@ class ListCategoryItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    debugPrint('is exist ${catId}');
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
