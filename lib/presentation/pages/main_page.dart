@@ -1,15 +1,11 @@
-import 'package:asan_yab/data/repositoris/local_rep/notification.dart';
-
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/riverpod/config/internet_connectivity_checker.dart';
-
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
-import 'suggestion.dart';
-import 'package:flutter/material.dart';
-
 import 'about_us_page.dart';
 import 'home_page.dart';
+import 'suggestion.dart';
 
 // String? notifTitle, notifBody;
 
@@ -44,7 +40,7 @@ class _MainPageState extends ConsumerState<MainPage> {
   Widget build(BuildContext context) {
     final selectedIndex = ref.watch(buttonNavigationProvider);
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      //backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: buildBottomNavigationBar(),
       body: IndexedStack(
         index: selectedIndex,
@@ -70,7 +66,7 @@ class _MainPageState extends ConsumerState<MainPage> {
           FocusScope.of(context).unfocus();
           ref.read(buttonNavigationProvider.notifier).selectedIndex(index);
         },
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         items: const [
           BottomNavigationBarItem(
             label: 'خانه',

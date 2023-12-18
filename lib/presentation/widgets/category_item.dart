@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,10 +8,8 @@ import '../../core/res/image_res.dart';
 import '../../core/utils/convert_digits_to_farsi.dart';
 import '../../data/models/place.dart';
 import '../../domain/riverpod/data/categories_items_provider.dart';
-
 import '../../domain/riverpod/screen/loading_circularPRI_provider.dart';
 import '../pages/detials_page.dart';
-
 import '.IncrementallyLoadingListView.dart';
 
 class CategoryItem extends ConsumerStatefulWidget {
@@ -150,8 +147,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                       items.name!,
                       overflow: TextOverflow.fade,
                       maxLines: 2,
-                      style:
-                          const TextStyle(color: Colors.black, fontSize: 18.0),
+                      style: const TextStyle(fontSize: 18.0),
                     ),
                     const SizedBox(height: 12.0),
                     phoneNumber.isEmpty
