@@ -106,9 +106,7 @@ class _MyAppState extends State<MyApp> {
     FirebaseApi().getToken();
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
-        statusBarColor: Theme.of(context).scaffoldBackgroundColor,
-      ),
+      value: SystemUiOverlayStyle(),
       child: MaterialApp(
         themeMode: themeMode,
         darkTheme: ThemeData.dark().copyWith(
