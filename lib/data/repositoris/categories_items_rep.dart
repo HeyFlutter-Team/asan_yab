@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
 import '../models/place.dart';
 import '../models/place_response.dart';
 
 class CategoriesItemsRepository {
   final firebase = FirebaseFirestore.instance;
-  final _path = 'Users';
+  final _path = 'Places';
   final pageSize = 10;
   Future<PlaceReponse?> fetchPlaces(
       {DocumentSnapshot? lastItem, String? id}) async {
