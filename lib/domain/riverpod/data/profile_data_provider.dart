@@ -3,6 +3,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:io';
+import 'package:clipboard/clipboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -14,7 +15,7 @@ import '../../../data/models/users.dart';
 class UserDetails extends StateNotifier<Users?>{
   UserDetails(super.state);
 
-  Stream<Users?> getCurrentUserData() async* {
+  Future<Users?> getCurrentUserData() async {
     try {
       User? user = FirebaseAuth.instance.currentUser;
 
@@ -27,19 +28,22 @@ class UserDetails extends StateNotifier<Users?>{
             .get();
         if (userSnapshot.exists) {
        state = Users.fromMap(userSnapshot.data()!);
-        yield state;
+        return state;
 
         } else {
-          yield null;
+          return null;
         }
       } else {
-        yield null;
+        return null;
       }
     } catch (e) {
       print('Younis Error fetching current user data: $e');
       print('younis: state $state');
-      yield null;
+      return null;
     }
+  }
+  copyToClipboard(String text) {
+    FlutterClipboard.copy(text);
   }
 }
 

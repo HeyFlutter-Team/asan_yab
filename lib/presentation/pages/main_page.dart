@@ -18,28 +18,10 @@ class MainPage extends ConsumerStatefulWidget {
 }
 
 class _MainPageState extends ConsumerState<MainPage> {
-//   @override
-//   void initState() {
-//     super.initState();
-// if(FirebaseAuth.instance.currentUser != null){
-//   ref
-//       .read(internetConnectivityCheckerProvider.notifier)
-//       .startStremaing(context);
-// }
-//
-//   }
+
 
   final pages = [const HomePage(), const SuggestionPage(), const ProfilePage()];
-  // @override
-  // void dispose() {
-  //   if(FirebaseAuth.instance.currentUser != null){
-  //   ref
-  //       .read(internetConnectivityCheckerProvider.notifier)
-  //       .subscription
-  //       .cancel();
-  //   }
-  //   super.dispose();
-  // }
+
 
   @override
   Widget build(BuildContext context) {

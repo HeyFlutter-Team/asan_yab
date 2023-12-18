@@ -110,136 +110,251 @@
 
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:async';
+// import 'dart:async';
+// import 'package:asan_yab/presentation/pages/personal_information_page.dart';
+// import 'package:asan_yab/presentation/pages/sign_in_page.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
+//
+// class VerifyEmailPage extends ConsumerStatefulWidget {
+//   final String? email;
+//   const VerifyEmailPage({
+//      this.email,
+//     super.key,
+//   });
+//
+//   @override
+//   ConsumerState<VerifyEmailPage> createState() => _VerifyEmailPageState();
+// }
+//
+// class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
+//   bool isEmailVerified = false;
+//   bool canResendEmail = false;
+//   Timer? timer;
+//   @override
+//   void initState() {
+//     super.initState();
+//     isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+//     if (!isEmailVerified) {
+//       sendVerificationEmail();
+//       timer = Timer.periodic(
+//         Duration(seconds: 3),
+//         (_) => checkEmailVerified()
+//       );
+//     }
+//   }
+//
+//   Future sendVerificationEmail() async {
+//     try {
+//       final user = FirebaseAuth.instance.currentUser!;
+//       await user.sendEmailVerification();
+//       setState(() => canResendEmail = false);
+//       await Future.delayed(Duration(seconds: 3));
+//       setState(() => canResendEmail = true);
+//     } catch (e) {
+//       print(e);
+//     }
+//   }
+//
+//   Future checkEmailVerified() async {
+//     await FirebaseAuth.instance.currentUser!.reload();
+//     setState(() {
+//       isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+//     });
+//     if (isEmailVerified) {
+//       timer?.cancel();
+//
+//
+//     }
+//
+//   }
+//
+//   @override
+//   void dispose() {
+//     // TODO: implement dispose
+//     super.dispose();
+//     timer?.cancel();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) =>
+//       isEmailVerified
+//       ?PersonalInformation(email: widget.email)
+//       :
+//   Scaffold(
+//           appBar: AppBar(
+//             backgroundColor: Colors.red.shade900,
+//             title: const Text('تایید ایمیل'),
+//             centerTitle: true,
+//           ),
+//           body: Center(
+//             child: Column(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               children: [
+//                 const Text(
+//                     'یک لینک تاییدیه به ایمیل شما فرستاده شد!\n لطفا برای تایید ایمیل خود روی آن کلیک کنید'),
+//                 Text('${widget.email}'),
+//                 const SizedBox(
+//                   height: 10,
+//                 ),
+//                 ElevatedButton.icon(
+//                     style: ElevatedButton.styleFrom(
+//                         backgroundColor: Colors.red.shade800,
+//                         minimumSize: const Size(340, 55),
+//                         shape: RoundedRectangleBorder(
+//                             borderRadius: BorderRadius.circular(12))),
+//                     onPressed: canResendEmail ? sendVerificationEmail : null,
+//                     icon: const Icon(Icons.mail),
+//                     label: const Text('ارسال دوباره')),
+//                 const SizedBox(
+//                   height: 8,
+//                 ),
+//                 TextButton(
+//                     onPressed: () => FirebaseAuth.instance
+//                         .signOut()
+//                         .whenComplete(() => Navigator.push(
+//                             context,
+//                             MaterialPageRoute(
+//                               builder: (context) => LogInPage(),
+//                             ))),
+//                     child: Text(
+//                       'لغو',
+//                       style: TextStyle(color: Colors.red.shade800),
+//                     ))
+//               ],
+//             ),
+//           ),
+//         );
+// }
 
-import 'package:asan_yab/domain/riverpod/data/controllers_provider.dart';
-import 'package:asan_yab/domain/riverpod/data/sign_up_provider.dart';
-import 'package:asan_yab/presentation/pages/main_page.dart';
+import 'dart:async';
 import 'package:asan_yab/presentation/pages/personal_information_page.dart';
 import 'package:asan_yab/presentation/pages/sign_in_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final verifyEmailProvider = StateNotifierProvider<VerifyEmailNotifier, VerifyEmailState>((ref) {
+  return VerifyEmailNotifier(ref);
+});
+
+class VerifyEmailState {
+  final bool isEmailVerified;
+  final bool canResendEmail;
+
+  VerifyEmailState(this.isEmailVerified, this.canResendEmail);
+}
+
+class VerifyEmailNotifier extends StateNotifier<VerifyEmailState> {
+  final Ref ref;
+  late Timer _timer;
+
+  VerifyEmailNotifier(this.ref) : super(VerifyEmailState(false, false)) {
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    final isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+    if (!isEmailVerified) {
+      await _sendVerificationEmail();
+      _timer = Timer.periodic(Duration(seconds: 3), (_) => _checkEmailVerified());
+    }
+  }
+
+  Future<void> _sendVerificationEmail() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser!;
+      await user.sendEmailVerification();
+      state = VerifyEmailState(state.isEmailVerified, false);
+      await Future.delayed(Duration(seconds: 3));
+      state = VerifyEmailState(state.isEmailVerified, true);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> _checkEmailVerified() async {
+    await FirebaseAuth.instance.currentUser!.reload();
+    final isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+    if (isEmailVerified) {
+      _timer.cancel();
+      state = VerifyEmailState(isEmailVerified, state.canResendEmail);
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+}
+
 class VerifyEmailPage extends ConsumerStatefulWidget {
   final String? email;
+
   const VerifyEmailPage({
-     this.email,
-    super.key,
-  });
+    this.email,
+    Key? key,
+  }) : super(key: key);
 
   @override
   ConsumerState<VerifyEmailPage> createState() => _VerifyEmailPageState();
 }
 
 class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
-  bool isEmailVerified = false;
-  bool canResendEmail = false;
-  Timer? timer;
   @override
-  void initState() {
-    super.initState();
-    isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-    if (!isEmailVerified) {
-      sendVerificationEmail();
-      timer = Timer.periodic(
-        Duration(seconds: 3),
-        (_) => checkEmailVerified()
-      );
-    }
-    // if(isEmailVerified==true){
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) => PersonalInformation(
-    //         email: widget.email,
-    //
-    //       ),
-    //     ),
-    //   );
-    // }
-  }
+  Widget build(BuildContext context) {
+    final verifyEmailState = ref.watch(verifyEmailProvider);
 
-  Future sendVerificationEmail() async {
-    try {
-      final user = FirebaseAuth.instance.currentUser!;
-      await user.sendEmailVerification();
-      setState(() => canResendEmail = false);
-      await Future.delayed(Duration(seconds: 3));
-      setState(() => canResendEmail = true);
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future checkEmailVerified() async {
-    await FirebaseAuth.instance.currentUser!.reload();
-    setState(() {
-      isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-    });
-    if (isEmailVerified) {
-      timer?.cancel();
-
-
-    }
-
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    timer?.cancel();
-  }
-
-  @override
-  Widget build(BuildContext context) =>
-      isEmailVerified
-      ?PersonalInformation(email: widget.email)
-      :
-  Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.red.shade900,
-            title: const Text('تایید ایمیل'),
-            centerTitle: true,
-          ),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                    'یک لینک تاییدیه به ایمیل شما فرستاده شد!\n لطفا برای تایید ایمیل خود روی آن کلیک کنید'),
-                Text('${widget.email}'),
-                const SizedBox(
-                  height: 10,
-                ),
-                ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red.shade800,
-                        minimumSize: const Size(340, 55),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12))),
-                    onPressed: canResendEmail ? sendVerificationEmail : null,
-                    icon: const Icon(Icons.mail),
-                    label: const Text('ارسال دوباره')),
-                const SizedBox(
-                  height: 8,
-                ),
-                TextButton(
-                    onPressed: () => FirebaseAuth.instance
-                        .signOut()
-                        .whenComplete(() => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LogInPage(),
-                            ))),
-                    child: Text(
-                      'لغو',
-                      style: TextStyle(color: Colors.red.shade800),
-                    ))
-              ],
+    return verifyEmailState.isEmailVerified
+        ? PersonalInformation(email: widget.email)
+        : Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.red.shade900,
+        title: const Text('تایید ایمیل'),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+                'یک لینک تاییدیه به ایمیل شما فرستاده شد!\n لطفا برای تایید ایمیل خود روی آن کلیک کنید'),
+            Text('${widget.email}'),
+            const SizedBox(
+              height: 10,
             ),
-          ),
-        );
+            ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red.shade800,
+                    minimumSize: const Size(340, 55),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12))),
+                onPressed: verifyEmailState.canResendEmail
+                    ? () => ref.read(verifyEmailProvider.notifier)._sendVerificationEmail()
+                    : null,
+                icon: const Icon(Icons.mail),
+                label: const Text('ارسال دوباره')),
+            const SizedBox(
+              height: 8,
+            ),
+            TextButton(
+                onPressed: () => FirebaseAuth.instance
+                    .signOut()
+                    .whenComplete(() => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LogInPage(),
+                    ))),
+                child: Text(
+                  'لغو',
+                  style: TextStyle(color: Colors.red.shade800),
+                ))
+          ],
+        ),
+      ),
+    );
+  }
 }
+
