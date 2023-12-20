@@ -2,7 +2,7 @@
 
 import 'package:asan_yab/data/models/users.dart';
 import 'package:asan_yab/domain/riverpod/data/edit_profile_page_provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:asan_yab/presentation/pages/profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -21,43 +21,25 @@ class EditProfilePage extends ConsumerStatefulWidget {
 }
 
 class _EditProfilePageState extends ConsumerState<EditProfilePage> {
-  final user=FirebaseAuth.instance.currentUser;
-  final nameController=TextEditingController();
-  final lastNameController=TextEditingController();
+  final user = FirebaseAuth.instance.currentUser;
+  final nameController = TextEditingController();
+  final lastNameController = TextEditingController();
   @override
   void initState() {
     super.initState();
-  Future.delayed(Duration.zero,(){
-    nameController.text=widget.userData.name;
-    lastNameController.text=widget.userData.lastName;
-   ref.read(editProfilePageProvider.notifier).editData(nameController, lastNameController);
-    ref.read(imageProvider.notifier).state?.imageUrl;
-  },);
-
+    Future.delayed(
+      Duration.zero,
+      () {
+        nameController.text = widget.userData.name;
+        lastNameController.text = widget.userData.lastName;
+        ref
+            .read(editProfilePageProvider.notifier)
+            .editData(nameController, lastNameController);
+        // ref.read(imageProvider).imageUrl;
+        ref.read(imageProvider.notifier).state.imageUrl;
+      },
+    );
   }
-
-// Assuming you have access to FirebaseAuth instance and nameController
-
-// Future editData() async {
-//   try {
-//     User? user = FirebaseAuth.instance.currentUser;
-//     if (user != null) {
-//       await FirebaseFirestore.instance.collection('User').doc(user.uid).update({
-//         'name': nameController.text,
-//         'lastName':lastNameController.text
-//         // Add other fields you want to update here
-//       });
-//       print('Data updated successfully!');
-//     } else {
-//       print('User is not authenticated!');
-//       // Handle case when user is not authenticated
-//     }
-//   } catch (error) {
-//     print('Error updating data: $error');
-//     // Handle error when updating data fails
-//   }
-// }
-
 
   @override
   Widget build(BuildContext context) {
@@ -83,22 +65,35 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 48.0,right: 4),
+                    padding: const EdgeInsets.only(top: 40.0, right: 4),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                    )),
+                Padding(
+                  padding: const EdgeInsets.only(top: 40.0, right: 334),
                   child: TextButton(
-                      child: Text('Save'),
-                      onPressed: (){
-
-                    ref.read(userDetailsProvider.notifier).getCurrentUserData();
-
-                     Navigator.pop(context);
-
-                  },
-                      // icon: const Icon(Icons.arrow_back,size: 35,color: Colors.white,)
+                    child: const Text(
+                      'ذخیره',
+                      style: TextStyle(color: Colors.red),
                     ),
+                    onPressed: () {
+                      ref
+                          .read(editProfilePageProvider.notifier)
+                          .editData(nameController, lastNameController);
+
+                      Navigator.pop(context);
+                      // Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage(),));
+                    },
+                    // icon: const Icon(Icons.arrow_back,size: 35,color: Colors.white,)
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 118.0, right: 116),
-                  child:widget.userData.imageUrl==''
+                  child: widget.userData.imageUrl == ''
                       ? Stack(
                           children: [
                             const CircleAvatar(
@@ -133,122 +128,85 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                             ),
                           ],
                         )
-                      : Stack(children: [
-                          CircleAvatar(
-                            maxRadius: 80,
-                            backgroundImage: NetworkImage(
-                              ref.watch(userDetailsProvider)!.imageUrl,
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(top: 40.0, right: 50),
-                            child: buildProgress(),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
+                      : Stack(
+                          children: [
+                            CircleAvatar(
+                              maxRadius: 80,
+                              backgroundImage: NetworkImage(
+                                ref.watch(userDetailsProvider)!.imageUrl,
                               ),
-                              child: IconButton(
-                                onPressed: () {
-                                  showBottomSheets(context);
-                                },
-                                icon: const Icon(
-                                  Icons.camera_alt,
-                                  size: 32,
-                                  color: Colors.blue,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 40.0, right: 50),
+                              child: buildProgress(),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: IconButton(
+                                  onPressed: () {
+                                    showBottomSheets(context);
+                                  },
+                                  icon: const Icon(
+                                    Icons.camera_alt,
+                                    size: 32,
+                                    color: Colors.blue,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                  ) ,
+                          ],
+                        ),
                 ),
               ],
             ),
           ),
           Column(
             children: [
-               TextField(
-                        controller: nameController,
-                        decoration: const InputDecoration(
-                          labelText: 'Name',
-                          
-                          prefixIcon: Icon(
-                            Icons.person_2_outlined,
-                            color: Colors.red,
-                            size: 30,
-                          ),
-                        ),
-                 onChanged: (value) {
-                   ref.read(editProfilePageProvider.notifier)
-                       .editData(
-                       nameController,
-                       lastNameController);
-                 },
-                      ),
-                      TextField(
-                        controller: lastNameController,
-                        decoration: const InputDecoration(
-                          labelText: 'lastName',
-                          
-                          prefixIcon: Icon(
-                            Icons.person_2_outlined,
-                            color: Colors.red,
-                            size: 30,
-                          ),
-                        ),
-                        onChanged: (value) {
-                          ref.read(editProfilePageProvider.notifier)
-                              .editData(
-                              nameController,
-                              lastNameController);
-                        },
-                      ),
-                    //   ListTile(
-                    //   title: Text(widget.userData.email),
-                    //   leading: const Icon(
-                    //     color: Colors.red,
-                    //     Icons.mail_outline,
-                    //     size: 30,
-                    //   ),
-                    // ),
-                    const Divider(
-                      color: Colors.grey,
-                    ),
-                      
-                // ListView(
-                //   children: [
-                //     ListTile(
-                //       title: Text(
-                //           '${widget.userData.name} ${widget.userData.lastName}'),
-                //       leading: const Icon(
-                //         color: Colors.red,
-                //         Icons.person_2_outlined,
-                //         size: 30,
-                //       ),
-                //     ),
-                //     const Divider(
-                //       color: Colors.grey,
-                //     ),
-                //     ListTile(
-                //       title: Text(widget.userData.email),
-                //       leading: const Icon(
-                //         color: Colors.red,
-                //         Icons.mail_outline,
-                //         size: 30,
-                //       ),
-                //     ),
-                //     const Divider(
-                //       color: Colors.grey,
-                //     ),
-                //   ],
-                // ),
-              
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                  labelText: 'نام',
+                  prefixIcon: Icon(
+                    Icons.person_2_outlined,
+                    color: Colors.red,
+                    size: 30,
+                  ),
+                ),
+                // onChanged: (value) {
+                //   // ref.read(editProfilePageProvider.notifier)
+                //   //     .editData(
+                //   //     nameController,
+                //   //     lastNameController);
+                //   // ref.read(userDetailsProvider.notifier).getCurrentUserData();
+                // },
+              ),
+              TextField(
+                controller: lastNameController,
+                decoration: const InputDecoration(
+                  labelText: 'تخلص',
+                  prefixIcon: Icon(
+                    Icons.person_2_outlined,
+                    color: Colors.red,
+                    size: 30,
+                  ),
+                ),
+                // onChanged: (value) {
+                //   ref.read(editProfilePageProvider.notifier)
+                //       .editData(
+                //       nameController,
+                //       lastNameController);
+                // },
+              ),
+              const Divider(
+                color: Colors.grey,
+              ),
             ],
           ),
         ],

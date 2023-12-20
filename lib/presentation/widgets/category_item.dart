@@ -52,7 +52,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
     debugPrint('Ui is load : $data ');
     debugPrint('Ui is load : ${ref.watch(hasMore)} ');
 
-    return ref.watch(loadingProvider)
+    return ref.watch(loadingDataProvider)
         ? const Center(
             child: CircularProgressIndicator(
               color: Colors.blueGrey,
@@ -60,10 +60,8 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
             ),
           )
         : ListView.builder(
-            controller: ref.watch(catLazyLoading.notifier).scrollController,
-            itemCount: ref.watch(loadingDataProvider)
-                ? (data.length + 1)
-                : data.length,
+            controller: ref.read(catLazyLoading.notifier).scrollController,
+            itemCount: ref.watch(hasMore) ? (data.length + 1) : data.length,
             itemBuilder: (context, index) {
               if (index < data.length) {
                 return InkWell(
@@ -176,7 +174,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                     ),
                   ),
                 );
-              } else if (ref.watch(loadingDataProvider)) {
+              } else if (index == data.length) {
                 // debugPrint('Ui is load : ${ref.watch(hasMore)} ');
                 return const Padding(
                   padding: EdgeInsets.only(bottom: 30.0),
@@ -186,6 +184,8 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                     ),
                   ),
                 );
+              } else {
+                return const SizedBox.shrink();
               }
             },
           );

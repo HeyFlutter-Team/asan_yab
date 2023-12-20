@@ -54,67 +54,6 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                   hintText: 'تخلص خود را وارد کنید',
                   validator: (p0) => p0!.isEmpty ? 'تخلص خالی است' : null,
                 ),
-                // CustomTextField(
-                //     label: 'ایمیل',
-                //     controller: emailController,
-                //     hintText: 'ایمیل خود را وارد کنید',
-                //     validator: (p0) {
-                //       if (p0!.isEmpty ||
-                //           p0.length < 10 && !EmailValidator.validate(p0)) {
-                //         return 'ایمیل شما اشتباه است';
-                //       }else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(p0)) {
-                //         return 'فورمت ایمیل شما اشتباه است';
-                //       }else {
-                //         return null;
-                //       }
-                //     }
-                // ),
-                // CustomTextField(
-                //   obscureText: ref.watch(isObscureProvider),
-                //   suffixIcon: IconButton(
-                //       onPressed: () => ref.read(isObscureProvider.notifier).isObscure(),
-                //       icon: const Icon(Icons.remove_red_eye_outlined)),
-                //   label: 'رمز',
-                //   controller: passwordController,
-                //   hintText: 'رمز خود را وارد کنید',
-                //   validator: (p0) => p0!.length < 6
-                //       ? 'رمز باید بیشتر از 6 عدد باشد'
-                //       : null,
-                // ),
-                // CustomTextField(
-                //   obscureText: true,
-                //   label: 'تایید رمز',
-                //   controller: confirmPasswordController,
-                //   hintText: 'تکرار رمز',
-                //   validator:(p0) {
-                //     if(p0!.isEmpty){
-                //       return 'رمز خود را مکررا وارد کنید';
-                //     }else if(p0 != passwordController.text){
-                //       return 'رمز ها برابری نمیکنند';
-                //     }else{
-                //       return null;
-                //     }
-                //   },
-                //
-                // ),
-                // RichText(
-                //   text: TextSpan(
-                //     children: [
-                //       const TextSpan(
-                //         text: '  قبلا اکانت داشتید؟',
-                //         style: TextStyle(color: Colors.black),
-                //       ),
-                //       TextSpan(
-                //         text: '  ورود',
-                //         style: const TextStyle(color: Colors.blue),
-                //         recognizer: TapGestureRecognizer()
-                //           ..onTap = () {
-                //             Navigator.pop(context);
-                //           },
-                //       ),
-                //     ],
-                //   ),
-                // ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -133,12 +72,6 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                       lastNameController:lastNameController.text,
                       nameController: nameController.text
                     ).whenComplete(() => Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(),)));
-
-                    // ref.read(signUpNotifierProvider.notifier).signUp(signUpFormKey,context,emailController,passwordController);
-                    // .whenComplete(() =>
-                    // ref.read(userDetailsProvider.notifier).userDetails(lastNameController,nameController,context);
-
-
                   },
                   child: const Text('ساخت'),
                 ),

@@ -18,18 +18,15 @@ class CatLazyLoading extends StateNotifier {
       // Check if the user has reached the end of the ListView
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
-        ref.read(loadingCircorile.notifier).state = true;
         // Call your method here
         if (ref.watch(hasMore)) {
           print('loading more is wotking');
-
           await ref
               .read(categoriesItemsProvider.notifier)
               .getPlaces(ref.watch(idProvider));
         }
       }
     });
-    ref.read(loadingCircorile.notifier).state = false;
   }
 }
 

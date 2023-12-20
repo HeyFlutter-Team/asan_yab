@@ -1,3 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:math';
+
 import 'package:asan_yab/main.dart';
 import 'package:asan_yab/presentation/pages/verify_email_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,10 +18,21 @@ class SignUpNotifier extends StateNotifier {
   SignUpNotifier(super.createFn, this.ref);
 
   Future signUp({required BuildContext context,required String email,required String password}) async {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Signing up...')),
-    );
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   const SnackBar(content: Text('Signing up...')),
+    // );
+
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => const Center(child:
+      CircularProgressIndicator(
+        color: Colors.red,
+
+      ),),
+    ).whenComplete(() => Navigator.pop(context));
     try {
+      // UserCredential userCredential=
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email:email
               .trim(),
@@ -36,6 +51,7 @@ class SignUpNotifier extends StateNotifier {
           content: Text('این ایمیل قبلا استفاده شده است'),
           duration: Duration(seconds: 5),
         ));
+        Navigator.pop(context);
       }
     }
   }
@@ -46,6 +62,8 @@ final signUpNotifierProvider =
 
 class UserDetails extends StateNotifier {
   UserDetails(super.state);
+
+  final id=DateTime.now().millisecondsSinceEpoch;
   final uid = FirebaseAuth.instance.currentUser?.uid;
   Future userDetails({
     required String emailController,
@@ -53,11 +71,15 @@ class UserDetails extends StateNotifier {
     required String nameController,
   }) async {
     final userRef = FirebaseFirestore.instance.collection('User').doc(uid);
+
     final user = Users(
         createdAt: Timestamp.now(),
         email: emailController.trim(),
         lastName: lastNameController.trim(),
-        name: nameController.trim());
+        name: nameController.trim(),
+         uid: userRef.id,
+        id: id
+    );
     final json = user.toJson();
     userRef.set(json);
   }
