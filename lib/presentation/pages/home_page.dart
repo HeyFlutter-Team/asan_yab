@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:asan_yab/presentation/pages/sign_in_page.dart';
 import 'package:asan_yab/presentation/widgets/nearby_place.dart';
+import 'package:asan_yab/presentation/widgets/new_places.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,7 +16,6 @@ import '../../domain/servers/nearby_places.dart';
 import '../widgets/categories.dart';
 import '../widgets/custom_search_bar.dart';
 import '../widgets/favorites.dart';
-import '../widgets/new_placess/custom_search_bar.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   final bool? isConnected;
@@ -68,7 +68,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               },
               icon: const Icon(
                 Icons.logout,
-                color: Colors.black,
+                // color: Colors.black,
               )),
         ],
       ),
