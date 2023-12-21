@@ -1,14 +1,19 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:asan_yab/data/models/place.dart';
+import 'package:asan_yab/domain/riverpod/data/update_favorite_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/utils/convert_digits_to_farsi.dart';
-import '../../domain/riverpod/data/ali_favorite_provider.dart';
+import '../../core/utils/download_image.dart';
+import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
+import '../../domain/riverpod/data/single_place_provider.dart';
+import '../../domain/riverpod/data/toggle_favorite.dart';
 import '../pages/detials_page.dart';
 import '../pages/detials_page_offline.dart';
 
@@ -25,7 +30,6 @@ class _FavoritesState extends ConsumerState<Favorites> {
   void initState() {
     super.initState();
     ref.read(favoriteProvider.notifier).fetchUser();
-    // ref.read(getInformationProvider).getFavorite();
   }
 
   @override
@@ -36,10 +40,13 @@ class _FavoritesState extends ConsumerState<Favorites> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final value1 = ref.watch(favoriteProvider);
-    debugPrint('favorit $value1');
-    final value = value1.map((e) => e).toList();
-    return value.isEmpty
+    final favoriteState = ref.watch(favoriteProvider);
+    debugPrint('favorite $favoriteState');
+    final favorites = favoriteState.map((e) => e).toList();
+
+    print("this is the lenght");
+    print(favorites.length);
+    return favorites.isEmpty
         ? const SizedBox()
         : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,11 +69,12 @@ class _FavoritesState extends ConsumerState<Favorites> {
                     crossAxisSpacing: 12.0,
                     mainAxisExtent: 230.0,
                   ),
-                  itemCount: value.length,
+                  itemCount: favorites.length,
                   itemBuilder: (context, index) {
-                    print(value[index]);
-                    final toggle = value[index]['toggle'] == 1 ? true : false;
-                    final items = value[index];
+                    print(favorites[index]);
+                    final toggle =
+                        favorites[index]['toggle'] == 1 ? true : false;
+                    final items = favorites[index];
                     List<String> phoneData =
                         List<String>.from(jsonDecode(items['phone']));
                     final phoneNumber = convertDigitsToFarsi(phoneData[0]);
@@ -81,14 +89,14 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                   ? Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            DetailsPage(id: value[index]['id']),
+                                        builder: (context) => DetailsPage(
+                                            id: favorites[index]['id']),
                                       ))
                                   : Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => DetailPageOffline(
-                                            favItem: value[index]),
+                                            favItem: favorites[index]),
                                       ));
                             },
                             child: Container(
@@ -107,7 +115,7 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                       ),
                                       image: DecorationImage(
                                         image: MemoryImage(Uint8List.fromList(
-                                            value[index]['image'])),
+                                            favorites[index]['image'])),
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -128,7 +136,7 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                     child: Column(
                                       children: [
                                         Text(
-                                          value[index]['name'],
+                                          favorites[index]['name'],
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
@@ -167,10 +175,17 @@ class _FavoritesState extends ConsumerState<Favorites> {
                           top: 10.0,
                           child: IconButton(
                             onPressed: () {
-                              ref
-                                  .read(favoriteProvider.notifier)
-                                  .delete(value[index]['id']);
-                              print(value[index]['id']);
+                              if (widget.isConnected) {
+                                ref
+                                    .read(getInformationProvider)
+                                    .toggle(favorites[index]['id']);
+
+                                ref.read(getInformationProvider).setFavorite();
+                                ref
+                                    .read(favoriteProvider.notifier)
+                                    .delete(favorites[index]['id']);
+                                print(favorites[index]['id']);
+                              }
                             },
                             icon: toggle
                                 ? const Icon(

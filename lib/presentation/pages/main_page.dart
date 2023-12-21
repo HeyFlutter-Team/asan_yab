@@ -1,17 +1,12 @@
-import 'package:asan_yab/data/repositoris/local_rep/notification.dart';
+import 'package:asan_yab/domain/riverpod/config/notification_repo.dart';
 import 'package:asan_yab/presentation/pages/profile_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/riverpod/config/internet_connectivity_checker.dart';
-
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
-import 'suggestion.dart';
-import 'package:flutter/material.dart';
-
-import 'about_us_page.dart';
 import 'home_page.dart';
+import 'suggestion.dart';
 
 // String? notifTitle, notifBody;
 
@@ -49,6 +44,9 @@ class _MainPageState extends ConsumerState<MainPage> {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = ref.watch(buttonNavigationProvider);
+    FirebaseApi().initInfo();
+    FirebaseApi().getToken();
+    FirebaseApi().initialize(context);
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: buildBottomNavigationBar(),

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,39 +9,29 @@ final getInformationProvider =
     ChangeNotifierProvider<Information>((ref) => Information());
 
 class Information extends ChangeNotifier {
-  // List<Post> posts = [];
   List<String> favoriteList = [];
   Future<void> getFavorite() async {
-    favoriteList = [];
-    final user = 'ali';
-    final data =
-        await FirebaseFirestore.instance.collection('Favorite').doc(user).get();
-    final data1 = Favorite.fromJson(data.data()!);
-    notifyListeners();
-    favoriteList.addAll(data1.items);
+    try {
+      favoriteList = [];
+      final data = await FirebaseFirestore.instance
+          .collection('Favorite')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+      final data1 = Favorite.fromJson(data.data()!);
+      notifyListeners();
+      favoriteList.addAll(data1.items);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
-  // Future<void> getPosttt() async {
-  //   posts = [];
-  //   for (int index = 0; index < favoriteList.length; index++) {
-  //     final data = await FirebaseFirestore.instance
-  //         .collection('data')
-  //         .doc(favoriteList[index])
-  //         .get();
-  //     final data1 = Post.fromJson(data.data()!);
-  //
-  //     posts.add(data1);
-  //   }
-  //   notifyListeners();
-  // }
-
   Future<void> setFavorite() async {
-    final user = 'ali';
     try {
-      if (user != null) {
+      if (FirebaseAuth.instance.currentUser != null) {
         // Reference to the 'Favorite' collection and the document with the user's email
-        final documentReference =
-            FirebaseFirestore.instance.collection('Favorite').doc(user);
+        final documentReference = FirebaseFirestore.instance
+            .collection('Favorite')
+            .doc(FirebaseAuth.instance.currentUser!.uid);
 
         final documentSnapshot = await documentReference.get();
 

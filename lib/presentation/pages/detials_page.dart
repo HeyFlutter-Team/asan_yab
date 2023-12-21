@@ -13,7 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../core/res/image_res.dart';
 
 import '../../core/utils/convert_digits_to_farsi.dart';
-import '../../domain/riverpod/data/ali_favorite_provider.dart';
+import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
 
 import '../../domain/riverpod/data/single_place_provider.dart';
@@ -85,8 +85,8 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                       ),
                       IconButton(
                         onPressed: () {
-                          ref.read(getInformationProvider).toggle(widget.id);
-                          ref.read(getInformationProvider).setFavorite();
+                          ref.watch(getInformationProvider).toggle(widget.id);
+                          ref.watch(getInformationProvider).setFavorite();
 
                           if (!ref
                               .watch(favoriteProvider.notifier)
