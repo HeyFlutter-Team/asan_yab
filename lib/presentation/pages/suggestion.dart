@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../data/repositoris/firebase_modle_helper.dart';
 
+import '../../data/repositoris/firebase_modle_helper.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/text_form_field_widget.dart';
 
@@ -39,14 +39,14 @@ class _SuggestionPageState extends State<SuggestionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      // backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         title: const Text(
           'درخواست مکان جدید',
-          style: TextStyle(color: Colors.black),
+          //style: TextStyle(color: Colors.black),
         ),
         elevation: 0,
-        backgroundColor: Colors.white,
+        //backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -96,6 +96,7 @@ class _SuggestionPageState extends State<SuggestionPage> {
                     title: 'نوت',
                     child: Text(
                       ' در این بخش شما میتوانید به ما در باره مکان مورد نظر خود درخواست بدهید، تا ما آن را در آسان یاب قرار دهیم \n\n همچنان، شما میتوانید برای آپدیت اطلاعات مکان های درج شده در آسان یاب به ما درخواست بدهید',
+                      style: TextStyle(fontSize: 15),
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -193,15 +194,15 @@ class CustomCard extends StatelessWidget {
                       children: [
                         const Icon(
                           Icons.info_outline,
-                          color: Colors.black54,
+                          // color: Colors.black54,
                         ),
                         const SizedBox(width: 12),
                         Text(
                           title,
                           style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black54),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Users{
+class Users {
   final int id;
   final String uid;
   final String name;
@@ -9,33 +9,30 @@ class Users{
   final Timestamp createdAt;
   final String imageUrl;
   final String userType;
-  final List<String>? owner;
+  final List<String> owner;
   Users({
-    this.owner,
+    this.owner = const ['s'],
     required this.id,
     required this.uid,
-    this.imageUrl='',
-    this.userType='normal',
-   required this.name,
-   required this.lastName,
-   required this.email,
-   required this.createdAt
-
+    this.imageUrl = '',
+    this.userType = 'normal',
+    required this.name,
+    required this.lastName,
+    required this.email,
+    required this.createdAt,
   });
 
-   
-  Map<String,dynamic> toJson()=>{
-    'name':name,
-    'lastName':lastName,
-    'email':email,
-    'createdAt':createdAt,
-    'imageUrl':imageUrl,
-    'userType':userType,
-    'uid':uid,
-    'id':id,
-    'owner':owner
-
-  };
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'lastName': lastName,
+        'email': email,
+        'createdAt': createdAt,
+        'imageUrl': imageUrl,
+        'userType': userType,
+        'uid': uid,
+        'id': id,
+        'owner': owner
+      };
 
   factory Users.fromMap(Map<String, dynamic> json) {
     return Users(
@@ -46,8 +43,8 @@ class Users{
       imageUrl: json['imageUrl'],
       userType: json['userType'],
       uid: json['uid'],
-        id: json['id'],
-        owner: json['owner']
+      id: json['id'],
+      owner: List<String>.from(json['owner']),
     );
   }
 }

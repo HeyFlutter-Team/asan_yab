@@ -18,10 +18,7 @@ class MainPage extends ConsumerStatefulWidget {
 }
 
 class _MainPageState extends ConsumerState<MainPage> {
-
-
   final pages = [const HomePage(), const SuggestionPage(), const ProfilePage()];
-
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +27,7 @@ class _MainPageState extends ConsumerState<MainPage> {
     FirebaseApi().getToken();
     FirebaseApi().initialize(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      //backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: buildBottomNavigationBar(),
       body: IndexedStack(
         index: selectedIndex,
@@ -56,7 +53,7 @@ class _MainPageState extends ConsumerState<MainPage> {
           FocusScope.of(context).unfocus();
           ref.read(buttonNavigationProvider.notifier).selectedIndex(index);
         },
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         items: const [
           BottomNavigationBarItem(
             label: 'خانه',
@@ -67,7 +64,7 @@ class _MainPageState extends ConsumerState<MainPage> {
             icon: Icon(Icons.place),
           ),
           BottomNavigationBarItem(
-            label: 'پروفایل',
+            label: 'در باره ما',
             icon: Icon(Icons.person),
           ),
         ],

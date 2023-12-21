@@ -19,10 +19,10 @@ class ListCategoryItem extends ConsumerWidget {
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
+          // backgroundColor: Theme.of(context).primaryColor,
           title: Text(
             categoryName,
-            style: const TextStyle(color: Colors.black),
+            // style: const TextStyle(color: Colors.black),
           ),
           elevation: 0.0,
           actions: [
@@ -35,7 +35,7 @@ class ListCategoryItem extends ConsumerWidget {
                 },
                 icon: const Icon(
                   Icons.search,
-                  color: Colors.black,
+                  // color: Colors.black,
                   size: 25,
                 ))
           ],
@@ -45,7 +45,7 @@ class ListCategoryItem extends ConsumerWidget {
               ref.read(loadingProvider.notifier).state =
                   !ref.watch(loadingProvider);
             },
-            icon: const Icon(Icons.arrow_back, color: Colors.black, size: 25.0),
+            icon: const Icon(Icons.arrow_back, size: 25.0),
           ),
         ),
         body: CategoryItem(id: catId),

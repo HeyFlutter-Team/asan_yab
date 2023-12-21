@@ -123,8 +123,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                                   data[index].name!,
                                   overflow: TextOverflow.fade,
                                   maxLines: 2,
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 18.0),
+                                  style: const TextStyle(fontSize: 18.0),
                                 ),
                                 const SizedBox(height: 12.0),
                                 data[index].adresses[0].phone.isEmpty

@@ -1,13 +1,12 @@
 // ignore_for_file: avoid_print
 
-import 'package:asan_yab/domain/riverpod/data/controllers_provider.dart';
-import 'package:asan_yab/presentation/pages/verify_email_page.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:asan_yab/domain/riverpod/data/sign_up_provider.dart';
 import 'package:asan_yab/presentation/widgets/custom_text_field.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../domain/riverpod/data/sign_in_provider.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
@@ -35,7 +34,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Form(
         key: signUpFormKey,
         child: Padding(
