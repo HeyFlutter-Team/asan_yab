@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_version_plus/new_version_plus.dart';
 
 import '../../domain/riverpod/data/categories_provider.dart';
+import '../../domain/riverpod/data/update_favorite_provider.dart';
 import '../../domain/servers/check_new_version.dart';
 import '../../domain/servers/nearby_places.dart';
 import '../widgets/categories.dart';
@@ -29,6 +30,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
     super.initState();
+    fetchData();
     ref.read(nearbyPlace.notifier).getNearestLocations();
     final newVersion = NewVersionPlus(
       androidId: 'com.heyflutter.asanYab',
@@ -38,6 +40,10 @@ class _HomePageState extends ConsumerState<HomePage> {
     Timer(const Duration(milliseconds: 800), () {
       checkNewVersion(newVersion, context);
     });
+  }
+
+  Future<void> fetchData() async {
+    await ref.refresh(updateProvider.notifier).update(context, ref);
   }
 
   Future<void> onRefresh() async {
