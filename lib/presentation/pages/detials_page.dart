@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../core/res/image_res.dart';
 
 import '../../core/utils/convert_digits_to_farsi.dart';
+import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
 
 import '../../domain/riverpod/data/single_place_provider.dart';
@@ -35,6 +36,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
     ref.read(getSingleProvider.notifier).fetchSinglePlace(widget.id);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       //Todo: for selected
+      ref.read(getInformationProvider).getFavorite();
       final provider = ref.read(favoriteProvider.notifier);
       final toggle = provider.isExist(widget.id);
       ref.read(toggleProvider.notifier).toggle(toggle);
@@ -83,6 +85,9 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                       ),
                       IconButton(
                         onPressed: () {
+                          ref.watch(getInformationProvider).toggle(widget.id);
+                          ref.watch(getInformationProvider).setFavorite();
+
                           if (!ref
                               .watch(favoriteProvider.notifier)
                               .isExist(places.id)) {
@@ -314,12 +319,13 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                         const BoxConstraints(
                                                             minWidth: 120),
                                                     child: OutlinedButton(
-                                                      style: OutlinedButton.styleFrom(
-                                                          padding:
-                                                              const EdgeInsets
+                                                      style: OutlinedButton
+                                                          .styleFrom(
+                                                              padding:
+                                                                  const EdgeInsets
                                                                       .symmetric(
-                                                                  horizontal:
-                                                                      8)),
+                                                                      horizontal:
+                                                                          8)),
                                                       onPressed: () async {
                                                         await FlutterPhoneDirectCaller
                                                             .callNumber(

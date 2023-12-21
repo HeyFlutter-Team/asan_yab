@@ -11,7 +11,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:new_version_plus/new_version_plus.dart';
 
+import '../../core/utils/download_image.dart';
 import '../../domain/riverpod/data/categories_provider.dart';
+import '../../domain/riverpod/data/favorite_provider.dart';
+import '../../domain/riverpod/data/firbase_favorite_provider.dart';
+import '../../domain/riverpod/data/single_place_provider.dart';
+import '../../domain/riverpod/data/toggle_favorite.dart';
+import '../../domain/riverpod/data/update_favorite_provider.dart';
 import '../../domain/servers/check_new_version.dart';
 import '../../domain/servers/nearby_places.dart';
 import '../widgets/new_places.dart';
@@ -32,6 +38,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
     super.initState();
+    fetchData();
     ref.read(nearbyPlace.notifier).getNearestLocations();
     final newVersion = NewVersionPlus(
       androidId: 'com.heyflutter.asanYab',
@@ -41,6 +48,10 @@ class _HomePageState extends ConsumerState<HomePage> {
     Timer(const Duration(milliseconds: 800), () {
       checkNewVersion(newVersion, context);
     });
+  }
+
+  Future<void> fetchData() async {
+    await ref.refresh(updateProvider.notifier).update(context, ref);
   }
 
   Future<void> onRefresh() async {
@@ -61,10 +72,18 @@ class _HomePageState extends ConsumerState<HomePage> {
         actions: [
           IconButton(
               onPressed: () {
-                FirebaseAuth.instance.signOut()
-                    .whenComplete(() => Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInPage(),)));
+                FirebaseAuth.instance
+                    .signOut()
+                    .whenComplete(() => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LogInPage(),
+                        )));
               },
-              icon: const Icon(Icons.logout,color: Colors.black,)),
+              icon: const Icon(
+                Icons.logout,
+                color: Colors.black,
+              )),
         ],
       ),
       body: RefreshIndicator(
