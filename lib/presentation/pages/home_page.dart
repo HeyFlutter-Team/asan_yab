@@ -55,6 +55,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   Future<void> onRefresh() async {
+    await ref.refresh(updateProvider.notifier).update(context, ref);
     await Future.delayed(
       const Duration(milliseconds: 100),
     ).then((value) => ref.watch(nearbyPlace.notifier).refresh());
