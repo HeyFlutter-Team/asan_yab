@@ -79,7 +79,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                         MaterialPageRoute(
                           builder: (context) => const LogInPage(),
                         )));
-                // navigatorKey.currentState!.popUntil((route) => route.isFirst);
               },
               icon: const Icon(
                 Icons.logout,

@@ -37,8 +37,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body:
-      StreamBuilder<Users?>(
-          stream: ref.read(userDetailsProvider.notifier).getCurrentUserData(),
+      FutureBuilder<Users?>(
+          future: ref.read(userDetailsProvider.notifier).getCurrentUserData(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
@@ -71,6 +71,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         Padding(
                           padding: const EdgeInsets.only(top: 58.0, right: 120),
                           child: Text(
+                            maxLines: 1,
                             '${usersData.name} ${usersData.lastName}',
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 28),
@@ -139,6 +140,27 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   Expanded(
                       child: ListView(
                     children: [
+                      ListTile(
+                        title: Text('${usersData.id}'),
+                        leading: const Icon(
+                          color: Colors.red,
+                          Icons.account_circle,
+                          size: 30,
+                        ),
+                        onTap: () {
+                          ref.read(userDetailsProvider.notifier).copyToClipboard('${usersData.id}');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              // backgroundColor: Colors.red,
+                              content: Text('${usersData.id} آیدی شما در کلیپ بورد کبی شد'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        },
+                      ),
+                      const Divider(
+                        color: Colors.grey,
+                      ),
                       ListTile(
                         title: Text('${usersData.name} ${usersData.lastName}'),
                         leading: const Icon(

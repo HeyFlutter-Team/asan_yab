@@ -7,6 +7,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -60,13 +62,9 @@ class _MyAppState extends ConsumerState<MyApp> {
       ref
           .read(internetConnectivityCheckerProvider.notifier)
           .startStremaing(context);
-      // ref.read(isEmailVerifieds)
-      //       ?const MainPage()
-      //       :const VerifyEmailPage();
     }
     super.initState();
   }
-
   @override
   void dispose() {
     if (FirebaseAuth.instance.currentUser != null) {
@@ -74,9 +72,6 @@ class _MyAppState extends ConsumerState<MyApp> {
           .read(internetConnectivityCheckerProvider.notifier)
           .subscription
           .cancel();
-      // ref.watch(isEmailVerifieds)
-      //       ?const MainPage()
-      //       :const VerifyEmailPage();
     }
     super.dispose();
   }
