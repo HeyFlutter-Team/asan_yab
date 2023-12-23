@@ -39,7 +39,7 @@ class CustomTextField extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            height: 2,
+            height: 5,
           ),
           TextFormField(
               textCapitalization: textCapitalization,

@@ -1,26 +1,19 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:math';
-
-import 'package:asan_yab/main.dart';
 import 'package:asan_yab/presentation/pages/verify_email_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
-
 import '../../../data/models/users.dart';
-import 'controllers_provider.dart';
 
 class SignUpNotifier extends StateNotifier {
   final Ref ref;
   SignUpNotifier(super.createFn, this.ref);
 
   Future signUp({required BuildContext context,required String email,required String password}) async {
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   const SnackBar(content: Text('Signing up...')),
-    // );
+
 
     showDialog(
       barrierDismissible: false,
@@ -32,7 +25,6 @@ class SignUpNotifier extends StateNotifier {
       ),),
     ).whenComplete(() => Navigator.pop(context));
     try {
-      // UserCredential userCredential=
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email:email
               .trim(),
@@ -47,9 +39,9 @@ class SignUpNotifier extends StateNotifier {
     } on FirebaseAuthException catch (e) {
       print(e);
       if (e.code == 'email-already-in-use') {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('این ایمیل قبلا استفاده شده است'),
-          duration: Duration(seconds: 5),
+        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+          content:const Text('sign_up_method').tr(),
+          duration:const Duration(seconds: 5),
         ));
         Navigator.pop(context);
       }

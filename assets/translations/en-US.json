@@ -1,0 +1,113 @@
+{
+  "__SignIn__": "This is Sign in page codes",
+  "sign_in_email": "Email",
+  "sign_in_email_hintText": "Enter your email",
+  "sign_in_email_1_valid": "please enter your Email",
+  "sign_in_email_2_valid": "Your email is incorrect",
+  "sign_in_email_3_valid": "Your email format is incorrect",
+  "sign_in_password": "Password",
+  "sign_in_password_hintText": "Enter your password",
+  "sign_in_password_1_valid": "Enter your password",
+  "sign_in_password_2_valid": "The password must be six characters or more",
+  "sign_in_checkBox": "Remember me",
+  "sign_in_elbT": "  Sign In",
+  "sig_in_account_text": "Don't have a previous account?",
+  "sign_in_2_elbT": "Register",
+  "sign_in_method_1_if": "Your email is not registered in the database",
+  "sign_in_method_2_if": "Your password is incorrect",
+  "sign_in_method_3_if": "For repeated error requests, your account has been blocked. Please try again later",
+
+
+
+  "__SignUp__": "This is Sign in page codes",
+  "sign_up_confirm_p": "Confirm password",
+  "sign_up_confirm_p_hint_text": "Repeat password",
+  "sign_up_confirm_p_1_valid": "Enter your password repeatedly",
+  "sign_up_confirm_p_2_valid": "Passwords are not equal",
+  "sign_up_account_text": "Did you already have an account?",
+  "sign_up_account_text1": "Sign In",
+  "sign_up_elbT": "Sign Up",
+  "sign_up_method": "This email has already been used",
+
+
+
+  "__VerifyPage__": "This is Verify Page codes",
+  "verify_appBar_title": "Email confirmation",
+  "verify_body_text": "A confirmation link has been sent to your email!\n Please click on it to confirm your email",
+  "verify_elb_text": "Resend",
+  "verify_tbt_text": "Cancel",
+
+
+
+  "__MainPage__": "This is Main Page codes",
+  "ButtonNvB_1": "Home",
+  "ButtonNvB_2": "New Place",
+  "ButtonNvB_3": "Profile",
+
+
+
+
+  "__CategoryPage__": "This is Home Page codes",
+  "Category_title": "Categories",
+
+
+
+  "__NearbyPlacesPage__": "This is Home Page codes",
+  "nearbyPlaces_title": "Nearby places",
+  "nearbyPlaces_meter_title": "meters to the destination",
+
+
+
+  "__FavoritePage__": "This is Favorite Page codes",
+  "favorite_page_title": "Favorites",
+
+
+
+
+  "__SuggestionPage__": "This is Suggestion Page codes",
+  "suggestion_appBar_title": "Request a new location",
+  "suggestion_1_tf_labelName": "Name of the place",
+  "suggestion_1_tf_valid": "Enter your address!",
+  "suggestion_2_tf_labelName": "Address Location",
+  "suggestion_2_tf_valid": "Write address of the location",
+  "suggestion_3_tf_labelName": "Location description",
+  "suggestion_3_tf_valid": "Write a description of the location",
+  "suggestion_4_tf_labelName": "Phone number",
+  "suggestion_4_tf_valid": "Enter your number!",
+  "suggestion_custom_card_title": "Note",
+  "suggestion_custom_card_text": "In this section, you can request us about the place you want, so that we include it in Easy Finder \n\n Also, you can ask us to update the information of the places listed in Easy Finder.",
+  "suggestion_button": "Submit request",
+  "suggestion_customDialog_title": "Submit a location request",
+  "suggestion_customDialog_content": "Your request has been registered",
+  "suggestion_customDialog_textButton": "Return to the previous page",
+
+
+
+  "__ProfilePage__": "This is Profile Page codes",
+  "profile_future_error": "Information not available",
+  "profile_copy_id_snack_bar": "Your ID was copied to the clipboard",
+  "profile_about_us_listTile": "About us",
+  "profile_edit_button_text": "Edit",
+  "profile_buttonSheet_camera": "Camera",
+  "profile_buttonSheet_gallery": "Gallery",
+  "profile_language_listTile": "Language",
+  "profile_snackBar_catch": "Your internet is down",
+
+
+
+
+  "__EditProfilePage__": "This is EditProfile Page codes",
+  "edit_appBar_leading": "Save",
+  "edit_1_txf_label": "Name",
+  "edit_2_txf_label": "Last Name",
+
+
+
+  "__CustomSearchBar__": "This is CustomSearchBar codes",
+  "container_text": "Search in",
+
+
+  "__SearchBarWidget__": "This is SearchBarWidget codes",
+  "search_bar_hint_text": "Search"
+
+}
