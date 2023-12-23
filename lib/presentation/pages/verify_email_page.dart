@@ -231,6 +231,7 @@
 import 'dart:async';
 import 'package:asan_yab/presentation/pages/personal_information_page.dart';
 import 'package:asan_yab/presentation/pages/sign_in_page.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -312,15 +313,15 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
         : Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red.shade900,
-        title: const Text('تایید ایمیل'),
+        title:  Text('verify_appBar_title'.tr()),
         centerTitle: true,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-                'یک لینک تاییدیه به ایمیل شما فرستاده شد!\n لطفا برای تایید ایمیل خود روی آن کلیک کنید'),
+             Text(
+                'verify_body_text'.tr()),
             Text('${widget.email}'),
             const SizedBox(
               height: 10,
@@ -335,7 +336,7 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
                     ? () => ref.read(verifyEmailProvider.notifier)._sendVerificationEmail()
                     : null,
                 icon: const Icon(Icons.mail),
-                label: const Text('ارسال دوباره')),
+                label:  Text('verify_elb_text'.tr())),
             const SizedBox(
               height: 8,
             ),
@@ -348,7 +349,7 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
                       builder: (context) => LogInPage(),
                     ))),
                 child: Text(
-                  'لغو',
+                  'verify_tbt_text'.tr(),
                   style: TextStyle(color: Colors.red.shade800),
                 ))
           ],

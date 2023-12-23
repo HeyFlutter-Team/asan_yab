@@ -1,4 +1,5 @@
 import 'package:asan_yab/domain/riverpod/data/categories_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter/material.dart';
@@ -18,8 +19,8 @@ class CategoryPage extends ConsumerWidget {
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Colors.white,
-        title: const Text(
-          'دسته بندی ها',
+        title:  Text(
+          'Category_title'.tr(),
           style: TextStyle(color: Colors.black),
         ),
         leading: IconButton(

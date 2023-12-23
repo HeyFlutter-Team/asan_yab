@@ -10,7 +10,9 @@ class Users{
   final String imageUrl;
   final String userType;
   final List<String>? owner;
+  final List<String>? ownerPlaceName;
   Users({
+    this.ownerPlaceName,
     this.owner,
     required this.id,
     required this.uid,
@@ -33,7 +35,8 @@ class Users{
     'userType':userType,
     'uid':uid,
     'id':id,
-    'owner':owner
+    'owner':owner,
+    'ownerPlaceName':ownerPlaceName
 
   };
 
@@ -47,7 +50,8 @@ class Users{
       userType: json['userType'],
       uid: json['uid'],
         id: json['id'],
-        owner: json['owner']
+        owner: json['owner'],
+      ownerPlaceName: json['ownerPlaceName']
     );
   }
 }

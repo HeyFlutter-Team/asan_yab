@@ -188,6 +188,18 @@
       "languageVersion": "2.15"
     },
     {
+      "name": "easy_localization",
+      "rootUri": "file:///C:/Users/E%20H%20C/AppData/Local/Pub/Cache/hosted/pub.dev/easy_localization-3.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "easy_logger",
+      "rootUri": "file:///C:/Users/E%20H%20C/AppData/Local/Pub/Cache/hosted/pub.dev/easy_logger-0.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "email_validator",
       "rootUri": "file:///C:/Users/E%20H%20C/AppData/Local/Pub/Cache/hosted/pub.dev/email_validator-2.1.17",
       "packageUri": "lib/",
@@ -1094,7 +1106,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-12-18T11:04:58.578769Z",
+  "generated": "2023-12-19T11:59:39.106839Z",
   "generator": "pub",
   "generatorVersion": "3.0.6"
 }

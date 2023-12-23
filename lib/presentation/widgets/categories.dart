@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -33,9 +34,9 @@ class Categories extends ConsumerWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'دسته بندی ها',
-                        style: TextStyle(color: Colors.grey, fontSize: 20.0),
+                       Text(
+                        'Category_title'.tr(),
+                        style:const TextStyle(color: Colors.grey, fontSize: 20.0),
                       ),
                       IconButton(
                         onPressed: () => Navigator.push(
@@ -43,8 +44,10 @@ class Categories extends ConsumerWidget {
                           MaterialPageRoute(
                               builder: (context) => const CategoryPage()),
                         ),
-                        icon: const Icon(
-                          Icons.arrow_circle_left_outlined,
+                        icon:  Icon(
+                          context.locale==const Locale('fa','AF')?
+                          Icons.arrow_circle_left_outlined
+                          :Icons.arrow_circle_right_outlined,
                           size: 32.0,
                           color: Colors.grey,
                         ),

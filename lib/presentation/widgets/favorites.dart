@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
@@ -42,11 +43,11 @@ class _FavoritesState extends ConsumerState<Favorites> {
         : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(right: 16.0, top: 12.0),
+               Padding(
+                padding:const EdgeInsets.only(right: 16.0, top: 12.0),
                 child: Text(
-                  'موارد دلخواه',
-                  style: TextStyle(color: Colors.grey, fontSize: 20.0),
+                  'favorite_page_title'.tr(),
+                  style:const TextStyle(color: Colors.grey, fontSize: 20.0),
                 ),
               ),
               Padding(

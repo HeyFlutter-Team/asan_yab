@@ -1,0 +1,117 @@
+{
+  "__SignIn__": "This is Sign in page codes",
+  "sign_in_email": "ایمیل",
+  "sign_in_email_hintText": "ایمیل خود را وارد کنید",
+  "sign_in_email_1_valid": "لطفا ایمیل خود را وارد کنید",
+  "sign_in_email_2_valid": "ایمیل شما اشتباه است",
+  "sign_in_email_3_valid": "فورمت ایمیل شما اشتباه است",
+  "sign_in_password": "رمز",
+  "sign_in_password_hintText": "رمز خود را وارد کنید",
+  "sign_in_password_1_valid": "رمز خود را وارد کنید",
+  "sign_in_password_2_valid": "رمز باید شیش کاراکتر یا بیشتر از شیش تا باشد",
+  "sign_in_checkBox": "مرا بخاطر داشته باش",
+  "sign_in_elbT": "ورود",
+  "sig_in_account_text": "اکانت قبلی ندارید؟",
+  "sign_in_2_elbT": "ثبت نام",
+  "sign_in_method_1_if": "ایمیل شما در دیتابیس ثبت نشده است",
+  "sign_in_method_2_if": "رمز شما اشتباه است",
+  "sign_in_method_3_if": "برای درخواست اشتباه مکرر اکانت شما بلاک شده است لطفا بعدا امتحان کنید",
+
+
+
+
+
+
+  "__SignUp__": "This is Sign in page codes",
+  "sign_up_confirm_p": "تایید رمز",
+  "sign_up_confirm_p_hint_text": "تکرار رمز",
+  "sign_up_confirm_p_1_valid": "رمز خود را مکررا وارد کنید",
+  "sign_up_confirm_p_2_valid": "رمز ها برابری نمیکنند",
+  "sign_up_account_text": "  قبلا اکانت داشتید؟",
+  "sign_up_account_text1": "  ورود",
+  "sign_up_elbT": "ثبت نام",
+  "sign_up_method": "این ایمیل قبلا استفاده شده است",
+
+
+
+
+  "__VerifyPage__": "This is Verify Page codes",
+  "verify_appBar_title": "تایید ایمیل",
+  "verify_body_text": "یک لینک تاییدیه به ایمیل شما فرستاده شد!\\n لطفا برای تایید ایمیل خود روی آن کلیک کنید",
+  "verify_elb_text": "ارسال دوباره",
+  "verify_tbt_text": "لغو",
+
+
+
+  "__MainPage__": "This is Main Page codes",
+  "ButtonNvB_1": "خانه",
+  "ButtonNvB_2": "مکان جدید",
+  "ButtonNvB_3": "پروفایل",
+
+
+
+
+  "__CategoryPage__": "This is Home Page codes",
+  "Category_title": "دسته بندی ها",
+
+
+
+  "__NearbyPlacesPage__": "This is Home Page codes",
+  "nearbyPlaces_title": "مکان های نزدیک",
+  "nearbyPlaces_meter_title": " متر تا مقصد ",
+
+
+
+  "__FavoritePage__": "This is Favorite Page codes",
+  "favorite_page_title": "موارد دلخواه",
+
+
+
+
+  "__SuggestionPage__": "This is Suggestion Page codes",
+  "suggestion_appBar_title": "درخواست مکان جدید",
+  "suggestion_1_tf_labelName": "نام مکان",
+  "suggestion_1_tf_valid": "مکان خود را وارد کنید!",
+  "suggestion_2_tf_labelName": "آدرس مکان",
+  "suggestion_2_tf_valid": "آدرس خود را وارد کنید!",
+  "suggestion_3_tf_labelName": "توضیجات مکان",
+  "suggestion_3_tf_valid": "توضیجات مکان را بنویسید",
+  "suggestion_4_tf_labelName": "شماره تماس",
+  "suggestion_4_tf_valid": "شماره خود را وارد کنید!",
+  "suggestion_custom_card_title": "نوت",
+  "suggestion_custom_card_text": " در این بخش شما میتوانید به ما در باره مکان مورد نظر خود درخواست بدهید، تا ما آن را در آسان یاب قرار دهیم \n\n همچنان، شما میتوانید برای آپدیت اطلاعات مکان های درج شده در آسان یاب به ما درخواست بدهید",
+  "suggestion_button": "ارسال درخواست",
+  "suggestion_customDialog_title": "ارسال درخواست مکان",
+  "suggestion_customDialog_content": "درخواست شما ثیت گردید",
+  "suggestion_customDialog_textButton": "بازگشت به صفحه قبلی",
+
+
+
+  "__ProfilePage__": "This is Profile Page codes",
+  "profile_future_error": "اطلاعات در دسترس نیست",
+  "profile_copy_id_snack_bar": " آیدی شما در کلیپ بورد کبی شد",
+  "profile_about_us_listTile": "درباره ما",
+  "profile_edit_button_text": "ویرایش",
+  "profile_buttonSheet_camera": "کامره",
+  "profile_buttonSheet_gallery": "گالری",
+  "profile_language_listTile": "زبان",
+  "profile_snackBar_catch": "انترنت شما قطع است",
+
+
+
+
+  "__EditProfilePage__": "This is EditProfile Page codes",
+  "edit_appBar_leading": "ذخیره",
+  "edit_1_txf_label": "نام",
+  "edit_2_txf_label": "تخلص",
+
+
+
+  "__CustomSearchBar__": "This is CustomSearchBar codes",
+  "container_text": "جستجوی در",
+
+
+  "__SearchBarWidget__": "This is SearchBarWidget codes",
+  "search_bar_hint_text": "جستجو"
+
+}

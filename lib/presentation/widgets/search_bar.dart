@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class TextSearchBar extends StatelessWidget {
@@ -23,7 +24,7 @@ class TextSearchBar extends StatelessWidget {
             borderRadius: BorderRadius.circular(12.0),
             borderSide: const BorderSide(color: Colors.white),
           ),
-          hintText: 'جستجو ',
+          hintText: 'search_bar_hint_text'.tr(),
           prefixIcon: const Icon(Icons.search),
         ),
       ),

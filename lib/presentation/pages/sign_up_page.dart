@@ -2,6 +2,7 @@
 
 import 'package:asan_yab/domain/riverpod/data/controllers_provider.dart';
 import 'package:asan_yab/presentation/pages/verify_email_page.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:asan_yab/domain/riverpod/data/sign_up_provider.dart';
 import 'package:asan_yab/presentation/widgets/custom_text_field.dart';
@@ -45,21 +46,21 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.asset(
-                  'assets/gmail@.jpg',
+                  'assets/newGmail.png',
                   height: 200,
                   width: 200,
                 ),
                 CustomTextField(
-                    label: 'ایمیل',
+                    label: 'sign_in_email'.tr(),
                     controller: emailController,
-                    hintText: 'ایمیل خود را وارد کنید',
+                    hintText: 'sign_in_email_hintText'.tr(),
                     validator: (p0) {
                       if (p0!.isEmpty ||
                           p0.length < 10 && !EmailValidator.validate(p0)) {
-                        return 'ایمیل شما اشتباه است';
+                        return 'sign_in_email_2_valid'.tr();
                       } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                           .hasMatch(p0)) {
-                        return 'فورمت ایمیل شما اشتباه است';
+                        return 'sign_in_email_3_valid'.tr();
                       } else {
                         return null;
                       }
@@ -70,22 +71,22 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       onPressed: () =>
                           ref.read(isObscureProvider.notifier).isObscure(),
                       icon: const Icon(Icons.remove_red_eye_outlined)),
-                  label: 'رمز',
+                  label: 'sign_in_password'.tr(),
                   controller: passwordController,
-                  hintText: 'رمز خود را وارد کنید',
+                  hintText: 'sign_in_password_hintText'.tr(),
                   validator: (p0) =>
-                      p0!.length < 6 ? 'رمز باید بیشتر از 6 عدد باشد' : null,
+                      p0!.length < 6 ? 'sign_in_password_2_valid'.tr() : null,
                 ),
                 CustomTextField(
                   obscureText: true,
-                  label: 'تایید رمز',
+                  label: 'sign_up_confirm_p'.tr(),
                   controller: confirmPasswordController,
-                  hintText: 'تکرار رمز',
+                  hintText: 'sign_up_confirm_p_hint_text'.tr(),
                   validator: (p0) {
                     if (p0!.isEmpty) {
-                      return 'رمز خود را مکررا وارد کنید';
+                      return 'sign_up_confirm_p_1_valid'.tr();
                     } else if (p0 != passwordController.text) {
-                      return 'رمز ها برابری نمیکنند';
+                      return 'sign_up_confirm_p_2_valid'.tr();
                     } else {
                       return null;
                     }
@@ -94,12 +95,12 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 RichText(
                   text: TextSpan(
                     children: [
-                      const TextSpan(
-                        text: '  قبلا اکانت داشتید؟',
-                        style: TextStyle(color: Colors.black),
+                       TextSpan(
+                        text: 'sign_up_account_text'.tr(),
+                        style: const TextStyle(color: Colors.black),
                       ),
                       TextSpan(
-                        text: '  ورود',
+                        text: '  ${'sign_up_account_text1'.tr()}',
                         style: const TextStyle(color: Colors.blue),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
@@ -127,7 +128,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                         email: emailController.text,
                         password: passwordController.text);
                   },
-                  child: const Text('ساخت'),
+                  child:  Text('sign_up_elbT'.tr(),style: const TextStyle(fontSize: 20),),
                 ),
                 const SizedBox(
                   height: 20,
