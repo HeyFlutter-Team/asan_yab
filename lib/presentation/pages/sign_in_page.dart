@@ -154,8 +154,8 @@ class _LogInPageState extends ConsumerState<LogInPage>
               Text(
                 'اکانت قبلی ندارید؟',
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black.withOpacity(0.44)),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(
                 height: 10,

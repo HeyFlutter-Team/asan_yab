@@ -1,19 +1,14 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:asan_yab/data/models/place.dart';
-import 'package:asan_yab/domain/riverpod/data/update_favorite_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/utils/convert_digits_to_farsi.dart';
-import '../../core/utils/download_image.dart';
-import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
-import '../../domain/riverpod/data/single_place_provider.dart';
-import '../../domain/riverpod/data/toggle_favorite.dart';
+import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../pages/detials_page.dart';
 import '../pages/detials_page_offline.dart';
 
@@ -102,7 +97,7 @@ class _FavoritesState extends ConsumerState<Favorites> {
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12.0),
-                                color: Colors.white,
+                                // color: Colors.white,
                               ),
                               child: Column(
                                 children: [
@@ -140,8 +135,8 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 16.0),
+                                              // color: Colors.black,
+                                              ),
                                         ),
                                         OutlinedButton(
                                           onPressed: () async {
@@ -154,9 +149,9 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                             children: [
                                               Text(phoneNumber,
                                                   style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 14.0,
-                                                  )),
+                                                      // color: Colors.black,
+
+                                                      )),
                                               const Icon(Icons.phone_android,
                                                   color: Colors.green),
                                             ],

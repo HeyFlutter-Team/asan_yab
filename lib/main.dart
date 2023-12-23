@@ -3,7 +3,6 @@ import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -89,13 +88,11 @@ class _MyAppState extends ConsumerState<MyApp> {
       themeMode: themeModel.currentThemeMode,
       darkTheme: ThemeData.dark().copyWith(
         textTheme: ThemeData.dark().textTheme.apply(
-              fontFamily: 'Shabnam',
               bodyColor: Colors.white,
             ),
       ),
       theme: ThemeData.light().copyWith(
         textTheme: ThemeData.light().textTheme.apply(
-              fontFamily: 'Shabnam',
               bodyColor: Colors.black,
             ),
       ),
@@ -131,9 +128,9 @@ class _MyAppState extends ConsumerState<MyApp> {
       builder: (context, child) {
         return Theme(
           data: ThemeData(
-            brightness: Theme.of(context).brightness,
-            // Add other theme configurations here if needed
-          ),
+              brightness: Theme.of(context).brightness, fontFamily: 'Shabnam'
+              // Add other theme configurations here if needed
+              ),
           child: child!,
         );
       },

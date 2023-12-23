@@ -99,7 +99,7 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                     child: Text(
                                       ref.watch(nearbyPlace)[index].category!,
                                       style: const TextStyle(
-                                          color: Colors.black,
+                                          // color: Colors.black,
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -112,8 +112,8 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                       ref.watch(nearbyPlace)[index].name!,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                        color: Colors.indigo.withOpacity(0.6),
-                                      ),
+                                          //color: Colors.indigo.withOpacity(0.6),
+                                          ),
                                     ),
                                   ),
                                   const SizedBox(height: 10),

@@ -16,7 +16,7 @@ class CategoryPage extends ConsumerWidget {
       //backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         elevation: 0.0,
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         title: const Text(
           'دسته بندی ها',
           style: TextStyle(color: Colors.black),

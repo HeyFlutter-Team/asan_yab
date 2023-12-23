@@ -94,11 +94,12 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     children: [
                       const TextSpan(
                         text: '  قبلا اکانت داشتید؟',
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(fontSize: 16),
                       ),
                       TextSpan(
                         text: '  ورود',
-                        style: const TextStyle(color: Colors.blue),
+                        style:
+                            const TextStyle(color: Colors.blue, fontSize: 17),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             Navigator.pop(context);

@@ -68,7 +68,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                       icon: const Icon(
                         Icons.close,
                         size: 25.0,
-                        color: Colors.black,
+                        // color: Colors.black,
                       ),
                     )
                   : null,
