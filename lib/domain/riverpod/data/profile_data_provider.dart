@@ -13,10 +13,9 @@ import '../../../data/models/users.dart';
 
 class UserDetails extends StateNotifier<Users?> {
   UserDetails(super.state);
-
   Future<Users?> getCurrentUserData() async {
     try {
-      User? user = FirebaseAuth.instance.currentUser;
+      final user = FirebaseAuth.instance.currentUser;
 
       if (user != null) {
         final userSnapshot = await FirebaseFirestore.instance

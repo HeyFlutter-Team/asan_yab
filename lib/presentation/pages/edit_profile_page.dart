@@ -3,6 +3,8 @@
 import 'package:asan_yab/data/models/users.dart';
 import 'package:asan_yab/domain/riverpod/data/edit_profile_page_provider.dart';
 import 'package:asan_yab/presentation/pages/profile_page.dart';
+import 'package:asan_yab/presentation/pages/show_profile_page.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +14,8 @@ import 'package:image_picker/image_picker.dart';
 import '../../domain/riverpod/data/profile_data_provider.dart';
 
 class EditProfilePage extends ConsumerStatefulWidget {
-  final Users userData;
 
-  const EditProfilePage({super.key, required this.userData});
+  const EditProfilePage({super.key});
 
   @override
   ConsumerState<EditProfilePage> createState() => _EditProfilePageState();
@@ -24,14 +25,15 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
   final user = FirebaseAuth.instance.currentUser;
   final nameController = TextEditingController();
   final lastNameController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     Future.delayed(
       Duration.zero,
       () {
-        nameController.text = widget.userData.name;
-        lastNameController.text = widget.userData.lastName;
+        nameController.text = ref.read(userDetailsProvider)!.name;
+        lastNameController.text = ref.read(userDetailsProvider)!.lastName;
         ref
             .read(editProfilePageProvider.notifier)
             .editData(nameController, lastNameController);
@@ -43,6 +45,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final usersData = ref.watch(userDetailsProvider);
     return Scaffold(
       body: Column(
         children: [
@@ -54,10 +57,20 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                   height: 220,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                      Colors.white,
-                      Colors.red.shade900,
-                    ]),
+                    gradient:context.locale==const Locale('fa','AF')?
+                    LinearGradient(
+                        colors: [
+                          Colors.white,
+                          Colors.red.shade900,
+
+                        ])
+                        :LinearGradient(
+                        colors: [
+                          Colors.red.shade900,
+                          Colors.white,
+
+
+                        ]),
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.elliptical(600, 100),
                       bottomRight: Radius.elliptical(600, 100),
@@ -65,7 +78,9 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                   ),
                 ),
                 Padding(
-                    padding: const EdgeInsets.only(top: 40.0, right: 4),
+                    padding: context.locale==const Locale('fa','AF')?
+                    const EdgeInsets.only(top: 40.0, right: 4)
+                    :const EdgeInsets.only(top: 40.0, left:334),
                     child: IconButton(
                       icon: const Icon(
                         Icons.arrow_back,
@@ -76,9 +91,9 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 40.0, right: 334),
                   child: TextButton(
-                    child: const Text(
-                      'ذخیره',
-                      style: TextStyle(color: Colors.red),
+                    child: Text(
+                      'edit_appBar_leading'.tr(),
+                      style:  TextStyle(color:context.locale==const Locale('fa','AF')?Colors.red:Colors.white),
                     ),
                     onPressed: () {
                       ref
@@ -86,83 +101,93 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                           .editData(nameController, lastNameController);
 
                       Navigator.pop(context);
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage(),));
                     },
-                    // icon: const Icon(Icons.arrow_back,size: 35,color: Colors.white,)
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 118.0, right: 116),
-                  child: widget.userData.imageUrl == ''
-                      ? Stack(
-                          children: [
-                            const CircleAvatar(
-                              radius: 80,
-                              backgroundImage: AssetImage(
-                                  'assets/Avatar.png'), // Your image URL
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 40.0, right: 50),
-                              child: buildProgress(),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
+                  padding: context.locale==const Locale('fa','AF')
+                 ?const EdgeInsets.only(top: 118.0, right: 116)
+                 :const EdgeInsets.only(top: 118.0, left: 116)
+                  ,
+                  child: InkWell(
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ShowProfilePage(imagUrl:'${ref.watch(userDetailsProvider)?.imageUrl}' ),)),
+                    child: usersData?.imageUrl == ''
+                        ? Stack(
+                            children: [
+                              const Hero(
+                                tag:'avatarHeroTag',
+                                child: CircleAvatar(
+                                  radius: 80,
+                                  backgroundImage: AssetImage(
+                                      'assets/Avatar.png'), // Your image URL
                                 ),
-                                child: IconButton(
-                                  onPressed: () {
-                                    showBottomSheets(context);
-                                  },
-                                  icon: const Icon(
-                                    Icons.camera_alt,
-                                    size: 32,
-                                    color: Colors.blue,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 40.0, right: 50),
+                                child: buildProgress(),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      showBottomSheets(context);
+                                    },
+                                    icon: const Icon(
+                                      Icons.camera_alt,
+                                      size: 32,
+                                      color: Colors.blue,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        )
-                      : Stack(
-                          children: [
-                            CircleAvatar(
-                              maxRadius: 80,
-                              backgroundImage: NetworkImage(
-                                ref.watch(userDetailsProvider)!.imageUrl,
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 40.0, right: 50),
-                              child: buildProgress(),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: IconButton(
-                                  onPressed: () {
-                                    showBottomSheets(context);
-                                  },
-                                  icon: const Icon(
-                                    Icons.camera_alt,
-                                    size: 32,
-                                    color: Colors.blue,
+                            ],
+                          )
+                        : Stack(
+                            children: [
+                              Hero(
+                                tag:'avatarHeroTag',
+                                child: CircleAvatar(
+                                  maxRadius: 80,
+                                  backgroundImage: NetworkImage(
+                                    '${ref.watch(userDetailsProvider)?.imageUrl}',
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 40.0, right: 50),
+                                child: buildProgress(),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      showBottomSheets(context);
+                                    },
+                                    icon: const Icon(
+                                      Icons.camera_alt,
+                                      size: 32,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                  ),
                 ),
               ],
             ),
@@ -171,41 +196,25 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
             children: [
               TextField(
                 controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: 'نام',
-                  prefixIcon: Icon(
+                decoration: InputDecoration(
+                  labelText: 'edit_1_txf_label'.tr(),
+                  prefixIcon: const Icon(
                     Icons.person_2_outlined,
                     color: Colors.red,
                     size: 30,
                   ),
                 ),
-                // onChanged: (value) {
-                //   // ref.read(editProfilePageProvider.notifier)
-                //   //     .editData(
-                //   //     nameController,
-                //   //     lastNameController);
-                //   // ref.read(userDetailsProvider.notifier).getCurrentUserData();
-                // },
               ),
               TextField(
                 controller: lastNameController,
-                decoration: const InputDecoration(
-                  labelText: 'تخلص',
-                  prefixIcon: Icon(
+                decoration: InputDecoration(
+                  labelText: 'edit_2_txf_label'.tr(),
+                  prefixIcon: const Icon(
                     Icons.person_2_outlined,
                     color: Colors.red,
                     size: 30,
                   ),
                 ),
-                // onChanged: (value) {
-                //   ref.read(editProfilePageProvider.notifier)
-                //       .editData(
-                //       nameController,
-                //       lastNameController);
-                // },
-              ),
-              const Divider(
-                color: Colors.grey,
               ),
             ],
           ),
@@ -260,12 +269,12 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                       .pickImage(ImageSource.camera);
                   Navigator.pop(context);
                 },
-                child: const Column(
+                child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Icon(Icons.camera),
-                    SizedBox(height: 8.0),
-                    Text('کامره'),
+                    const Icon(Icons.camera),
+                    const SizedBox(height: 8.0),
+                    Text('profile_buttonSheet_camera'.tr()),
                   ],
                 ),
               ),
@@ -278,12 +287,12 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                   Navigator.pop(
                       context); // Call a function to handle Gallery action
                 },
-                child: const Column(
+                child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Icon(Icons.image),
-                    SizedBox(height: 8.0),
-                    Text('گالری'),
+                    const Icon(Icons.image),
+                    const SizedBox(height: 8.0),
+                    Text('profile_buttonSheet_gallery'.tr()),
                   ],
                 ),
               ),

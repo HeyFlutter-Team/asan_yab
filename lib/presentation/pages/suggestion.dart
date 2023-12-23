@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../data/repositoris/firebase_modle_helper.dart';
@@ -41,9 +42,8 @@ class _SuggestionPageState extends State<SuggestionPage> {
     return Scaffold(
       // backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        title: const Text(
-          'درخواست مکان جدید',
-          //style: TextStyle(color: Colors.black),
+        title: Text(
+          'suggestion_appBar_title'.tr(),
         ),
         elevation: 0,
         //backgroundColor: Colors.white,
@@ -61,42 +61,41 @@ class _SuggestionPageState extends State<SuggestionPage> {
                   const SizedBox(height: 15),
                   TextFieldWidget(
                     addController: nameController,
-                    labelName: 'نام مکان',
+                    labelName: 'suggestion_1_tf_labelName'.tr(),
                     validator: (value) => value != null && value.isEmpty
-                        ? 'مکان خود را وارد کنید!'
+                        ? 'suggestion_1_tf_valid'.tr()
                         : null,
                   ),
                   const SizedBox(height: 10),
                   TextFieldWidget(
                     addController: addressController,
-                    labelName: 'آدرس مکان',
+                    labelName: 'suggestion_2_tf_labelName'.tr(),
                     validator: (value) => value != null && value.isEmpty
-                        ? 'آدرس خود را وارد کنید!'
+                        ? 'suggestion_2_tf_valid'.tr()
                         : null,
                   ),
                   const SizedBox(height: 10),
                   TextFieldWidget(
                     line: 2,
                     addController: typeController,
-                    labelName: 'توضیجات مکان',
+                    labelName: 'suggestion_3_tf_labelName'.tr(),
                     validator: (value) => value != null && value.isEmpty
-                        ? 'توضیجات مکان را بنویسید'
+                        ? 'suggestion_3_tf_valid'.tr()
                         : null,
                   ),
                   const SizedBox(height: 10),
                   TextFieldWidget(
                     addController: phoneController,
-                    labelName: 'شماره تماس',
+                    labelName: 'suggestion_4_tf_labelName'.tr(),
                     validator: (value) => value != null && value.isEmpty
-                        ? 'شماره خود را وارد کنید!'
+                        ? 'suggestion_4_tf_valid'.tr()
                         : null,
                   ),
                   const SizedBox(height: 20),
-                  const CustomCard(
-                    title: 'نوت',
+                  CustomCard(
+                    title: 'suggestion_custom_card_title'.tr(),
                     child: Text(
-                      ' در این بخش شما میتوانید به ما در باره مکان مورد نظر خود درخواست بدهید، تا ما آن را در آسان یاب قرار دهیم \n\n همچنان، شما میتوانید برای آپدیت اطلاعات مکان های درج شده در آسان یاب به ما درخواست بدهید',
-                      style: TextStyle(fontSize: 15),
+                      'suggestion_custom_card_text'.tr(),
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -120,7 +119,7 @@ class _SuggestionPageState extends State<SuggestionPage> {
                         controllerClear();
                       }
                     },
-                    titleName: 'ارسال درخواست',
+                    titleName: 'suggestion_button'.tr(),
                     textColor1: Colors.white,
                     btnColor: Colors.grey,
                   ),
@@ -140,12 +139,12 @@ class CustomDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('ارسال درخواست مکان'),
-      content: const Text('درخواست شما ثیت گردید'),
+      title: Text('suggestion_customDialog_title'.tr()),
+      content: Text('suggestion_customDialog_content'.tr()),
       actions: <Widget>[
         TextButton(
-          child: const Text('بازگشت به صفحه قبلی ',
-              style: TextStyle(
+          child: Text('suggestion_customDialog_textButton'.tr(),
+              style: const TextStyle(
                 color: Colors.blueAccent,
               )),
           onPressed: () {

@@ -1,5 +1,6 @@
 import 'package:asan_yab/core/utils/convert_digits_to_farsi.dart';
 import 'package:asan_yab/presentation/pages/all_nearby_place.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,9 +28,9 @@ class NearbyPlaceWidget extends ConsumerWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'مکان های نزدیک',
-                      style: TextStyle(color: Colors.grey, fontSize: 20.0),
+                     Text(
+                      'nearbyPlaces_title'.tr(),
+                      style: const TextStyle(color: Colors.grey, fontSize: 20.0),
                     ),
                     IconButton(
                       onPressed: () => Navigator.push(
@@ -37,8 +38,10 @@ class NearbyPlaceWidget extends ConsumerWidget {
                         MaterialPageRoute(
                             builder: (context) => const NearbyPlacePage()),
                       ),
-                      icon: const Icon(
-                        Icons.arrow_circle_left_outlined,
+                      icon: Icon(
+                        context.locale==const Locale('fa','AF')?
+                        Icons.arrow_circle_left_outlined
+                        :Icons.arrow_circle_right_outlined,
                         size: 32.0,
                         color: Colors.grey,
                       ),
@@ -150,7 +153,7 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                               BorderRadius.circular(8)),
                                       padding: const EdgeInsets.all(8),
                                       child: Text(
-                                        '${convertDigitsToFarsi(place[index].distance.toString())} متر تا مقصد ',
+                                        '${'nearbyPlaces_meter_title'.tr()} ${convertDigitsToFarsi(place[index].distance.toString())}',
                                         style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 12,

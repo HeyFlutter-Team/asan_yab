@@ -126,6 +126,14 @@ dio
 2.15
 file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/dio-5.4.0/
 file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/dio-5.4.0/lib/
+easy_localization
+2.12
+file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/easy_localization-3.0.3/
+file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/easy_localization-3.0.3/lib/
+easy_logger
+2.12
+file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/easy_logger-0.0.2/
+file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/easy_logger-0.0.2/lib/
 email_validator
 2.12
 file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/email_validator-2.1.17/
@@ -238,10 +246,6 @@ flutter_cache_manager
 2.17
 file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_cache_manager-3.3.1/
 file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_cache_manager-3.3.1/lib/
-flutter_hooks
-2.17
-file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_hooks-0.20.3/
-file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_hooks-0.20.3/lib/
 flutter_launcher_icons
 2.18
 file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_launcher_icons-0.13.1/
@@ -354,10 +358,6 @@ google_maps_flutter_web
 2.19
 file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/google_maps_flutter_web-0.5.4+1/
 file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/google_maps_flutter_web-0.5.4+1/lib/
-hooks_riverpod
-2.17
-file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/hooks_riverpod-2.4.9/
-file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/hooks_riverpod-2.4.9/lib/
 html
 2.19
 file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/html-0.15.4/
