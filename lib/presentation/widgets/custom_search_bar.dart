@@ -4,7 +4,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/res/image_res.dart';
-
 import '../pages/search_bar_page.dart';
 
 class CustomSearchBar extends StatelessWidget {
@@ -29,7 +28,7 @@ class CustomSearchBar extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Icon(Icons.search, color: Colors.black),
+              child: Icon(Icons.search),
             ),
             Row(
               children: [

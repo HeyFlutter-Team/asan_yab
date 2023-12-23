@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import '../../data/repositoris/firebase_modle_helper.dart';
 
+import '../../data/repositoris/firebase_modle_helper.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/text_form_field_widget.dart';
 
@@ -40,14 +40,14 @@ class _SuggestionPageState extends State<SuggestionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      // backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         title:  Text(
           'suggestion_appBar_title'.tr(),
           style:const TextStyle(color: Colors.black),
         ),
         elevation: 0,
-        backgroundColor: Colors.white,
+        //backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -194,15 +194,15 @@ class CustomCard extends StatelessWidget {
                       children: [
                         const Icon(
                           Icons.info_outline,
-                          color: Colors.black54,
+                          // color: Colors.black54,
                         ),
                         const SizedBox(width: 12),
                         Text(
                           title,
                           style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black54),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),

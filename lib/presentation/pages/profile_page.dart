@@ -4,13 +4,15 @@ import 'package:asan_yab/presentation/pages/edit_profile_page.dart';
 import 'package:asan_yab/presentation/pages/show_profile_page.dart';
 import 'package:asan_yab/presentation/pages/sign_in_page.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../domain/riverpod/data/language_controller_provider.dart';
+
+import '../../data/models/users.dart';
 import '../../domain/riverpod/data/profile_data_provider.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
@@ -38,6 +40,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   Widget build(BuildContext context) {
     final usersData = ref.watch(userDetailsProvider);
 
+    final themeModel = ref.watch(themeModelProvider);
     return Scaffold(
         body: Column(
       children: [

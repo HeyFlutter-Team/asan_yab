@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/res/image_res.dart';
 import '../../domain/riverpod/data/search_provider.dart';
-
 import 'detials_page.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
@@ -34,11 +33,11 @@ class _SearchPageState extends ConsumerState<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
+        // backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
           elevation: 1,
           shadowColor: Colors.blue,
-          backgroundColor: Theme.of(context).primaryColor,
+          // backgroundColor: Theme.of(context).primaryColor,
           title: TextFormField(
             controller: searchController,
             // autofocus: true,
@@ -81,7 +80,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
               Navigator.pop(context);
               ref.refresh(searchTypeSenseProvider.notifier).clear;
             },
-            icon: const Icon(Icons.arrow_back, color: Colors.black, size: 25.0),
+            icon: const Icon(Icons.arrow_back, size: 25.0),
           ),
         ),
         body: ref.watch(searchTypeSenseProvider).isEmpty

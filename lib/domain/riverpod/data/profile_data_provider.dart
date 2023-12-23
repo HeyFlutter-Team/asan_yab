@@ -1,8 +1,7 @@
-
-
 // ignore_for_file: avoid_print
 
 import 'dart:io';
+
 import 'package:clipboard/clipboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,28 +11,20 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../data/models/users.dart';
 
-class UserDetails extends StateNotifier<Users?>{
+class UserDetails extends StateNotifier<Users?> {
   UserDetails(super.state);
   Future<Users?> getCurrentUserData() async {
     try {
-      User? user = FirebaseAuth.instance.currentUser;
+      final user = FirebaseAuth.instance.currentUser;
 
       if (user != null) {
-        final userSnapshot =
-        await FirebaseFirestore
-            .instance
+        final userSnapshot = await FirebaseFirestore.instance
             .collection('User')
             .doc(user.uid)
             .get();
-        if (userSnapshot.exists) {
-       state = Users.fromMap(userSnapshot.data()!);
-        return state;
 
-        } else {
-          return null;
-        }
-      } else {
-        return null;
+        state = Users.fromMap(userSnapshot.data()!);
+        return state;
       }
     } catch (e) {
       print('Younis Error fetching current user data: $e');
@@ -41,13 +32,14 @@ class UserDetails extends StateNotifier<Users?>{
       return null;
     }
   }
+
   copyToClipboard(String text) {
     FlutterClipboard.copy(text);
   }
 }
 
-final userDetailsProvider=StateNotifierProvider<UserDetails,Users?>((ref) => UserDetails(null));
-
+final userDetailsProvider =
+    StateNotifierProvider<UserDetails, Users?>((ref) => UserDetails(null));
 
 class ImageState {
   File? image;
@@ -73,7 +65,7 @@ class ImageState {
   }
 }
 
-class ImageNotifier  extends StateNotifier<ImageState>{
+class ImageNotifier extends StateNotifier<ImageState> {
   ImageNotifier() : super(ImageState());
 
   final ImagePicker _imagePicker = ImagePicker();

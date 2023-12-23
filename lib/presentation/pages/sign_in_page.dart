@@ -65,7 +65,6 @@ class _LogInPageState extends ConsumerState<LogInPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Form(
           key: formKey,

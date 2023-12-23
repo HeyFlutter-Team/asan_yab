@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/res/colors.dart';
 import 'list_category_item.dart';
@@ -15,7 +16,7 @@ class CategoryPage extends ConsumerWidget {
     ref.read(categoriesProvider.notifier).getCategories();
     final category = ref.watch(categoriesProvider);
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      //backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Colors.white,

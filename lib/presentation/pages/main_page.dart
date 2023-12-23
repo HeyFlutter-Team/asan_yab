@@ -50,7 +50,7 @@ class _MainPageState extends ConsumerState<MainPage> {
     FirebaseApi().getToken();
     FirebaseApi().initialize(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      //backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: buildBottomNavigationBar(),
       body: IndexedStack(
         index: selectedIndex,
@@ -76,8 +76,8 @@ class _MainPageState extends ConsumerState<MainPage> {
           FocusScope.of(context).unfocus();
           ref.read(buttonNavigationProvider.notifier).selectedIndex(index);
         },
-        backgroundColor: Colors.white,
-        items: [
+        // backgroundColor: Colors.white,
+        items:  [
           BottomNavigationBarItem(
             label: 'ButtonNvB_1'.tr(),
             icon: const Icon(Icons.home),

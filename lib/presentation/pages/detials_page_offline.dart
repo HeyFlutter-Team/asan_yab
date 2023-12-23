@@ -217,15 +217,14 @@ class CustomCard extends StatelessWidget {
                         children: [
                           const Icon(
                             Icons.library_books,
-                            color: Colors.black54,
                           ),
                           const SizedBox(width: 12),
                           Text(
                             title,
                             style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black54),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),

@@ -4,21 +4,19 @@ import 'dart:async';
 
 import 'package:asan_yab/presentation/pages/sign_in_page.dart';
 import 'package:asan_yab/presentation/widgets/nearby_place.dart';
+import 'package:asan_yab/presentation/widgets/new_places.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:new_version_plus/new_version_plus.dart';
 
 import '../../domain/riverpod/data/categories_provider.dart';
+import '../../domain/riverpod/data/update_favorite_provider.dart';
 import '../../domain/servers/check_new_version.dart';
 import '../../domain/servers/nearby_places.dart';
-import '../widgets/new_places.dart';
 import '../widgets/categories.dart';
-import '../widgets/favorites.dart';
-
 import '../widgets/custom_search_bar.dart';
+import '../widgets/favorites.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   final bool? isConnected;
@@ -32,6 +30,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
     super.initState();
+    fetchData();
     ref.read(nearbyPlace.notifier).getNearestLocations();
     final newVersion = NewVersionPlus(
       androidId: 'com.heyflutter.asanYab',
@@ -41,6 +40,10 @@ class _HomePageState extends ConsumerState<HomePage> {
     Timer(const Duration(milliseconds: 800), () {
       checkNewVersion(newVersion, context);
     });
+  }
+
+  Future<void> fetchData() async {
+    await ref.refresh(updateProvider.notifier).update(context, ref);
   }
 
   Future<void> onRefresh() async {
@@ -53,9 +56,9 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      //backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        //backgroundColor: Colors.white,
         elevation: 0.0,
         automaticallyImplyLeading: false,
         title: const CustomSearchBar(),
