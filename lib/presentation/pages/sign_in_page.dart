@@ -1,12 +1,15 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'package:asan_yab/presentation/pages/sign_up_page.dart';
 import 'package:asan_yab/presentation/widgets/custom_text_field.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../domain/riverpod/data/language_controller_provider.dart';
 import '../../domain/riverpod/data/sign_in_provider.dart';
+import '../widgets/custom_language_icon.dart';
 
 class LogInPage extends ConsumerStatefulWidget {
   final Function()? onClickedSignUp;
@@ -36,6 +39,19 @@ class _LogInPageState extends ConsumerState<LogInPage>
       end: 1,
     ).animate(_controller);
     _controller.forward();
+    retrieveSavedValues();
+  }
+
+  void retrieveSavedValues() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final savedEmail = prefs.getString('email');
+    final savedPassword = prefs.getString('password');
+
+    final isCheckboxChecked = ref.watch(isCheckProvider);
+    if (isCheckboxChecked) {
+      emailCTRL.text = savedEmail ?? '';
+      passwordCTRL.text = savedPassword ?? '';
+    }
   }
 
   @override
@@ -54,38 +70,52 @@ class _LogInPageState extends ConsumerState<LogInPage>
           key: formKey,
           child: Column(
             children: [
-              FadeTransition(
-                alwaysIncludeSemantics: false,
-                opacity: _animation,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Image.asset(
-                    'assets/asanYabbYounis.jpg',
-                    height: 200,
-                    width: 200,
+              Row(children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 88.0, right: 10),
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                    color: Colors.white,
+                    child: const LanguageIcon(),
                   ),
                 ),
-              ),
+                const SizedBox(
+                  width: 50,
+                ),
+                FadeTransition(
+                  alwaysIncludeSemantics: false,
+                  opacity: _animation,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Image.asset(
+                      'assets/asanYabbYounis.jpg',
+                      height: 200,
+                      width: 200,
+                    ),
+                  ),
+                ),
+              ]),
               CustomTextField(
-                label: 'ایمیل',
+                label: 'sign_in_email'.tr(),
                 controller: emailCTRL,
-                hintText: 'ایمیل خود را وارد کنید',
+                hintText: 'sign_in_email_hintText'.tr(),
                 validator: (p0) {
                   if (p0!.isEmpty) {
-                    return 'لطفا ایمیل خود را وارد کنید';
+                    return 'sign_in_email_1_valid'.tr();
                   } else if (p0.length < 10 && !EmailValidator.validate(p0)) {
-                    return 'ایمیل شما اشتباه است';
+                    return 'sign_in_email_2_valid'.tr();
                   } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                       .hasMatch(p0)) {
-                    return 'فورمت ایمیل شما اشتباه است';
+                    return 'sign_in_email_3_valid'.tr();
                   }
                   return null;
                 },
               ),
               CustomTextField(
-                  label: 'رمز',
+                  label: 'sign_in_password'.tr(),
                   controller: passwordCTRL,
-                  hintText: 'رمز خود را وارد کنید',
+                  hintText: 'sign_in_password_hintText'.tr(),
                   obscureText: ref.watch(isObscureProvider),
                   suffixIcon: IconButton(
                       onPressed: () =>
@@ -93,9 +123,9 @@ class _LogInPageState extends ConsumerState<LogInPage>
                       icon: const Icon(Icons.remove_red_eye_outlined)),
                   validator: (p0) {
                     if (p0 == null || p0.isEmpty) {
-                      return 'رمز خود را وارد کنید';
+                      return 'sign_in_password_1_valid'.tr();
                     } else if (p0.length < 6) {
-                      return 'رمز باید شیش کاراکتر یا بیشتر از شیش تا باشد';
+                      return 'sign_in_password_2_valid'.tr();
                     }
                     return null;
                   }),
@@ -121,10 +151,10 @@ class _LogInPageState extends ConsumerState<LogInPage>
                         },
                       ),
                     ),
-                    const Text(
-                      'مرا بخاطر داشته باش',
-                      style:
-                          TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
+                    Text(
+                      'sign_in_checkBox'.tr(),
+                      style: const TextStyle(
+                          fontSize: 17, fontWeight: FontWeight.w400),
                     ),
                   ],
                 ),
@@ -138,24 +168,34 @@ class _LogInPageState extends ConsumerState<LogInPage>
                     minimumSize: const Size(340, 55),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12))),
-                onPressed: () {
+                onPressed: () async {
                   final isValid = formKey.currentState!.validate();
                   if (!isValid) return;
-                  ref.read(SignInProvider.notifier).signIn(
+                  final isCheckboxChecked = ref.watch(isCheckProvider);
+                  if (isCheckboxChecked) {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    prefs.setString('email', emailCTRL.text);
+                    prefs.setString('password', passwordCTRL.text);
+                  }
+                  ref.read(signInProvider.notifier).signIn(
                       context: context,
                       email: emailCTRL.text,
                       password: passwordCTRL.text);
                 },
-                child: const Text('ورود'),
+                child: Text(
+                  'sign_in_elbT'.tr(),
+                  style: const TextStyle(fontSize: 20),
+                ),
               ),
               const SizedBox(
                 height: 100,
               ),
               Text(
-                'اکانت قبلی ندارید؟',
+                'sig_in_account_text'.tr(),
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black.withOpacity(0.44)),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(
                 height: 10,
@@ -174,8 +214,9 @@ class _LogInPageState extends ConsumerState<LogInPage>
                           builder: (context) => const SignUpPage()));
                 },
                 child: Text(
-                  'ثبت نام',
-                  style: TextStyle(color: Colors.black.withOpacity(0.44)),
+                  'sign_in_2_elbT'.tr(),
+                  style: TextStyle(
+                      color: Colors.black.withOpacity(0.44), fontSize: 20),
                 ),
               ),
               const SizedBox(

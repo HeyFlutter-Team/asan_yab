@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unused_local_variable
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/res/image_res.dart';
@@ -32,7 +33,7 @@ class CustomSearchBar extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  'جستجو در',
+                  'container_text'.tr(),
                   style: TextStyle(fontSize: 15.0),
                 ),
                 Image.asset(

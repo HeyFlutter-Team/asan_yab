@@ -1,5 +1,6 @@
 import 'package:asan_yab/domain/riverpod/screen/search_load_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -40,9 +41,9 @@ class _SearchPageState extends ConsumerState<SearchPage> {
           title: TextFormField(
             controller: searchController,
             // autofocus: true,
-            decoration: const InputDecoration(
+            decoration:  InputDecoration(
               border: InputBorder.none,
-              hintText: 'جستجو ',
+              hintText: 'search_bar_hint_text'.tr(),
             ),
             onChanged: (value) {
               ref.read(searchTypeSenseProvider.notifier).search(value);
@@ -68,7 +69,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                       icon: const Icon(
                         Icons.close,
                         size: 25.0,
-                        color: Colors.black,
+                        // color: Colors.black,
                       ),
                     )
                   : null,

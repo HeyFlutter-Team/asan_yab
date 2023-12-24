@@ -10,8 +10,11 @@ class Users {
   final String imageUrl;
   final String userType;
   final List<String> owner;
+  final List<String> ownerPlaceName;
+
   Users({
-    this.owner = const ['s'],
+    this.owner = const [],
+    this.ownerPlaceName = const [],
     required this.id,
     required this.uid,
     this.imageUrl = '',
@@ -23,28 +26,30 @@ class Users {
   });
 
   Map<String, dynamic> toJson() => {
-        'name': name,
-        'lastName': lastName,
-        'email': email,
-        'createdAt': createdAt,
-        'imageUrl': imageUrl,
-        'userType': userType,
-        'uid': uid,
-        'id': id,
-        'owner': owner
-      };
+    'name': name,
+    'lastName': lastName,
+    'email': email,
+    'createdAt': createdAt,
+    'imageUrl': imageUrl,
+    'userType': userType,
+    'uid': uid,
+    'id': id,
+    'owner': owner,
+    'ownerPlaceName': ownerPlaceName,
+  };
 
   factory Users.fromMap(Map<String, dynamic> json) {
     return Users(
       name: json['name'],
       lastName: json['lastName'],
       email: json['email'],
-      createdAt: json['createdAt'],
+      createdAt: json['createdAt'] != null ? (json['createdAt'] as Timestamp) : Timestamp.now(), // Ensure correct Timestamp conversion
       imageUrl: json['imageUrl'],
       userType: json['userType'],
       uid: json['uid'],
       id: json['id'],
       owner: List<String>.from(json['owner']),
+      ownerPlaceName: List<String>.from(json['ownerPlaceName']),
     );
   }
 }
