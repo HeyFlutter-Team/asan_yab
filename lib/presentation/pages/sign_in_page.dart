@@ -7,7 +7,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../domain/riverpod/data/language_controller_provider.dart';
+
 import '../../domain/riverpod/data/sign_in_provider.dart';
 import '../widgets/custom_language_icon.dart';
 
@@ -76,7 +76,6 @@ class _LogInPageState extends ConsumerState<LogInPage>
                   child: Container(
                     height: 50,
                     width: 50,
-                    color: Colors.white,
                     child: const LanguageIcon(),
                   ),
                 ),
@@ -185,7 +184,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
                 },
                 child: Text(
                   'sign_in_elbT'.tr(),
-                  style: const TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 20, color: Colors.white),
                 ),
               ),
               const SizedBox(

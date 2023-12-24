@@ -352,7 +352,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           },
           child: Text(
             'profile_edit_button_text'.tr(),
-            style: const TextStyle(fontSize: 25),
+            style: const TextStyle(fontSize: 25, color: Colors.white),
           ),
         ),
         const SizedBox(

@@ -95,7 +95,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     children: [
                       TextSpan(
                         text: 'sign_up_account_text'.tr(),
-                        style: const TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.grey),
                       ),
                       TextSpan(
                         text: '  ${'sign_up_account_text1'.tr()}',
@@ -128,7 +128,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   },
                   child: Text(
                     'sign_up_elbT'.tr(),
-                    style: const TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 20, color: Colors.white),
                   ),
                 ),
                 const SizedBox(
