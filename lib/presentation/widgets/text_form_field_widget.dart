@@ -17,19 +17,18 @@ class TextFieldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       maxLines: line,
-      cursorColor: Colors.black,
-      style: const TextStyle(color: Colors.black, fontSize: 16),
+      style: const TextStyle(fontSize: 16),
       controller: addController,
       validator: (value) => validator(value),
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.blueGrey.withOpacity(0.1),
         focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.black),
+            borderSide: const BorderSide(),
             borderRadius: BorderRadius.circular(16)),
         hoverColor: Colors.black,
         labelText: labelName,
-        labelStyle: const TextStyle(color: Colors.black),
+        labelStyle: const TextStyle(),
         enabled: true,
         border: OutlineInputBorder(
           borderSide: const BorderSide(

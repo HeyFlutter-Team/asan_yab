@@ -2,7 +2,7 @@ import 'package:asan_yab/domain/riverpod/screen/botton_navigation_provider.dart'
 import 'package:asan_yab/presentation/pages/about_us_page.dart';
 import 'package:asan_yab/presentation/pages/edit_profile_page.dart';
 import 'package:asan_yab/presentation/pages/sign_in_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +35,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   final userName = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
+    final themeModel = ref.watch(themeModelProvider);
     return Scaffold(
       body: FutureBuilder<Users?>(
           future: ref.read(userDetailsProvider.notifier).getCurrentUserData(),
@@ -122,13 +123,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         Padding(
                           padding: const EdgeInsets.only(top: 38.0, right: 15),
                           child: IconButton(
-                              onPressed: () async {
-                                await FirebaseFirestore.instance
-                                    .collection('UserToken')
-                                    .doc(FirebaseAuth.instance.currentUser!.uid)
-                                    .update({
-                                  "Token": '',
-                                });
+                              onPressed: () {
                                 FirebaseAuth.instance
                                     .signOut()
                                     .whenComplete(() {
@@ -221,6 +216,28 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         const Divider(
                           color: Colors.grey,
                         ),
+                        ListTile(
+                          title: Text('Dark Mode'),
+                          leading: Icon(
+                            color: Colors.red,
+                            Icons.dark_mode_outlined,
+                            size: 30,
+                          ),
+                          trailing: Switch(
+                            value:
+                                themeModel.currentThemeMode == ThemeMode.dark,
+                            onChanged: (value) {
+                              final newThemeMode =
+                                  value ? ThemeMode.dark : ThemeMode.light;
+                              ref
+                                  .read(themeModelProvider)
+                                  .setThemeMode(newThemeMode);
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
                       ],
                     ),
                   ),
@@ -242,10 +259,13 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                               .read(userDetailsProvider.notifier)
                               .getCurrentUserData());
                     },
-                    child: const Text('ویرایش'),
+                    child: const Text(
+                      'ویرایش',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 10,
                   )
                 ],
               );

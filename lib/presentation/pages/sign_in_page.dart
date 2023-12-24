@@ -5,6 +5,7 @@ import 'package:asan_yab/presentation/widgets/custom_text_field.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../domain/riverpod/data/sign_in_provider.dart';
 
 class LogInPage extends ConsumerStatefulWidget {
@@ -30,7 +31,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
       vsync: this,
       duration: const Duration(seconds: 7),
     );
-    _animation=Tween<double>(
+    _animation = Tween<double>(
       begin: 0,
       end: 1,
     ).animate(_controller);
@@ -48,7 +49,6 @@ class _LogInPageState extends ConsumerState<LogInPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Form(
           key: formKey,
@@ -170,8 +170,8 @@ class _LogInPageState extends ConsumerState<LogInPage>
                 onPressed: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const SignUpPage()
-                          ));
+                      MaterialPageRoute(
+                          builder: (context) => const SignUpPage()));
                 },
                 child: Text(
                   'ثبت نام',

@@ -35,7 +35,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
         Duration(milliseconds: 100),
         () {
           WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            ref.read(catLazyLoading.notifier).loadMoreData(context);
+            ref.read(catLazyLoading.notifier).loadMoreData();
           });
         },
       );

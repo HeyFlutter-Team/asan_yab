@@ -1,14 +1,12 @@
 import 'package:asan_yab/presentation/pages/auth_page.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
+import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -64,7 +62,13 @@ class _MyAppState extends ConsumerState<MyApp> {
           .startStremaing(context);
     }
     super.initState();
+
+    ref.read(themeModelProvider.notifier).initialize().whenComplete(
+        () => ref.read(themeModelProvider.notifier).loadSavedTheme());
+
+    // Listen for brightness changes
   }
+
   @override
   void dispose() {
     if (FirebaseAuth.instance.currentUser != null) {
@@ -78,44 +82,60 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final themeModel = ref.watch(themeModelProvider);
     return MaterialApp(
-        navigatorKey: navigatorKey,
-        useInheritedMediaQuery: true,
-        // locale: DevicePreview.locale(context),
-        // builder: DevicePreview.appBuilder,
-        navigatorObservers: [
-          FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
-        ],
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [Locale('fa')],
-        theme: ThemeData(
-          fontFamily: 'Shabnam',
-          primaryColor: Colors.white,
-          scaffoldBackgroundColor: Colors.white,
-        ),
-        home: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.hasError) {
-              return const Center(
-                child: Text('خطا در اتصال'),
-              );
-            } else if (snapshot.hasData) {
-              return MainPage();
-              // VerifyEmailPage();
-            } else {
-              return const AuthPage();
-            }
-          },
-        ));
+      navigatorKey: navigatorKey,
+      themeMode: themeModel.currentThemeMode,
+      darkTheme: ThemeData.dark().copyWith(
+        textTheme: ThemeData.dark().textTheme.apply(
+              fontFamily: 'Shabnam',
+              bodyColor: Colors.white,
+            ),
+      ),
+      theme: ThemeData.light().copyWith(
+        textTheme: ThemeData.light().textTheme.apply(
+              fontFamily: 'Shabnam',
+              bodyColor: Colors.black,
+            ),
+      ),
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+      ],
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('fa')],
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return const Center(
+              child: Text('خطا در اتصال'),
+            );
+          } else if (snapshot.hasData) {
+            return const MainPage();
+            // VerifyEmailPage();
+          } else {
+            return const AuthPage();
+          }
+        },
+      ),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData(
+            brightness: Theme.of(context).brightness,
+            // Add other theme configurations here if needed
+          ),
+          child: child!,
+        );
+      },
+    );
   }
 }
