@@ -9,7 +9,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_version_plus/new_version_plus.dart';
-
 import '../../domain/riverpod/data/categories_provider.dart';
 import '../../domain/riverpod/data/update_favorite_provider.dart';
 import '../../domain/servers/check_new_version.dart';

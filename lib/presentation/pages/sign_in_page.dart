@@ -194,8 +194,8 @@ class _LogInPageState extends ConsumerState<LogInPage>
               Text(
                 'sig_in_account_text'.tr(),
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black.withOpacity(0.44)),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(
                 height: 10,

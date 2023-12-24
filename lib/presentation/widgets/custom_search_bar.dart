@@ -34,7 +34,7 @@ class CustomSearchBar extends StatelessWidget {
               children: [
                 Text(
                   'container_text'.tr(),
-                  style: TextStyle(color: Colors.black, fontSize: 15.0),
+                  style: TextStyle(fontSize: 15.0),
                 ),
                 Image.asset(
                   ImageRes.asanYab,

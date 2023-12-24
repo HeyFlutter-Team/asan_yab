@@ -3,16 +3,15 @@ import 'package:asan_yab/presentation/pages/about_us_page.dart';
 import 'package:asan_yab/presentation/pages/edit_profile_page.dart';
 import 'package:asan_yab/presentation/pages/show_profile_page.dart';
 import 'package:asan_yab/presentation/pages/sign_in_page.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../domain/riverpod/data/language_controller_provider.dart';
 
-import '../../data/models/users.dart';
+import '../../domain/riverpod/data/language_controller_provider.dart';
 import '../../domain/riverpod/data/profile_data_provider.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
@@ -215,26 +214,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const AboutUsPage(),
-                      ));
-                },
-                child: ListTile(
-                  leading: const Icon(
-                    Icons.info_outline,
-                    color: Colors.red,
-                    size: 30,
-                  ),
-                  title: Text('profile_about_us_listTile'.tr()),
-                ),
-              ),
-              const Divider(
-                color: Colors.grey,
-              ),
-              InkWell(
-                onTap: () {
                   showModalBottomSheet(
                     context: context,
                     builder: (context) {
@@ -310,6 +289,48 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               const Divider(
                 color: Colors.grey,
               ),
+              ListTile(
+                title: const Text('Dark Mode'),
+                leading: const Icon(
+                  color: Colors.red,
+                  Icons.dark_mode_outlined,
+                  size: 30,
+                ),
+                trailing: Switch(
+                  value: themeModel.currentThemeMode == ThemeMode.dark,
+                  onChanged: (value) {
+                    final newThemeMode =
+                        value ? ThemeMode.dark : ThemeMode.light;
+                    ref.read(themeModelProvider).setThemeMode(newThemeMode);
+                  },
+                ),
+              ),
+              const Divider(
+                color: Colors.grey,
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AboutUsPage(),
+                      ));
+                },
+                child: ListTile(
+                  leading: const Icon(
+                    Icons.info_outline,
+                    color: Colors.red,
+                    size: 30,
+                  ),
+                  title: Text('profile_about_us_listTile'.tr()),
+                ),
+              ),
+              const Divider(
+                color: Colors.grey,
+              ),
+              const SizedBox(
+                height: 5,
+              ),
             ],
           ),
         ),
@@ -331,7 +352,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           },
           child: Text(
             'profile_edit_button_text'.tr(),
-            style: TextStyle(fontSize: 25),
+            style: const TextStyle(fontSize: 25),
           ),
         ),
         const SizedBox(

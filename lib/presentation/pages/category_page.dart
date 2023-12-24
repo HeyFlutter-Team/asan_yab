@@ -1,8 +1,7 @@
 import 'package:asan_yab/domain/riverpod/data/categories_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/res/colors.dart';
@@ -19,8 +18,8 @@ class CategoryPage extends ConsumerWidget {
       //backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         elevation: 0.0,
-        backgroundColor: Colors.white,
-        title:  Text(
+        // backgroundColor: Colors.white,
+        title: Text(
           'Category_title'.tr(),
           style: TextStyle(color: Colors.black),
         ),

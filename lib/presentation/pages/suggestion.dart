@@ -42,9 +42,8 @@ class _SuggestionPageState extends State<SuggestionPage> {
     return Scaffold(
       // backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        title:  Text(
+        title: Text(
           'suggestion_appBar_title'.tr(),
-          style:const TextStyle(color: Colors.black),
         ),
         elevation: 0,
         //backgroundColor: Colors.white,
@@ -93,7 +92,7 @@ class _SuggestionPageState extends State<SuggestionPage> {
                         : null,
                   ),
                   const SizedBox(height: 20),
-                   CustomCard(
+                  CustomCard(
                     title: 'suggestion_custom_card_title'.tr(),
                     child: Text(
                       'suggestion_custom_card_text'.tr(),
@@ -141,11 +140,11 @@ class CustomDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text('suggestion_customDialog_title'.tr()),
-      content:  Text('suggestion_customDialog_content'.tr()),
+      content: Text('suggestion_customDialog_content'.tr()),
       actions: <Widget>[
         TextButton(
           child: Text('suggestion_customDialog_textButton'.tr(),
-              style:const TextStyle(
+              style: const TextStyle(
                 color: Colors.blueAccent,
               )),
           onPressed: () {
