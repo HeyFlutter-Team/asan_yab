@@ -122,7 +122,7 @@ class _MyAppState extends ConsumerState<MyApp> {
               child: Text('خطا در اتصال'),
             );
           } else if (snapshot.hasData) {
-            return MainPage();
+            return const MainPage();
             // VerifyEmailPage();
           } else {
             return const AuthPage();
