@@ -136,7 +136,7 @@ class _MyAppState extends ConsumerState<MyApp> {
               fontFamily: 'Shabnam',
               appBarTheme: AppBarTheme(
                 backgroundColor: Theme.of(context).brightness == Brightness.dark
-                    ? Colors.black45
+                    ? Colors.black.withOpacity(0.1)
                     : Colors.white,
               )
               // Add other theme configurations here if needed
