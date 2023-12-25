@@ -1,12 +1,13 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'package:asan_yab/presentation/pages/main_page.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 //Sign In method
-final SignInProvider = StateNotifierProvider((ref) => SignIn(ref, ref));
+final signInProvider = StateNotifierProvider((ref) => SignIn(ref, ref));
 
 class SignIn extends StateNotifier {
   final Ref ref;
@@ -37,17 +38,17 @@ class SignIn extends StateNotifier {
       print('Younis$e');
       if (e.code == 'user-not-found') {
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('ایمیل شما در دیتابیس ثبت نشده است')));
+             SnackBar(content:const Text('sign_in_method_1_if').tr()));
         Navigator.pop(context);
       } else if (e.code == 'wrong-password') {
         ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('رمز شما اشتباه است')));
+            .showSnackBar( SnackBar(content:const Text('sign_in_method_2_if').tr()));
         Navigator.pop(context);
 
       } else if (e.code == 'too-many-requests') {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-                'برای درخواست اشتباه مکرر اکانت شما بلاک شده است لطفا بعدا امتحان کنید')));
+        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            content:const Text(
+                'sign_in_method_3_if').tr()));
         Navigator.pop(context);
 
       }
@@ -61,7 +62,7 @@ class SignIn extends StateNotifier {
 class IsCheckNotifier extends StateNotifier<bool> {
   IsCheckNotifier() : super(false);
 
-  void setIsCheck(bool value) {
+   setIsCheck(bool value) {
     state = value;
   }
 }

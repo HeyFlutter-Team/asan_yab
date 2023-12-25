@@ -3,19 +3,15 @@ import 'dart:io';
 import 'package:asan_yab/core/utils/download_image.dart';
 import 'package:asan_yab/domain/riverpod/data/toggle_favorite.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/res/image_res.dart';
-
 import '../../core/utils/convert_digits_to_farsi.dart';
-import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
-
+import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../../domain/riverpod/data/single_place_provider.dart';
 import '../widgets/page_view_item.dart';
 import 'detials_page_offline.dart';
@@ -59,7 +55,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
 
     final places = ref.watch(getSingleProvider);
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      //backgroundColor: Theme.of(context).primaryColor,
       body: places == null
           ? const Center(
               child: CircularProgressIndicator(
@@ -191,15 +187,15 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                       children: [
                                         Icon(
                                           Icons.library_books,
-                                          color: Colors.black54,
+                                          // color: Colors.black54,
                                         ),
                                         SizedBox(width: 8),
                                         Text(
                                           'گالری',
                                           style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black54),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                         SizedBox(height: 12)
                                       ],
@@ -301,10 +297,12 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                               overflow:
                                                                   TextOverflow
                                                                       .ellipsis,
-                                                              style: const TextStyle(
-                                                                  fontSize: 14,
-                                                                  color: Colors
-                                                                      .black54),
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 14,
+                                                                // color: Colors
+                                                                //     .black54
+                                                              ),
                                                             ),
                                                           ),
                                                         ],
@@ -347,8 +345,8 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                             style:
                                                                 const TextStyle(
                                                               fontSize: 16,
-                                                              color: Colors
-                                                                  .black54,
+                                                              // color: Colors
+                                                              //     .black54,
                                                             ),
                                                           ),
                                                           const SizedBox(

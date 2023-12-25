@@ -1,5 +1,6 @@
 import 'package:asan_yab/domain/riverpod/config/notification_repo.dart';
 import 'package:asan_yab/presentation/pages/profile_page.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,8 +8,6 @@ import '../../domain/riverpod/config/internet_connectivity_checker.dart';
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
 import 'home_page.dart';
 import 'suggestion.dart';
-
-// String? notifTitle, notifBody;
 
 class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
@@ -18,10 +17,21 @@ class MainPage extends ConsumerStatefulWidget {
 }
 
 class _MainPageState extends ConsumerState<MainPage> {
-
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   final pages = [const HomePage(), const SuggestionPage(), const ProfilePage()];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
 
+    ref
+        .read(internetConnectivityCheckerProvider.notifier)
+        .startStremaing(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +40,7 @@ class _MainPageState extends ConsumerState<MainPage> {
     FirebaseApi().getToken();
     FirebaseApi().initialize(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      //backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: buildBottomNavigationBar(),
       body: IndexedStack(
         index: selectedIndex,
@@ -56,19 +66,19 @@ class _MainPageState extends ConsumerState<MainPage> {
           FocusScope.of(context).unfocus();
           ref.read(buttonNavigationProvider.notifier).selectedIndex(index);
         },
-        backgroundColor: Colors.white,
-        items: const [
+        // backgroundColor: Colors.white,
+        items: [
           BottomNavigationBarItem(
-            label: 'خانه',
-            icon: Icon(Icons.home),
+            label: 'ButtonNvB_1'.tr(),
+            icon: const Icon(Icons.home),
           ),
           BottomNavigationBarItem(
-            label: ' مکان جدید',
-            icon: Icon(Icons.place),
+            label: 'ButtonNvB_2'.tr(),
+            icon: const Icon(Icons.place),
           ),
           BottomNavigationBarItem(
-            label: 'پروفایل',
-            icon: Icon(Icons.person),
+            label: 'ButtonNvB_3'.tr(),
+            icon: const Icon(Icons.person),
           ),
         ],
       );

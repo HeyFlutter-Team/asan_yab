@@ -1,11 +1,11 @@
 import 'package:asan_yab/domain/riverpod/screen/search_load_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/res/image_res.dart';
 import '../../domain/riverpod/data/search_provider.dart';
-
 import 'detials_page.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
@@ -33,17 +33,17 @@ class _SearchPageState extends ConsumerState<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
+        // backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
           elevation: 1,
           shadowColor: Colors.blue,
-          backgroundColor: Theme.of(context).primaryColor,
+          // backgroundColor: Theme.of(context).primaryColor,
           title: TextFormField(
             controller: searchController,
             // autofocus: true,
-            decoration: const InputDecoration(
+            decoration:  InputDecoration(
               border: InputBorder.none,
-              hintText: 'جستجو ',
+              hintText: 'search_bar_hint_text'.tr(),
             ),
             onChanged: (value) {
               ref.read(searchTypeSenseProvider.notifier).search(value);
@@ -69,7 +69,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                       icon: const Icon(
                         Icons.close,
                         size: 25.0,
-                        color: Colors.black,
+                        // color: Colors.black,
                       ),
                     )
                   : null,
@@ -80,7 +80,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
               Navigator.pop(context);
               ref.refresh(searchTypeSenseProvider.notifier).clear;
             },
-            icon: const Icon(Icons.arrow_back, color: Colors.black, size: 25.0),
+            icon: const Icon(Icons.arrow_back, size: 25.0),
           ),
         ),
         body: ref.watch(searchTypeSenseProvider).isEmpty

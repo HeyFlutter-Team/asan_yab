@@ -1,6 +1,4 @@
-
 import 'package:asan_yab/presentation/pages/main_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,7 +11,8 @@ class PersonalInformation extends ConsumerStatefulWidget {
   const PersonalInformation({super.key, this.email});
 
   @override
-  ConsumerState<PersonalInformation> createState() => _PersonalInformationState();
+  ConsumerState<PersonalInformation> createState() =>
+      _PersonalInformationState();
 }
 
 class _PersonalInformationState extends ConsumerState<PersonalInformation> {
@@ -22,8 +21,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
   final signUpFormKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      backgroundColor: Colors.white,
+    return Scaffold(
       body: Form(
         key: signUpFormKey,
         child: Padding(
@@ -50,7 +48,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                 CustomTextField(
                   textCapitalization: TextCapitalization.words,
                   label: 'تخلص',
-                  controller:lastNameController,
+                  controller: lastNameController,
                   hintText: 'تخلص خود را وارد کنید',
                   validator: (p0) => p0!.isEmpty ? 'تخلص خالی است' : null,
                 ),
@@ -65,21 +63,31 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                           borderRadius: BorderRadius.circular(12))),
                   onPressed: () {
                     final isValid = signUpFormKey.currentState!.validate();
-                    if (!isValid)return;
+                    if (!isValid) return;
 
-                    ref.read(userDetailsProvider.notifier).userDetails(
-                      emailController: widget.email!,
-                      lastNameController:lastNameController.text,
-                      nameController: nameController.text
-                    ).whenComplete(() => Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(),)));
+                    ref
+                        .read(userDetailsProvider.notifier)
+                        .userDetails(
+                            emailController: widget.email!,
+                            lastNameController: lastNameController.text,
+                            nameController: nameController.text)
+                        .whenComplete(() => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MainPage(),
+                            )));
                   },
-                  child: const Text('ساخت'),
+                  child: const Text(
+                    'ساخت',
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
                 ),
               ],
             ),
           ),
         ),
       ),
-    );;
+    );
+    ;
   }
 }

@@ -229,13 +229,16 @@
 // }
 
 import 'dart:async';
+
 import 'package:asan_yab/presentation/pages/personal_information_page.dart';
 import 'package:asan_yab/presentation/pages/sign_in_page.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final verifyEmailProvider = StateNotifierProvider<VerifyEmailNotifier, VerifyEmailState>((ref) {
+final verifyEmailProvider =
+    StateNotifierProvider<VerifyEmailNotifier, VerifyEmailState>((ref) {
   return VerifyEmailNotifier(ref);
 });
 
@@ -258,7 +261,8 @@ class VerifyEmailNotifier extends StateNotifier<VerifyEmailState> {
     final isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
     if (!isEmailVerified) {
       await _sendVerificationEmail();
-      _timer = Timer.periodic(Duration(seconds: 3), (_) => _checkEmailVerified());
+      _timer =
+          Timer.periodic(Duration(seconds: 3), (_) => _checkEmailVerified());
     }
   }
 
@@ -310,51 +314,62 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
     return verifyEmailState.isEmailVerified
         ? PersonalInformation(email: widget.email)
         : Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.red.shade900,
-        title: const Text('تایید ایمیل'),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-                'یک لینک تاییدیه به ایمیل شما فرستاده شد!\n لطفا برای تایید ایمیل خود روی آن کلیک کنید'),
-            Text('${widget.email}'),
-            const SizedBox(
-              height: 10,
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.red.shade900,
+              title: Text(
+                'verify_appBar_title'.tr(),
+                style: TextStyle(color: Colors.white),
+              ),
+              centerTitle: true,
             ),
-            ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red.shade800,
-                    minimumSize: const Size(340, 55),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12))),
-                onPressed: verifyEmailState.canResendEmail
-                    ? () => ref.read(verifyEmailProvider.notifier)._sendVerificationEmail()
-                    : null,
-                icon: const Icon(Icons.mail),
-                label: const Text('ارسال دوباره')),
-            const SizedBox(
-              height: 8,
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('verify_body_text'.tr()),
+                  Text('${widget.email}'),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red.shade800,
+                          minimumSize: const Size(340, 55),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12))),
+                      onPressed: verifyEmailState.canResendEmail
+                          ? () => ref
+                              .read(verifyEmailProvider.notifier)
+                              ._sendVerificationEmail()
+                          : null,
+                      icon: const Icon(
+                        Icons.mail,
+                        color: Colors.white,
+                      ),
+                      label: Text(
+                        'verify_elb_text'.tr(),
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      )),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  TextButton(
+                      onPressed: () => FirebaseAuth.instance
+                          .signOut()
+                          .whenComplete(() => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LogInPage(),
+                              ))),
+                      child: Text(
+                        'verify_tbt_text'.tr(),
+                        style:
+                            TextStyle(color: Colors.red.shade800, fontSize: 18),
+                      ))
+                ],
+              ),
             ),
-            TextButton(
-                onPressed: () => FirebaseAuth.instance
-                    .signOut()
-                    .whenComplete(() => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LogInPage(),
-                    ))),
-                child: Text(
-                  'لغو',
-                  style: TextStyle(color: Colors.red.shade800),
-                ))
-          ],
-        ),
-      ),
-    );
+          );
   }
 }
-

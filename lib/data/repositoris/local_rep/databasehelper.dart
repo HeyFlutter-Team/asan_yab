@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-
 import '../../models/place.dart';
 
 class DatabaseHelper {
