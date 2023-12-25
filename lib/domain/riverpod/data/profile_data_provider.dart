@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../data/models/users.dart';
 
@@ -31,6 +32,13 @@ class UserDetails extends StateNotifier<Users?> {
       print('younis: state $state');
       return null;
     }
+  }
+  void resetState() {
+    // Implement clearing of user data here
+    // For example, to clear SharedPreferences:
+    SharedPreferences.getInstance().then((prefs) => prefs.clear());
+    // Reset the state to null
+    state = null;
   }
 
   copyToClipboard(String text) {

@@ -37,7 +37,7 @@
 
   "__VerifyPage__": "This is Verify Page codes",
   "verify_appBar_title": "تایید ایمیل",
-  "verify_body_text": "یک لینک تاییدیه به ایمیل شما فرستاده شد!\\n لطفا برای تایید ایمیل خود روی آن کلیک کنید",
+  "verify_body_text": "یک لینک تاییدیه به ایمیل شما فرستاده شد!\n لطفا برای تایید ایمیل خود روی آن کلیک کنید",
   "verify_elb_text": "ارسال دوباره",
   "verify_tbt_text": "لغو",
 
@@ -112,6 +112,18 @@
 
 
   "__SearchBarWidget__": "This is SearchBarWidget codes",
-  "search_bar_hint_text": "جستجو"
+  "search_bar_hint_text": "جستجو",
+
+
+  "__PersonalInformationPage__": "This is PersonalInformationPage codes",
+
+  "first_text_field_label": "اسم",
+  "first_text_field_hint": "اسم خود را وارد کنید",
+  "first_text_field_valid": "اسم خالی است",
+  "second_text_field_label": "تخلص",
+  "second_text_field_hint": "نخلص خود را وارد کنید",
+  "second_text_field_valid": "تخلص خالی است",
+  "elevated_text": "ثبت نام"
+
 
 }

@@ -3,6 +3,7 @@ import 'package:asan_yab/presentation/pages/about_us_page.dart';
 import 'package:asan_yab/presentation/pages/edit_profile_page.dart';
 import 'package:asan_yab/presentation/pages/show_profile_page.dart';
 import 'package:asan_yab/presentation/pages/sign_in_page.dart';
+import 'package:asan_yab/presentation/pages/verify_email_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,8 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../domain/riverpod/data/language_controller_provider.dart';
-
-import '../../data/models/users.dart';
 import '../../domain/riverpod/data/profile_data_provider.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
@@ -39,7 +38,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final usersData = ref.watch(userDetailsProvider);
-
     final themeModel = ref.watch(themeModelProvider);
     return Scaffold(
         body: Column(
@@ -141,17 +139,20 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               Padding(
                 padding: const EdgeInsets.only(top: 38.0, right: 15),
                 child: IconButton(
-                    onPressed: () {
-                      FirebaseAuth.instance.signOut().whenComplete(() {
-                        Navigator.push(
+                    onPressed: () async {
+                        FirebaseAuth.instance.signOut().whenComplete(() {
+                          // ref.read(verifyEmailProvider.notifier).setIsEmailVerifiedFalse();
+                          ref.read(userDetailsProvider.notifier).resetState();
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const LogInPage(),
-                            ));
-                        ref
-                            .read(buttonNavigationProvider.notifier)
-                            .selectedIndex(0);
-                      });
+                            ),
+                          );
+                          ref.read(buttonNavigationProvider.notifier).selectedIndex(0);
+                          FirebaseAuth.instance.currentUser!.delete();
+
+                        });
                     },
                     icon: context.locale == const Locale('fa', 'AF')
                         ? const Icon(
@@ -192,7 +193,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 color: Colors.grey,
               ),
               ListTile(
-                title: Text('${usersData?.name}${usersData?.lastName}'),
+                title: Text('${usersData?.name} ${usersData?.lastName}'),
                 leading: const Icon(
                   color: Colors.red,
                   Icons.person_2_outlined,
@@ -331,7 +332,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           },
           child: Text(
             'profile_edit_button_text'.tr(),
-            style: TextStyle(fontSize: 25),
+            style: const TextStyle(fontSize: 20),
           ),
         ),
         const SizedBox(

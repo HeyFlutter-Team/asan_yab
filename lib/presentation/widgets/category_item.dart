@@ -115,7 +115,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                         ),
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.only(right: 12.0),
+                            padding: const EdgeInsets.only(right: 12.0,left: 12),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
