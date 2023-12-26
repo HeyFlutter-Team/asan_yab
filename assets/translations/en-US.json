@@ -75,7 +75,7 @@
   "suggestion_4_tf_labelName": "Phone number",
   "suggestion_4_tf_valid": "Enter your number!",
   "suggestion_custom_card_title": "Note",
-  "suggestion_custom_card_text": "In this section, you can request us about the place you want, so that we include it in Easy Finder \n\n Also, you can ask us to update the information of the places listed in Easy Finder.",
+  "suggestion_custom_card_text": "In this section, you can request us about the place you want, so that we include it in Asan Yab \n\n Also, you can ask us to update the information of the places listed in Asan Yab.",
   "suggestion_button": "Submit request",
   "suggestion_customDialog_title": "Submit a location request",
   "suggestion_customDialog_content": "Your request has been registered",
@@ -108,6 +108,18 @@
 
 
   "__SearchBarWidget__": "This is SearchBarWidget codes",
-  "search_bar_hint_text": "Search"
+  "search_bar_hint_text": "Search",
+
+
+
+  "__PersonalInformationPage__": "This is PersonalInformationPage codes",
+
+  "first_text_field_label": "Name",
+  "first_text_field_hint": "Enter your Name",
+  "first_text_field_valid": "Your name is empty",
+  "second_text_field_label": "Last Name",
+  "second_text_field_hint": "Enter your Last Name",
+  "second_text_field_valid": "Your last name is empty",
+  "elevated_text": "Enter"
 
 }

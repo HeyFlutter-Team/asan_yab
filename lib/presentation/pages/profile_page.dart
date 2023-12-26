@@ -3,14 +3,15 @@ import 'package:asan_yab/presentation/pages/about_us_page.dart';
 import 'package:asan_yab/presentation/pages/edit_profile_page.dart';
 import 'package:asan_yab/presentation/pages/show_profile_page.dart';
 import 'package:asan_yab/presentation/pages/sign_in_page.dart';
-import 'package:asan_yab/presentation/pages/themeProvider.dart';
+import 'package:asan_yab/presentation/pages/verify_email_page.dart';
+import 'package:asan_yab/presentation/widgets/custom_language_icon.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../domain/riverpod/data/language_controller_provider.dart';
 import '../../domain/riverpod/data/profile_data_provider.dart';
 
@@ -38,7 +39,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final usersData = ref.watch(userDetailsProvider);
-
     final themeModel = ref.watch(themeModelProvider);
     return Scaffold(
         body: Column(
@@ -140,17 +140,20 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               Padding(
                 padding: const EdgeInsets.only(top: 38.0, right: 15),
                 child: IconButton(
-                    onPressed: () {
-                      FirebaseAuth.instance.signOut().whenComplete(() {
-                        Navigator.push(
+                    onPressed: () async {
+                        FirebaseAuth.instance.signOut().whenComplete(() {
+                          // ref.read(verifyEmailProvider.notifier).setIsEmailVerifiedFalse();
+                          ref.read(userDetailsProvider.notifier).resetState();
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const LogInPage(),
-                            ));
-                        ref
-                            .read(buttonNavigationProvider.notifier)
-                            .selectedIndex(0);
-                      });
+                            ),
+                          );
+                          ref.read(buttonNavigationProvider.notifier).selectedIndex(0);
+                          FirebaseAuth.instance.currentUser!.delete();
+
+                        });
                     },
                     icon: context.locale == const Locale('fa', 'AF')
                         ? const Icon(
@@ -191,7 +194,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 color: Colors.grey,
               ),
               ListTile(
-                title: Text('${usersData?.name}${usersData?.lastName}'),
+                title: Text('${usersData?.name} ${usersData?.lastName}'),
                 leading: const Icon(
                   color: Colors.red,
                   Icons.person_2_outlined,
@@ -212,80 +215,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               const Divider(
                 color: Colors.grey,
               ),
-              InkWell(
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Container(
-                        color: Colors.black.withOpacity(0.8),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ListTile(
-                              trailing:
-                                  context.locale == const Locale('fa', 'AF')
-                                      ? const Icon(
-                                          Icons.done,
-                                          color: Colors.blue,
-                                        )
-                                      : null,
-                              leading: const Icon(Icons.language,
-                                  color: Colors.blue),
-                              title: const Center(
-                                child: Text(
-                                  'فارسی',
-                                  style: TextStyle(color: Colors.blue),
-                                ),
-                              ),
-                              onTap: () {
-                                ref
-                                    .read(languageProvider.notifier)
-                                    .setToFarsi(context);
-
-                                Navigator.pop(context);
-                              },
-                            ),
-                            const Divider(height: 0, color: Colors.grey),
-                            ListTile(
-                              trailing:
-                                  context.locale == const Locale('en', 'US')
-                                      ? const Icon(
-                                          Icons.done,
-                                          color: Colors.blue,
-                                        )
-                                      : null,
-                              leading: const Icon(Icons.language,
-                                  color: Colors.blue),
-                              title: const Center(
-                                child: Text(
-                                  'English',
-                                  style: TextStyle(color: Colors.blue),
-                                ),
-                              ),
-                              onTap: () {
-                                ref
-                                    .read(languageProvider.notifier)
-                                    .setToEnglish(context);
-
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: ListTile(
-                  leading: const Icon(
-                    Icons.language,
-                    color: Colors.red,
-                    size: 30,
-                  ),
-                  title: Text('profile_language_listTile'.tr()),
-                ),
-              ),
+        LanguageIcon(),
               const Divider(
                 color: Colors.grey,
               ),
