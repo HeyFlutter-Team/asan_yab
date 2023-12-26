@@ -94,14 +94,10 @@ class _MyAppState extends ConsumerState<MyApp> {
       navigatorKey: navigatorKey,
       themeMode: themeModel.currentThemeMode,
       darkTheme: ThemeData.dark().copyWith(
-        textTheme: ThemeData.dark().textTheme.apply(
-              bodyColor: Colors.white,
-            ),
+        textTheme: ThemeData.dark().textTheme.apply(bodyColor: Colors.white),
       ),
       theme: ThemeData.light().copyWith(
-        textTheme: ThemeData.light().textTheme.apply(
-              bodyColor: Colors.black,
-            ),
+        textTheme: ThemeData.light().textTheme.apply(bodyColor: Colors.black),
       ),
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
@@ -132,9 +128,11 @@ class _MyAppState extends ConsumerState<MyApp> {
       builder: (context, child) {
         return Theme(
           data: ThemeData(
-              brightness: Theme.of(context).brightness, fontFamily: 'Shabnam'
-              // Add other theme configurations here if needed
-              ),
+            brightness: Theme.of(context).brightness,
+            fontFamily: 'Shabnam',
+            // Add other theme configurations here if needed
+            appBarTheme: AppBarTheme(backgroundColor: Colors.green),
+          ),
           child: child!,
         );
       },
