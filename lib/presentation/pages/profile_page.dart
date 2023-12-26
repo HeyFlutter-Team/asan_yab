@@ -4,6 +4,7 @@ import 'package:asan_yab/presentation/pages/edit_profile_page.dart';
 import 'package:asan_yab/presentation/pages/show_profile_page.dart';
 import 'package:asan_yab/presentation/pages/sign_in_page.dart';
 import 'package:asan_yab/presentation/pages/verify_email_page.dart';
+import 'package:asan_yab/presentation/widgets/custom_language_icon.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -214,6 +215,29 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               const Divider(
                 color: Colors.grey,
               ),
+        LanguageIcon(),
+              const Divider(
+                color: Colors.grey,
+              ),
+              ListTile(
+                title: const Text('Dark Mode'),
+                leading: const Icon(
+                  color: Colors.red,
+                  Icons.dark_mode_outlined,
+                  size: 30,
+                ),
+                trailing: Switch(
+                  value: themeModel.currentThemeMode == ThemeMode.dark,
+                  onChanged: (value) {
+                    final newThemeMode =
+                        value ? ThemeMode.dark : ThemeMode.light;
+                    ref.read(themeModelProvider).setThemeMode(newThemeMode);
+                  },
+                ),
+              ),
+              const Divider(
+                color: Colors.grey,
+              ),
               InkWell(
                 onTap: () {
                   Navigator.push(
@@ -234,82 +258,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               const Divider(
                 color: Colors.grey,
               ),
-              InkWell(
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Container(
-                        color: Colors.black.withOpacity(0.8),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ListTile(
-                              trailing:
-                                  context.locale == const Locale('fa', 'AF')
-                                      ? const Icon(
-                                          Icons.done,
-                                          color: Colors.blue,
-                                        )
-                                      : null,
-                              leading: const Icon(Icons.language,
-                                  color: Colors.blue),
-                              title: const Center(
-                                child: Text(
-                                  'فارسی',
-                                  style: TextStyle(color: Colors.blue),
-                                ),
-                              ),
-                              onTap: () {
-                                ref
-                                    .read(languageProvider.notifier)
-                                    .setToFarsi(context);
-
-                                Navigator.pop(context);
-                              },
-                            ),
-                            const Divider(height: 0, color: Colors.grey),
-                            ListTile(
-                              trailing:
-                                  context.locale == const Locale('en', 'US')
-                                      ? const Icon(
-                                          Icons.done,
-                                          color: Colors.blue,
-                                        )
-                                      : null,
-                              leading: const Icon(Icons.language,
-                                  color: Colors.blue),
-                              title: const Center(
-                                child: Text(
-                                  'English',
-                                  style: TextStyle(color: Colors.blue),
-                                ),
-                              ),
-                              onTap: () {
-                                ref
-                                    .read(languageProvider.notifier)
-                                    .setToEnglish(context);
-
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: ListTile(
-                  leading: const Icon(
-                    Icons.language,
-                    color: Colors.red,
-                    size: 30,
-                  ),
-                  title: Text('profile_language_listTile'.tr()),
-                ),
-              ),
-              const Divider(
-                color: Colors.grey,
+              const SizedBox(
+                height: 5,
               ),
             ],
           ),
@@ -332,7 +282,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           },
           child: Text(
             'profile_edit_button_text'.tr(),
-            style: const TextStyle(fontSize: 20),
+            style: const TextStyle(fontSize: 25, color: Colors.white),
           ),
         ),
         const SizedBox(

@@ -1,4 +1,3 @@
-
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,8 +38,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
   }
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      backgroundColor: Colors.white,
+    return Scaffold(
       body: Form(
         key: signUpFormKey,
         child: Padding(

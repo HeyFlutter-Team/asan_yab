@@ -12,16 +12,16 @@ class LanguageController extends StateNotifier<LanguageState> {
 
   LanguageController(this._prefs) : super(LanguageState());
 
-  void setToFarsi(BuildContext context) {
+  void setToFarsi(BuildContext context) async {
     state = LanguageState()..locale = const Locale('fa', 'AF');
-    context.setLocale(const Locale('fa', 'AF'));
-    _saveLocale('fa_AF');
+   await context.setLocale(const Locale('fa', 'AF'));
+   await _saveLocale('fa_AF');
   }
 
-  void setToEnglish(BuildContext context) {
+  void setToEnglish(BuildContext context) async {
     state = LanguageState()..locale = const Locale('en', 'US');
-    context.setLocale(const Locale('en', 'US'));
-    _saveLocale('en_US');
+   await  context.setLocale(const Locale('en', 'US')) ;
+  await  _saveLocale('en_US');
   }
 
   Future<void> _saveLocale(String localeKey) async {

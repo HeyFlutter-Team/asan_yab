@@ -1,11 +1,8 @@
 // ignore_for_file: avoid_print
 
-import 'package:asan_yab/domain/riverpod/data/controllers_provider.dart';
-import 'package:asan_yab/presentation/pages/verify_email_page.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:asan_yab/domain/riverpod/data/sign_up_provider.dart';
 import 'package:asan_yab/presentation/widgets/custom_text_field.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -96,9 +93,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 RichText(
                   text: TextSpan(
                     children: [
-                       TextSpan(
+                      TextSpan(
                         text: 'sign_up_account_text'.tr(),
-                        style: const TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.grey),
                       ),
                       TextSpan(
                         text: '  ${'sign_up_account_text1'.tr()}',
@@ -129,7 +126,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                         email: emailController.text,
                         password: passwordController.text);
                   },
-                  child:  Text('sign_up_elbT'.tr(),style: const TextStyle(fontSize: 20),),
+                  child: Text(
+                    'sign_up_elbT'.tr(),
+                    style: const TextStyle(fontSize: 20, color: Colors.white),
+                  ),
                 ),
                 const SizedBox(
                   height: 20,

@@ -8,28 +8,33 @@ final catLazyLoading = StateNotifierProvider((ref) => CatLazyLoading(ref, ref));
 class CatLazyLoading extends StateNotifier {
   final Ref ref;
   final scrollController = ScrollController();
-
+  bool canLoadMoreData = true;
   CatLazyLoading(super.state, this.ref);
 
-  Future<void> loadMoreData(
-    BuildContext context,
-  ) async {
-    scrollController.addListener(() async {
-      // Check if the user has reached the end of the ListView
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
-        ref.read(loadingCircorile.notifier).state = true;
-        // Call your method here
-        if (ref.watch(hasMore)) {
-          print('loading more is wotking');
-
-          await ref
-              .read(categoriesItemsProvider.notifier)
-              .getPlaces(ref.watch(idProvider));
-        }
+  void loadMoreData() {
+    scrollController.addListener(() {
+      // Check if you can load more data
+      if (canLoadMoreData) {
+        scrollListener();
       }
     });
-    ref.read(loadingCircorile.notifier).state = false;
+  }
+
+  Future<void> scrollListener() async {
+    // Check if the user has reached the end of the ListView
+    if (scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent &&
+        ref.watch(hasMore)) {
+      // Call your method here
+      canLoadMoreData = false;
+      print('loading more is wotking ${ref.watch(loadingCircorile)}');
+
+      await ref
+          .read(categoriesItemsProvider.notifier)
+          .getPlaces(ref.watch(idProvider));
+
+      canLoadMoreData = true;
+    }
   }
 }
 

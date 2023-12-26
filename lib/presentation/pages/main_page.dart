@@ -1,15 +1,13 @@
 import 'package:asan_yab/domain/riverpod/config/notification_repo.dart';
 import 'package:asan_yab/presentation/pages/profile_page.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../domain/riverpod/config/internet_connectivity_checker.dart';
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
 import 'home_page.dart';
 import 'suggestion.dart';
-
-// String? notifTitle, notifBody;
 
 class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
@@ -20,28 +18,20 @@ class MainPage extends ConsumerStatefulWidget {
 
 class _MainPageState extends ConsumerState<MainPage> {
   @override
-  void initState() {
-    if (FirebaseAuth.instance.currentUser != null) {
-      ref
-          .read(internetConnectivityCheckerProvider.notifier)
-          .startStremaing(context);
-    }
-    super.initState();
-  }
-
-  @override
   void dispose() {
-
     super.dispose();
-    if (FirebaseAuth.instance.currentUser != null) {
-      ref
-          .read(internetConnectivityCheckerProvider.notifier)
-          .subscription
-          .cancel();
-    }
   }
 
   final pages = [const HomePage(), const SuggestionPage(), const ProfilePage()];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    ref
+        .read(internetConnectivityCheckerProvider.notifier)
+        .startStremaing(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +67,7 @@ class _MainPageState extends ConsumerState<MainPage> {
           ref.read(buttonNavigationProvider.notifier).selectedIndex(index);
         },
         // backgroundColor: Colors.white,
-        items:  [
+        items: [
           BottomNavigationBarItem(
             label: 'ButtonNvB_1'.tr(),
             icon: const Icon(Icons.home),

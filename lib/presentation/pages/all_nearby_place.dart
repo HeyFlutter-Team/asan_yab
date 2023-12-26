@@ -22,7 +22,7 @@ class NearbyPlacePage extends ConsumerWidget {
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
-          backgroundColor: Colors.white,
+          // backgroundColor: Colors.white,
           title: const Text(
             'مکان های نزدیک',
             style: TextStyle(color: Colors.black),
@@ -143,7 +143,7 @@ class NearbyPlacePage extends ConsumerWidget {
                                           padding: EdgeInsets.zero,
                                           decoration: BoxDecoration(
                                               borderRadius: const BorderRadius
-                                                      .only(
+                                                  .only(
                                                   topLeft: Radius.circular(12),
                                                   topRight: Radius.circular(12),
                                                   bottomLeft: Radius.elliptical(
