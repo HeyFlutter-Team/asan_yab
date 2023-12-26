@@ -47,6 +47,9 @@ class SignUpNotifier extends StateNotifier {
       }
     }
   }
+  resetData(){
+    state=null;
+  }
 }
 
 final signUpNotifierProvider =

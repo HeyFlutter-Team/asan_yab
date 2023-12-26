@@ -229,7 +229,6 @@
 // }
 
 import 'dart:async';
-
 import 'package:asan_yab/presentation/pages/personal_information_page.dart';
 import 'package:asan_yab/presentation/pages/sign_in_page.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -237,8 +236,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final verifyEmailProvider =
-    StateNotifierProvider<VerifyEmailNotifier, VerifyEmailState>((ref) {
+final verifyEmailProvider = StateNotifierProvider<VerifyEmailNotifier, VerifyEmailState>((ref) {
   return VerifyEmailNotifier(ref);
 });
 
@@ -257,12 +255,15 @@ class VerifyEmailNotifier extends StateNotifier<VerifyEmailState> {
     _initialize();
   }
 
+  void setIsEmailVerifiedFalse() {
+    state = VerifyEmailState(false, state.canResendEmail);
+  }
+
   Future<void> _initialize() async {
     final isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
     if (!isEmailVerified) {
       await _sendVerificationEmail();
-      _timer =
-          Timer.periodic(Duration(seconds: 3), (_) => _checkEmailVerified());
+      _timer = Timer.periodic(const Duration(seconds: 3), (_) => _checkEmailVerified());
     }
   }
 
@@ -271,7 +272,7 @@ class VerifyEmailNotifier extends StateNotifier<VerifyEmailState> {
       final user = FirebaseAuth.instance.currentUser!;
       await user.sendEmailVerification();
       state = VerifyEmailState(state.isEmailVerified, false);
-      await Future.delayed(Duration(seconds: 3));
+      await Future.delayed(const Duration(seconds: 3));
       state = VerifyEmailState(state.isEmailVerified, true);
     } catch (e) {
       print(e);
@@ -290,6 +291,9 @@ class VerifyEmailNotifier extends StateNotifier<VerifyEmailState> {
   @override
   void dispose() {
     _timer.cancel();
+    _checkEmailVerified();
+    _sendVerificationEmail();
+    _initialize();
     super.dispose();
   }
 }
@@ -307,6 +311,16 @@ class VerifyEmailPage extends ConsumerStatefulWidget {
 }
 
 class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration.zero,() {
+
+      ref.read(verifyEmailProvider.notifier).state = VerifyEmailState(false, false);
+      ref.read(verifyEmailProvider.notifier)._sendVerificationEmail().whenComplete(() => ref.read(verifyEmailProvider.notifier)._initialize());
+    },);
+  }
   @override
   Widget build(BuildContext context) {
     final verifyEmailState = ref.watch(verifyEmailProvider);
@@ -373,3 +387,4 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
           );
   }
 }
+
