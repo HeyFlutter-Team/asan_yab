@@ -1,12 +1,12 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../data/models/category.dart';
-
+import '../../data/models/language.dart';
+import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/categories_provider.dart';
 import '../pages/category_page.dart';
 import '../pages/list_category_item.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Categories extends ConsumerWidget {
   final RefreshCallback onRefresh;
@@ -18,6 +18,8 @@ class Categories extends ConsumerWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     ref.read(categoriesProvider.notifier).getCategories();
     List<Category> category = ref.watch(categoriesProvider);
+    final isRTL = ref.watch(languageProvider).code=='fa';
+    final languageText=AppLocalizations.of(context);
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: category.isEmpty
@@ -35,7 +37,7 @@ class Categories extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                        Text(
-                        'Category_title'.tr(),
+                         languageText!.category_title,
                         style:const TextStyle(color: Colors.grey, fontSize: 20.0),
                       ),
                       IconButton(
@@ -44,10 +46,7 @@ class Categories extends ConsumerWidget {
                           MaterialPageRoute(
                               builder: (context) => const CategoryPage()),
                         ),
-                        icon:  Icon(
-                          context.locale==const Locale('fa','AF')?
-                          Icons.arrow_circle_left_outlined
-                          :Icons.arrow_circle_right_outlined,
+                        icon: isRTL?const Icon(Icons.arrow_circle_left_outlined,size: 32,color: Colors.grey,): const Icon(Icons.arrow_circle_right_outlined,
                           size: 32.0,
                           color: Colors.grey,
                         ),

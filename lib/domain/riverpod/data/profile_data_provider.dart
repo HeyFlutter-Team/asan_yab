@@ -33,13 +33,7 @@ class UserDetails extends StateNotifier<Users?> {
       return null;
     }
   }
-  void resetState() {
-    // Implement clearing of user data here
-    // For example, to clear SharedPreferences:
-    SharedPreferences.getInstance().then((prefs) => prefs.clear());
-    // Reset the state to null
-    state = null;
-  }
+
 
   copyToClipboard(String text) {
     FlutterClipboard.copy(text);
