@@ -28,23 +28,24 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
     super.initState();
-    fetchData();
+
     ref.read(nearbyPlace.notifier).getNearestLocations();
     final newVersion = NewVersionPlus(
       androidId: 'com.heyflutter.asanYab',
       iOSId: 'com.heyflutter.asanYab',
     );
 
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await ref.refresh(updateProvider.notifier).update(context, ref);
+    });
+
     Timer(const Duration(milliseconds: 800), () {
       checkNewVersion(newVersion, context);
     });
   }
 
-  Future<void> fetchData() async {
-    await ref.refresh(updateProvider.notifier).update(context, ref);
-  }
-
   Future<void> onRefresh() async {
+    await ref.refresh(updateProvider.notifier).update(context, ref);
     await Future.delayed(
       const Duration(milliseconds: 100),
     ).then((value) => ref.watch(nearbyPlace.notifier).refresh());
