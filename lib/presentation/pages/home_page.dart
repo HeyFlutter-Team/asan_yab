@@ -55,20 +55,10 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        // backgroundColor: Colors.white,
         elevation: 0.0,
         automaticallyImplyLeading: false,
         title: const CustomSearchBar(),
-        // actions: [
-        //   IconButton(
-        //       onPressed: () {
-        //         FirebaseAuth.instance.signOut()
-        //             .whenComplete(() => Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInPage(),)));
-        //       },
-        //       icon: const Icon(Icons.logout,color: Colors.black,)),
-        // ],
       ),
       body: RefreshIndicator(
         triggerMode: RefreshIndicatorTriggerMode.onEdge,

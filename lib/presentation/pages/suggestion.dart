@@ -1,9 +1,8 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-
 import '../../data/repositoris/firebase_modle_helper.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/text_form_field_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SuggestionPage extends StatefulWidget {
   const SuggestionPage({super.key});
@@ -39,11 +38,12 @@ class _SuggestionPageState extends State<SuggestionPage> {
 
   @override
   Widget build(BuildContext context) {
+    final languageText=AppLocalizations.of(context);
     return Scaffold(
-      // backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
-          'suggestion_appBar_title'.tr(),
+          languageText!.suggestion_appBar_title,
         ),
         elevation: 0,
         //backgroundColor: Colors.white,
@@ -61,41 +61,41 @@ class _SuggestionPageState extends State<SuggestionPage> {
                   const SizedBox(height: 15),
                   TextFieldWidget(
                     addController: nameController,
-                    labelName: 'suggestion_1_tf_labelName'.tr(),
+                    labelName: languageText.suggestion_1_tf_labelName,
                     validator: (value) => value != null && value.isEmpty
-                        ? 'suggestion_1_tf_valid'.tr()
+                        ? languageText.suggestion_1_tf_valid
                         : null,
                   ),
                   const SizedBox(height: 10),
                   TextFieldWidget(
                     addController: addressController,
-                    labelName: 'suggestion_2_tf_labelName'.tr(),
+                    labelName: languageText.suggestion_2_tf_labelName,
                     validator: (value) => value != null && value.isEmpty
-                        ? 'suggestion_2_tf_valid'.tr()
+                        ? languageText.suggestion_2_tf_valid
                         : null,
                   ),
                   const SizedBox(height: 10),
                   TextFieldWidget(
                     line: 2,
                     addController: typeController,
-                    labelName: 'suggestion_3_tf_labelName'.tr(),
+                    labelName: languageText.suggestion_3_tf_labelName,
                     validator: (value) => value != null && value.isEmpty
-                        ? 'suggestion_3_tf_valid'.tr()
+                        ? languageText.suggestion_3_tf_valid
                         : null,
                   ),
                   const SizedBox(height: 10),
                   TextFieldWidget(
                     addController: phoneController,
-                    labelName: 'suggestion_4_tf_labelName'.tr(),
+                    labelName: languageText.suggestion_4_tf_labelName,
                     validator: (value) => value != null && value.isEmpty
-                        ? 'suggestion_4_tf_valid'.tr()
+                        ? languageText.suggestion_4_tf_valid
                         : null,
                   ),
                   const SizedBox(height: 20),
                   CustomCard(
-                    title: 'suggestion_custom_card_title'.tr(),
+                    title: languageText.suggestion_custom_card_title,
                     child: Text(
-                      'suggestion_custom_card_text'.tr(),
+                      languageText.suggestion_custom_card_text,
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -119,7 +119,7 @@ class _SuggestionPageState extends State<SuggestionPage> {
                         controllerClear();
                       }
                     },
-                    titleName: 'suggestion_button'.tr(),
+                    titleName: languageText.suggestion_button,
                     textColor1: Colors.white,
                     btnColor: Colors.grey,
                   ),
@@ -138,12 +138,13 @@ class CustomDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final languageText=AppLocalizations.of(context);
     return AlertDialog(
-      title: Text('suggestion_customDialog_title'.tr()),
-      content: Text('suggestion_customDialog_content'.tr()),
+      title: Text(languageText!.suggestion_customDialog_title),
+      content: Text(languageText.suggestion_customDialog_content),
       actions: <Widget>[
         TextButton(
-          child: Text('suggestion_customDialog_textButton'.tr(),
+          child: Text(languageText.suggestion_customDialog_textButton,
               style: const TextStyle(
                 color: Colors.blueAccent,
               )),

@@ -1,7 +1,7 @@
 import 'package:asan_yab/presentation/pages/auth_page.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:asan_yab/data/repositoris/language_repository.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,9 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'domain/riverpod/data/language_controller_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'data/models/language.dart';
 import 'firebase_options.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -26,15 +25,14 @@ Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   WidgetsFlutterBinding.ensureInitialized();
-  final prefs = await SharedPreferences.getInstance();
+  final container = ProviderContainer();
+  final language =
+      await container.read(languageRepositoryProvider).getLanguage();
   await Future.delayed(const Duration(seconds: 2));
   FlutterNativeSplash.remove();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final savedLocale = prefs.getString('appLocale');
-  await EasyLocalization.ensureInitialized();
-
   FirebaseAnalytics.instance
       .setAnalyticsCollectionEnabled(true); //firebase analytics
   SystemChrome.setPreferredOrientations(
@@ -48,23 +46,10 @@ Future<void> main() async {
 
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-  runApp(
-    EasyLocalization(
-      supportedLocales: const [Locale('en', 'US'), Locale('fa', 'AF')],
-      path: 'assets/translations',
-      fallbackLocale: const Locale('en', 'US'),
-      startLocale: savedLocale != null
-          ? Locale(savedLocale.split('_')[0], savedLocale.split('_')[1])
-          : null,
-      saveLocale: true,
-      child: ProviderScope(
-        overrides: [
-          sharedPreferencesProvider.overrideWithValue(prefs),
-        ],
-        child: MyApp(),
-      ),
-    ),
-  );
+  runApp(ProviderScope(
+    overrides: [languageProvider.overrideWith((ref) => language)],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends ConsumerStatefulWidget {
@@ -90,6 +75,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final themeModel = ref.watch(themeModelProvider);
+    final language = ref.watch(languageProvider);
     return MaterialApp(
       navigatorKey: navigatorKey,
       themeMode: themeModel.currentThemeMode,
@@ -107,9 +93,9 @@ class _MyAppState extends ConsumerState<MyApp> {
         FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
       ],
       debugShowCheckedModeBanner: false,
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: Locale(language.code),
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
@@ -123,7 +109,6 @@ class _MyAppState extends ConsumerState<MyApp> {
             );
           } else if (snapshot.hasData) {
             return const MainPage();
-            // VerifyEmailPage();
           } else {
             return const AuthPage();
           }
@@ -132,15 +117,14 @@ class _MyAppState extends ConsumerState<MyApp> {
       builder: (context, child) {
         return Theme(
           data: ThemeData(
+              useMaterial3: false,
               brightness: Theme.of(context).brightness,
               fontFamily: 'Shabnam',
               appBarTheme: AppBarTheme(
                 backgroundColor: Theme.of(context).brightness == Brightness.dark
                     ? Colors.black.withOpacity(0.1)
                     : Colors.white,
-              )
-              // Add other theme configurations here if needed
-              ),
+              )),
           child: child!,
         );
       },

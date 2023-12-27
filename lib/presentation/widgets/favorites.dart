@@ -1,19 +1,17 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'dart:typed_data';
-
-import 'package:asan_yab/data/models/place.dart';
-import 'package:asan_yab/domain/riverpod/data/update_favorite_provider.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../core/utils/convert_digits_to_farsi.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
 import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../pages/detials_page.dart';
 import '../pages/detials_page_offline.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Favorites extends ConsumerStatefulWidget {
   final bool isConnected;
@@ -41,7 +39,7 @@ class _FavoritesState extends ConsumerState<Favorites> {
     final favoriteState = ref.watch(favoriteProvider);
     debugPrint('favorite $favoriteState');
     final favorites = favoriteState.map((e) => e).toList();
-
+    final languageText=AppLocalizations.of(context);
     print("this is the lenght");
     print(favorites.length);
     return favorites.isEmpty
@@ -52,7 +50,7 @@ class _FavoritesState extends ConsumerState<Favorites> {
               Padding(
                 padding: const EdgeInsets.only(right: 16.0, top: 12.0),
                 child: Text(
-                  'favorite_page_title'.tr(),
+                  languageText!.favorite_page_title,
                   style: const TextStyle(color: Colors.grey, fontSize: 20.0),
                 ),
               ),

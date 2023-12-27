@@ -2,14 +2,13 @@
 
 import 'package:asan_yab/presentation/pages/sign_up_page.dart';
 import 'package:asan_yab/presentation/widgets/custom_text_field.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../domain/riverpod/data/sign_in_provider.dart';
-import '../widgets/custom_language_icon.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class LogInPage extends ConsumerStatefulWidget {
   final Function()? onClickedSignUp;
@@ -39,10 +38,12 @@ class _LogInPageState extends ConsumerState<LogInPage>
       end: 1,
     ).animate(_controller);
     _controller.forward();
-    retrieveSavedValues();
+    _initializeValues();
   }
-
-  void retrieveSavedValues() async {
+  void _initializeValues() async {
+    await retrieveSavedValues();
+  }
+  Future<void> retrieveSavedValues() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final savedEmail = prefs.getString('email');
     final savedPassword = prefs.getString('password');
@@ -64,57 +65,45 @@ class _LogInPageState extends ConsumerState<LogInPage>
 
   @override
   Widget build(BuildContext context) {
+    final languageText=AppLocalizations.of(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
           key: formKey,
           child: Column(
             children: [
-              Row(children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 88.0, right: 10),
-                  child: Container(
-                    height: 50,
-                    width: 50,
-                    child: const LanguageIcon(),
+              FadeTransition(
+                alwaysIncludeSemantics: false,
+                opacity: _animation,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Image.asset(
+                    'assets/asanYabbYounis.jpg',
+                    height: 200,
+                    width: 200,
                   ),
                 ),
-                const SizedBox(
-                  width: 50,
-                ),
-                FadeTransition(
-                  alwaysIncludeSemantics: false,
-                  opacity: _animation,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Image.asset(
-                      'assets/asanYabbYounis.jpg',
-                      height: 200,
-                      width: 200,
-                    ),
-                  ),
-                ),
-              ]),
+              ),
               CustomTextField(
-                label: 'sign_in_email'.tr(),
+                label:languageText!.sign_in_email,
                 controller: emailCTRL,
-                hintText: 'sign_in_email_hintText'.tr(),
+                hintText: languageText.sign_in_email_hintText,
                 validator: (p0) {
                   if (p0!.isEmpty) {
-                    return 'sign_in_email_1_valid'.tr();
+                    return languageText.sign_in_email_1_valid;
                   } else if (p0.length < 10 && !EmailValidator.validate(p0)) {
-                    return 'sign_in_email_2_valid'.tr();
+                    return languageText.sign_in_email_2_valid;
                   } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                       .hasMatch(p0)) {
-                    return 'sign_in_email_3_valid'.tr();
+                    return languageText.sign_in_email_3_valid;
                   }
                   return null;
                 },
               ),
               CustomTextField(
-                  label: 'sign_in_password'.tr(),
+                  label: languageText.sign_in_password,
                   controller: passwordCTRL,
-                  hintText: 'sign_in_password_hintText'.tr(),
+                  hintText: languageText.sign_in_password_hintText,
                   obscureText: ref.watch(isObscureProvider),
                   suffixIcon: IconButton(
                       onPressed: () =>
@@ -122,9 +111,9 @@ class _LogInPageState extends ConsumerState<LogInPage>
                       icon: const Icon(Icons.remove_red_eye_outlined)),
                   validator: (p0) {
                     if (p0 == null || p0.isEmpty) {
-                      return 'sign_in_password_1_valid'.tr();
+                      return languageText.sign_in_password_1_valid;
                     } else if (p0.length < 6) {
-                      return 'sign_in_password_2_valid'.tr();
+                      return languageText.sign_in_password_2_valid;
                     }
                     return null;
                   }),
@@ -151,7 +140,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
                       ),
                     ),
                     Text(
-                      'sign_in_checkBox'.tr(),
+                      languageText.sign_in_checkBox,
                       style: const TextStyle(
                           fontSize: 17, fontWeight: FontWeight.w400),
                     ),
@@ -183,7 +172,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
                       password: passwordCTRL.text);
                 },
                 child: Text(
-                  'sign_in_elbT'.tr(),
+                  languageText.sign_in_elbT,
                   style: const TextStyle(fontSize: 20, color: Colors.white),
                 ),
               ),
@@ -191,8 +180,8 @@ class _LogInPageState extends ConsumerState<LogInPage>
                 height: 100,
               ),
               Text(
-                'sig_in_account_text'.tr(),
-                style: TextStyle(
+                languageText.sig_in_account_text,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -213,7 +202,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
                           builder: (context) => const SignUpPage()));
                 },
                 child: Text(
-                  'sign_in_2_elbT'.tr(),
+                  languageText.sign_in_2_elbT,
                   style: TextStyle(
                       color: Colors.black.withOpacity(0.44), fontSize: 20),
                 ),
