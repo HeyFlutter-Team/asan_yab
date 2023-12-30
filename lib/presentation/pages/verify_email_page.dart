@@ -338,9 +338,13 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
             ),
             body: Center(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(languageText.verify_body_text),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 28.0),
+                    child: Text(languageText.verify_body_text),
+                  ),
                   Text('${widget.email}'),
                   const SizedBox(
                     height: 10,

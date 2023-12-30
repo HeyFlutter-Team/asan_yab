@@ -34,7 +34,7 @@
 
 
   "verify_appBar_title": "تایید ایمیل",
-  "verify_body_text": "یک لینک تاییدیه به ایمیل شما فرستاده شد!\n لطفا برای تایید ایمیل خود روی آن کلیک کنید",
+  "verify_body_text": "یک لینک تاییدیه به ایمیل شما فرستاده شد!\n لطفا برای تایید ایمیل خود روی آن کلیک کنید \nاگر لینک را دریافت نکرده اید دکمه ارسال دوباره \nرا فشار بدهید!",
   "verify_elb_text": "ارسال دوباره",
   "verify_tbt_text": "لغو",
 
@@ -110,7 +110,13 @@
   "second_text_field_label": "تخلص",
   "second_text_field_hint": "نخلص خود را وارد کنید",
   "second_text_field_valid": "تخلص خالی است",
-  "elevated_text": "ثبت نام"
+  "elevated_text": "ثبت نام",
+
+
+  "details_page_snack_bar": "برای اضافه کردن به مورد دلخواه اول باید وارد اکانت خود شوید ",
+  "details_page_1_custom_card": "توضیحات",
+  "details_page_2_custom_card": "گالری",
+  "details_page_3_custom_card": "مشخصات"
 
 
 }

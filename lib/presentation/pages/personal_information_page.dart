@@ -39,7 +39,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.asset(
-                  'assets/gmail@.jpg',
+                  'assets/newGmail.png',
                   height: 200,
                   width: 200,
                 ),

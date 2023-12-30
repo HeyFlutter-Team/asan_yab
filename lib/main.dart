@@ -1,9 +1,7 @@
-import 'package:asan_yab/presentation/pages/auth_page.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:asan_yab/data/repositoris/language_repository.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -96,35 +94,19 @@ class _MyAppState extends ConsumerState<MyApp> {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: Locale(language.code),
-      home: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return const Center(
-              child: Text('خطا در اتصال'),
-            );
-          } else if (snapshot.hasData) {
-            return const MainPage();
-          } else {
-            return const AuthPage();
-          }
-        },
-      ),
+      home: const MainPage(),
       builder: (context, child) {
         return Theme(
           data: ThemeData(
-              useMaterial3: false,
+              useMaterial3: true,
               brightness: Theme.of(context).brightness,
               fontFamily: 'Shabnam',
-              appBarTheme: AppBarTheme(
-                backgroundColor: Theme.of(context).brightness == Brightness.dark
-                    ? Colors.black.withOpacity(0.1)
-                    : Colors.white,
-              )),
+              // appBarTheme: AppBarTheme(
+              //   backgroundColor: Theme.of(context).brightness == Brightness.dark
+              //       ? Colors.black.withOpacity(0.1)
+              //       : Colors.white,
+              // )
+          ),
           child: child!,
         );
       },

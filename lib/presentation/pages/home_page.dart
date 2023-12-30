@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:asan_yab/presentation/widgets/nearby_place.dart';
 import 'package:asan_yab/presentation/widgets/new_places.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_version_plus/new_version_plus.dart';
@@ -54,6 +55,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLogin=FirebaseAuth.instance.currentUser!=null;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -78,7 +80,9 @@ class _HomePageState extends ConsumerState<HomePage> {
               ref.watch(nearbyPlace).isEmpty
                   ? const SizedBox(height: 0)
                   : const NearbyPlaceWidget(),
-              Favorites(isConnected: widget.isConnected!),
+              isLogin
+              ?Favorites(isConnected: widget.isConnected!)
+              :const SizedBox(),
             ],
           ),
         ),

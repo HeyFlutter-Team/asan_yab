@@ -19,7 +19,7 @@ class ListCategoryItem extends ConsumerWidget {
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
-          // backgroundColor: Theme.of(context).primaryColor,
+          // backgroundColor: Colors.grey.shade700,
           title: Text(
             categoryName,
             // style: const TextStyle(color: Colors.black),
