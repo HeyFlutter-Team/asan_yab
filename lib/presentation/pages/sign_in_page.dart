@@ -166,7 +166,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
                     prefs.setString('email', emailCTRL.text);
                     prefs.setString('password', passwordCTRL.text);
                   }
-                  ref.read(signInProvider.notifier).signIn(
+                  ref.read(signInProvider).signIn(
                       context: context,
                       email: emailCTRL.text,
                       password: passwordCTRL.text);

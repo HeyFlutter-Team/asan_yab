@@ -52,4 +52,29 @@ class Users {
       ownerPlaceName: List<String>.from(json['ownerPlaceName']),
     );
   }
+  Users copyWith({
+    int? id,
+    String? uid,
+    String? name,
+    String? lastName,
+    String? email,
+    Timestamp? createdAt,
+    String? imageUrl,
+    String? userType,
+    List<String>? owner,
+    List<String>? ownerPlaceName,
+  }) {
+    return Users(
+      id: id ?? this.id,
+      uid: uid ?? this.uid,
+      name: name ?? this.name,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
+      createdAt: createdAt ?? this.createdAt,
+      imageUrl: imageUrl ?? this.imageUrl,
+      userType: userType ?? this.userType,
+      owner: owner ?? this.owner,
+      ownerPlaceName: ownerPlaceName ?? this.ownerPlaceName,
+    );
+  }
 }

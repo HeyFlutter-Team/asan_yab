@@ -20,7 +20,7 @@ class CategoryPage extends ConsumerWidget {
         // backgroundColor: Colors.white,
         title: Text(
           languageText!.category_title,
-          style: TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black),
         ),
         leading: IconButton(
           onPressed: () {

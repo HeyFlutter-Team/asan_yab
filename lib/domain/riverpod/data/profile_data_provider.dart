@@ -6,6 +6,7 @@ import 'package:clipboard/clipboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,8 +14,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/models/users.dart';
 
 class UserDetails extends StateNotifier<Users?> {
-  UserDetails(super.state);
-  Future<Users?> getCurrentUserData() async {
+  UserDetails(Users? state):super(state);
+Future<Users?> getCurrentUserData(BuildContext context) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
 
@@ -32,8 +33,8 @@ class UserDetails extends StateNotifier<Users?> {
       print('younis: state $state');
       return null;
     }
+    return state;
   }
-
 
   copyToClipboard(String text) {
     FlutterClipboard.copy(text);
@@ -68,6 +69,7 @@ class ImageState {
 }
 
 class ImageNotifier extends StateNotifier<ImageState> {
+  Ref? refs;
   ImageNotifier() : super(ImageState());
 
   final ImagePicker _imagePicker = ImagePicker();

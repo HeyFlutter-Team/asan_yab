@@ -1,9 +1,10 @@
 import 'package:asan_yab/domain/riverpod/screen/botton_navigation_provider.dart';
 import 'package:asan_yab/presentation/pages/about_us_page.dart';
 import 'package:asan_yab/presentation/pages/edit_profile_page.dart';
+import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/show_profile_page.dart';
-import 'package:asan_yab/presentation/pages/sign_in_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
+import 'package:asan_yab/presentation/widgets/buildProgress.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +30,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     Future.delayed(
       Duration.zero,
       () {
-        ref.read(userDetailsProvider.notifier).getCurrentUserData();
-        ref.read(userDetailsProvider)?.imageUrl;
+        ref.read(userDetailsProvider.notifier).getCurrentUserData(context);
+        ref.read(imageProvider).imageUrl==ref.read(userDetailsProvider)?.imageUrl;
       },
     );
   }
@@ -102,7 +103,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                             Padding(
                               padding:
                                   const EdgeInsets.only(top: 40.0, right: 50),
-                              child: buildProgress(),
+                              child: ImageWidgets.buildProgress(ref: ref),
                             ),
                             Positioned(
                               bottom: 0,
@@ -114,7 +115,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                 ),
                                 child: IconButton(
                                   onPressed: () {
-                                    showBottomSheets(context);
+                                   ImageWidgets.showBottomSheets(ref: ref,context: context);
                                   },
                                   icon: const Icon(
                                     Icons.camera_alt,
@@ -144,12 +145,12 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     onPressed: () async {
                       ref
                           .read(buttonNavigationProvider.notifier)
-                          .selectedIndex(0);
+                          .selectedIndex(2);
                       FirebaseAuth.instance.signOut().whenComplete(() {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const LogInPage(),
+                            builder: (context) => const MainPage(),
                           ),
                         );
                       });
@@ -273,7 +274,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     ))
                 .then((value) => ref
                     .read(userDetailsProvider.notifier)
-                    .getCurrentUserData());
+                    .getCurrentUserData(context));
           },
           child: Text(
             languageText.profile_edit_button_text,
@@ -285,86 +286,5 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         )
       ],
     ));
-  }
-
-  void showBottomSheets(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        final languageText = AppLocalizations.of(context);
-        return Container(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              InkWell(
-                onTap: () {
-                  // Handle Camera option
-                  ref
-                      .read(imageProvider.notifier)
-                      .pickImage(ImageSource.camera);
-                  Navigator.pop(context);
-                },
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    const Icon(Icons.camera),
-                    const SizedBox(height: 8.0),
-                    Text(languageText!.profile_buttonSheet_camera),
-                  ],
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  // Handle Gallery option
-                  ref
-                      .read(imageProvider.notifier)
-                      .pickImage(ImageSource.gallery);
-                  Navigator.pop(
-                      context); // Call a function to handle Gallery action
-                },
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    const Icon(Icons.image),
-                    const SizedBox(height: 8.0),
-                    Text(languageText.profile_buttonSheet_gallery),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget buildProgress() {
-    return StreamBuilder<TaskSnapshot>(
-      stream: ref.watch(imageProvider).uploadTask?.snapshotEvents,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final data = snapshot.data!;
-          double progress = data.bytesTransferred / data.totalBytes;
-
-          if (data.state == TaskState.success) {
-            // If upload is complete, return an empty Container
-            return Container();
-          }
-
-          return SizedBox(
-            height: 50,
-            width: 50,
-            child: CircularProgressIndicator(
-              value: progress,
-              backgroundColor: Colors.grey,
-              color: Colors.red,
-            ),
-          );
-        } else {
-          return const SizedBox();
-        }
-      },
-    );
   }
 }

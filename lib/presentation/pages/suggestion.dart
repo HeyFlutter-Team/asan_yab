@@ -46,7 +46,6 @@ class _SuggestionPageState extends State<SuggestionPage> {
           languageText!.suggestion_appBar_title,
         ),
         elevation: 0,
-        //backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         child: Padding(
