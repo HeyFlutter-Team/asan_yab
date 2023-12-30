@@ -231,10 +231,10 @@
 import 'dart:async';
 import 'package:asan_yab/presentation/pages/personal_information_page.dart';
 import 'package:asan_yab/presentation/pages/sign_in_page.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final verifyEmailProvider = StateNotifierProvider<VerifyEmailNotifier, VerifyEmailState>((ref) {
   return VerifyEmailNotifier(ref);
@@ -316,7 +316,6 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero,() {
-
       ref.read(verifyEmailProvider.notifier).state = VerifyEmailState(false, false);
       ref.read(verifyEmailProvider.notifier)._sendVerificationEmail().whenComplete(() => ref.read(verifyEmailProvider.notifier)._initialize());
     },);
@@ -324,7 +323,7 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
   @override
   Widget build(BuildContext context) {
     final verifyEmailState = ref.watch(verifyEmailProvider);
-
+    final languageText=AppLocalizations.of(context);
     return verifyEmailState.isEmailVerified
         ? PersonalInformation(email: widget.email)
         : Scaffold(
@@ -332,8 +331,8 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
               automaticallyImplyLeading: false,
               backgroundColor: Colors.red.shade900,
               title: Text(
-                'verify_appBar_title'.tr(),
-                style: TextStyle(color: Colors.white),
+                languageText!.verify_appBar_title,
+                style: const TextStyle(color: Colors.white),
               ),
               centerTitle: true,
             ),
@@ -341,7 +340,7 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('verify_body_text'.tr()),
+                  Text(languageText.verify_body_text),
                   Text('${widget.email}'),
                   const SizedBox(
                     height: 10,
@@ -362,8 +361,8 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
                         color: Colors.white,
                       ),
                       label: Text(
-                        'verify_elb_text'.tr(),
-                        style: TextStyle(fontSize: 16, color: Colors.white),
+                        languageText.verify_elb_text,
+                        style: const TextStyle(fontSize: 16, color: Colors.white),
                       )),
                   const SizedBox(
                     height: 8,
@@ -374,10 +373,10 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
                           .whenComplete(() => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => LogInPage(),
+                                builder: (context) => const LogInPage(),
                               ))),
                       child: Text(
-                        'verify_tbt_text'.tr(),
+                        languageText.verify_tbt_text,
                         style:
                             TextStyle(color: Colors.red.shade800, fontSize: 18),
                       ))

@@ -1,10 +1,10 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'package:asan_yab/presentation/pages/main_page.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 //Sign In method
 final signInProvider = StateNotifierProvider((ref) => SignIn(ref, ref));
@@ -35,20 +35,21 @@ class SignIn extends StateNotifier {
         MaterialPageRoute(builder: (context) => const MainPage()),
       );
     } on FirebaseAuthException catch (e) {
+      final languageText=AppLocalizations.of(context);
       print('Younis$e');
       if (e.code == 'user-not-found') {
         ScaffoldMessenger.of(context).showSnackBar(
-             SnackBar(content:const Text('sign_in_method_1_if').tr()));
+             SnackBar(content: Text(languageText!.sign_in_method_1_if)));
         Navigator.pop(context);
       } else if (e.code == 'wrong-password') {
         ScaffoldMessenger.of(context)
-            .showSnackBar( SnackBar(content:const Text('sign_in_method_2_if').tr()));
+            .showSnackBar( SnackBar(content: Text(languageText!.sign_in_method_2_if)));
         Navigator.pop(context);
 
       } else if (e.code == 'too-many-requests') {
         ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-            content:const Text(
-                'sign_in_method_3_if').tr()));
+            content: Text(
+                languageText!.sign_in_method_3_if)));
         Navigator.pop(context);
 
       }

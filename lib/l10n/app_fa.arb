@@ -1,5 +1,4 @@
 {
-  "__SignIn__": "This is Sign in page codes",
   "sign_in_email": "ایمیل",
   "sign_in_email_hintText": "ایمیل خود را وارد کنید",
   "sign_in_email_1_valid": "لطفا ایمیل خود را وارد کنید",
@@ -22,7 +21,6 @@
 
 
 
-  "__SignUp__": "This is Sign in page codes",
   "sign_up_confirm_p": "تایید رمز",
   "sign_up_confirm_p_hint_text": "تکرار رمز",
   "sign_up_confirm_p_1_valid": "رمز خود را مکررا وارد کنید",
@@ -35,7 +33,6 @@
 
 
 
-  "__VerifyPage__": "This is Verify Page codes",
   "verify_appBar_title": "تایید ایمیل",
   "verify_body_text": "یک لینک تاییدیه به ایمیل شما فرستاده شد!\n لطفا برای تایید ایمیل خود روی آن کلیک کنید",
   "verify_elb_text": "ارسال دوباره",
@@ -43,32 +40,27 @@
 
 
 
-  "__MainPage__": "This is Main Page codes",
-  "ButtonNvB_1": "خانه",
-  "ButtonNvB_2": "مکان جدید",
-  "ButtonNvB_3": "پروفایل",
+  "buttonNvB_1": "خانه",
+  "buttonNvB_2": "مکان جدید",
+  "buttonNvB_3": "پروفایل",
 
 
 
 
-  "__CategoryPage__": "This is Home Page codes",
-  "Category_title": "دسته بندی ها",
+  "category_title": "دسته بندی ها",
 
 
 
-  "__NearbyPlacesPage__": "This is Home Page codes",
   "nearbyPlaces_title": "مکان های نزدیک",
   "nearbyPlaces_meter_title": " متر تا مقصد ",
 
 
 
-  "__FavoritePage__": "This is Favorite Page codes",
   "favorite_page_title": "موارد دلخواه",
 
 
 
 
-  "__SuggestionPage__": "This is Suggestion Page codes",
   "suggestion_appBar_title": "درخواست مکان جدید",
   "suggestion_1_tf_labelName": "نام مکان",
   "suggestion_1_tf_valid": "مکان خود را وارد کنید!",
@@ -87,7 +79,6 @@
 
 
 
-  "__ProfilePage__": "This is Profile Page codes",
   "profile_future_error": "اطلاعات در دسترس نیست",
   "profile_copy_id_snack_bar": " آیدی شما در کلیپ بورد کبی شد",
   "profile_about_us_listTile": "درباره ما",
@@ -100,22 +91,18 @@
 
 
 
-  "__EditProfilePage__": "This is EditProfile Page codes",
   "edit_appBar_leading": "ذخیره",
   "edit_1_txf_label": "نام",
   "edit_2_txf_label": "تخلص",
 
 
 
-  "__CustomSearchBar__": "This is CustomSearchBar codes",
   "container_text": "جستجوی در",
 
 
-  "__SearchBarWidget__": "This is SearchBarWidget codes",
   "search_bar_hint_text": "جستجو",
 
 
-  "__PersonalInformationPage__": "This is PersonalInformationPage codes",
 
   "first_text_field_label": "اسم",
   "first_text_field_hint": "اسم خود را وارد کنید",

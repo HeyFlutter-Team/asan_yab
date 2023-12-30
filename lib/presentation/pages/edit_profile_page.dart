@@ -1,20 +1,18 @@
 // ignore_for_file: avoid_print
 
-import 'package:asan_yab/data/models/users.dart';
+import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/domain/riverpod/data/edit_profile_page_provider.dart';
-import 'package:asan_yab/presentation/pages/profile_page.dart';
 import 'package:asan_yab/presentation/pages/show_profile_page.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/profile_data_provider.dart';
 
 class EditProfilePage extends ConsumerStatefulWidget {
-
   const EditProfilePage({super.key});
 
   @override
@@ -37,7 +35,6 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
         ref
             .read(editProfilePageProvider.notifier)
             .editData(nameController, lastNameController);
-        // ref.read(imageProvider).imageUrl;
         ref.read(imageProvider.notifier).state.imageUrl;
       },
     );
@@ -46,6 +43,8 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     final usersData = ref.watch(userDetailsProvider);
+    final isRTL = ref.watch(languageProvider).code=='fa';
+    final languageText=AppLocalizations.of(context);
     return Scaffold(
       body: Column(
         children: [
@@ -57,20 +56,15 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                   height: 220,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    gradient:context.locale==const Locale('fa','AF')?
-                    LinearGradient(
-                        colors: [
-                          Colors.white,
-                          Colors.red.shade900,
-
-                        ])
-                        :LinearGradient(
-                        colors: [
-                          Colors.red.shade900,
-                          Colors.white,
-
-
-                        ]),
+                    gradient:isRTL?
+                  LinearGradient(colors: [
+                  Colors.white,
+                      Colors.red.shade900,
+                      ])
+                    :LinearGradient(colors: [
+            Colors.red.shade900,
+                Colors.white,
+                ]),
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.elliptical(600, 100),
                       bottomRight: Radius.elliptical(600, 100),
@@ -78,9 +72,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                   ),
                 ),
                 Padding(
-                    padding: context.locale==const Locale('fa','AF')?
-                    const EdgeInsets.only(top: 40.0, right: 4)
-                    :const EdgeInsets.only(top: 40.0, left:334),
+                    padding: const EdgeInsets.only(top: 40.0, right: 4),
                     child: IconButton(
                       icon: const Icon(
                         Icons.arrow_back,
@@ -89,11 +81,11 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                       onPressed: () => Navigator.pop(context),
                     )),
                 Padding(
-                  padding: const EdgeInsets.only(top: 40.0, right: 334),
+                  padding: isRTL?const EdgeInsets.only(top: 40.0, right: 334):const EdgeInsets.only(top: 40.0, left: 334),
                   child: TextButton(
                     child: Text(
-                      'edit_appBar_leading'.tr(),
-                      style:  TextStyle(color:context.locale==const Locale('fa','AF')?Colors.red:Colors.white),
+                      languageText!.edit_appBar_leading,
+                      style:const TextStyle(color: Colors.red),
                     ),
                     onPressed: () {
                       ref
@@ -105,17 +97,20 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                   ),
                 ),
                 Padding(
-                  padding: context.locale==const Locale('fa','AF')
-                 ?const EdgeInsets.only(top: 118.0, right: 116)
-                 :const EdgeInsets.only(top: 118.0, left: 116)
-                  ,
+                  padding: const EdgeInsets.only(top: 118.0, left: 116,right: 116),
                   child: InkWell(
-                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ShowProfilePage(imagUrl:'${ref.watch(userDetailsProvider)?.imageUrl}' ),)),
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ShowProfilePage(
+                              imagUrl:
+                                  '${ref.watch(userDetailsProvider)?.imageUrl}'),
+                        )),
                     child: usersData?.imageUrl == ''
                         ? Stack(
                             children: [
                               const Hero(
-                                tag:'avatarHeroTag',
+                                tag: 'avatarHeroTag',
                                 child: CircleAvatar(
                                   radius: 80,
                                   backgroundImage: AssetImage(
@@ -152,7 +147,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                         : Stack(
                             children: [
                               Hero(
-                                tag:'avatarHeroTag',
+                                tag: 'avatarHeroTag',
                                 child: CircleAvatar(
                                   maxRadius: 80,
                                   backgroundImage: NetworkImage(
@@ -197,7 +192,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
               TextField(
                 controller: nameController,
                 decoration: InputDecoration(
-                  labelText: 'edit_1_txf_label'.tr(),
+                  labelText: languageText.edit_1_txf_label,
                   prefixIcon: const Icon(
                     Icons.person_2_outlined,
                     color: Colors.red,
@@ -208,7 +203,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
               TextField(
                 controller: lastNameController,
                 decoration: InputDecoration(
-                  labelText: 'edit_2_txf_label'.tr(),
+                  labelText: languageText.edit_2_txf_label,
                   prefixIcon: const Icon(
                     Icons.person_2_outlined,
                     color: Colors.red,
@@ -253,6 +248,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
   }
 
   void showBottomSheets(BuildContext context) {
+    final languageText=AppLocalizations.of(context);
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -274,7 +270,8 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                   children: <Widget>[
                     const Icon(Icons.camera),
                     const SizedBox(height: 8.0),
-                    Text('profile_buttonSheet_camera'.tr()),
+                    Text(languageText!
+                        .profile_buttonSheet_camera),
                   ],
                 ),
               ),
@@ -292,7 +289,8 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                   children: <Widget>[
                     const Icon(Icons.image),
                     const SizedBox(height: 8.0),
-                    Text('profile_buttonSheet_gallery'.tr()),
+                    Text(languageText
+                        .profile_buttonSheet_gallery),
                   ],
                 ),
               ),
