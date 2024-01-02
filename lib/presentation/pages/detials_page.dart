@@ -57,7 +57,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
     final provider = ref.read(favoriteProvider.notifier);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     final places = ref.watch(getSingleProvider);
-    final languageText=AppLocalizations.of(context);
+    final languageText = AppLocalizations.of(context);
     return Scaffold(
       //backgroundColor: Theme.of(context).primaryColor,
       body: places == null
@@ -85,8 +85,9 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                       ),
                       IconButton(
                         onPressed: () {
-                          bool isLogin=FirebaseAuth.instance.currentUser!=null;
-                          if(isLogin){
+                          bool isLogin =
+                              FirebaseAuth.instance.currentUser != null;
+                          if (isLogin) {
                             ref.watch(getInformationProvider).toggle(widget.id);
                             ref.watch(getInformationProvider).setFavorite();
 
@@ -94,7 +95,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                 .watch(favoriteProvider.notifier)
                                 .isExist(places.id)) {
                               DownloadImage.getImage(
-                                  places.logo, places.coverImage, context)
+                                      places.logo, places.coverImage, context)
                                   .whenComplete(() {
                                 Navigator.pop(context);
                                 provider.toggleFavorite(
@@ -114,12 +115,11 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                   DownloadImage.logo,
                                   DownloadImage.coverImage);
                             }
-                          }else{
-                            ScaffoldMessenger.of(context).showSnackBar(
-                               SnackBar(content: Text('${languageText?.details_page_snack_bar}'))
-                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                    '${languageText?.details_page_snack_bar}')));
                           }
-
                         },
                         icon: ref.watch(toggleProvider)
                             ? const Icon(
@@ -187,7 +187,8 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                     places.description == null)
                                 ? const SizedBox()
                                 : CustomCard(
-                                    title: '${languageText?.details_page_1_custom_card}',
+                                    title:
+                                        '${languageText?.details_page_1_custom_card}',
                                     child: Text(places.description!),
                                   ),
                             Padding(
@@ -195,7 +196,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                   const EdgeInsets.symmetric(horizontal: 12),
                               child: (places.gallery.isEmpty)
                                   ? const SizedBox()
-                                  :  Row(
+                                  : Row(
                                       children: [
                                         const Icon(
                                           Icons.library_books,
@@ -244,7 +245,8 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                             (places.adresses.isEmpty)
                                 ? const SizedBox()
                                 : CustomCard(
-                                    title: '${languageText?.details_page_3_custom_card}',
+                                    title:
+                                        '${languageText?.details_page_3_custom_card}',
                                     child: ListView.builder(
                                       padding: EdgeInsets.zero,
                                       itemCount: places.adresses.length,
@@ -349,20 +351,25 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                                 .end,
                                                         children: [
                                                           Text(
-                                                            isRTL?convertDigitsToFarsi(
-                                                                places
+                                                            isRTL
+                                                                ? convertDigitsToFarsi(
+                                                                    places
+                                                                        .adresses[
+                                                                            index]
+                                                                        .phone)
+                                                                : places
                                                                     .adresses[
                                                                         index]
-                                                                    .phone)
-                                                            :places
-                                                                .adresses[
-                                                            index]
-                                                                .phone,
-                                                            style:
-                                                                const TextStyle(
+                                                                    .phone,
+                                                            style: TextStyle(
                                                               fontSize: 16,
-                                                              // color: Colors
-                                                              //     .black54,
+                                                              color: Theme.of(context)
+                                                                          .brightness ==
+                                                                      Brightness
+                                                                          .dark
+                                                                  ? Colors.white
+                                                                  : Colors
+                                                                      .black,
                                                             ),
                                                           ),
                                                           const SizedBox(
