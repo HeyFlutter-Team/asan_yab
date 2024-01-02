@@ -60,7 +60,7 @@ dependencies:
 flutter_native_splash:
   color: '#ffffff'
   image: 'assets/asan_yab.png'
-  color_dark: '#ffffff'
+  color_dark: '#2D3339'
 
 
   android: true

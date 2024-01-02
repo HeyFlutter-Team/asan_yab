@@ -36,8 +36,8 @@ class _SearchPageState extends ConsumerState<SearchPage> {
         // backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
           elevation: 1,
-          shadowColor: Colors.blue,
-          // backgroundColor: Theme.of(context).primaryColor,
+          //shadowColor: Colors.blue,
+           //backgroundColor: Theme.of(context).primaryColor,
           title: TextFormField(
             controller: searchController,
             // autofocus: true,
@@ -85,7 +85,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
         ),
         body: ref.watch(searchTypeSenseProvider).isEmpty
             ? Center(
-                child: Image.asset(ImageRes.noInfo),
+
               )
             : ListView.separated(
                 padding: const EdgeInsets.all(12),
@@ -124,7 +124,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
-                              color: Colors.black,
+
                               fontSize: 18.0,
                             ),
                           ),

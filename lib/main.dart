@@ -90,9 +90,12 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final themeModel = ref.watch(themeModelProvider);
-    return MaterialApp(
+    return
+      MaterialApp(
       navigatorKey: navigatorKey,
-      themeMode: themeModel.currentThemeMode,
+      themeMode: themeModel.currentThemeMode!= ThemeMode.system
+          ? themeModel.currentThemeMode
+          : ThemeMode.light,
       darkTheme: ThemeData.dark().copyWith(
         textTheme: ThemeData.dark().textTheme.apply(
               bodyColor: Colors.white,
@@ -132,13 +135,14 @@ class _MyAppState extends ConsumerState<MyApp> {
       builder: (context, child) {
         return Theme(
           data: ThemeData(
+               useMaterial3: true,
               brightness: Theme.of(context).brightness,
               fontFamily: 'Shabnam',
-              appBarTheme: AppBarTheme(
-                backgroundColor: Theme.of(context).brightness == Brightness.dark
-                    ? Colors.black.withOpacity(0.1)
-                    : Colors.white,
-              )
+              // appBarTheme: AppBarTheme(
+              //   backgroundColor: Theme.of(context).brightness == Brightness.dark
+              //       ? Colors.black.withOpacity(0.1)
+              //       : Colors.white,
+              // )
               // Add other theme configurations here if needed
               ),
           child: child!,

@@ -327,26 +327,20 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                       onPressed: () async {
                                                         await FlutterPhoneDirectCaller
                                                             .callNumber(
-                                                          places.adresses[index]
-                                                              .phone,
+                                                          places.adresses[index].phone,
                                                         );
                                                       },
                                                       child: Row(
                                                         mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .end,
+                                                            MainAxisAlignment.end,
                                                         children: [
                                                           Text(
                                                             convertDigitsToFarsi(
-                                                                places
-                                                                    .adresses[
-                                                                        index]
-                                                                    .phone),
-                                                            style:
-                                                                const TextStyle(
+                                                                places.adresses[index].phone),
+                                                            style: const TextStyle(
                                                               fontSize: 16,
-                                                              // color: Colors
-                                                              //     .black54,
+                                                              color:
+                                                                  Colors.white,
                                                             ),
                                                           ),
                                                           const SizedBox(

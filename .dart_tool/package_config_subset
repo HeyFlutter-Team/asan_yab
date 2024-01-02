@@ -424,8 +424,8 @@ file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/json_annotation-4.
 file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/json_annotation-4.8.1/lib/
 leak_tracker
 3.1
-file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker-9.0.13/
-file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker-9.0.13/lib/
+file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker-9.0.16/
+file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker-9.0.16/lib/
 leak_tracker_testing
 3.1
 file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker_testing-1.0.5/
@@ -712,12 +712,8 @@ file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/vm_service-13.0.0/
 file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/vm_service-13.0.0/lib/
 web
 3.2
-file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.3.0/
-file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.3.0/lib/
-web_socket_channel
-2.15
-file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/web_socket_channel-2.4.0/
-file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/web_socket_channel-2.4.0/lib/
+file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.4.0/
+file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.4.0/lib/
 win32
 3.0
 file:///C:/Users/NAWIN/AppData/Local/Pub/Cache/hosted/pub.dev/win32-5.0.9/
