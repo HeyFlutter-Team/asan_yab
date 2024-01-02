@@ -249,22 +249,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.4.0"
-  easy_localization:
-    dependency: "direct main"
-    description:
-      name: easy_localization
-      sha256: de63e3b422adfc97f256cbb3f8cf12739b6a4993d390f3cadb3f51837afaefe5
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.3"
-  easy_logger:
-    dependency: transitive
-    description:
-      name: easy_logger
-      sha256: c764a6e024846f33405a2342caf91c62e357c24b02c04dbc712ef232bf30ffb7
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.2"
   email_validator:
     dependency: "direct main"
     description:
@@ -563,6 +547,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.17"
+  flutter_popup_menu_button:
+    dependency: "direct main"
+    description:
+      name: flutter_popup_menu_button
+      sha256: "3ddf95a0e9d9c42d16d18c31f23d7fae41ac212b20217c43d07d8582cdbfe0b2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1+5"
   flutter_riverpod:
     dependency: "direct main"
     description:

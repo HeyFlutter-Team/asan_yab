@@ -1,26 +1,34 @@
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../domain/riverpod/data/sign_up_provider.dart';
+import '../../domain/riverpod/data/verify_page_provider.dart';
 import '../widgets/custom_text_field.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class PersonalInformation extends ConsumerStatefulWidget {
   final String? email;
-  // final Function()? onClickedSignIn;
   const PersonalInformation({super.key, this.email});
 
   @override
-  ConsumerState<PersonalInformation> createState() =>
-      _PersonalInformationState();
+  ConsumerState<PersonalInformation> createState() => _PersonalInformationState();
 }
 
 class _PersonalInformationState extends ConsumerState<PersonalInformation> {
   final nameController = TextEditingController();
   final lastNameController = TextEditingController();
   final signUpFormKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    lastNameController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
+    final languageText=AppLocalizations.of(context);
     return Scaffold(
       body: Form(
         key: signUpFormKey,
@@ -40,17 +48,17 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                 ),
                 CustomTextField(
                   textCapitalization: TextCapitalization.words,
-                  label: 'اسم',
+                  label: languageText!.first_text_field_label,
                   controller: nameController,
-                  hintText: 'اسم خود را وارد کنید',
-                  validator: (p0) => p0!.isEmpty ? 'اسم خالی است' : null,
+                  hintText: languageText.first_text_field_hint,
+                  validator: (p0) => p0!.isEmpty ? languageText.first_text_field_valid : null,
                 ),
                 CustomTextField(
                   textCapitalization: TextCapitalization.words,
-                  label: 'تخلص',
-                  controller: lastNameController,
-                  hintText: 'تخلص خود را وارد کنید',
-                  validator: (p0) => p0!.isEmpty ? 'تخلص خالی است' : null,
+                  label: languageText.second_text_field_label,
+                  controller:lastNameController,
+                  hintText: languageText.second_text_field_hint,
+                  validator: (p0) => p0!.isEmpty ? languageText.second_text_field_valid : null,
                 ),
                 const SizedBox(
                   height: 10,
@@ -63,24 +71,15 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                           borderRadius: BorderRadius.circular(12))),
                   onPressed: () {
                     final isValid = signUpFormKey.currentState!.validate();
-                    if (!isValid) return;
+                    if (!isValid)return;
 
-                    ref
-                        .read(userDetailsProvider.notifier)
-                        .userDetails(
-                            emailController: widget.email!,
-                            lastNameController: lastNameController.text,
-                            nameController: nameController.text)
-                        .whenComplete(() => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MainPage(),
-                            )));
+                    ref.read(userDetailsProvider.notifier).userDetails(
+                      emailController: widget.email!,
+                      lastNameController:lastNameController.text,
+                      nameController: nameController.text
+                    ).whenComplete(() => Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(),)));
                   },
-                  child: const Text(
-                    'ساخت',
-                    style: TextStyle(fontSize: 18, color: Colors.white),
-                  ),
+                  child:  Text(languageText.elevated_text),
                 ),
               ],
             ),
@@ -88,6 +87,5 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
         ),
       ),
     );
-    ;
   }
 }

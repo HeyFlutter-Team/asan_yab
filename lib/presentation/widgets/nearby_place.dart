@@ -1,12 +1,13 @@
 import 'package:asan_yab/core/utils/convert_digits_to_farsi.dart';
 import 'package:asan_yab/presentation/pages/all_nearby_place.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/place.dart';
 import '../../domain/servers/nearby_places.dart';
 import '../pages/detials_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class NearbyPlaceWidget extends ConsumerWidget {
   const NearbyPlaceWidget({super.key});
@@ -18,6 +19,7 @@ class NearbyPlaceWidget extends ConsumerWidget {
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final languageText=AppLocalizations.of(context);
     return place.isEmpty
         ? const SizedBox()
         : Column(
@@ -29,7 +31,7 @@ class NearbyPlaceWidget extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                      Text(
-                      'nearbyPlaces_title'.tr(),
+                       languageText!.nearbyPlaces_title,
                       style: const TextStyle(color: Colors.grey, fontSize: 20.0),
                     ),
                     IconButton(
@@ -38,10 +40,7 @@ class NearbyPlaceWidget extends ConsumerWidget {
                         MaterialPageRoute(
                             builder: (context) => const NearbyPlacePage()),
                       ),
-                      icon: Icon(
-                        context.locale==const Locale('fa','AF')?
-                        Icons.arrow_circle_left_outlined
-                        :Icons.arrow_circle_right_outlined,
+                      icon: const Icon(Icons.arrow_circle_right_outlined,
                         size: 32.0,
                         color: Colors.grey,
                       ),
@@ -114,7 +113,7 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                     child: Text(
                                       ref.watch(nearbyPlace)[index].name!,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           //color: Colors.indigo.withOpacity(0.6),
                                           ),
                                     ),
@@ -153,7 +152,7 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                               BorderRadius.circular(8)),
                                       padding: const EdgeInsets.all(8),
                                       child: Text(
-                                        '${'nearbyPlaces_meter_title'.tr()} ${convertDigitsToFarsi(place[index].distance.toString())}',
+                                        '${languageText!.nearbyPlaces_meter_title} ${convertDigitsToFarsi(place[index].distance.toString())}',
                                         style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 12,

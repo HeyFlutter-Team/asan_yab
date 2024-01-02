@@ -16,7 +16,8 @@ class _ShowProfilePageState extends State<ShowProfilePage> {
       body: Center(
         child: Hero(
              tag: 'avatarHeroTag',
-            child:Image.network(widget.imagUrl)),
+            child:Image.network(widget.imagUrl)
+        ),
       ),
     );
   }

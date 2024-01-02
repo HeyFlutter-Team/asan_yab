@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:asan_yab/presentation/widgets/nearby_place.dart';
 import 'package:asan_yab/presentation/widgets/new_places.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_version_plus/new_version_plus.dart';
@@ -28,23 +29,24 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
     super.initState();
-    fetchData();
+
     ref.read(nearbyPlace.notifier).getNearestLocations();
     final newVersion = NewVersionPlus(
       androidId: 'com.heyflutter.asanYab',
       iOSId: 'com.heyflutter.asanYab',
     );
 
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await ref.refresh(updateProvider.notifier).update(context, ref);
+    });
+
     Timer(const Duration(milliseconds: 800), () {
       checkNewVersion(newVersion, context);
     });
   }
 
-  Future<void> fetchData() async {
-    await ref.refresh(updateProvider.notifier).update(context, ref);
-  }
-
   Future<void> onRefresh() async {
+    await ref.refresh(updateProvider.notifier).update(context, ref);
     await Future.delayed(
       const Duration(milliseconds: 100),
     ).then((value) => ref.watch(nearbyPlace.notifier).refresh());
@@ -53,21 +55,12 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLogin=FirebaseAuth.instance.currentUser!=null;
     return Scaffold(
-      // backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        // backgroundColor: Colors.white,
         elevation: 0.0,
         automaticallyImplyLeading: false,
         title: const CustomSearchBar(),
-        // actions: [
-        //   IconButton(
-        //       onPressed: () {
-        //         FirebaseAuth.instance.signOut()
-        //             .whenComplete(() => Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInPage(),)));
-        //       },
-        //       icon: const Icon(Icons.logout,color: Colors.black,)),
-        // ],
       ),
       body: RefreshIndicator(
         triggerMode: RefreshIndicatorTriggerMode.onEdge,
@@ -87,7 +80,9 @@ class _HomePageState extends ConsumerState<HomePage> {
               ref.watch(nearbyPlace).isEmpty
                   ? const SizedBox(height: 0)
                   : const NearbyPlaceWidget(),
-              Favorites(isConnected: widget.isConnected!),
+              isLogin
+              ?Favorites(isConnected: widget.isConnected!)
+              :const SizedBox(),
             ],
           ),
         ),

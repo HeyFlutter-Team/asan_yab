@@ -1,5 +1,4 @@
 {
-  "__SignIn__": "This is Sign in page codes",
   "sign_in_email": "Email",
   "sign_in_email_hintText": "Enter your email",
   "sign_in_email_1_valid": "please enter your Email",
@@ -19,7 +18,6 @@
 
 
 
-  "__SignUp__": "This is Sign in page codes",
   "sign_up_confirm_p": "Confirm password",
   "sign_up_confirm_p_hint_text": "Repeat password",
   "sign_up_confirm_p_1_valid": "Enter your password repeatedly",
@@ -31,40 +29,34 @@
 
 
 
-  "__VerifyPage__": "This is Verify Page codes",
   "verify_appBar_title": "Email confirmation",
-  "verify_body_text": "A confirmation link has been sent to your email!\n Please click on it to confirm your email",
+  "verify_body_text": "A confirmation link has been sent to your email!\n   Please click on it to confirm your email.\n If you press the link,\n press send again!",
   "verify_elb_text": "Resend",
   "verify_tbt_text": "Cancel",
 
 
 
-  "__MainPage__": "This is Main Page codes",
-  "ButtonNvB_1": "Home",
-  "ButtonNvB_2": "New Place",
-  "ButtonNvB_3": "Profile",
+  "buttonNvB_1": "Home",
+  "buttonNvB_2": "New Place",
+  "buttonNvB_3": "Profile",
 
 
 
 
-  "__CategoryPage__": "This is Home Page codes",
-  "Category_title": "Categories",
+  "category_title": "Categories",
 
 
 
-  "__NearbyPlacesPage__": "This is Home Page codes",
   "nearbyPlaces_title": "Nearby places",
   "nearbyPlaces_meter_title": "meters to the destination",
 
 
 
-  "__FavoritePage__": "This is Favorite Page codes",
   "favorite_page_title": "Favorites",
 
 
 
 
-  "__SuggestionPage__": "This is Suggestion Page codes",
   "suggestion_appBar_title": "Request a new location",
   "suggestion_1_tf_labelName": "Name of the place",
   "suggestion_1_tf_valid": "Enter your address!",
@@ -75,7 +67,7 @@
   "suggestion_4_tf_labelName": "Phone number",
   "suggestion_4_tf_valid": "Enter your number!",
   "suggestion_custom_card_title": "Note",
-  "suggestion_custom_card_text": "In this section, you can request us about the place you want, so that we include it in Easy Finder \n\n Also, you can ask us to update the information of the places listed in Easy Finder.",
+  "suggestion_custom_card_text": "In this section, you can request us about the place you want, so that we include it in Asan Yab \n\n Also, you can ask us to update the information of the places listed in Asan Yab.",
   "suggestion_button": "Submit request",
   "suggestion_customDialog_title": "Submit a location request",
   "suggestion_customDialog_content": "Your request has been registered",
@@ -83,7 +75,6 @@
 
 
 
-  "__ProfilePage__": "This is Profile Page codes",
   "profile_future_error": "Information not available",
   "profile_copy_id_snack_bar": "Your ID was copied to the clipboard",
   "profile_about_us_listTile": "About us",
@@ -96,18 +87,32 @@
 
 
 
-  "__EditProfilePage__": "This is EditProfile Page codes",
   "edit_appBar_leading": "Save",
   "edit_1_txf_label": "Name",
   "edit_2_txf_label": "Last Name",
 
 
 
-  "__CustomSearchBar__": "This is CustomSearchBar codes",
   "container_text": "Search in",
 
 
-  "__SearchBarWidget__": "This is SearchBarWidget codes",
-  "search_bar_hint_text": "Search"
+  "search_bar_hint_text": "Search",
+
+
+
+
+  "first_text_field_label": "Name",
+  "first_text_field_hint": "Enter your Name",
+  "first_text_field_valid": "Your name is empty",
+  "second_text_field_label": "Last Name",
+  "second_text_field_hint": "Enter your Last Name",
+  "second_text_field_valid": "Your last name is empty",
+  "elevated_text": "Enter",
+
+
+  "details_page_snack_bar": "To add to favorites you must first log in to your account",
+  "details_page_1_custom_card": "Description",
+  "details_page_2_custom_card": "Gallery",
+  "details_page_3_custom_card": "Specifications"
 
 }

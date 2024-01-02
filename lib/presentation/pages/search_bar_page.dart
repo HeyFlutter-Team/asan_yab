@@ -1,12 +1,12 @@
 import 'package:asan_yab/domain/riverpod/screen/search_load_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../core/res/image_res.dart';
 import '../../domain/riverpod/data/search_provider.dart';
 import 'detials_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class SearchPage extends ConsumerStatefulWidget {
   const SearchPage({super.key});
@@ -32,8 +32,8 @@ class _SearchPageState extends ConsumerState<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final languageText=AppLocalizations.of(context);
     return Scaffold(
-        // backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
           elevation: 1,
           //shadowColor: Colors.blue,
@@ -43,7 +43,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             // autofocus: true,
             decoration:  InputDecoration(
               border: InputBorder.none,
-              hintText: 'search_bar_hint_text'.tr(),
+              hintText: languageText!.search_bar_hint_text,
             ),
             onChanged: (value) {
               ref.read(searchTypeSenseProvider.notifier).search(value);

@@ -89,7 +89,7 @@ class DetailPageOffline extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: Text(
                           favItem['name'],
-                          maxLines: 2,
+                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                               fontSize: 24, fontWeight: FontWeight.bold),
