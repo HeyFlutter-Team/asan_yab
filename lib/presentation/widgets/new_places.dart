@@ -40,7 +40,7 @@ class NewPlaces extends ConsumerWidget {
                 CarouselSlider.builder(
                   itemCount: places.length >= 5 ? 5 : places.length,
                   itemBuilder: (context, index, realIndex) {
-                    final phoneNumberItems = places[index].adresses[0].phone;
+                    final phoneNumberItems = places[index].addresses[0].phone;
                     final items = places[index];
                     final phoneNumber = convertDigitsToFarsi(phoneNumberItems);
                     return GestureDetector(

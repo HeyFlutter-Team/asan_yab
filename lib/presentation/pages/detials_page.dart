@@ -242,29 +242,29 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                             },
                                           ),
                                   ),
-                            (places.adresses.isEmpty)
+                            (places.addresses.isEmpty)
                                 ? const SizedBox()
                                 : CustomCard(
                                     title:
                                         '${languageText?.details_page_3_custom_card}',
                                     child: ListView.builder(
                                       padding: EdgeInsets.zero,
-                                      itemCount: places.adresses.length,
+                                      itemCount: places.addresses.length,
                                       physics:
                                           const NeverScrollableScrollPhysics(),
                                       shrinkWrap: true,
                                       itemBuilder: (context, index) {
                                         phoneData
-                                            .add(places.adresses[index].phone);
+                                            .add(places.addresses[index].phone);
                                         addressData.add(
-                                            '${places.adresses[index].branch}: ${places.adresses[index].address}');
+                                            '${places.addresses[index].branch}: ${places.addresses[index].address}');
                                         return Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Expanded(
                                               flex: 1,
-                                              child: (places.adresses[index]
+                                              child: (places.addresses[index]
                                                       .address.isEmpty)
                                                   ? const SizedBox(height: 0)
                                                   : InkWell(
@@ -272,14 +272,14 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                         if (Platform
                                                             .isAndroid) {
                                                           var uri = Uri.parse(
-                                                              "google.navigation:q=${places.adresses[index].lat},${places.adresses[index].lang}&mode=d");
+                                                              "google.navigation:q=${places.addresses[index].lat},${places.addresses[index].lang}&mode=d");
                                                           launchUrl(uri);
                                                         } else {
                                                           final urlAppleMaps =
                                                               Uri.parse(
-                                                                  'https://maps.apple.com/?q=${places.adresses[index].lat},${places.adresses[index].lang}');
+                                                                  'https://maps.apple.com/?q=${places.addresses[index].lat},${places.addresses[index].lang}');
                                                           var uri = Uri.parse(
-                                                              'comgooglemaps://?saddr=&daddr=${places.adresses[index].lat},${places.adresses[index].lang}&directionsmode=driving');
+                                                              'comgooglemaps://?saddr=&daddr=${places.addresses[index].lat},${places.addresses[index].lang}&directionsmode=driving');
                                                           // launchUrl(uri);
                                                           if (await canLaunchUrl(
                                                               uri)) {
@@ -306,7 +306,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                           Flexible(
                                                             flex: 2,
                                                             child: Text(
-                                                              '${places.adresses[index].branch.isNotEmpty ? ' ${places.adresses[index].branch}: ' : ''} ${places.adresses[index].address}',
+                                                              '${places.addresses[index].branch.isNotEmpty ? ' ${places.addresses[index].branch}: ' : ''} ${places.addresses[index].address}',
                                                               maxLines: 4,
                                                               overflow:
                                                                   TextOverflow
@@ -323,7 +323,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                       ),
                                                     ),
                                             ),
-                                            (places.adresses[index].phone
+                                            (places.addresses[index].phone
                                                     .isEmpty)
                                                 ? const SizedBox(height: 0)
                                                 : ConstrainedBox(
@@ -341,7 +341,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                       onPressed: () async {
                                                         await FlutterPhoneDirectCaller
                                                             .callNumber(
-                                                          places.adresses[index]
+                                                          places.addresses[index]
                                                               .phone,
                                                         );
                                                       },
@@ -354,11 +354,11 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                             isRTL
                                                                 ? convertDigitsToFarsi(
                                                                     places
-                                                                        .adresses[
+                                                                        .addresses[
                                                                             index]
                                                                         .phone)
                                                                 : places
-                                                                    .adresses[
+                                                                    .addresses[
                                                                         index]
                                                                     .phone,
                                                             style: TextStyle(

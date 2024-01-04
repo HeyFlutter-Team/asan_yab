@@ -47,10 +47,10 @@ class UpdateFavorite extends ChangeNotifier {
           //  lists name {phoneData    ,  addressData}
 
           if (places != null) {
-            for (int i = 0; i < places.adresses.length; i++) {
+            for (int i = 0; i < places.addresses.length; i++) {
               addressData.add(
-                  '${places.adresses[i].branch}: ${places.adresses[i].address}');
-              phoneData.add(places.adresses[i].phone);
+                  '${places.addresses[i].branch}: ${places.addresses[i].address}');
+              phoneData.add(places.addresses[i].phone);
             }
             DownloadImage.getImage(places.logo, places.coverImage, context)
                 .whenComplete(() {
@@ -75,21 +75,21 @@ class UpdateFavorite extends ChangeNotifier {
         final places = Place(
             categoryId: '',
             category: '',
-            adresses: [],
+            addresses: [],
             id: phoneId[i],
             logo: '',
             coverImage: '',
             name: '',
             description: '',
             gallery: [],
-            createdAt: Timestamp.now());
+            createdAt: DateTime.now(), order:1 ,);
         addressData = [];
         phoneData = [];
 
-        for (int i = 0; i < places.adresses.length; i++) {
+        for (int i = 0; i < places.addresses.length; i++) {
           addressData.add(
-              '${places.adresses[i].branch}: ${places.adresses[i].address}');
-          phoneData.add(places.adresses[i].phone);
+              '${places.addresses[i].branch}: ${places.addresses[i].address}');
+          phoneData.add(places.addresses[i].phone);
         }
         provider.toggleFavorite(
           phoneId[i],
