@@ -1,12 +1,12 @@
 import 'package:asan_yab/domain/riverpod/screen/search_load_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../core/res/image_res.dart';
 import '../../domain/riverpod/data/search_provider.dart';
 import 'detials_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class SearchPage extends ConsumerStatefulWidget {
   const SearchPage({super.key});
@@ -32,18 +32,18 @@ class _SearchPageState extends ConsumerState<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final languageText=AppLocalizations.of(context);
     return Scaffold(
-        // backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
           elevation: 1,
-          shadowColor: Colors.blue,
-          // backgroundColor: Theme.of(context).primaryColor,
+          //shadowColor: Colors.blue,
+           //backgroundColor: Theme.of(context).primaryColor,
           title: TextFormField(
             controller: searchController,
             // autofocus: true,
             decoration:  InputDecoration(
               border: InputBorder.none,
-              hintText: 'search_bar_hint_text'.tr(),
+              hintText: languageText!.search_bar_hint_text,
             ),
             onChanged: (value) {
               ref.read(searchTypeSenseProvider.notifier).search(value);
@@ -85,7 +85,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
         ),
         body: ref.watch(searchTypeSenseProvider).isEmpty
             ? Center(
-                child: Image.asset(ImageRes.noInfo),
+
               )
             : ListView.separated(
                 padding: const EdgeInsets.all(12),
@@ -124,7 +124,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
-                              color: Colors.black,
+
                               fontSize: 18.0,
                             ),
                           ),

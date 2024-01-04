@@ -2,12 +2,11 @@
 
 import 'package:asan_yab/domain/riverpod/data/sign_up_provider.dart';
 import 'package:asan_yab/presentation/widgets/custom_text_field.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../domain/riverpod/data/sign_in_provider.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
@@ -34,6 +33,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final languageText=AppLocalizations.of(context);
     return Scaffold(
       body: Form(
         key: signUpFormKey,
@@ -49,16 +49,16 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   width: 200,
                 ),
                 CustomTextField(
-                    label: 'sign_in_email'.tr(),
+                    label: languageText!.sign_in_email,
                     controller: emailController,
-                    hintText: 'sign_in_email_hintText'.tr(),
+                    hintText: languageText.sign_in_email_hintText,
                     validator: (p0) {
                       if (p0!.isEmpty ||
                           p0.length < 10 && !EmailValidator.validate(p0)) {
-                        return 'sign_in_email_2_valid'.tr();
+                        return languageText.sign_in_email_2_valid;
                       } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                           .hasMatch(p0)) {
-                        return 'sign_in_email_3_valid'.tr();
+                        return languageText.sign_in_email_3_valid;
                       } else {
                         return null;
                       }
@@ -69,22 +69,22 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       onPressed: () =>
                           ref.read(isObscureProvider.notifier).isObscure(),
                       icon: const Icon(Icons.remove_red_eye_outlined)),
-                  label: 'sign_in_password'.tr(),
+                  label: languageText.sign_in_password,
                   controller: passwordController,
-                  hintText: 'sign_in_password_hintText'.tr(),
+                  hintText: languageText.sign_in_password_hintText,
                   validator: (p0) =>
-                      p0!.length < 6 ? 'sign_in_password_2_valid'.tr() : null,
+                      p0!.length < 6 ? languageText.sign_in_password_2_valid : null,
                 ),
                 CustomTextField(
                   obscureText: true,
-                  label: 'sign_up_confirm_p'.tr(),
+                  label: languageText.sign_up_confirm_p,
                   controller: confirmPasswordController,
-                  hintText: 'sign_up_confirm_p_hint_text'.tr(),
+                  hintText: languageText.sign_up_confirm_p_hint_text,
                   validator: (p0) {
                     if (p0!.isEmpty) {
-                      return 'sign_up_confirm_p_1_valid'.tr();
+                      return languageText.sign_up_confirm_p_1_valid;
                     } else if (p0 != passwordController.text) {
-                      return 'sign_up_confirm_p_2_valid'.tr();
+                      return languageText.sign_up_confirm_p_2_valid;
                     } else {
                       return null;
                     }
@@ -94,11 +94,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: 'sign_up_account_text'.tr(),
-                        style: const TextStyle(color: Colors.black),
+                        text:languageText.sign_up_account_text,
+                        style: const TextStyle(color: Colors.grey),
                       ),
                       TextSpan(
-                        text: '  ${'sign_up_account_text1'.tr()}',
+                        text: '  ${languageText.sign_up_account_text1}',
                         style: const TextStyle(color: Colors.blue),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
@@ -127,8 +127,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                         password: passwordController.text);
                   },
                   child: Text(
-                    'sign_up_elbT'.tr(),
-                    style: const TextStyle(fontSize: 20),
+                    languageText.sign_up_elbT,
+                    style: const TextStyle(fontSize: 20, color: Colors.white),
                   ),
                 ),
                 const SizedBox(

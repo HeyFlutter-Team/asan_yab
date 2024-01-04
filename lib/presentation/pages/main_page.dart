@@ -1,13 +1,14 @@
 import 'package:asan_yab/domain/riverpod/config/notification_repo.dart';
 import 'package:asan_yab/presentation/pages/profile_page.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../domain/riverpod/config/internet_connectivity_checker.dart';
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
+import 'auth_page.dart';
 import 'home_page.dart';
 import 'suggestion.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
@@ -22,7 +23,7 @@ class _MainPageState extends ConsumerState<MainPage> {
     super.dispose();
   }
 
-  final pages = [const HomePage(), const SuggestionPage(), const ProfilePage()];
+  final pages = [const HomePage(), const SuggestionPage(), const AuthPage()];
   @override
   void initState() {
     // TODO: implement initState
@@ -50,7 +51,20 @@ class _MainPageState extends ConsumerState<MainPage> {
                   .watch(internetConnectivityCheckerProvider.notifier)
                   .isConnected),
           const SuggestionPage(),
-          const ProfilePage()
+          StreamBuilder<User?>(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text('خطا در اتصال'),
+                );
+              } else if (snapshot.hasData) {
+                return const ProfilePage();
+              } else {
+                return const AuthPage();
+              }
+            },
+          ),
         ],
       ),
     );
@@ -69,15 +83,15 @@ class _MainPageState extends ConsumerState<MainPage> {
         // backgroundColor: Colors.white,
         items: [
           BottomNavigationBarItem(
-            label: 'ButtonNvB_1'.tr(),
+            label: AppLocalizations.of(context)!.buttonNvB_1,
             icon: const Icon(Icons.home),
           ),
           BottomNavigationBarItem(
-            label: 'ButtonNvB_2'.tr(),
+            label: AppLocalizations.of(context)!.buttonNvB_2,
             icon: const Icon(Icons.place),
           ),
           BottomNavigationBarItem(
-            label: 'ButtonNvB_3'.tr(),
+            label: AppLocalizations.of(context)!.buttonNvB_3,
             icon: const Icon(Icons.person),
           ),
         ],

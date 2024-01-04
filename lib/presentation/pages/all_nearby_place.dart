@@ -25,14 +25,14 @@ class NearbyPlacePage extends ConsumerWidget {
           // backgroundColor: Colors.white,
           title: const Text(
             'مکان های نزدیک',
-            style: TextStyle(color: Colors.black),
+            //style: TextStyle(color: Colors.black),
           ),
           leading: IconButton(
             onPressed: () {
               FocusScope.of(context).unfocus();
               Navigator.pop(context);
             },
-            icon: const Icon(Icons.arrow_back, color: Colors.black, size: 25),
+            icon: const Icon(Icons.arrow_back,  size: 25),
           ),
         ),
         body: place.isEmpty
@@ -165,7 +165,7 @@ class NearbyPlacePage extends ConsumerWidget {
                                         child: Text(
                                           '${place[index].category}',
                                           style: const TextStyle(
-                                              color: Colors.black,
+                                              //color: Colors.black,
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold),
                                         ),

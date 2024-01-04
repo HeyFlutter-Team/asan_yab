@@ -1,3 +1,5 @@
+import 'package:asan_yab/core/utils/convert_digits_to_farsi.dart';
+import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/domain/riverpod/data/lazy_loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -6,6 +8,7 @@ import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/res/image_res.dart';
+import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/categories_items_provider.dart';
 import '../../domain/riverpod/screen/loading_circularPRI_provider.dart';
 import '../pages/detials_page.dart';
@@ -49,10 +52,11 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.width;
     final data = ref.watch(categoriesItemsProvider);
+    final isRTL = ref.watch(languageProvider).code == 'fa';
     debugPrint('Ui is load : $data ');
     debugPrint('Ui is load : ${ref.watch(hasMore)} ');
 
-    return ref.watch(loadingDataProvider)
+    return ref.watch(loadingDataProvider) || ref.watch(loadingProvider)
         ? const Center(
             child: CircularProgressIndicator(
               color: Colors.blueGrey,
@@ -113,7 +117,8 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                         ),
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.only(right: 12.0),
+                            padding:
+                                const EdgeInsets.only(right: 12.0, left: 12),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -121,8 +126,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                                   data[index].name!,
                                   overflow: TextOverflow.fade,
                                   maxLines: 2,
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 18.0),
+                                  style: const TextStyle(fontSize: 18.0),
                                 ),
                                 const SizedBox(height: 12.0),
                                 data[index].adresses[0].phone.isEmpty
@@ -149,10 +153,16 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                                                 MainAxisAlignment.spaceEvenly,
                                             children: [
                                               Text(
-                                                data[index]
-                                                    .adresses
-                                                    .first
-                                                    .phone,
+                                                isRTL
+                                                    ? convertDigitsToFarsi(
+                                                        data[index]
+                                                            .adresses
+                                                            .first
+                                                            .phone)
+                                                    : data[index]
+                                                        .adresses
+                                                        .first
+                                                        .phone,
                                                 style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 16.0),

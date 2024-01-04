@@ -1,18 +1,20 @@
 import 'package:asan_yab/domain/riverpod/screen/botton_navigation_provider.dart';
 import 'package:asan_yab/presentation/pages/about_us_page.dart';
 import 'package:asan_yab/presentation/pages/edit_profile_page.dart';
+import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/show_profile_page.dart';
-import 'package:asan_yab/presentation/pages/sign_in_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:asan_yab/presentation/widgets/buildProgress.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-
-import '../../domain/riverpod/data/language_controller_provider.dart';
+import '../../data/models/language.dart';
+import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/profile_data_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../widgets/language/language_bottom_sheet.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
@@ -28,8 +30,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     Future.delayed(
       Duration.zero,
       () {
-        ref.read(userDetailsProvider.notifier).getCurrentUserData();
-        ref.read(userDetailsProvider)?.imageUrl;
+        ref.read(userDetailsProvider.notifier).getCurrentUserData(context);
+        ref.read(imageProvider).imageUrl==ref.read(userDetailsProvider)?.imageUrl;
       },
     );
   }
@@ -38,8 +40,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final usersData = ref.watch(userDetailsProvider);
-
     final themeModel = ref.watch(themeModelProvider);
+    final isRTL = ref.watch(languageProvider).code == 'fa';
+    final languageText = AppLocalizations.of(context);
     return Scaffold(
         body: Column(
       children: [
@@ -51,7 +54,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 height: 220,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  gradient: context.locale == const Locale('fa', 'AF')
+                  gradient: isRTL
                       ? LinearGradient(colors: [
                           Colors.white,
                           Colors.red.shade900,
@@ -67,9 +70,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 ),
               ),
               Padding(
-                padding: context.locale == const Locale('fa', 'AF')
-                    ? const EdgeInsets.only(top: 58.0, right: 120)
-                    : const EdgeInsets.only(top: 58.0, left: 120),
+                padding:
+                    const EdgeInsets.only(top: 58.0, right: 120, left: 120),
                 child: Text(
                   maxLines: 1,
                   '${usersData?.name} ${usersData?.lastName}',
@@ -77,9 +79,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 ),
               ),
               Padding(
-                padding: context.locale == const Locale('fa', 'AF')
-                    ? const EdgeInsets.only(top: 118.0, right: 116)
-                    : const EdgeInsets.only(top: 118.0, left: 116),
+                padding:
+                    const EdgeInsets.only(top: 118.0, right: 116, left: 116),
                 child: InkWell(
                   onTap: () => Navigator.push(
                       context,
@@ -102,7 +103,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                             Padding(
                               padding:
                                   const EdgeInsets.only(top: 40.0, right: 50),
-                              child: buildProgress(),
+                              child: ImageWidgets.buildProgress(ref: ref),
                             ),
                             Positioned(
                               bottom: 0,
@@ -114,7 +115,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                 ),
                                 child: IconButton(
                                   onPressed: () {
-                                    showBottomSheets(context);
+                                   ImageWidgets.showBottomSheets(ref: ref,context: context);
                                   },
                                   icon: const Icon(
                                     Icons.camera_alt,
@@ -138,30 +139,27 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 38.0, right: 15),
-                child: IconButton(
-                    onPressed: () {
+                  padding:
+                      const EdgeInsets.only(top: 50.0, right: 10, left: 10),
+                  child: IconButton(
+                    onPressed: () async {
+                      ref
+                          .read(buttonNavigationProvider.notifier)
+                          .selectedIndex(2);
                       FirebaseAuth.instance.signOut().whenComplete(() {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LogInPage(),
-                            ));
-                        ref
-                            .read(buttonNavigationProvider.notifier)
-                            .selectedIndex(0);
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MainPage(),
+                          ),
+                        );
                       });
                     },
-                    icon: context.locale == const Locale('fa', 'AF')
-                        ? const Icon(
-                            Icons.logout,
-                            color: Colors.white,
-                          )
-                        : const Icon(
-                            Icons.logout,
-                            color: Colors.white,
-                          )),
-              )
+                    icon: const Icon(
+                      Icons.logout,
+                      color: Colors.white,
+                    ),
+                  ))
             ],
           ),
         ),
@@ -181,7 +179,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       .copyToClipboard('${usersData?.id}');
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('profile_copy_id_snack_bar'.tr()),
+                      content: Text(languageText!.profile_copy_id_snack_bar),
                       duration: const Duration(seconds: 2),
                     ),
                   );
@@ -191,7 +189,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 color: Colors.grey,
               ),
               ListTile(
-                title: Text('${usersData?.name}${usersData?.lastName}'),
+                title: Text('${usersData?.name} ${usersData?.lastName}'),
                 leading: const Icon(
                   color: Colors.red,
                   Icons.person_2_outlined,
@@ -212,80 +210,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               const Divider(
                 color: Colors.grey,
               ),
-              InkWell(
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Container(
-                        color: Colors.black.withOpacity(0.8),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ListTile(
-                              trailing:
-                                  context.locale == const Locale('fa', 'AF')
-                                      ? const Icon(
-                                          Icons.done,
-                                          color: Colors.blue,
-                                        )
-                                      : null,
-                              leading: const Icon(Icons.language,
-                                  color: Colors.blue),
-                              title: const Center(
-                                child: Text(
-                                  'فارسی',
-                                  style: TextStyle(color: Colors.blue),
-                                ),
-                              ),
-                              onTap: () {
-                                ref
-                                    .read(languageProvider.notifier)
-                                    .setToFarsi(context);
-
-                                Navigator.pop(context);
-                              },
-                            ),
-                            const Divider(height: 0, color: Colors.grey),
-                            ListTile(
-                              trailing:
-                                  context.locale == const Locale('en', 'US')
-                                      ? const Icon(
-                                          Icons.done,
-                                          color: Colors.blue,
-                                        )
-                                      : null,
-                              leading: const Icon(Icons.language,
-                                  color: Colors.blue),
-                              title: const Center(
-                                child: Text(
-                                  'English',
-                                  style: TextStyle(color: Colors.blue),
-                                ),
-                              ),
-                              onTap: () {
-                                ref
-                                    .read(languageProvider.notifier)
-                                    .setToEnglish(context);
-
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: ListTile(
-                  leading: const Icon(
-                    Icons.language,
-                    color: Colors.red,
-                    size: 30,
-                  ),
-                  title: Text('profile_language_listTile'.tr()),
-                ),
-              ),
+              const LanguageBottomSheet(),
+              // LanguageIcon(),
               const Divider(
                 color: Colors.grey,
               ),
@@ -322,7 +248,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     color: Colors.red,
                     size: 30,
                   ),
-                  title: Text('profile_about_us_listTile'.tr()),
+                  title: Text(languageText!.profile_about_us_listTile),
                 ),
               ),
               const Divider(
@@ -348,11 +274,11 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     ))
                 .then((value) => ref
                     .read(userDetailsProvider.notifier)
-                    .getCurrentUserData());
+                    .getCurrentUserData(context));
           },
           child: Text(
-            'profile_edit_button_text'.tr(),
-            style: const TextStyle(fontSize: 25),
+            languageText.profile_edit_button_text,
+            style: const TextStyle(fontSize: 20, color: Colors.white),
           ),
         ),
         const SizedBox(
@@ -360,85 +286,5 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         )
       ],
     ));
-  }
-
-  void showBottomSheets(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              InkWell(
-                onTap: () {
-                  // Handle Camera option
-                  ref
-                      .read(imageProvider.notifier)
-                      .pickImage(ImageSource.camera);
-                  Navigator.pop(context);
-                },
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    const Icon(Icons.camera),
-                    const SizedBox(height: 8.0),
-                    Text('profile_buttonSheet_camera'.tr()),
-                  ],
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  // Handle Gallery option
-                  ref
-                      .read(imageProvider.notifier)
-                      .pickImage(ImageSource.gallery);
-                  Navigator.pop(
-                      context); // Call a function to handle Gallery action
-                },
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    const Icon(Icons.image),
-                    const SizedBox(height: 8.0),
-                    Text('profile_buttonSheet_gallery'.tr()),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget buildProgress() {
-    return StreamBuilder<TaskSnapshot>(
-      stream: ref.watch(imageProvider).uploadTask?.snapshotEvents,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final data = snapshot.data!;
-          double progress = data.bytesTransferred / data.totalBytes;
-
-          if (data.state == TaskState.success) {
-            // If upload is complete, return an empty Container
-            return Container();
-          }
-
-          return SizedBox(
-            height: 50,
-            width: 50,
-            child: CircularProgressIndicator(
-              value: progress,
-              backgroundColor: Colors.grey,
-              color: Colors.red,
-            ),
-          );
-        } else {
-          return const SizedBox();
-        }
-      },
-    );
   }
 }

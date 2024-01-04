@@ -1,9 +1,7 @@
 import 'package:asan_yab/domain/riverpod/data/categories_provider.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../core/res/colors.dart';
 import 'list_category_item.dart';
 
@@ -12,6 +10,7 @@ class CategoryPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final languageText=AppLocalizations.of(context);
     ref.read(categoriesProvider.notifier).getCategories();
     final category = ref.watch(categoriesProvider);
     return Scaffold(
@@ -20,15 +19,14 @@ class CategoryPage extends ConsumerWidget {
         elevation: 0.0,
         // backgroundColor: Colors.white,
         title: Text(
-          'Category_title'.tr(),
-          style: TextStyle(color: Colors.black),
+          languageText!.category_title,
         ),
         leading: IconButton(
           onPressed: () {
             FocusScope.of(context).unfocus();
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back, color: Colors.black, size: 25),
+          icon: const Icon(Icons.arrow_back, size: 25),
         ),
       ),
       body: category.isEmpty

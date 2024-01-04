@@ -2,11 +2,11 @@
 
 import 'package:asan_yab/presentation/pages/verify_email_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/models/users.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignUpNotifier extends StateNotifier {
   final Ref ref;
@@ -37,15 +37,19 @@ class SignUpNotifier extends StateNotifier {
                   email: email,
                 )));
     } on FirebaseAuthException catch (e) {
+      final languageText=AppLocalizations.of(context);
       print(e);
       if (e.code == 'email-already-in-use') {
         ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-          content:const Text('sign_up_method').tr(),
+          content: Text(languageText!.sign_up_method),
           duration:const Duration(seconds: 5),
         ));
         Navigator.pop(context);
       }
     }
+  }
+  resetData(){
+    state=null;
   }
 }
 

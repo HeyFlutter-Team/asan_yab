@@ -1,8 +1,9 @@
 import 'dart:io';
-
 import 'package:asan_yab/core/utils/download_image.dart';
+import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/domain/riverpod/data/toggle_favorite.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,11 +11,13 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/res/image_res.dart';
 import '../../core/utils/convert_digits_to_farsi.dart';
+import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
 import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../../domain/riverpod/data/single_place_provider.dart';
 import '../widgets/page_view_item.dart';
 import 'detials_page_offline.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DetailsPage extends ConsumerStatefulWidget {
   final String id;
@@ -52,8 +55,9 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
     final size = MediaQuery.of(context).size;
 
     final provider = ref.read(favoriteProvider.notifier);
-
+    final isRTL = ref.watch(languageProvider).code == 'fa';
     final places = ref.watch(getSingleProvider);
+    final languageText = AppLocalizations.of(context);
     return Scaffold(
       //backgroundColor: Theme.of(context).primaryColor,
       body: places == null
@@ -81,16 +85,28 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                       ),
                       IconButton(
                         onPressed: () {
-                          ref.watch(getInformationProvider).toggle(widget.id);
-                          ref.watch(getInformationProvider).setFavorite();
+                          bool isLogin =
+                              FirebaseAuth.instance.currentUser != null;
+                          if (isLogin) {
+                            ref.watch(getInformationProvider).toggle(widget.id);
+                            ref.watch(getInformationProvider).setFavorite();
 
-                          if (!ref
-                              .watch(favoriteProvider.notifier)
-                              .isExist(places.id)) {
-                            DownloadImage.getImage(
-                                    places.logo, places.coverImage, context)
-                                .whenComplete(() {
-                              Navigator.pop(context);
+                            if (!ref
+                                .watch(favoriteProvider.notifier)
+                                .isExist(places.id)) {
+                              DownloadImage.getImage(
+                                      places.logo, places.coverImage, context)
+                                  .whenComplete(() {
+                                Navigator.pop(context);
+                                provider.toggleFavorite(
+                                    places.id,
+                                    places,
+                                    addressData,
+                                    phoneData,
+                                    DownloadImage.logo,
+                                    DownloadImage.coverImage);
+                              });
+                            } else {
                               provider.toggleFavorite(
                                   places.id,
                                   places,
@@ -98,15 +114,11 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                   phoneData,
                                   DownloadImage.logo,
                                   DownloadImage.coverImage);
-                            });
+                            }
                           } else {
-                            provider.toggleFavorite(
-                                places.id,
-                                places,
-                                addressData,
-                                phoneData,
-                                DownloadImage.logo,
-                                DownloadImage.coverImage);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                    '${languageText?.details_page_snack_bar}')));
                           }
                         },
                         icon: ref.watch(toggleProvider)
@@ -175,7 +187,8 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                     places.description == null)
                                 ? const SizedBox()
                                 : CustomCard(
-                                    title: 'توضیحات',
+                                    title:
+                                        '${languageText?.details_page_1_custom_card}',
                                     child: Text(places.description!),
                                   ),
                             Padding(
@@ -183,21 +196,21 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                   const EdgeInsets.symmetric(horizontal: 12),
                               child: (places.gallery.isEmpty)
                                   ? const SizedBox()
-                                  : const Row(
+                                  : Row(
                                       children: [
-                                        Icon(
+                                        const Icon(
                                           Icons.library_books,
                                           // color: Colors.black54,
                                         ),
-                                        SizedBox(width: 8),
+                                        const SizedBox(width: 8),
                                         Text(
-                                          'گالری',
-                                          style: TextStyle(
+                                          '${languageText?.details_page_2_custom_card}',
+                                          style: const TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        SizedBox(height: 12)
+                                        const SizedBox(height: 12)
                                       ],
                                     ),
                             ),
@@ -232,7 +245,8 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                             (places.adresses.isEmpty)
                                 ? const SizedBox()
                                 : CustomCard(
-                                    title: 'مشخصات',
+                                    title:
+                                        '${languageText?.details_page_3_custom_card}',
                                     child: ListView.builder(
                                       padding: EdgeInsets.zero,
                                       itemCount: places.adresses.length,
@@ -337,16 +351,25 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                                 .end,
                                                         children: [
                                                           Text(
-                                                            convertDigitsToFarsi(
-                                                                places
+                                                            isRTL
+                                                                ? convertDigitsToFarsi(
+                                                                    places
+                                                                        .adresses[
+                                                                            index]
+                                                                        .phone)
+                                                                : places
                                                                     .adresses[
                                                                         index]
-                                                                    .phone),
-                                                            style:
-                                                                const TextStyle(
+                                                                    .phone,
+                                                            style: TextStyle(
                                                               fontSize: 16,
-                                                              // color: Colors
-                                                              //     .black54,
+                                                              color: Theme.of(context)
+                                                                          .brightness ==
+                                                                      Brightness
+                                                                          .dark
+                                                                  ? Colors.white
+                                                                  : Colors
+                                                                      .black,
                                                             ),
                                                           ),
                                                           const SizedBox(
