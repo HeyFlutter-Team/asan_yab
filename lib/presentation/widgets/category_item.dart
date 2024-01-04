@@ -129,7 +129,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                                        fontSize: 18.0),
                                 ),
                                 const SizedBox(height: 12.0),
-                                data[index].adresses[0].phone.isEmpty
+                                data[index].addresses[0].phone.isEmpty
                                     ? const SizedBox()
                                     : SizedBox(
                                         width: 180,
@@ -145,7 +145,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                                           onPressed: () async {
                                             await FlutterPhoneDirectCaller
                                                 .callNumber(data[index]
-                                                    .adresses[0]
+                                                    .addresses[0]
                                                     .phone);
                                           },
                                           child: Row(
@@ -155,11 +155,11 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                                               Text(
                                           isRTL
                                                ? convertDigitsToFarsi(data[index]
-                                                    .adresses
+                                                    .addresses
                                                     .first
                                                     .phone)
                                           :data[index]
-                                                  .adresses
+                                                  .addresses
                                                   .first
                                                   .phone,
                                                 style: const TextStyle(

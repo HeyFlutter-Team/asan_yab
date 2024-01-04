@@ -196,7 +196,7 @@ class NearbyPlacePage extends ConsumerWidget {
                                             Flexible(
                                               child: Text(
                                                 place[index]
-                                                    .adresses[0]
+                                                    .addresses[0]
                                                     .address,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(
