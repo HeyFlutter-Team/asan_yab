@@ -229,6 +229,8 @@
 // }
 
 import 'dart:async';
+import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/personal_information_page.dart';
 import 'package:asan_yab/presentation/pages/sign_in_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -236,7 +238,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-final verifyEmailProvider = StateNotifierProvider<VerifyEmailNotifier, VerifyEmailState>((ref) {
+import '../../data/repositoris/language_repository.dart';
+
+final verifyEmailProvider =
+    StateNotifierProvider<VerifyEmailNotifier, VerifyEmailState>((ref) {
   return VerifyEmailNotifier(ref);
 });
 
@@ -255,15 +260,12 @@ class VerifyEmailNotifier extends StateNotifier<VerifyEmailState> {
     _initialize();
   }
 
-  void setIsEmailVerifiedFalse() {
-    state = VerifyEmailState(false, state.canResendEmail);
-  }
-
   Future<void> _initialize() async {
     final isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
     if (!isEmailVerified) {
       await _sendVerificationEmail();
-      _timer = Timer.periodic(const Duration(seconds: 3), (_) => _checkEmailVerified());
+      _timer = Timer.periodic(
+          const Duration(seconds: 3), (_) => _checkEmailVerified());
     }
   }
 
@@ -272,7 +274,7 @@ class VerifyEmailNotifier extends StateNotifier<VerifyEmailState> {
       final user = FirebaseAuth.instance.currentUser!;
       await user.sendEmailVerification();
       state = VerifyEmailState(state.isEmailVerified, false);
-      await Future.delayed(const Duration(seconds: 3));
+      await Future.delayed(const Duration(seconds: 20));
       state = VerifyEmailState(state.isEmailVerified, true);
     } catch (e) {
       print(e);
@@ -280,24 +282,31 @@ class VerifyEmailNotifier extends StateNotifier<VerifyEmailState> {
   }
 
   Future<void> _checkEmailVerified() async {
-    await FirebaseAuth.instance.currentUser!.reload();
-    final isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-    if (isEmailVerified) {
-      _timer.cancel();
-      state = VerifyEmailState(isEmailVerified, state.canResendEmail);
+    FirebaseAuth.instance.currentUser?.reload();
+    if(FirebaseAuth.instance.currentUser !=null){
+      final isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+      if (isEmailVerified) {
+        _timer.cancel();
+        state = VerifyEmailState(isEmailVerified, state.canResendEmail);
+      }
     }
+
   }
 
   @override
   void dispose() {
-    _timer.cancel();
-    _checkEmailVerified();
-    _sendVerificationEmail();
-    _initialize();
+    Future.delayed(
+      Duration.zero,
+      () {
+        _initialize();
+      },
+    );
     super.dispose();
   }
 }
 
+
+//my class
 class VerifyEmailPage extends ConsumerStatefulWidget {
   final String? email;
 
@@ -313,81 +322,80 @@ class VerifyEmailPage extends ConsumerStatefulWidget {
 class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
   @override
   void initState() {
-    // TODO: implement initState
+    Future.delayed(
+      Duration.zero,
+      () {
+        ref
+            .read(verifyEmailProvider.notifier)
+            ._sendVerificationEmail()
+            .whenComplete(
+                () => ref.read(verifyEmailProvider.notifier)._initialize());
+      },
+    );
     super.initState();
-    Future.delayed(Duration.zero,() {
-      ref.read(verifyEmailProvider.notifier).state = VerifyEmailState(false, false);
-      ref.read(verifyEmailProvider.notifier)._sendVerificationEmail().whenComplete(() => ref.read(verifyEmailProvider.notifier)._initialize());
-    },);
   }
+
   @override
   Widget build(BuildContext context) {
     final verifyEmailState = ref.watch(verifyEmailProvider);
-    final languageText=AppLocalizations.of(context);
+    final languageText = AppLocalizations.of(context);
+    final isRTL = ref.watch(languageProvider).code == 'fa';
     return verifyEmailState.isEmailVerified
-        ? PersonalInformation(email: widget.email)
-        : Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              backgroundColor: Colors.red.shade900,
-              title: Text(
-                languageText!.verify_appBar_title,
-                style: const TextStyle(color: Colors.white),
+        ? const MainPage()
+        : PopScope(
+      canPop: false,
+          child: Scaffold(
+              appBar: AppBar(
+                automaticallyImplyLeading: false,
+                backgroundColor: Colors.red.shade900,
+                title: Text(
+                  languageText!.verify_appBar_title,
+                  style: const TextStyle(color: Colors.white),
+                ),
+                centerTitle: true,
               ),
-              centerTitle: true,
-            ),
-            body: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 28.0),
-                    child: Text(languageText.verify_body_text),
-                  ),
-                  Text('${widget.email}'),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red.shade800,
-                          minimumSize: const Size(340, 55),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12))),
-                      onPressed: verifyEmailState.canResendEmail
-                          ? () => ref
-                              .read(verifyEmailProvider.notifier)
-                              ._sendVerificationEmail()
-                          : null,
-                      icon: const Icon(
-                        Icons.mail,
-                        color: Colors.white,
-                      ),
-                      label: Text(
-                        languageText.verify_elb_text,
-                        style: const TextStyle(fontSize: 16, color: Colors.white),
-                      )),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  TextButton(
-                      onPressed: () => FirebaseAuth.instance
-                          .signOut()
-                          .whenComplete(() => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LogInPage(),
-                              ))),
-                      child: Text(
-                        languageText.verify_tbt_text,
-                        style:
-                            TextStyle(color: Colors.red.shade800, fontSize: 18),
-                      ))
-                ],
+              body: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: isRTL
+                          ? const EdgeInsets.only(right: 28.0)
+                          : const EdgeInsets.only(left: 28.0),
+                      child: Text(languageText.verify_body_text),
+                    ),
+                    Text('${widget.email}'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red.shade800,
+                            minimumSize: const Size(340, 55),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12))),
+                        onPressed: verifyEmailState.canResendEmail
+                            ? () => ref
+                                .read(verifyEmailProvider.notifier)
+                                ._sendVerificationEmail()
+                            : null,
+                        icon: const Icon(
+                          Icons.mail,
+                          color: Colors.white,
+                        ),
+                        label: Text(
+                          languageText.verify_elb_text,
+                          style:
+                              const TextStyle(fontSize: 16, color: Colors.white),
+                        )),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                  ],
+                ),
               ),
             ),
-          );
+        );
   }
 }
-

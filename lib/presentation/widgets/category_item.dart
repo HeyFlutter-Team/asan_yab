@@ -148,7 +148,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                                                     .adresses[0]
                                                     .phone);
                                           },
-                                          child: Row(
+                                          child:isRTL? Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
                                             children: [
@@ -170,6 +170,31 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                                                 Icons.phone_android,
                                                 color: Colors.green,
                                                 size: 25,
+                                              ),
+                                            ],
+                                          )
+                                          :Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              const Icon(
+                                                Icons.phone_android,
+                                                color: Colors.green,
+                                                size: 25,
+                                              ),
+                                              Text(
+                                                isRTL
+                                                    ? convertDigitsToFarsi(data[index]
+                                                    .adresses
+                                                    .first
+                                                    .phone)
+                                                    :data[index]
+                                                    .adresses
+                                                    .first
+                                                    .phone,
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16.0),
                                               ),
                                             ],
                                           ),

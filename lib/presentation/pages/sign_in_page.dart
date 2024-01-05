@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
 
+import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
+import 'package:asan_yab/presentation/pages/personal_information_page.dart';
 import 'package:asan_yab/presentation/pages/sign_up_page.dart';
 import 'package:asan_yab/presentation/widgets/custom_text_field.dart';
 import 'package:email_validator/email_validator.dart';
@@ -159,14 +161,14 @@ class _LogInPageState extends ConsumerState<LogInPage>
                 onPressed: () async {
                   final isValid = formKey.currentState!.validate();
                   if (!isValid) return;
-                  final isCheckboxChecked = ref.watch(isCheckProvider);
+                  final isCheckboxChecked = ref.read(isCheckProvider);
                   if (isCheckboxChecked) {
                     SharedPreferences prefs =
                         await SharedPreferences.getInstance();
                     prefs.setString('email', emailCTRL.text);
                     prefs.setString('password', passwordCTRL.text);
                   }
-                  ref.read(signInProvider).signIn(
+                await ref.read(signInProvider).signIn(
                       context: context,
                       email: emailCTRL.text,
                       password: passwordCTRL.text);
@@ -199,7 +201,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const SignUpPage()));
+                          builder: (context) => const PersonalInformation()));
                 },
                 child: Text(
                   languageText.sign_in_2_elbT,

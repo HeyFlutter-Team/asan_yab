@@ -11,7 +11,9 @@ import '../../domain/riverpod/data/sign_in_provider.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
   final Function()? onClickedSignIn;
-  const SignUpPage({super.key, this.onClickedSignIn});
+  final String? name;
+  final String? lastName;
+  const SignUpPage({super.key, this.onClickedSignIn,this.name,this.lastName});
 
   @override
   ConsumerState<SignUpPage> createState() => _SignUpPageState();
@@ -121,10 +123,17 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     final isValid = signUpFormKey.currentState!.validate();
                     if (!isValid) return;
 
-                    ref.read(signUpNotifierProvider.notifier).signUp(
+                    ref.read(signUpNotifierProvider).signUp(
                         context: context,
                         email: emailController.text,
-                        password: passwordController.text);
+                        password: passwordController.text,
+                    ).whenComplete((){
+                      ref.read(userRegesterDetailsProvider).userDetails(
+                        emailController: emailController.text,
+                        lastNameController:widget.lastName,
+                        nameController: widget.name
+                      );
+                    });
                   },
                   child: Text(
                     languageText.sign_up_elbT,

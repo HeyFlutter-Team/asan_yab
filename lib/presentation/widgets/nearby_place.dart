@@ -1,9 +1,11 @@
 import 'package:asan_yab/core/utils/convert_digits_to_farsi.dart';
+import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/presentation/pages/all_nearby_place.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/place.dart';
+import '../../data/repositoris/language_repository.dart';
 import '../../domain/servers/nearby_places.dart';
 import '../pages/detials_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -20,6 +22,7 @@ class NearbyPlaceWidget extends ConsumerWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final languageText=AppLocalizations.of(context);
+    final isRTL = ref.watch(languageProvider).code=='fa';
     return place.isEmpty
         ? const SizedBox()
         : Column(
@@ -40,7 +43,7 @@ class NearbyPlaceWidget extends ConsumerWidget {
                         MaterialPageRoute(
                             builder: (context) => const NearbyPlacePage()),
                       ),
-                      icon: const Icon(Icons.arrow_circle_right_outlined,
+                      icon:  Icon(isRTL?Icons.arrow_circle_left_outlined:Icons.arrow_circle_right_outlined,
                         size: 32.0,
                         color: Colors.grey,
                       ),
@@ -151,8 +154,16 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                           borderRadius:
                                               BorderRadius.circular(8)),
                                       padding: const EdgeInsets.all(8),
-                                      child: Text(
-                                        '${languageText!.nearbyPlaces_meter_title} ${convertDigitsToFarsi(place[index].distance.toString())}',
+                                      child:isRTL
+                                      ?Text(
+                                        '${convertDigitsToFarsi(place[index].distance.toString())} ${languageText.nearbyPlaces_meter_title}',
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                      :Text(
+                                        '${place[index].distance} ${languageText.nearbyPlaces_meter_title}',
                                         style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 12,

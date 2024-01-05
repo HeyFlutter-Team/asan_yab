@@ -147,7 +147,21 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                             await FlutterPhoneDirectCaller
                                                 .callNumber(phoneNumber);
                                           },
-                                          child: Row(
+                                          child:isRTL
+                                              ?Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              const Icon(Icons.phone_android,
+                                                  color: Colors.green),
+                                              Text(phoneNumber,
+                                                  style: const TextStyle(
+                                                    // color: Colors.black,
+
+                                                  )),
+                                            ],
+                                          )
+                                          :Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [

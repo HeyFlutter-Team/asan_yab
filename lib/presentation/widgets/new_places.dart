@@ -1,3 +1,4 @@
+import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/domain/riverpod/screen/active_index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -11,6 +12,7 @@ import '../../core/res/image_res.dart';
 import '../../core/utils/convert_digits_to_farsi.dart';
 import '../../data/models/place.dart';
 
+import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/places_provider.dart';
 import '../pages/detials_page.dart';
 
@@ -42,7 +44,8 @@ class NewPlaces extends ConsumerWidget {
                   itemBuilder: (context, index, realIndex) {
                     final phoneNumberItems = places[index].adresses[0].phone;
                     final items = places[index];
-                    final phoneNumber = convertDigitsToFarsi(phoneNumberItems);
+                    final isRTL = ref.watch(languageProvider).code=='fa';
+                    final phoneNumber =isRTL?convertDigitsToFarsi(phoneNumberItems):phoneNumberItems;
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -111,13 +114,24 @@ class NewPlaces extends ConsumerWidget {
                                             await FlutterPhoneDirectCaller
                                                 .callNumber(phoneNumber);
                                           },
-                                          child: Row(
+                                          child:isRTL
+                                      ?Row(
                                             children: [
                                               Text(phoneNumber),
                                               const Icon(
                                                 Icons.phone_android,
                                                 color: Colors.green,
                                               ),
+                                            ],
+                                          )
+                                    :Row(
+                                            children: [
+                                              const Icon(
+                                                Icons.phone_android,
+                                                color: Colors.green,
+                                              ),
+                                              Text(phoneNumber),
+
                                             ],
                                           ),
                                         ),
