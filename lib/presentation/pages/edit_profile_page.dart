@@ -37,6 +37,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
             .read(editProfilePageProvider.notifier)
             .editData(nameController, lastNameController);
         ref.read(imageProvider.notifier).state.imageUrl;
+        ref.read(imageProvider.notifier).state.imageUrl = ref.read(userDetailsProvider)?.imageUrl ?? '';
       },
     );
   }
@@ -88,12 +89,10 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                       languageText!.edit_appBar_leading,
                       style:const TextStyle(color: Colors.red),
                     ),
-                    onPressed: () {
+                    onPressed: () async{
                       ref
                           .read(editProfilePageProvider.notifier)
-                          .editData(nameController, lastNameController);
-
-                      Navigator.pop(context);
+                          .editData(nameController, lastNameController).whenComplete(() =>Navigator.pop(context));
                     },
                   ),
                 ),
@@ -103,29 +102,33 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ShowProfilePage(
+                          builder: (context) =>usersData?.imageUrl==''?const SizedBox(): ShowProfilePage(
                               imagUrl:
                                   '${ref.watch(userDetailsProvider)?.imageUrl}'),
                         )),
-                    child: usersData?.imageUrl == ''
-                        ? Stack(
+                    child: Stack(
                             children: [
-                              const Hero(
+                               Hero(
                                 tag: 'avatarHeroTag',
                                 child: CircleAvatar(
                                   radius: 80,
-                                  backgroundImage: AssetImage(
-                                      'assets/Avatar.png'), // Your image URL
+                                  backgroundImage:usersData?.imageUrl == ''
+                                      ? const AssetImage(
+                                      'assets/Avatar.png')
+                                  :NetworkImage(
+                                    '${ref.watch(userDetailsProvider)?.imageUrl}',
+                                  )as ImageProvider<Object>, // Your image URL
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 40.0, right: 50),
+                                padding:isRTL?
+                                    const EdgeInsets.only(top: 40.0, right: 50)
+                                :const EdgeInsets.only(top: 40.0, left: 55),
                                 child: ImageWidgets.buildProgress(ref: ref),
                               ),
                               Positioned(
                                 bottom: 0,
-                                right: 0,
+                                right: 15,
                                 child: Container(
                                   decoration: const BoxDecoration(
                                     color: Colors.white,
@@ -145,44 +148,6 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                               ),
                             ],
                           )
-                        : Stack(
-                            children: [
-                              Hero(
-                                tag: 'avatarHeroTag',
-                                child: CircleAvatar(
-                                  maxRadius: 80,
-                                  backgroundImage: NetworkImage(
-                                    '${ref.watch(userDetailsProvider)?.imageUrl}',
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 40.0, right: 50),
-                                child: ImageWidgets.buildProgress(ref: ref),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: IconButton(
-                                    onPressed: () {
-                                      ImageWidgets.showBottomSheets(context: context, ref: ref);
-                                    },
-                                    icon: const Icon(
-                                      Icons.camera_alt,
-                                      size: 32,
-                                      color: Colors.blue,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
                   ),
                 ),
               ],

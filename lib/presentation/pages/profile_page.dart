@@ -6,14 +6,13 @@ import 'package:asan_yab/presentation/pages/show_profile_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:asan_yab/presentation/widgets/buildProgress.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 import '../../data/models/language.dart';
 import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/profile_data_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../domain/riverpod/data/sign_in_provider.dart';
 import '../widgets/language/language_bottom_sheet.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
@@ -43,6 +42,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     final themeModel = ref.watch(themeModelProvider);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     final languageText = AppLocalizations.of(context);
+
     return Scaffold(
         body: Column(
       children: [
@@ -68,21 +68,23 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     bottomRight: Radius.elliptical(600, 100),
                   ),
                 ),
+                child:Padding(
+                  padding: const EdgeInsets.only(bottom:50.0),
+
+                  child: Center(
+                    child: Text(
+                      '${usersData?.name} ${usersData?.lastName}',
+                      style: const TextStyle(color: Colors.white, fontSize: 28),
+                    ),
+                  ),
+                ) ,
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.only(top: 58.0, right: 120, left: 120),
-                child: Text(
-                  maxLines: 1,
-                  '${usersData?.name} ${usersData?.lastName}',
-                  style: const TextStyle(color: Colors.white, fontSize: 28),
-                ),
-              ),
+
               Padding(
                 padding:
                     const EdgeInsets.only(top: 118.0, right: 116, left: 116),
                 child: InkWell(
-                  onTap: () => Navigator.push(
+                  onTap: () =>usersData?.imageUrl==''?const SizedBox(): Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => ShowProfilePage(
@@ -127,7 +129,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                             ),
                           ],
                         )
-                      : Hero(
+                      :ref.watch(userDetailsProvider)?.imageUrl==''?
+                      const SizedBox()
+                      :
+                  Hero(
                           tag: 'avatarHeroTag',
                           child: CircleAvatar(
                             maxRadius: 80,
@@ -142,18 +147,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   padding:
                       const EdgeInsets.only(top: 50.0, right: 10, left: 10),
                   child: IconButton(
-                    onPressed: () async {
-                      ref
-                          .read(buttonNavigationProvider.notifier)
-                          .selectedIndex(2);
-                      FirebaseAuth.instance.signOut().whenComplete(() {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MainPage(),
-                          ),
-                        );
-                      });
+                    onPressed: ()  {
+                    ref.read(authProvider.notifier).signOut();
+
                     },
                     icon: const Icon(
                       Icons.logout,
@@ -216,7 +212,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 color: Colors.grey,
               ),
               ListTile(
-                title: const Text('Dark Mode'),
+                title:  Text(languageText!.profile_dark_mode),
                 leading: const Icon(
                   color: Colors.red,
                   Icons.dark_mode_outlined,
@@ -248,7 +244,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     color: Colors.red,
                     size: 30,
                   ),
-                  title: Text(languageText!.profile_about_us_listTile),
+                  title: Text(languageText.profile_about_us_listTile),
                 ),
               ),
               const Divider(

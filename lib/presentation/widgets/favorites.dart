@@ -129,38 +129,54 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                     ),
                                   ),
                                   const SizedBox(height: 10.0),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        favorites[index]['name'],
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                            // color: Colors.black,
-                                            ),
-                                      ),
-                                     // SizedBox(height: 5,),
-                                      OutlinedButton(
-                                         style: OutlinedButton.styleFrom(backgroundColor: Colors.black54),
-                                        onPressed: () async {
-                                          await FlutterPhoneDirectCaller
-                                              .callNumber(phoneNumber);
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(phoneNumber,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                ),
-                                            ),
-                                            const Icon(Icons.phone_android,
-                                                color: Colors.green),
-                                          ],
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          favorites[index]['name'],
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                              // color: Colors.black,
+                                              ),
                                         ),
-                                      ),
-                                    ],
+                                        OutlinedButton(
+                                          onPressed: () async {
+                                            await FlutterPhoneDirectCaller
+                                                .callNumber(phoneNumber);
+                                          },
+                                          child:isRTL
+                                              ?Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              const Icon(Icons.phone_android,
+                                                  color: Colors.green),
+                                              Text(phoneNumber,
+                                                  style: const TextStyle(
+                                                    // color: Colors.black,
+
+                                                  )),
+                                            ],
+                                          )
+                                          :Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(phoneNumber,
+                                                  style: const TextStyle(
+                                                      // color: Colors.black,
+
+                                                      )),
+                                              const Icon(Icons.phone_android,
+                                                  color: Colors.green),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),

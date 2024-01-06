@@ -1,5 +1,6 @@
 import 'package:asan_yab/domain/riverpod/config/notification_repo.dart';
 import 'package:asan_yab/presentation/pages/profile_page.dart';
+import 'package:asan_yab/presentation/pages/verify_email_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,16 +20,8 @@ class MainPage extends ConsumerStatefulWidget {
 
 class _MainPageState extends ConsumerState<MainPage> {
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  final pages = [const HomePage(), const SuggestionPage(), const AuthPage()];
-  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
     ref
         .read(internetConnectivityCheckerProvider.notifier)
         .startStremaing(context);
@@ -41,7 +34,6 @@ class _MainPageState extends ConsumerState<MainPage> {
     FirebaseApi().getToken();
     FirebaseApi().initialize(context);
     return Scaffold(
-      //backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: buildBottomNavigationBar(),
       body: IndexedStack(
         index: selectedIndex,
@@ -59,12 +51,28 @@ class _MainPageState extends ConsumerState<MainPage> {
                   child: Text('خطا در اتصال'),
                 );
               } else if (snapshot.hasData) {
-                return const ProfilePage();
+                User? user = snapshot.data;
+                if (user != null && user.emailVerified) {
+                  if(snapshot.connectionState==ConnectionState.waiting){
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.red,
+                      ),
+                    );
+                  }else{
+                  return const ProfilePage();
+                  }
+                } else {
+                  return  VerifyEmailPage(
+                    email: user?.email,
+                  );
+                }
               } else {
                 return const AuthPage();
               }
             },
           ),
+
         ],
       ),
     );

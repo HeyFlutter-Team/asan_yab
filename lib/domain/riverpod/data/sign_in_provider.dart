@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
-
-import 'package:asan_yab/presentation/pages/main_page.dart';
+import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +10,7 @@ final signInProvider = Provider((ref) => SignInNotifier(ref));
 
 class SignInNotifier {
   final Ref read;
+
   SignInNotifier(this.read);
 
   Future<void> signIn({
@@ -18,49 +18,76 @@ class SignInNotifier {
     required String email,
     required String password,
   }) async {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(
-          color: Colors.red,
-        ),
-      ),
-    );
-
     try {
+      read.read(userDetailsProvider);
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const Center(child: CircularProgressIndicator(
+            color: Colors.red,
+          )); // Use the custom dialog widget
+        },
+      );
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.trim(),
         password: password,
       );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MainPage()),
-      );
     } on FirebaseAuthException catch (e) {
       final languageText = AppLocalizations.of(context);
-      print('Younis$e');
       if (e.code == 'user-not-found') {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(languageText!.sign_in_method_1_if)),
         );
-        Navigator.pop(context);
       } else if (e.code == 'wrong-password') {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(languageText!.sign_in_method_2_if)),
         );
-        Navigator.pop(context);
       } else if (e.code == 'too-many-requests') {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(languageText!.sign_in_method_3_if)),
         );
-        Navigator.pop(context);
       }
     } catch (e) {
       print('younis general errors $e');
+    }finally{
+      Navigator.pop(context);
     }
   }
 }
+
+
+class LoadingNotifier extends StateNotifier<bool> {
+  LoadingNotifier() : super(false);
+
+  void setLoading(bool isLoading) {
+    state = isLoading;
+  }
+}
+
+final loadingProvider = StateNotifierProvider<LoadingNotifier, bool>((ref) {
+  return LoadingNotifier();
+});
+
+
+class AuthNotifier extends StateNotifier<User?> {
+  AuthNotifier() : super(FirebaseAuth.instance.currentUser);
+
+  Future<void> signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      state = null; // Clear the current user upon successful sign-out
+    } catch (e) {
+      // Handle sign-out failure, if needed
+      print('Sign out error: $e');
+    }
+  }
+}
+
+final authProvider = StateNotifierProvider<AuthNotifier, User?>((ref) {
+  return AuthNotifier();
+});
+
 
 //Cheak box method
 class IsCheckNotifier extends StateNotifier<bool> {
@@ -75,12 +102,13 @@ final isCheckProvider = StateNotifierProvider<IsCheckNotifier, bool>((ref) {
   return IsCheckNotifier();
 });
 
+
+
 class ObscureBool extends StateNotifier<bool> {
   ObscureBool() : super(true);
 
   void isObscure() {
     state = !state;
-    print('younis obscure = $state');
   }
 }
 
