@@ -79,7 +79,7 @@ class AuthNotifier extends StateNotifier<User?> {
       state = null; // Clear the current user upon successful sign-out
     } catch (e) {
       // Handle sign-out failure, if needed
-      print('Sign out error: $e');
+      print('younis$e');
     }
   }
 }
