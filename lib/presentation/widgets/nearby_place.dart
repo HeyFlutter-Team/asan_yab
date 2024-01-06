@@ -132,7 +132,7 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                         child: Text(
                                           ref
                                               .watch(nearbyPlace)[index]
-                                              .adresses[0]
+                                              .addresses[0]
                                               .address,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(

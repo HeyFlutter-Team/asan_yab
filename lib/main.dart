@@ -76,7 +76,9 @@ class _MyAppState extends ConsumerState<MyApp> {
     final language = ref.watch(languageProvider);
     return MaterialApp(
       navigatorKey: navigatorKey,
-      themeMode: themeModel.currentThemeMode,
+      themeMode: themeModel.currentThemeMode!= ThemeMode.system
+          ? themeModel.currentThemeMode
+          : ThemeMode.light,
       darkTheme: ThemeData.dark().copyWith(
         textTheme: ThemeData.dark().textTheme.apply(
               bodyColor: Colors.white,
@@ -102,11 +104,9 @@ class _MyAppState extends ConsumerState<MyApp> {
               brightness: Theme.of(context).brightness,
               fontFamily: 'Shabnam',
               // appBarTheme: AppBarTheme(
-              //   backgroundColor: Theme.of(context).brightness == Brightness.dark
-              //       ? Colors.black.withOpacity(0.1)
-              //       : Colors.white,
-              // )
-          ),
+
+              // Add other theme configurations here if needed
+              ),
           child: child!,
         );
       },

@@ -57,7 +57,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
     final provider = ref.read(favoriteProvider.notifier);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     final places = ref.watch(getSingleProvider);
-    final languageText=AppLocalizations.of(context);
+    final languageText = AppLocalizations.of(context);
     return Scaffold(
       //backgroundColor: Theme.of(context).primaryColor,
       body: places == null
@@ -85,8 +85,9 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                       ),
                       IconButton(
                         onPressed: () {
-                          bool isLogin=FirebaseAuth.instance.currentUser!=null;
-                          if(isLogin){
+                          bool isLogin =
+                              FirebaseAuth.instance.currentUser != null;
+                          if (isLogin) {
                             ref.watch(getInformationProvider).toggle(widget.id);
                             ref.watch(getInformationProvider).setFavorite();
 
@@ -94,7 +95,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                 .watch(favoriteProvider.notifier)
                                 .isExist(places.id)) {
                               DownloadImage.getImage(
-                                  places.logo, places.coverImage, context)
+                                      places.logo, places.coverImage, context)
                                   .whenComplete(() {
                                 Navigator.pop(context);
                                 provider.toggleFavorite(
@@ -114,12 +115,11 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                   DownloadImage.logo,
                                   DownloadImage.coverImage);
                             }
-                          }else{
-                            ScaffoldMessenger.of(context).showSnackBar(
-                               SnackBar(content: Text('${languageText?.details_page_snack_bar}'))
-                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                    '${languageText?.details_page_snack_bar}')));
                           }
-
                         },
                         icon: ref.watch(toggleProvider)
                             ? const Icon(
@@ -187,7 +187,8 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                     places.description == null)
                                 ? const SizedBox()
                                 : CustomCard(
-                                    title: '${languageText?.details_page_1_custom_card}',
+                                    title:
+                                        '${languageText?.details_page_1_custom_card}',
                                     child: Text(places.description!),
                                   ),
                             Padding(
@@ -195,7 +196,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                   const EdgeInsets.symmetric(horizontal: 12),
                               child: (places.gallery.isEmpty)
                                   ? const SizedBox()
-                                  :  Row(
+                                  : Row(
                                       children: [
                                         const Icon(
                                           Icons.library_books,
@@ -241,28 +242,29 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                             },
                                           ),
                                   ),
-                            (places.adresses.isEmpty)
+                            (places.addresses.isEmpty)
                                 ? const SizedBox()
                                 : CustomCard(
-                                    title: '${languageText?.details_page_3_custom_card}',
+                                    title:
+                                        '${languageText?.details_page_3_custom_card}',
                                     child: ListView.builder(
                                       padding: EdgeInsets.zero,
-                                      itemCount: places.adresses.length,
+                                      itemCount: places.addresses.length,
                                       physics:
                                           const NeverScrollableScrollPhysics(),
                                       shrinkWrap: true,
                                       itemBuilder: (context, index) {
                                         phoneData
-                                            .add(places.adresses[index].phone);
+                                            .add(places.addresses[index].phone);
                                         addressData.add(
-                                            '${places.adresses[index].branch}: ${places.adresses[index].address}');
+                                            '${places.addresses[index].branch}: ${places.addresses[index].address}');
                                         return Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Expanded(
                                               flex: 1,
-                                              child: (places.adresses[index]
+                                              child: (places.addresses[index]
                                                       .address.isEmpty)
                                                   ? const SizedBox(height: 0)
                                                   : InkWell(
@@ -270,14 +272,14 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                         if (Platform
                                                             .isAndroid) {
                                                           var uri = Uri.parse(
-                                                              "google.navigation:q=${places.adresses[index].lat},${places.adresses[index].lang}&mode=d");
+                                                              "google.navigation:q=${places.addresses[index].lat},${places.addresses[index].lang}&mode=d");
                                                           launchUrl(uri);
                                                         } else {
                                                           final urlAppleMaps =
                                                               Uri.parse(
-                                                                  'https://maps.apple.com/?q=${places.adresses[index].lat},${places.adresses[index].lang}');
+                                                                  'https://maps.apple.com/?q=${places.addresses[index].lat},${places.addresses[index].lang}');
                                                           var uri = Uri.parse(
-                                                              'comgooglemaps://?saddr=&daddr=${places.adresses[index].lat},${places.adresses[index].lang}&directionsmode=driving');
+                                                              'comgooglemaps://?saddr=&daddr=${places.addresses[index].lat},${places.addresses[index].lang}&directionsmode=driving');
                                                           // launchUrl(uri);
                                                           if (await canLaunchUrl(
                                                               uri)) {
@@ -304,7 +306,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                           Flexible(
                                                             flex: 2,
                                                             child: Text(
-                                                              '${places.adresses[index].branch.isNotEmpty ? ' ${places.adresses[index].branch}: ' : ''} ${places.adresses[index].address}',
+                                                              '${places.addresses[index].branch.isNotEmpty ? ' ${places.addresses[index].branch}: ' : ''} ${places.addresses[index].address}',
                                                               maxLines: 4,
                                                               overflow:
                                                                   TextOverflow
@@ -321,7 +323,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                       ),
                                                     ),
                                             ),
-                                            (places.adresses[index].phone
+                                            (places.addresses[index].phone
                                                     .isEmpty)
                                                 ? const SizedBox(height: 0)
                                                 : ConstrainedBox(
@@ -339,7 +341,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                       onPressed: () async {
                                                         await FlutterPhoneDirectCaller
                                                             .callNumber(
-                                                          places.adresses[index]
+                                                          places.addresses[index]
                                                               .phone,
                                                         );
                                                       },
@@ -349,20 +351,25 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                                 .end,
                                                         children: [
                                                           Text(
-                                                            isRTL?convertDigitsToFarsi(
-                                                                places
-                                                                    .adresses[
+                                                            isRTL
+                                                                ? convertDigitsToFarsi(
+                                                                    places
+                                                                        .addresses[
+                                                                            index]
+                                                                        .phone)
+                                                                : places
+                                                                    .addresses[
                                                                         index]
-                                                                    .phone)
-                                                            :places
-                                                                .adresses[
-                                                            index]
-                                                                .phone,
-                                                            style:
-                                                                const TextStyle(
+                                                                    .phone,
+                                                            style: TextStyle(
                                                               fontSize: 16,
-                                                              // color: Colors
-                                                              //     .black54,
+                                                              color: Theme.of(context)
+                                                                          .brightness ==
+                                                                      Brightness
+                                                                          .dark
+                                                                  ? Colors.white
+                                                                  : Colors
+                                                                      .black,
                                                             ),
                                                           ),
                                                           const SizedBox(
