@@ -36,6 +36,10 @@ Future<Object?> getCurrentUserData(BuildContext context) async {
     return state;
   }
 
+  void disposeUserData() {
+    state = null;
+  }
+
 
   copyToClipboard(String text) {
     FlutterClipboard.copy(text);

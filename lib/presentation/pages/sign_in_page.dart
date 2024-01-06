@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
+import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/personal_information_page.dart';
 import 'package:asan_yab/presentation/pages/sign_up_page.dart';
 import 'package:asan_yab/presentation/widgets/custom_text_field.dart';
@@ -174,11 +175,11 @@ class _LogInPageState extends ConsumerState<LogInPage>
                       prefs.setString('email', emailCTRL.text);
                       prefs.setString('password', passwordCTRL.text);
                     }
-                    ref.read(buttonNavigationProvider.notifier).selectedIndex(0);
                     await ref.read(signInProvider).signIn(
                         context: context,
                         email: emailCTRL.text,
-                        password: passwordCTRL.text);
+                        password: passwordCTRL.text).whenComplete(()=>ref.watch(userDetailsProvider)).whenComplete(() => Navigator.pushReplacement(context, MaterialPageRoute(builder:(context) =>  const MainPage())));
+
 
                   },
                   child: Text(

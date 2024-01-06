@@ -1,5 +1,5 @@
-// // ignore_for_file: avoid_print
-//
+// ignore_for_file: avoid_print
+
 // import 'dart:async';
 //
 // import 'package:asan_yab/domain/riverpod/data/verify_page_provider.dart';
@@ -107,8 +107,6 @@
 //         ),
 //       );
 // }
-
-// ignore_for_file: use_build_context_synchronously
 
 // import 'dart:async';
 // import 'package:asan_yab/presentation/pages/personal_information_page.dart';
@@ -228,12 +226,10 @@
 //         );
 // }
 
+// younis important
 import 'dart:async';
 import 'package:asan_yab/data/models/language.dart';
-import 'package:asan_yab/presentation/pages/home_page.dart';
-import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/personal_information_page.dart';
-import 'package:asan_yab/presentation/pages/sign_in_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -299,6 +295,7 @@ class VerifyEmailNotifier extends StateNotifier<VerifyEmailState> {
     Future.delayed(
       Duration.zero,
       () {
+        VerifyEmailState(false, false);
         _initialize();
       },
     );
@@ -402,3 +399,125 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
         );
   }
 }
+//
+// import 'dart:async';
+// import 'package:asan_yab/data/models/language.dart';
+// import 'package:asan_yab/presentation/pages/personal_information_page.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import '../../data/repositoris/language_repository.dart';
+//
+// class VerifyEmailState extends ChangeNotifier {
+//   bool isEmailVerified = false;
+//   bool canResendEmail = false;
+//   late Timer _timer;
+//
+//   VerifyEmailState() {
+//     _initialize();
+//   }
+//
+//   Future<void> _initialize() async {
+//     final isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+//     if (!isEmailVerified) {
+//       await _sendVerificationEmail();
+//       _timer = Timer.periodic(
+//           const Duration(seconds: 3), (_) => _checkEmailVerified());
+//     }
+//   }
+//
+//   Future<void> _sendVerificationEmail() async {
+//     try {
+//       final user = FirebaseAuth.instance.currentUser!;
+//       await user.sendEmailVerification();
+//       canResendEmail = false;
+//       notifyListeners();
+//       await Future.delayed(const Duration(seconds: 20));
+//       canResendEmail = true;
+//       notifyListeners();
+//     } catch (e) {
+//       print(e);
+//     }
+//   }
+//
+//   Future<void> _checkEmailVerified() async {
+//     FirebaseAuth.instance.currentUser?.reload();
+//     if (FirebaseAuth.instance.currentUser != null) {
+//       var isEmailVerifieded = FirebaseAuth.instance.currentUser!.emailVerified;
+//       if (isEmailVerifieded) {
+//         _timer.cancel();
+//         isEmailVerified = true;
+//         notifyListeners();
+//       }
+//     }
+//
+//   }
+//
+//   @override
+//   void dispose() {
+//     _timer.cancel();
+//     super.dispose();
+//   }
+// }
+//
+// final verifyEmailProvider = ChangeNotifierProvider<VerifyEmailState>((ref) {
+//   return VerifyEmailState();
+// });
+//
+// class VerifyEmailPage extends ConsumerWidget {
+//   final String? email;
+//
+//   const VerifyEmailPage({
+//     this.email,
+//     Key? key,
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     final languageText = AppLocalizations.of(context);
+//     final isRTL = ref.watch(languageProvider).code == 'fa';
+//     final verifyEmailState = ref.watch(verifyEmailProvider);
+//     return verifyEmailState.isEmailVerified
+//         ? PersonalInformation(email: email)
+//         : PopScope(
+//       canPop: false,
+//           child: Scaffold(
+//               appBar: AppBar(
+//                 automaticallyImplyLeading: false,
+//                 backgroundColor: Colors.red.shade900,
+//                 title: Text(languageText!.verify_appBar_title),
+//                 centerTitle: true,
+//               ),
+//               body: Center(
+//                 child: Column(
+//                   mainAxisAlignment: MainAxisAlignment.center,
+//                   children: [
+//                     Padding(
+//                       padding: isRTL
+//                           ? const EdgeInsets.only(right: 28.0)
+//                           : const EdgeInsets.only(left: 28.0),
+//                       child: Text(languageText.verify_body_text),
+//                     ),
+//                     Text('$email'),
+//                     const SizedBox(
+//                       height: 10,
+//                     ),
+//                     ElevatedButton.icon(
+//                         style: ElevatedButton.styleFrom(
+//                             backgroundColor: Colors.red.shade800,
+//                             minimumSize: const Size(340, 55),
+//                             shape: RoundedRectangleBorder(
+//                                 borderRadius: BorderRadius.circular(12))),
+//                         onPressed: verifyEmailState.canResendEmail
+//                             ? () => verifyEmailState._sendVerificationEmail()
+//                             : null,
+//                         icon: const Icon(Icons.mail),
+//                         label: Text(languageText.verify_elb_text)),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//         );
+//   }
+// }
