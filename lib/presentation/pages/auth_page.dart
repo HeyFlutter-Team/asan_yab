@@ -15,9 +15,9 @@ class AuthPage extends ConsumerWidget {
 
     return isLogin
         ? const LogInPage()
-        : const PersonalInformation();
-    // SignUpPage(
-    //   onClickedSignIn: () => ref.read(authPageStateProvider.notifier).toggleLoginState(),
-    // );
+        :
+    SignUpPage(
+      onClickedSignIn: () => ref.read(authPageStateProvider.notifier).toggleLoginState(),
+    );
   }
 }

@@ -20,6 +20,15 @@ class SignInNotifier {
   }) async {
     try {
       read.read(userDetailsProvider);
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const Center(child: CircularProgressIndicator(
+            color: Colors.red,
+          )); // Use the custom dialog widget
+        },
+      );
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.trim(),
         password: password,
@@ -41,9 +50,24 @@ class SignInNotifier {
       }
     } catch (e) {
       print('younis general errors $e');
+    }finally{
+      Navigator.pop(context);
     }
   }
 }
+
+
+class LoadingNotifier extends StateNotifier<bool> {
+  LoadingNotifier() : super(false);
+
+  void setLoading(bool isLoading) {
+    state = isLoading;
+  }
+}
+
+final loadingProvider = StateNotifierProvider<LoadingNotifier, bool>((ref) {
+  return LoadingNotifier();
+});
 
 
 class AuthNotifier extends StateNotifier<User?> {

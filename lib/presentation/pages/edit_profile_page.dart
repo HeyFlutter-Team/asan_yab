@@ -102,7 +102,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ShowProfilePage(
+                          builder: (context) =>usersData?.imageUrl==''?const SizedBox(): ShowProfilePage(
                               imagUrl:
                                   '${ref.watch(userDetailsProvider)?.imageUrl}'),
                         )),

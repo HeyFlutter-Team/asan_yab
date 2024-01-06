@@ -10,9 +10,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class PersonalInformation extends ConsumerStatefulWidget {
-  // final String? email;
-  final Function()? onClickedSignIn;
-  const PersonalInformation({super.key,this.onClickedSignIn});
+  final String? email;
+  const PersonalInformation({super.key,this.email});
 
   @override
   ConsumerState<PersonalInformation> createState() => _PersonalInformationState();
@@ -77,39 +76,16 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                     onPressed: () {
                       final isValid = signUpFormKey.currentState!.validate();
                       if (!isValid)return;
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpPage(
-                        name: nameController.text,
-                        lastName: lastNameController.text,
-                      ),));
-                      // ref.read(userRegesterDetailsProvider).userDetails(
-                      //   emailController: widget.email!,
-                      //   lastNameController:lastNameController.text,
-                      //   nameController: nameController.text
-                      // ).whenComplete(() {
-                      //   ref.read(buttonNavigationProvider.notifier).selectedIndex(0);
-                      //   Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage(),));
-                      // });
+                      ref.read(userRegesterDetailsProvider).userDetails(
+                        emailController: widget.email,
+                        lastNameController:lastNameController.text,
+                        nameController: nameController.text
+                      ).whenComplete(() {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage(),));
+                        ref.read(buttonNavigationProvider.notifier).selectedIndex(0);
+                      });
                     },
                     child:  Text(languageText.elevated_text),
-                  ),
-                  const SizedBox(height: 20,),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text:languageText.sign_up_account_text,
-                          style: const TextStyle(color: Colors.grey),
-                        ),
-                        TextSpan(
-                          text: '  ${languageText.sign_up_account_text1}',
-                          style: const TextStyle(color: Colors.blue),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              Navigator.pop(context);
-                            },
-                        ),
-                      ],
-                    ),
                   ),
                 ],
               ),

@@ -127,13 +127,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                         context: context,
                         email: emailController.text,
                         password: passwordController.text,
-                    ).whenComplete((){
-                      ref.read(userRegesterDetailsProvider).userDetails(
-                        emailController: emailController.text,
-                        lastNameController:widget.lastName,
-                        nameController: widget.name
-                      );
-                    });
+                    );
                   },
                   child: Text(
                     languageText.sign_up_elbT,

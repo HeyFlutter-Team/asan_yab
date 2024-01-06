@@ -68,23 +68,23 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     bottomRight: Radius.elliptical(600, 100),
                   ),
                 ),
+                child:Padding(
+                  padding: const EdgeInsets.only(bottom:50.0),
+
+                  child: Center(
+                    child: Text(
+                      '${usersData?.name} ${usersData?.lastName}',
+                      style: const TextStyle(color: Colors.white, fontSize: 28),
+                    ),
+                  ),
+                ) ,
               ),
-              Padding(
-                padding:
-                    isRTL?
-                    const EdgeInsets.only(top: 58.0, right: 130)
-                :const EdgeInsets.only(top: 58.0, left: 130),
-                child: Text(
-                  maxLines: 1,
-                  '${usersData?.name} ${usersData?.lastName}',
-                  style: const TextStyle(color: Colors.white, fontSize: 28),
-                ),
-              ),
+
               Padding(
                 padding:
                     const EdgeInsets.only(top: 118.0, right: 116, left: 116),
                 child: InkWell(
-                  onTap: () => Navigator.push(
+                  onTap: () =>usersData?.imageUrl==''?const SizedBox(): Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => ShowProfilePage(

@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../domain/riverpod/data/sign_in_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../domain/riverpod/screen/botton_navigation_provider.dart';
 
 class LogInPage extends ConsumerStatefulWidget {
   final Function()? onClickedSignUp;
@@ -42,9 +43,11 @@ class _LogInPageState extends ConsumerState<LogInPage>
     _controller.forward();
     _initializeValues();
   }
+
   void _initializeValues() async {
     await retrieveSavedValues();
   }
+
   Future<void> retrieveSavedValues() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final savedEmail = prefs.getString('email');
@@ -67,7 +70,8 @@ class _LogInPageState extends ConsumerState<LogInPage>
 
   @override
   Widget build(BuildContext context) {
-    final languageText=AppLocalizations.of(context);
+    final loadingState = ref.watch(loadingProvider);
+    final languageText = AppLocalizations.of(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
@@ -87,7 +91,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
                 ),
               ),
               CustomTextField(
-                label:languageText!.sign_in_email,
+                label: languageText!.sign_in_email,
                 controller: emailCTRL,
                 hintText: languageText.sign_in_email_hintText,
                 validator: (p0) {
@@ -152,30 +156,35 @@ class _LogInPageState extends ConsumerState<LogInPage>
               const SizedBox(
                 height: 10,
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red.shade800,
-                    minimumSize: const Size(340, 55),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12))),
-                onPressed: () async {
-                  final isValid = formKey.currentState!.validate();
-                  if (!isValid) return;
-                  final isCheckboxChecked = ref.read(isCheckProvider);
-                  if (isCheckboxChecked) {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    prefs.setString('email', emailCTRL.text);
-                    prefs.setString('password', passwordCTRL.text);
-                  }
-                await ref.read(signInProvider).signIn(
-                      context: context,
-                      email: emailCTRL.text,
-                      password: passwordCTRL.text);
-                },
-                child: Text(
-                  languageText.sign_in_elbT,
-                  style: const TextStyle(fontSize: 20, color: Colors.white),
+              Consumer(
+                builder: (context, sref, child) =>
+                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red.shade800,
+                      minimumSize: const Size(340, 55),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12))),
+                  onPressed: () async {
+                    final isValid = formKey.currentState!.validate();
+                    if (!isValid) return;
+                    final isCheckboxChecked = ref.read(isCheckProvider);
+                    if (isCheckboxChecked) {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.setString('email', emailCTRL.text);
+                      prefs.setString('password', passwordCTRL.text);
+                    }
+                    ref.read(buttonNavigationProvider.notifier).selectedIndex(0);
+                    await ref.read(signInProvider).signIn(
+                        context: context,
+                        email: emailCTRL.text,
+                        password: passwordCTRL.text);
+
+                  },
+                  child: Text(
+                    languageText.sign_in_elbT,
+                    style: const TextStyle(fontSize: 20, color: Colors.white),
+                  ),
                 ),
               ),
               const SizedBox(
@@ -201,7 +210,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const PersonalInformation()));
+                          builder: (context) => const SignUpPage()));
                 },
                 child: Text(
                   languageText.sign_in_2_elbT,
@@ -211,7 +220,18 @@ class _LogInPageState extends ConsumerState<LogInPage>
               ),
               const SizedBox(
                 height: 20,
-              )
+              ),
+             Center(
+               child:
+               loadingState
+                   ?  const CircularProgressIndicator(
+
+                 color: Colors.red,
+
+               )
+
+                   : const SizedBox(),
+             )
             ],
           ),
         ),
@@ -219,3 +239,5 @@ class _LogInPageState extends ConsumerState<LogInPage>
     );
   }
 }
+
+

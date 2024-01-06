@@ -230,6 +230,7 @@
 
 import 'dart:async';
 import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/presentation/pages/home_page.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/personal_information_page.dart';
 import 'package:asan_yab/presentation/pages/sign_in_page.dart';
@@ -341,7 +342,9 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
     final languageText = AppLocalizations.of(context);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     return verifyEmailState.isEmailVerified
-        ? const MainPage()
+        ?  PersonalInformation(
+      email: widget.email,
+    )
         : PopScope(
       canPop: false,
           child: Scaffold(
