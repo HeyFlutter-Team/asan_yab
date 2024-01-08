@@ -10,9 +10,38 @@ class QuickSort {
     this.quickSort(arr, 0, arr.length - 1, key, pivot);
 
     console.log("Sorted List:", arr);
-    const filteredList =
-    arr.filter((item) => item[key].toLowerCase().includes(pivot.toLowerCase()));
-    // Return the first 8 items of the sorted list
+
+    function betterNaiveContains(pivot: string, arr: any[], key: string):
+     any[] {
+      if (arr.length === 0) {
+        return [];
+      }
+
+      const result: any[] = [];
+      let low = 0;
+      let high = arr.length - 1;
+
+      while (low <= high) {
+        const middleIndex = Math.floor((low + high) / 2);
+        const middleValue = arr[middleIndex][key];
+
+        if (middleValue.toLowerCase().includes(pivot.toLowerCase())) {
+          result.push(middleValue); // Element found, add to the result array
+        }
+
+        if (pivot.toLowerCase() > middleValue.toLowerCase()) {
+          low = middleIndex + 1;
+        } else {
+          high = middleIndex - 1;
+        }
+      }
+
+      return result;
+    }
+
+
+    const filteredList = betterNaiveContains(pivot, arr, key);
+
     return filteredList;
   }
 
