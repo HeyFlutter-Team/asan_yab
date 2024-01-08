@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Users {
   final int id;
-  final String uid;
+  final String? uid;
   final String name;
   final String lastName;
   final String email;
@@ -16,7 +16,7 @@ class Users {
     this.owner = const [],
     this.ownerPlaceName = const [],
     required this.id,
-    required this.uid,
+     this.uid,
     this.imageUrl = '',
     this.userType = 'normal',
     required this.name,

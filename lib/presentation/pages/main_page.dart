@@ -19,19 +19,12 @@ class MainPage extends ConsumerStatefulWidget {
 
 class _MainPageState extends ConsumerState<MainPage> {
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  final pages = [const HomePage(), const SuggestionPage(), const AuthPage()];
-  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
     ref
         .read(internetConnectivityCheckerProvider.notifier)
         .startStremaing(context);
+    FirebaseAuth.instance.currentUser;
   }
 
   @override
@@ -41,7 +34,6 @@ class _MainPageState extends ConsumerState<MainPage> {
     FirebaseApi().getToken();
     FirebaseApi().initialize(context);
     return Scaffold(
-      //backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: buildBottomNavigationBar(),
       body: IndexedStack(
         index: selectedIndex,
@@ -51,20 +43,10 @@ class _MainPageState extends ConsumerState<MainPage> {
                   .watch(internetConnectivityCheckerProvider.notifier)
                   .isConnected),
           const SuggestionPage(),
-          StreamBuilder<User?>(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return const Center(
-                  child: Text('خطا در اتصال'),
-                );
-              } else if (snapshot.hasData) {
-                return const ProfilePage();
-              } else {
-                return const AuthPage();
-              }
-            },
-          ),
+          FirebaseAuth.instance.currentUser == null
+              ? const AuthPage()
+              : const ProfilePage(),
+
         ],
       ),
     );

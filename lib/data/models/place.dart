@@ -1,94 +1,99 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Place {
-  final String id;
-  final String logo;
+  final DateTime createdAt;
+  final List<Address> addresses;
   final String coverImage;
-  final String? name;
-  final String? description;
-  final List<Address> adresses;
-  final List<String> gallery;
-  final String? category;
+  final String name;
+  final String description;
+  final String logo;
+  final String id;
   final String categoryId;
-  final Timestamp createdAt;
+  final List<String> gallery;
+  final String category;
+  final int order;
   int distance;
-
   Place({
-    required this.categoryId,
-    required this.category,
-    required this.adresses,
-    required this.id,
-    required this.logo,
+    required this.createdAt,
+    required this.addresses,
     required this.coverImage,
     required this.name,
     required this.description,
+    required this.logo,
+    required this.id,
+    required this.categoryId,
     required this.gallery,
-    required this.createdAt,
+    required this.category,
+    required this.order,
     this.distance = 1,
   });
 
   factory Place.fromJson(Map<String, dynamic> json) {
-    return Place(
-        createdAt: json['createdAt'],
-        adresses: List<Address>.from(
-            json['addresses'].map((address) => Address.fromJson(address))),
-        id: json['id'],
-        logo: json['logo'],
-        coverImage: json['coverImage'],
-        name: json['name'],
-        description: json['description'],
-        gallery: List<String>.from(json['gallery']),
-        category: json['category'],
-        categoryId: json['categoryId']);
-  }
+    DateTime createdAt;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'createdAt': createdAt,
-      'addresses': adresses.map((address) => address.toJson()).toList(),
-      'id': id,
-      'logo': logo,
-      'coverImage': coverImage,
-      'name': name,
-      'description': description,
-      'gallery': gallery,
-      'category': category,
-      'categoryId': categoryId
-    };
+    if (json['createdAt'] == null) {
+      throw Exception("Missing 'createdAt' field in JSON");
+    }
+
+    try {
+      if (json['createdAt'] is Timestamp) {
+        // If 'createdAt' is already a Timestamp
+        createdAt = (json['createdAt'] as Timestamp).toDate();
+      } else if (json['createdAt'] is Map<String, dynamic>) {
+        // If 'createdAt' is a map with '_seconds' and '_nanoseconds'
+        createdAt = DateTime.fromMillisecondsSinceEpoch(
+          (json['createdAt']['_seconds'] * 1000) +
+              (json['createdAt']['_nanoseconds'] / 1e6).round(),
+        );
+      } else {
+        // Handle other cases or throw an error if necessary
+        throw Exception(
+            "Invalid 'createdAt' type: ${json['createdAt'].runtimeType}");
+      }
+    } catch (e) {
+      throw Exception("Error parsing 'createdAt': $e");
+    }
+
+    return Place(
+      createdAt: createdAt,
+      addresses: List<Address>.from(
+        json['addresses'].map((address) => Address.fromJson(address)),
+      ),
+      coverImage: json['coverImage'],
+      name: json['name'],
+      description: json['description'],
+      logo: json['logo'],
+      id: json['id'],
+      categoryId: json['categoryId'],
+      gallery: List<String>.from(json['gallery']),
+      category: json['category'],
+      order: json['order'],
+    );
   }
 }
 
 class Address {
-  final String branch;
   final String address;
-  final String lat;
-  final String lang;
   final String phone;
+  final String lang;
+  final String branch;
+  final String lat;
 
   Address({
-    required this.branch,
-    required this.phone,
     required this.address,
-    required this.lat,
+    required this.phone,
     required this.lang,
+    required this.branch,
+    required this.lat,
   });
-
-  Map<String, dynamic> toJson() {
-    return {
-      'address': address,
-      'lat': lat,
-      'lang': lang,
-      'branch': branch,
-      'phone': phone
-    };
-  }
 
   factory Address.fromJson(Map<String, dynamic> json) {
     return Address(
-        branch: json['branch'],
-        address: json['address'],
-        lat: json['lat'],
-        lang: json['lang'],
-        phone: json['phone']);
+      address: json['address'],
+      phone: json['phone'],
+      lang: json['lang'],
+      branch: json['branch'],
+      lat: json['lat'],
+    );
   }
 }
