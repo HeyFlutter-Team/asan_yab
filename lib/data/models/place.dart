@@ -12,7 +12,7 @@ class Place {
   final List<String> gallery;
   final String category;
   final int order;
- int distance;
+  int distance;
   Place({
     required this.createdAt,
     required this.addresses,
@@ -25,24 +25,33 @@ class Place {
     required this.gallery,
     required this.category,
     required this.order,
-     this.distance =1,
+    this.distance = 1,
   });
 
   factory Place.fromJson(Map<String, dynamic> json) {
     DateTime createdAt;
 
-    if (json['createdAt'] is Timestamp) {
-      // If 'createdAt' is already a Timestamp
-      createdAt = (json['createdAt'] as Timestamp).toDate();
-    } else if (json['createdAt'] is Map<String, dynamic>) {
-      // If 'createdAt' is a map with '_seconds' and '_nanoseconds'
-      createdAt = DateTime.fromMillisecondsSinceEpoch(
-        (json['createdAt']['_seconds'] * 1000) +
-            (json['createdAt']['_nanoseconds'] / 1e6).round(),
-      );
-    } else {
-      // Handle other cases or throw an error if necessary
-      throw Exception("Invalid 'createdAt' type");
+    if (json['createdAt'] == null) {
+      throw Exception("Missing 'createdAt' field in JSON");
+    }
+
+    try {
+      if (json['createdAt'] is Timestamp) {
+        // If 'createdAt' is already a Timestamp
+        createdAt = (json['createdAt'] as Timestamp).toDate();
+      } else if (json['createdAt'] is Map<String, dynamic>) {
+        // If 'createdAt' is a map with '_seconds' and '_nanoseconds'
+        createdAt = DateTime.fromMillisecondsSinceEpoch(
+          (json['createdAt']['_seconds'] * 1000) +
+              (json['createdAt']['_nanoseconds'] / 1e6).round(),
+        );
+      } else {
+        // Handle other cases or throw an error if necessary
+        throw Exception(
+            "Invalid 'createdAt' type: ${json['createdAt'].runtimeType}");
+      }
+    } catch (e) {
+      throw Exception("Error parsing 'createdAt': $e");
     }
 
     return Place(

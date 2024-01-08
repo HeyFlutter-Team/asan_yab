@@ -1,20 +1,19 @@
 import 'package:asan_yab/presentation/pages/main_page.dart';
-import 'package:asan_yab/presentation/pages/sign_up_page.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../domain/riverpod/data/sign_up_provider.dart';
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
 import '../widgets/custom_text_field.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 class PersonalInformation extends ConsumerStatefulWidget {
   final String? email;
-  const PersonalInformation({super.key,this.email});
+  const PersonalInformation({super.key, this.email});
 
   @override
-  ConsumerState<PersonalInformation> createState() => _PersonalInformationState();
+  ConsumerState<PersonalInformation> createState() =>
+      _PersonalInformationState();
 }
 
 class _PersonalInformationState extends ConsumerState<PersonalInformation> {
@@ -28,11 +27,12 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
     lastNameController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-    final languageText=AppLocalizations.of(context);
-    return PopScope(
-      canPop: false,
+    final languageText = AppLocalizations.of(context);
+    return WillPopScope(
+      onWillPop: () async => false,
       child: Scaffold(
         body: Form(
           key: signUpFormKey,
@@ -55,14 +55,18 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                     label: languageText!.first_text_field_label,
                     controller: nameController,
                     hintText: languageText.first_text_field_hint,
-                    validator: (p0) => p0!.isEmpty ? languageText.first_text_field_valid : null,
+                    validator: (p0) => p0!.isEmpty
+                        ? languageText.first_text_field_valid
+                        : null,
                   ),
                   CustomTextField(
                     textCapitalization: TextCapitalization.words,
                     label: languageText.second_text_field_label,
-                    controller:lastNameController,
+                    controller: lastNameController,
                     hintText: languageText.second_text_field_hint,
-                    validator: (p0) => p0!.isEmpty ? languageText.second_text_field_valid : null,
+                    validator: (p0) => p0!.isEmpty
+                        ? languageText.second_text_field_valid
+                        : null,
                   ),
                   const SizedBox(
                     height: 10,
@@ -75,17 +79,25 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                             borderRadius: BorderRadius.circular(12))),
                     onPressed: () {
                       final isValid = signUpFormKey.currentState!.validate();
-                      if (!isValid)return;
-                      ref.read(userRegesterDetailsProvider).userDetails(
-                        emailController: widget.email,
-                        lastNameController:lastNameController.text,
-                        nameController: nameController.text
-                      ).whenComplete(() {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage(),));
-                        ref.read(buttonNavigationProvider.notifier).selectedIndex(0);
+                      if (!isValid) return;
+                      ref
+                          .read(userRegesterDetailsProvider)
+                          .userDetails(
+                              emailController: widget.email,
+                              lastNameController: lastNameController.text,
+                              nameController: nameController.text)
+                          .whenComplete(() {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const MainPage(),
+                            ));
+                        ref
+                            .read(buttonNavigationProvider.notifier)
+                            .selectedIndex(0);
                       });
                     },
-                    child:  Text(languageText.elevated_text),
+                    child: Text(languageText.elevated_text),
                   ),
                 ],
               ),
