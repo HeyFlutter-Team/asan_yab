@@ -1,13 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:asan_yab/domain/riverpod/screen/botton_navigation_provider.dart';
 import 'package:asan_yab/presentation/pages/about_us_page.dart';
 import 'package:asan_yab/presentation/pages/edit_profile_page.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/show_profile_page.dart';
-import 'package:asan_yab/presentation/pages/sign_in_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
-import 'package:asan_yab/presentation/pages/verify_email_page.dart';
 import 'package:asan_yab/presentation/widgets/buildProgress.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +13,7 @@ import '../../data/models/language.dart';
 import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/profile_data_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../../domain/riverpod/data/sign_in_provider.dart';
 import '../widgets/language/language_bottom_sheet.dart';
-import 'auth_page.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});

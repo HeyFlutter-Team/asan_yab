@@ -2,14 +2,12 @@
 
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:asan_yab/data/models/language.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../core/utils/convert_digits_to_farsi.dart';
 import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
@@ -152,35 +150,26 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                             await FlutterPhoneDirectCaller
                                                 .callNumber(phoneNumber);
                                           },
-                                          child: isRTL
-                                              ? Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    const Icon(
-                                                        Icons.phone_android,
-                                                        color: Colors.green),
-                                                    Text(phoneNumber,
-                                                        style: const TextStyle(
-                                                            // color: Colors.black,
-
-                                                            )),
-                                                  ],
-                                                )
-                                              : Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(phoneNumber,
-                                                        style: const TextStyle(
-                                                            // color: Colors.black,
-
-                                                            )),
-                                                    const Icon(
-                                                        Icons.phone_android,
-                                                        color: Colors.green),
-                                                  ],
-                                                ),
+                                          child:isRTL
+                                              ?Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              const Icon(Icons.phone_android,
+                                                  color: Colors.green),
+                                              Text(phoneNumber),
+                                            ],
+                                          )
+                                          :Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(phoneNumber,overflow: TextOverflow.ellipsis),
+                                              const Icon(Icons.phone_android,
+                                                  color: Colors.green),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
