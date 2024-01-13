@@ -131,7 +131,7 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                   const SizedBox(height: 10.0),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 12),
+                                        horizontal: 5),
                                     child: Column(
                                       children: [
                                         Text(
@@ -154,22 +154,15 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                             children: [
                                               const Icon(Icons.phone_android,
                                                   color: Colors.green),
-                                              Text(phoneNumber,
-                                                  style: const TextStyle(
-                                                    // color: Colors.black,
-
-                                                  )),
+                                              Text(phoneNumber),
                                             ],
                                           )
                                           :Row(
+                                            mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              Text(phoneNumber,
-                                                  style: const TextStyle(
-                                                      // color: Colors.black,
-
-                                                      )),
+                                              Text(phoneNumber,overflow: TextOverflow.ellipsis),
                                               const Icon(Icons.phone_android,
                                                   color: Colors.green),
                                             ],

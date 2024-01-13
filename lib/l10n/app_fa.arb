@@ -117,8 +117,15 @@
   "details_page_1_custom_card": "توضیحات",
   "details_page_2_custom_card": "گالری",
   "details_page_3_custom_card": "مشخصات",
+  "details_page_4_custom_card": "اجناس جدید",
+  "details_page_5_custom_card": "نام",
+  "details_page_6_custom_card": "قیمت",
+  "details_page_7_custom_card": "داکتر",
+  "details_page_8_custom_card": "نخصص",
+  "details_page_9_custom_card": "تایم",
 
-"about_us_page_appbar_title": " در باره ما",
+
+  "about_us_page_appbar_title": " در باره ما",
 
   "nearby_place_page_title": "مکان های نزدیک",
   "nearby_place_page_active_location": "لوکشن خود را فعال کنید",

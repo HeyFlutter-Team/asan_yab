@@ -70,7 +70,10 @@ class Categories extends ConsumerWidget {
                                 MaterialPageRoute(
                                   builder: (context) => ListCategoryItem(
                                     catId: category[index].id,
-                                    categoryName: category[index].categoryName,
+                                    categoryName:
+                                    isRTL ?
+                                    category[index].categoryName
+                                        :category[index].enCategoryName!,
                                   ),
                                 ));
                           },
@@ -94,7 +97,10 @@ class Categories extends ConsumerWidget {
                                     color: Colors.white,
                                     size: 45.0),
                                 const SizedBox(height: 4),
-                                Text(category[index].categoryName,
+                                Text(
+                                    isRTL?
+                                    category[index].categoryName
+                                    :category[index].enCategoryName!,
                                     maxLines: 1,
                                     style: const TextStyle(
                                       color: Colors.white,

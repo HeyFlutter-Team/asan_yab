@@ -1,8 +1,10 @@
+import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/domain/riverpod/data/categories_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../core/res/colors.dart';
+import '../../data/repositoris/language_repository.dart';
 import 'list_category_item.dart';
 
 class CategoryPage extends ConsumerWidget {
@@ -10,6 +12,7 @@ class CategoryPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isRTL = ref.watch(languageProvider).code=='fa';
     final languageText=AppLocalizations.of(context);
     ref.read(categoriesProvider.notifier).getCategories();
     final category = ref.watch(categoriesProvider);
@@ -61,7 +64,10 @@ class CategoryPage extends ConsumerWidget {
                             MaterialPageRoute(
                               builder: (context) => ListCategoryItem(
                                 catId: category[index].id,
-                                categoryName: category[index].categoryName,
+                                categoryName:
+                                isRTL?
+                                category[index].categoryName
+                                :category[index].enCategoryName!,
                               ),
                             ),
                           );
@@ -84,7 +90,9 @@ class CategoryPage extends ConsumerWidget {
                               ),
                               const SizedBox(height: 16.0),
                               Text(
-                                category[index].categoryName,
+                                isRTL?
+                                category[index].categoryName
+                                :category[index].enCategoryName!,
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 16.0),
                               ),
