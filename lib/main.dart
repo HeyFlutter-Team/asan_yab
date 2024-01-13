@@ -1,7 +1,8 @@
+import 'package:asan_yab/data/repositoris/language_repository.dart';
+import 'package:asan_yab/data/repositoris/language_repository.dart';
 import 'package:asan_yab/presentation/pages/auth_page.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
-import 'package:asan_yab/data/repositoris/language_repository.dart';
 import 'package:asan_yab/presentation/pages/verify_email_page.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,9 +12,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'data/models/language.dart';
 import 'firebase_options.dart';
 
@@ -79,7 +81,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     final language = ref.watch(languageProvider);
     return MaterialApp(
       navigatorKey: navigatorKey,
-      themeMode: themeModel.currentThemeMode!= ThemeMode.system
+      themeMode: themeModel.currentThemeMode != ThemeMode.system
           ? themeModel.currentThemeMode
           : ThemeMode.light,
       darkTheme: ThemeData.dark().copyWith(
@@ -99,7 +101,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: Locale(language.code),
-      home:StreamBuilder<User?>(
+      home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
@@ -117,7 +119,7 @@ class _MyAppState extends ConsumerState<MyApp> {
             if (user.emailVerified) {
               return const MainPage();
             } else {
-              return  VerifyEmailPage(
+              return VerifyEmailPage(
                 email: user.email,
               );
             }
@@ -125,19 +127,17 @@ class _MyAppState extends ConsumerState<MyApp> {
             return const MainPage();
           }
         },
-      )
-
-      ,
+      ),
       builder: (context, child) {
         return Theme(
           data: ThemeData(
-              useMaterial3: true,
-              brightness: Theme.of(context).brightness,
-              fontFamily: 'Shabnam',
-              // appBarTheme: AppBarTheme(
+            useMaterial3: true,
+            brightness: Theme.of(context).brightness,
+            fontFamily: 'Shabnam',
+            // appBarTheme: AppBarTheme(
 
-              // Add other theme configurations here if needed
-              ),
+            // Add other theme configurations here if needed
+          ),
           child: child!,
         );
       },

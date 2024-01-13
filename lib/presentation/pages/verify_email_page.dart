@@ -228,12 +228,13 @@
 
 // younis important
 import 'dart:async';
+
 import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/presentation/pages/personal_information_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositoris/language_repository.dart';
 
@@ -280,14 +281,13 @@ class VerifyEmailNotifier extends StateNotifier<VerifyEmailState> {
 
   Future<void> _checkEmailVerified() async {
     FirebaseAuth.instance.currentUser?.reload();
-    if(FirebaseAuth.instance.currentUser !=null){
+    if (FirebaseAuth.instance.currentUser != null) {
       final isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
       if (isEmailVerified) {
         _timer.cancel();
         state = VerifyEmailState(isEmailVerified, state.canResendEmail);
       }
     }
-
   }
 
   @override
@@ -302,7 +302,6 @@ class VerifyEmailNotifier extends StateNotifier<VerifyEmailState> {
     super.dispose();
   }
 }
-
 
 //my class
 class VerifyEmailPage extends ConsumerStatefulWidget {
@@ -339,12 +338,12 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
     final languageText = AppLocalizations.of(context);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     return verifyEmailState.isEmailVerified
-        ?  PersonalInformation(
-      email: widget.email,
-    )
-        : PopScope(
-      canPop: false,
-          child: Scaffold(
+        ? PersonalInformation(
+            email: widget.email,
+          )
+        : WillPopScope(
+            onWillPop: () async => false,
+            child: Scaffold(
               appBar: AppBar(
                 automaticallyImplyLeading: false,
                 backgroundColor: Colors.red.shade900,
@@ -386,8 +385,8 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
                         ),
                         label: Text(
                           languageText.verify_elb_text,
-                          style:
-                              const TextStyle(fontSize: 16, color: Colors.white),
+                          style: const TextStyle(
+                              fontSize: 16, color: Colors.white),
                         )),
                     const SizedBox(
                       height: 8,
@@ -396,7 +395,7 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
                 ),
               ),
             ),
-        );
+          );
   }
 }
 //
