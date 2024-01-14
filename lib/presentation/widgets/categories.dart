@@ -46,7 +46,7 @@ class Categories extends ConsumerWidget {
                           MaterialPageRoute(
                               builder: (context) => const CategoryPage()),
                         ),
-                        icon: isRTL?const Icon(Icons.arrow_circle_left_outlined,size: 32,color: Colors.grey,): const Icon(Icons.arrow_circle_right_outlined,
+                        icon: Icon(isRTL?Icons.arrow_circle_left_outlined:Icons.arrow_circle_right_outlined,
                           size: 32.0,
                           color: Colors.grey,
                         ),
@@ -70,7 +70,10 @@ class Categories extends ConsumerWidget {
                                 MaterialPageRoute(
                                   builder: (context) => ListCategoryItem(
                                     catId: category[index].id,
-                                    categoryName: category[index].categoryName,
+                                    categoryName:
+                                    isRTL ?
+                                    category[index].categoryName
+                                        :category[index].enCategoryName!,
                                   ),
                                 ));
                           },
@@ -94,7 +97,10 @@ class Categories extends ConsumerWidget {
                                     color: Colors.white,
                                     size: 45.0),
                                 const SizedBox(height: 4),
-                                Text(category[index].categoryName,
+                                Text(
+                                    isRTL?
+                                    category[index].categoryName
+                                    :category[index].enCategoryName!,
                                     maxLines: 1,
                                     style: const TextStyle(
                                       color: Colors.white,

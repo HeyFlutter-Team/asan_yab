@@ -6,6 +6,7 @@ import 'package:clipboard/clipboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,25 +14,30 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/models/users.dart';
 
 class UserDetails extends StateNotifier<Users?> {
-  UserDetails(super.state);
-  Future<Users?> getCurrentUserData() async {
+  UserDetails({Users? user}):super(user);
+Future<Object?> getCurrentUserData(BuildContext context) async {
     try {
-      final user = FirebaseAuth.instance.currentUser;
+      final user = FirebaseAuth.instance.currentUser?.uid;
 
       if (user != null) {
         final userSnapshot = await FirebaseFirestore.instance
             .collection('User')
-            .doc(user.uid)
+            .doc(user)
             .get();
 
         state = Users.fromMap(userSnapshot.data()!);
         return state;
       }
     } catch (e) {
-      print('Younis Error fetching current user data: $e');
-      print('younis: state $state');
-      return null;
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
     }
+    return state;
+  }
+
+  void disposeUserData() {
+    state = null;
   }
 
 
@@ -41,7 +47,12 @@ class UserDetails extends StateNotifier<Users?> {
 }
 
 final userDetailsProvider =
-    StateNotifierProvider<UserDetails, Users?>((ref) => UserDetails(null));
+    StateNotifierProvider<UserDetails, Users?>((ref) => UserDetails());
+
+
+
+
+
 
 class ImageState {
   File? image;
@@ -68,17 +79,18 @@ class ImageState {
 }
 
 class ImageNotifier extends StateNotifier<ImageState> {
+  Ref? refs;
   ImageNotifier() : super(ImageState());
 
   final ImagePicker _imagePicker = ImagePicker();
 
   Future<void> pickImage(ImageSource source) async {
     try {
-      final pickedImage = await _imagePicker.pickImage(source: source);
+     final pickedImage = await _imagePicker.pickImage(source: source);
       if (pickedImage == null) return;
 
-      final imageTemp = File(pickedImage.path);
-      state = state.copyWith(image: imageTemp);
+       final imageTemp = File(pickedImage.path);
+      state = state.copyWith(image: imageTemp,imageUrl: pickedImage.path);
       uploadFile();
     } catch (e) {
       print('Failed to pick image: $e');

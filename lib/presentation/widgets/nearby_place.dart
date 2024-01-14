@@ -43,17 +43,13 @@ class NearbyPlaceWidget extends ConsumerWidget {
                         MaterialPageRoute(
                             builder: (context) => const NearbyPlacePage()),
                       ),
-                      icon: isRTL
-                          ? const Icon(
-                              Icons.arrow_circle_left_outlined,
-                              size: 32,
-                              color: Colors.grey,
-                            )
-                          : const Icon(
-                              Icons.arrow_circle_right_outlined,
-                              size: 32.0,
-                              color: Colors.grey,
-                            ),
+                      icon: Icon(
+                        isRTL
+                            ? Icons.arrow_circle_left_outlined
+                            : Icons.arrow_circle_right_outlined,
+                        size: 32.0,
+                        color: Colors.grey,
+                      ),
                     ),
                   ],
                 ),
@@ -139,7 +135,7 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                         child: Text(
                                           ref
                                               .watch(nearbyPlace)[index]
-                                              .adresses[0]
+                                              .addresses[0]
                                               .address,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
@@ -161,13 +157,21 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                           borderRadius:
                                               BorderRadius.circular(8)),
                                       padding: const EdgeInsets.all(8),
-                                      child: Text(
-                                        '${languageText!.nearbyPlaces_meter_title} ${convertDigitsToFarsi(place[index].distance.toString())}',
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                      child: isRTL
+                                          ? Text(
+                                              '${convertDigitsToFarsi(place[index].distance.toString())} ${languageText.nearbyPlaces_meter_title}',
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            )
+                                          : Text(
+                                              '${place[index].distance} ${languageText.nearbyPlaces_meter_title}',
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                     ),
                                   ),
                                   const SizedBox(height: 10),

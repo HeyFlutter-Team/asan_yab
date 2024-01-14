@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Users {
   final int id;
-  final String uid;
+  final String? uid;
   final String name;
   final String lastName;
   final String email;
@@ -16,7 +16,7 @@ class Users {
     this.owner = const [],
     this.ownerPlaceName = const [],
     required this.id,
-    required this.uid,
+     this.uid,
     this.imageUrl = '',
     this.userType = 'normal',
     required this.name,
@@ -50,6 +50,31 @@ class Users {
       id: json['id'],
       owner: List<String>.from(json['owner']),
       ownerPlaceName: List<String>.from(json['ownerPlaceName']),
+    );
+  }
+  Users copyWith({
+    int? id,
+    String? uid,
+    String? name,
+    String? lastName,
+    String? email,
+    Timestamp? createdAt,
+    String? imageUrl,
+    String? userType,
+    List<String>? owner,
+    List<String>? ownerPlaceName,
+  }) {
+    return Users(
+      id: id ?? this.id,
+      uid: uid ?? this.uid,
+      name: name ?? this.name,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
+      createdAt: createdAt ?? this.createdAt,
+      imageUrl: imageUrl ?? this.imageUrl,
+      userType: userType ?? this.userType,
+      owner: owner ?? this.owner,
+      ownerPlaceName: ownerPlaceName ?? this.ownerPlaceName,
     );
   }
 }

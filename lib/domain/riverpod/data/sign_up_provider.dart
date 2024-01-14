@@ -8,9 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/models/users.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class SignUpNotifier extends StateNotifier {
+class SignUpNotifier{
   final Ref ref;
-  SignUpNotifier(super.createFn, this.ref);
+  SignUpNotifier(this.ref);
 
   Future signUp({required BuildContext context,required String email,required String password}) async {
 
@@ -48,37 +48,32 @@ class SignUpNotifier extends StateNotifier {
       }
     }
   }
-  resetData(){
-    state=null;
-  }
 }
 
 final signUpNotifierProvider =
-    StateNotifierProvider((ref) => SignUpNotifier(ref, ref));
+    Provider((ref) => SignUpNotifier(ref));
 
-class UserDetails extends StateNotifier {
-  UserDetails(super.state);
-
+class UserDetails{
   final id=DateTime.now().millisecondsSinceEpoch;
   final uid = FirebaseAuth.instance.currentUser?.uid;
-  Future userDetails({
-    required String emailController,
-    required String lastNameController,
-    required String nameController,
+  Future<void> userDetails({
+     String? emailController,
+     String? lastNameController,
+     String? nameController,
   }) async {
     final userRef = FirebaseFirestore.instance.collection('User').doc(uid);
 
     final user = Users(
         createdAt: Timestamp.now(),
-        email: emailController.trim(),
-        lastName: lastNameController.trim(),
-        name: nameController.trim(),
+        email: emailController!.trim(),
+        lastName: lastNameController!.trim(),
+        name: nameController!.trim(),
          uid: userRef.id,
         id: id
     );
     final json = user.toJson();
-    userRef.set(json);
+   await userRef.set(json);
   }
 }
 
-final userDetailsProvider = StateNotifierProvider((ref) => UserDetails(ref));
+final userRegesterDetailsProvider = Provider((ref) => UserDetails());

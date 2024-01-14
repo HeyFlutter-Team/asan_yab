@@ -1,9 +1,11 @@
 import 'package:asan_yab/domain/riverpod/config/notification_repo.dart';
 import 'package:asan_yab/presentation/pages/profile_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/riverpod/config/internet_connectivity_checker.dart';
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
+import 'auth_page.dart';
 import 'home_page.dart';
 import 'suggestion.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -17,19 +19,12 @@ class MainPage extends ConsumerStatefulWidget {
 
 class _MainPageState extends ConsumerState<MainPage> {
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  final pages = [const HomePage(), const SuggestionPage(), const ProfilePage()];
-  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
     ref
         .read(internetConnectivityCheckerProvider.notifier)
         .startStremaing(context);
+    FirebaseAuth.instance.currentUser;
   }
 
   @override
@@ -39,7 +34,6 @@ class _MainPageState extends ConsumerState<MainPage> {
     FirebaseApi().getToken();
     FirebaseApi().initialize(context);
     return Scaffold(
-      //backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: buildBottomNavigationBar(),
       body: IndexedStack(
         index: selectedIndex,
@@ -49,7 +43,10 @@ class _MainPageState extends ConsumerState<MainPage> {
                   .watch(internetConnectivityCheckerProvider.notifier)
                   .isConnected),
           const SuggestionPage(),
-          const ProfilePage()
+          FirebaseAuth.instance.currentUser == null
+              ? const AuthPage()
+              : const ProfilePage(),
+
         ],
       ),
     );

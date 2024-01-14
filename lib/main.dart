@@ -1,7 +1,9 @@
+import 'package:asan_yab/data/repositoris/language_repository.dart';
+import 'package:asan_yab/data/repositoris/language_repository.dart';
 import 'package:asan_yab/presentation/pages/auth_page.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
-import 'package:asan_yab/data/repositoris/language_repository.dart';
+import 'package:asan_yab/presentation/pages/verify_email_page.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,9 +12,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'data/models/language.dart';
 import 'firebase_options.dart';
 
@@ -78,7 +81,9 @@ class _MyAppState extends ConsumerState<MyApp> {
     final language = ref.watch(languageProvider);
     return MaterialApp(
       navigatorKey: navigatorKey,
-      themeMode: themeModel.currentThemeMode,
+      themeMode: themeModel.currentThemeMode != ThemeMode.system
+          ? themeModel.currentThemeMode
+          : ThemeMode.light,
       darkTheme: ThemeData.dark().copyWith(
         textTheme: ThemeData.dark().textTheme.apply(
               bodyColor: Colors.white,
@@ -99,32 +104,40 @@ class _MyAppState extends ConsumerState<MyApp> {
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
+          if (snapshot.hasError) {
             return const Center(
               child: Text('خطا در اتصال'),
             );
-          } else if (snapshot.hasData) {
-            return const MainPage();
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Colors.red,
+              ),
+            );
+          } else if (snapshot.hasData && snapshot.data != null) {
+            final user = snapshot.data!;
+            if (user.emailVerified) {
+              return const MainPage();
+            } else {
+              return VerifyEmailPage(
+                email: user.email,
+              );
+            }
           } else {
-            return const AuthPage();
+            return const MainPage();
           }
         },
       ),
       builder: (context, child) {
         return Theme(
           data: ThemeData(
-              useMaterial3: false,
-              brightness: Theme.of(context).brightness,
-              fontFamily: 'Shabnam',
-              appBarTheme: AppBarTheme(
-                backgroundColor: Theme.of(context).brightness == Brightness.dark
-                    ? Colors.black.withOpacity(0.1)
-                    : Colors.white,
-              )),
+            useMaterial3: true,
+            brightness: Theme.of(context).brightness,
+            fontFamily: 'Shabnam',
+            // appBarTheme: AppBarTheme(
+
+            // Add other theme configurations here if needed
+          ),
           child: child!,
         );
       },

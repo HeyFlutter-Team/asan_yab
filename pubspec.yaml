@@ -55,6 +55,8 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   rate_my_app: ^2.0.0
 
+  easy_localization: ^3.0.3
+  cloud_functions: ^4.5.8
 
 
 
@@ -63,7 +65,7 @@ dependencies:
 flutter_native_splash:
   color: '#ffffff'
   image: 'assets/asan_yab.png'
-  color_dark: '#ffffff'
+  color_dark: '#2D3339'
 
 
   android: true
