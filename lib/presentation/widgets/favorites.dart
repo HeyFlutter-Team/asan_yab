@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:asan_yab/domain/riverpod/data/firebase_rating_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
@@ -39,9 +40,14 @@ class _FavoritesState extends ConsumerState<Favorites> {
     final favoriteState = ref.watch(favoriteProvider);
     debugPrint('favorite $favoriteState');
     final favorites = favoriteState.map((e) => e).toList();
-    final languageText=AppLocalizations.of(context);
-    print("this is the lenght");
+
+    final languageText = AppLocalizations.of(context);
+    for (var favorite in favorites) {
+      print("this is the length: ${favorite.keys}");
+      print("this is the length: ${favorite.values}");
+    }
     print(favorites.length);
+
     return favorites.isEmpty
         ? const SizedBox()
         : Column(
@@ -67,7 +73,6 @@ class _FavoritesState extends ConsumerState<Favorites> {
                   ),
                   itemCount: favorites.length,
                   itemBuilder: (context, index) {
-                    print(favorites[index]);
                     final toggle =
                         favorites[index]['toggle'] == 1 ? true : false;
                     final items = favorites[index];
@@ -196,6 +201,53 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                   ),
                           ),
                         ),
+                        widget.isConnected
+                            ? Positioned(
+                                top: 98.0,
+                                left: 10.0,
+                                child: FutureBuilder<double>(
+                                  future: ref
+                                      .read(firebaseRatingProvider)
+                                      .getAverageRatingForPlace(
+                                          favorites[index]['id']),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const CircularProgressIndicator(); // Show loading indicator while fetching rating
+                                    } else if (snapshot.hasError) {
+                                      return const Text(
+                                          'Error fetching rating'); // Show error message if there's an error
+                                    } else {
+                                      final averageRating = snapshot.data ?? 0;
+                                      return Container(
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          border: Border.all(
+                                              width: 4, color: Colors.white),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            averageRating.toStringAsFixed(
+                                                1), // Display the average rating with one decimal place
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                              )
+                            : const SizedBox(
+                                height: 0,
+                              )
                       ],
                     );
                   },

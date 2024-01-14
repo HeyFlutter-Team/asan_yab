@@ -14,9 +14,9 @@ final updateProvider =
 
 class UpdateFavorite extends ChangeNotifier {
   Future<void> update(BuildContext context, WidgetRef ref) async {
-    await ref.read(getInformationProvider).getFavorite();
+    await ref.read(getInformationProvider.notifier).getFavorite();
     List<String> firebaseId =
-        ref.watch(getInformationProvider.notifier).favoriteList;
+        await ref.watch(getInformationProvider).favoriteList;
     List<String> phoneId =
         ref.watch(favoriteProvider).map((e) => e['id'].toString()).toList();
 
@@ -73,16 +73,17 @@ class UpdateFavorite extends ChangeNotifier {
         ref.read(toggleProvider.notifier).toggle(toggle);
         final provider = ref.read(favoriteProvider.notifier);
         final places = Place(
-            categoryId: '',
-            category: '',
-            adresses: [],
-            id: phoneId[i],
-            logo: '',
-            coverImage: '',
-            name: '',
-            description: '',
-            gallery: [],
-            createdAt: Timestamp.now());
+          categoryId: '',
+          category: '',
+          adresses: [],
+          id: phoneId[i],
+          logo: '',
+          coverImage: '',
+          name: '',
+          description: '',
+          gallery: [],
+          createdAt: Timestamp.now(),
+        );
         addressData = [];
         phoneData = [];
 

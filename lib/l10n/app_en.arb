@@ -107,6 +107,12 @@
   "second_text_field_label": "Last Name",
   "second_text_field_hint": "Enter your Last Name",
   "second_text_field_valid": "Your last name is empty",
-  "elevated_text": "Enter"
+  "elevated_text": "Enter",
+
+
+  "rating_widget_dialog":"Please leave a star rating",
+
+  "done_click":"Done"
+
 
 }

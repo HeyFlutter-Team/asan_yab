@@ -110,7 +110,8 @@
   "second_text_field_label": "تخلص",
   "second_text_field_hint": "نخلص خود را وارد کنید",
   "second_text_field_valid": "تخلص خالی است",
-  "elevated_text": "ثبت نام"
+  "elevated_text": "ثبت نام",
 
-
+"rating_widget_dialog":"لطفا برای ما امتیاز دهید",
+  "done_click":"تایید"
 }
