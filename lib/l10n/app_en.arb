@@ -111,6 +111,13 @@
   "elevated_text": "Enter",
 
 
+  "rating_widget_dialog":"Please leave a star rating",
+
+  "done_click":"Done",
+
+  "elevated_text": "Enter",
+
+
   "details_page_snack_bar": "To add to favorites you must first log in to your account",
   "details_page_1_custom_card": "Description",
   "details_page_2_custom_card": "Gallery",

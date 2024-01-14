@@ -113,6 +113,8 @@
   "elevated_text": "ثبت نام",
 
 
+"rating_widget_dialog":"لطفا برای ما امتیاز دهید",
+  "done_click":"تایید",
   "details_page_snack_bar": "برای اضافه کردن به مورد دلخواه اول باید وارد اکانت خود شوید ",
   "details_page_1_custom_card": "توضیحات",
   "details_page_2_custom_card": "گالری",

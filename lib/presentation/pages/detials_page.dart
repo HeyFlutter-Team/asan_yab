@@ -2,10 +2,13 @@ import 'dart:io';
 import 'package:asan_yab/core/utils/download_image.dart';
 import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/domain/riverpod/data/toggle_favorite.dart';
+
+import 'package:asan_yab/presentation/widgets/rating_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,6 +17,7 @@ import '../../core/utils/convert_digits_to_farsi.dart';
 import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
 import '../../domain/riverpod/data/firbase_favorite_provider.dart';
+import '../../domain/riverpod/data/firebase_rating_provider.dart';
 import '../../domain/riverpod/data/single_place_provider.dart';
 import '../widgets/page_view_item.dart';
 import 'detials_page_offline.dart';
@@ -33,12 +37,16 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
   void initState() {
     super.initState();
     ref.read(getSingleProvider.notifier).fetchSinglePlace(widget.id);
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       //Todo: for selected
       ref.read(getInformationProvider).getFavorite();
       final provider = ref.read(favoriteProvider.notifier);
       final toggle = provider.isExist(widget.id);
       ref.read(toggleProvider.notifier).toggle(toggle);
+
+      ref
+          .read(firebaseRatingProvider.notifier)
+          .getAverageRating(postId: widget.id);
     });
   }
 
@@ -51,6 +59,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
   Widget build(BuildContext context) {
     List<String> phoneData = [];
     List<String> addressData = [];
+    ref.read(firebaseRatingProvider.notifier);
     final size = MediaQuery.of(context).size;
 
     final provider = ref.read(favoriteProvider.notifier);
@@ -181,6 +190,9 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                     fontSize: 24, fontWeight: FontWeight.bold),
                               ),
                             ),
+                            RatingWidgets(
+                              postId: places.id,
+                            ),
                             const SizedBox(height: 12),
                             (places.description == '' ||
                                     places.description.isEmpty)
@@ -296,10 +308,12 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
-                                                  builder: (context) => ImageView(
+                                                  builder: (context) =>
+                                                      ImageView(
                                                     selectedIndex: index,
-                                                    gallery: places.itemImages
-                                                        !.map((item) => item.imageUrl)
+                                                    gallery: places.itemImages!
+                                                        .map((item) =>
+                                                            item.imageUrl)
                                                         .toList(),
                                                   ),
                                                 ),
@@ -325,13 +339,15 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                 children: [
                                                   ClipRRect(
                                                     borderRadius:
-                                                        BorderRadius.circular(22),
+                                                        BorderRadius.circular(
+                                                            22),
                                                     child: CachedNetworkImage(
                                                       imageUrl: places
                                                           .itemImages![index]
                                                           .imageUrl,
                                                       width: double.infinity,
-                                                      height: size.height * 0.20,
+                                                      height:
+                                                          size.height * 0.20,
                                                       fit: BoxFit.cover,
                                                       placeholder:
                                                           (context, url) =>
@@ -347,12 +363,13 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                     '${languageText!.details_page_5_custom_card}: ${places.itemImages![index].name}',
                                                     style: const TextStyle(
                                                       fontSize: 14,
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
                                                   ),
                                                   const SizedBox(height: 4),
                                                   Text(
-                                                    '${languageText.details_page_6_custom_card}: ${isRTL?convertDigitsToFarsi(places.itemImages![index].price):places.itemImages![index].price}',
+                                                    '${languageText.details_page_6_custom_card}: ${isRTL ? convertDigitsToFarsi(places.itemImages![index].price) : places.itemImages![index].price}',
                                                     style: const TextStyle(
                                                       fontSize: 14,
                                                       color: Colors.blue,
@@ -372,120 +389,119 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                             ////hojjat////
                             Padding(
                               padding:
-                              const EdgeInsets.symmetric(horizontal: 12),
+                                  const EdgeInsets.symmetric(horizontal: 12),
                               child: (places.doctors == null ||
-                                  places.doctors!.isEmpty)
+                                      places.doctors!.isEmpty)
                                   ? const SizedBox()
                                   : Row(
-                                children: [
-                                  const Icon(
-                                    Icons.timer,
-                                    // color: Colors.black54,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    '${languageText?.details_page_7_custom_card}',
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                      children: [
+                                        const Icon(
+                                          Icons.timer,
+                                          // color: Colors.black54,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          '${languageText?.details_page_7_custom_card}',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 12)
+                                      ],
                                     ),
-                                  ),
-                                  const SizedBox(height: 12)
-                                ],
-                              ),
                             ),
                             const SizedBox(
                               height: 5,
                             ),
-                            places.doctors == null ||
-                                places.doctors!.isEmpty
+                            places.doctors == null || places.doctors!.isEmpty
                                 ? const SizedBox(height: 0)
                                 : SizedBox(
-                              height: size.height * 0.35,
-                              child: ListView.separated(
-                                separatorBuilder: (context, index) =>
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12),
-                                scrollDirection: Axis.horizontal,
-                                itemCount: places.doctors!.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 6,
-                                        left: 2,
-                                        right: 2,
-                                        bottom: 18),
-                                    child: Container(
-                                      width: size.width * 0.55,
-                                      height: 160,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                        BorderRadius.circular(12),
-                                        boxShadow: const [
-                                          BoxShadow(
-                                            spreadRadius: 2,
-                                            blurRadius: 5,
-                                            offset: Offset(0, 3),
-                                          ),
-                                        ],
+                                    height: size.height * 0.35,
+                                    child: ListView.separated(
+                                      separatorBuilder: (context, index) =>
+                                          const SizedBox(
+                                        width: 20,
                                       ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius:
-                                            BorderRadius.circular(22),
-                                            child: CachedNetworkImage(
-                                              imageUrl: places
-                                                  .doctors![index]
-                                                  .imageUrl,
-                                              width: double.infinity,
-                                              height: size.height * 0.20,
-                                              fit: BoxFit.cover,
-                                              placeholder:
-                                                  (context, url) =>
-                                                  Image.asset(
-                                                    ImageRes.asanYab,
-                                                    height: 170,
-                                                    width: 130,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12),
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: places.doctors!.length,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 6,
+                                              left: 2,
+                                              right: 2,
+                                              bottom: 18),
+                                          child: Container(
+                                            width: size.width * 0.55,
+                                            height: 160,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  spreadRadius: 2,
+                                                  blurRadius: 5,
+                                                  offset: Offset(0, 3),
+                                                ),
+                                              ],
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(22),
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: places
+                                                        .doctors![index]
+                                                        .imageUrl,
+                                                    width: double.infinity,
+                                                    height: size.height * 0.20,
+                                                    fit: BoxFit.cover,
+                                                    placeholder:
+                                                        (context, url) =>
+                                                            Image.asset(
+                                                      ImageRes.asanYab,
+                                                      height: 170,
+                                                      width: 130,
+                                                    ),
                                                   ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Text(
+                                                  '${languageText!.details_page_5_custom_card}: ${places.doctors![index].name}',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 4),
+                                                Text(
+                                                  '${languageText.details_page_8_custom_card}: ${places.doctors![index].title}',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.blue,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 4),
+                                                Text(
+                                                  '${languageText.details_page_9_custom_card}: ${isRTL ? convertDigitsToFarsi(places.doctors![index].time) : places.doctors![index].time}',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.blue,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                          const SizedBox(height: 8),
-                                          Text(
-                                            '${languageText!.details_page_5_custom_card}: ${places.doctors![index].name}',
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            '${languageText.details_page_8_custom_card}: ${places.doctors![index].title}',
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.blue,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            '${languageText.details_page_9_custom_card}: ${isRTL?convertDigitsToFarsi(places.doctors![index].time):places.doctors![index].time}',
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.blue,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                        );
+                                      },
                                     ),
-                                  );
-                                },
-                              ),
-                            ),
+                                  ),
 
                             ////hojjat finish////
 
