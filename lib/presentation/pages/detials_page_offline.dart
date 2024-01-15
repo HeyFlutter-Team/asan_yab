@@ -16,7 +16,7 @@ class DetailPageOffline extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final isRTL = ref.watch(languageProvider).  code == 'fa';
+    final isRTL = ref.watch(languageProvider).code == 'fa';
     List<String> phoneData = List<String>.from(jsonDecode(favItem['phone']));
     List<String> addressData =
         List<String>.from(jsonDecode(favItem['address']));
@@ -150,9 +150,10 @@ class DetailPageOffline extends ConsumerWidget {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Text(
-                                         isRTL? convertDigitsToFarsi(
-                                              phoneData[index])
-                                          :phoneData[index],
+                                          isRTL
+                                              ? convertDigitsToFarsi(
+                                                  phoneData[index])
+                                              : phoneData[index],
                                           style: const TextStyle(
                                               fontSize: 16,
                                               color: Colors.black54),

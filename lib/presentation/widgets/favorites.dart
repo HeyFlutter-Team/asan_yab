@@ -2,20 +2,20 @@
 
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/domain/riverpod/data/firebase_rating_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../core/utils/convert_digits_to_farsi.dart';
 import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
 import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../pages/detials_page.dart';
 import '../pages/detials_page_offline.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Favorites extends ConsumerStatefulWidget {
   final bool isConnected;
@@ -160,22 +160,18 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                                     const Icon(
                                                         Icons.phone_android,
                                                         color: Colors.green),
-                                                    Text(phoneNumber,
-                                                        style: const TextStyle(
-                                                            // color: Colors.black,
-
-                                                            )),
+                                                    Text(phoneNumber),
                                                   ],
                                                 )
                                               : Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   children: [
                                                     Text(phoneNumber,
-                                                        style: const TextStyle(
-                                                            // color: Colors.black,
-
-                                                            )),
+                                                        overflow: TextOverflow
+                                                            .ellipsis),
                                                     const Icon(
                                                         Icons.phone_android,
                                                         color: Colors.green),
@@ -220,6 +216,53 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                   ),
                           ),
                         ),
+                        widget.isConnected
+                            ? Positioned(
+                                top: 98.0,
+                                left: 10.0,
+                                child: FutureBuilder<double>(
+                                  future: ref
+                                      .read(firebaseRatingProvider)
+                                      .getAverageRatingForPlace(
+                                          favorites[index]['id']),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const CircularProgressIndicator(); // Show loading indicator while fetching rating
+                                    } else if (snapshot.hasError) {
+                                      return const Text(
+                                          'Error fetching rating'); // Show error message if there's an error
+                                    } else {
+                                      final averageRating = snapshot.data ?? 0;
+                                      return Container(
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          border: Border.all(
+                                              width: 4, color: Colors.white),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            averageRating.toStringAsFixed(
+                                                1), // Display the average rating with one decimal place
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                              )
+                            : const SizedBox(
+                                height: 0,
+                              )
                       ],
                     );
                   },
