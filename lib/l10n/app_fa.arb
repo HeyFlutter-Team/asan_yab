@@ -42,9 +42,10 @@
 
   "buttonNvB_1": "خانه",
   "buttonNvB_2": "مکان جدید",
-  "buttonNvB_3": "پروفایل",
+  "buttonNvB_3": "پیام",
+  "buttonNvB_4": "پروفایل",
 
-
+  "proFile_type": "حساب",
 
 
   "category_title": "دسته بندی ها",
@@ -59,7 +60,8 @@
   "favorite_page_title": "موارد دلخواه",
 
 
-
+  "findingFriendById": "ایدی مورد نظر را  بنویسید",
+  "searchById": "گشتن با آیدی ",
 
   "suggestion_appBar_title": "درخواست مکان جدید",
   "suggestion_1_tf_labelName": "نام مکان",

@@ -5,15 +5,16 @@ import 'package:asan_yab/presentation/widgets/custom_text_field.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../domain/riverpod/data/sign_in_provider.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
   final Function()? onClickedSignIn;
   final String? name;
   final String? lastName;
-  const SignUpPage({super.key, this.onClickedSignIn,this.name,this.lastName});
+  const SignUpPage({super.key, this.onClickedSignIn, this.name, this.lastName});
 
   @override
   ConsumerState<SignUpPage> createState() => _SignUpPageState();
@@ -35,7 +36,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    final languageText=AppLocalizations.of(context);
+    final languageText = AppLocalizations.of(context);
     return Scaffold(
       body: Form(
         key: signUpFormKey,
@@ -74,8 +75,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   label: languageText.sign_in_password,
                   controller: passwordController,
                   hintText: languageText.sign_in_password_hintText,
-                  validator: (p0) =>
-                      p0!.length < 6 ? languageText.sign_in_password_2_valid : null,
+                  validator: (p0) => p0!.length < 6
+                      ? languageText.sign_in_password_2_valid
+                      : null,
                 ),
                 CustomTextField(
                   obscureText: true,
@@ -96,7 +98,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text:languageText.sign_up_account_text,
+                        text: languageText.sign_up_account_text,
                         style: const TextStyle(color: Colors.grey),
                       ),
                       TextSpan(
@@ -124,10 +126,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     if (!isValid) return;
 
                     ref.read(signUpNotifierProvider).signUp(
-                        context: context,
-                        email: emailController.text,
-                        password: passwordController.text,
-                    );
+                          context: context,
+                          email: emailController.text,
+                          password: passwordController.text,
+                        );
                   },
                   child: Text(
                     languageText.sign_up_elbT,

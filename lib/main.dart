@@ -1,6 +1,4 @@
 import 'package:asan_yab/data/repositoris/language_repository.dart';
-import 'package:asan_yab/data/repositoris/language_repository.dart';
-import 'package:asan_yab/presentation/pages/auth_page.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:asan_yab/presentation/pages/verify_email_page.dart';
@@ -48,6 +46,8 @@ Future<void> main() async {
   //firebase messegaing
 
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  //
+  // FirebaseFirestore.instance.useFirestoreEmulator('host', '');
 
   runApp(ProviderScope(
     overrides: [languageProvider.overrideWith((ref) => language)],
