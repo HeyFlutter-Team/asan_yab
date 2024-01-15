@@ -13,6 +13,8 @@ class Place {
   final String category;
   final int order;
   int distance;
+  final List<NewItems>? newItems;
+  final List<NewItemsYounis>? newItemYounis;
   Place({
     required this.createdAt,
     required this.addresses,
@@ -26,6 +28,8 @@ class Place {
     required this.category,
     required this.order,
     this.distance = 1,
+    this.newItems,
+    this.newItemYounis,
   });
 
   factory Place.fromJson(Map<String, dynamic> json) {
@@ -68,6 +72,14 @@ class Place {
       gallery: List<String>.from(json['gallery']),
       category: json['category'],
       order: json['order'],
+      newItems: json['newItems'] != null
+          ? List<NewItems>.from(
+              json['newItems'].map((newItem) => NewItems.fromJson(newItem)))
+          : null,
+      newItemYounis: json['newItemYounis'] != null
+          ? List<NewItemsYounis>.from(json['newItemYounis']
+              .map((newItemYounis) => NewItems.fromJson(newItemYounis)))
+          : null,
     );
   }
 }
@@ -95,5 +107,51 @@ class Address {
       branch: json['branch'],
       lat: json['lat'],
     );
+  }
+}
+
+class NewItems {
+  final String? imageUrl;
+  final String? itemName;
+  final String? itemPrice;
+  NewItems({this.imageUrl, this.itemName, this.itemPrice});
+
+  Map<String, dynamic> toJson() {
+    return {'imageUrl': imageUrl, 'itemName': itemName, 'itemPrice': itemPrice};
+  }
+
+  factory NewItems.fromJson(Map<String, dynamic> json) {
+    return NewItems(
+        imageUrl: json['imageUrl'],
+        itemName: json['itemName'],
+        itemPrice: json['itemPrice']);
+  }
+}
+
+class NewItemsYounis {
+  final String? newItemYounisImage;
+  final String? itemYounisName;
+  final String? itemYounisPrice;
+
+  NewItemsYounis({
+    this.newItemYounisImage,
+    this.itemYounisName,
+    this.itemYounisPrice,
+  });
+
+  factory NewItemsYounis.fromJson(Map<String, dynamic> json) {
+    return NewItemsYounis(
+      newItemYounisImage: json['newItemYounis'],
+      itemYounisName: json['itemYounisName'],
+      itemYounisPrice: json['itemYounisPrice'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'newItemYounis': newItemYounisImage,
+      'itemYounisName': itemYounisName,
+      'itemYounisPrice': itemYounisPrice,
+    };
   }
 }
