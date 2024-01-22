@@ -15,8 +15,8 @@ class Place {
   final List<ItemImage>? itemImages;
   final List<Doctors>? doctors;
   int distance;
-
-
+  final List<NewItems>? newItems;
+  final List<NewItemsYounis>? newItemYounis;
   Place({
     required this.createdAt,
     required this.addresses,
@@ -29,10 +29,11 @@ class Place {
     required this.gallery,
     required this.category,
     required this.order,
-     this.distance =1,
+    this.distance = 1,
     this.itemImages,
-    this.doctors
-
+    this.doctors,
+    this.newItems,
+    this.newItemYounis,
   });
 
   factory Place.fromJson(Map<String, dynamic> json) {
@@ -77,13 +78,21 @@ class Place {
       order: json['order'],
       itemImages: json['itemImages'] != null
           ? List<ItemImage>.from(
-        json['itemImages'].map((item) => ItemImage.fromJson(item)),
-      )
+              json['itemImages'].map((item) => ItemImage.fromJson(item)),
+            )
           : null,
-      doctors:  json['doctors'] != null
+      doctors: json['doctors'] != null
           ? List<Doctors>.from(
-        json['doctors'].map((doctors) => Doctors.fromJson(doctors)),
-      )
+              json['doctors'].map((doctors) => Doctors.fromJson(doctors)),
+            )
+          : null,
+      newItems: json['newItems'] != null
+          ? List<NewItems>.from(
+              json['newItems'].map((newItem) => NewItems.fromJson(newItem)))
+          : null,
+      newItemYounis: json['newItemYounis'] != null
+          ? List<NewItemsYounis>.from(json['newItemYounis']
+              .map((newItemYounis) => NewItems.fromJson(newItemYounis)))
           : null,
     );
   }
@@ -115,6 +124,51 @@ class Address {
   }
 }
 
+class NewItems {
+  final String? imageUrl;
+  final String? itemName;
+  final String? itemPrice;
+  NewItems({this.imageUrl, this.itemName, this.itemPrice});
+
+  Map<String, dynamic> toJson() {
+    return {'imageUrl': imageUrl, 'itemName': itemName, 'itemPrice': itemPrice};
+  }
+
+  factory NewItems.fromJson(Map<String, dynamic> json) {
+    return NewItems(
+        imageUrl: json['imageUrl'],
+        itemName: json['itemName'],
+        itemPrice: json['itemPrice']);
+  }
+}
+
+class NewItemsYounis {
+  final String? newItemYounisImage;
+  final String? itemYounisName;
+  final String? itemYounisPrice;
+
+  NewItemsYounis({
+    this.newItemYounisImage,
+    this.itemYounisName,
+    this.itemYounisPrice,
+  });
+
+  factory NewItemsYounis.fromJson(Map<String, dynamic> json) {
+    return NewItemsYounis(
+      newItemYounisImage: json['newItemYounis'],
+      itemYounisName: json['itemYounisName'],
+      itemYounisPrice: json['itemYounisPrice'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'newItemYounis': newItemYounisImage,
+      'itemYounisName': itemYounisName,
+      'itemYounisPrice': itemYounisPrice,
+    };
+  }
+}
 
 class ItemImage {
   final String name;
@@ -144,26 +198,20 @@ class ItemImage {
   }
 }
 
-class Doctors{
+class Doctors {
   final String name;
   final String title;
   final String time;
   final String imageUrl;
 
-  Doctors({
-    required this.name,
-    required this.title,
-    required this.imageUrl,
-    required this.time
-  });
+  Doctors(
+      {required this.name,
+      required this.title,
+      required this.imageUrl,
+      required this.time});
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'title': title,
-      'imageUrl': imageUrl,
-      "time":time
-    };
+    return {'name': name, 'title': title, 'imageUrl': imageUrl, "time": time};
   }
 
   factory Doctors.fromJson(Map<String, dynamic> json) {
@@ -171,7 +219,6 @@ class Doctors{
         name: json['name'],
         title: json['title'],
         imageUrl: json['imageUrl'],
-        time: json['time']
-    );
+        time: json['time']);
   }
 }

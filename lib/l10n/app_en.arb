@@ -38,10 +38,11 @@
 
   "buttonNvB_1": "Home",
   "buttonNvB_2": "New Place",
-  "buttonNvB_3": "Profile",
+  "buttonNvB_3": "Message",
+  "buttonNvB_4": "Profile",
 
 
-
+ "proFile_type": "Account",
 
   "category_title": "Categories",
 
@@ -53,6 +54,10 @@
 
 
   "favorite_page_title": "Favorites",
+
+
+  "findingFriendById": "Finding your new friend by Id",
+  "searchById": "Search by Id ",
 
 
 
