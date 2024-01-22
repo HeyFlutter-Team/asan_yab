@@ -154,7 +154,11 @@
 
 
 
-  "update_dialog_page_new_version": "About the new version"
+  "update_dialog_page_new_version": "About the new version",
+  "firstComment": "The last comment will be shown here",
+  "comment": "Comments",
+  "more":"More",
+  "add_a_comment": "Add a Comment"
 
 
 
