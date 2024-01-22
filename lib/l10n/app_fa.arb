@@ -138,5 +138,9 @@
   "nearby_place_page_km_away": "کیلومتر تا مقصد",
 
 
-  "update_dialog_page_new_version": "درباره نسخه جدید"
+  "update_dialog_page_new_version": "درباره نسخه جدید",
+  "firstComment": "آخرین نظر در اینجا نشان داده خواهد شد",
+  "comment": "نظرات",
+  "more":"بیشتر",
+  "add_a_comment": "نظر دهید"
 }
