@@ -5,6 +5,7 @@ import 'package:asan_yab/domain/riverpod/data/other_user_data.dart';
 import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
 import 'package:asan_yab/domain/riverpod/screen/follow_checker.dart';
 import 'package:asan_yab/presentation/pages/about_us_page.dart';
+import 'package:asan_yab/presentation/pages/message_page/chat_details_page.dart';
 import 'package:asan_yab/presentation/pages/profile/show_profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -181,7 +182,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
         ElevatedButton(
           style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red.shade800,
-              minimumSize: const Size(260, 55),
+              minimumSize: const Size(130, 55),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32))),
           onPressed: () {
@@ -205,6 +206,26 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                   ref.watch(followerProvider) ? 'Follow' : "Unfollow",
                   style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red.shade800,
+              minimumSize: const Size(130, 55),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32))),
+          onPressed: () {
+            //todo for chat
+            final followId = usersData!.uid!;
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChatDetailPage(uid: followId),
+                ));
+          },
+          child: Text(
+            'Chat page',
+            style: TextStyle(fontSize: 20, color: Colors.white),
+          ),
         ),
         const SizedBox(
           height: 20,

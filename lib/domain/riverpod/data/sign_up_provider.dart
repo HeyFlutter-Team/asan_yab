@@ -5,6 +5,7 @@ import 'package:asan_yab/data/repositoris/follow/follow_repo.dart';
 import 'package:asan_yab/presentation/pages/verify_email_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -62,17 +63,17 @@ class UserDetails {
     String? nameController,
   }) async {
     final userRef = FirebaseFirestore.instance.collection('User').doc(uid);
-
+    final fcmToken = await FirebaseMessaging.instance.getToken();
     final user = Users(
-      createdAt: Timestamp.now(),
-      email: emailController!.trim(),
-      lastName: lastNameController!.trim(),
-      name: nameController!.trim(),
-      uid: userRef.id,
-      id: id,
-      followerCount: 0,
-      followingCount: 0,
-    );
+        createdAt: Timestamp.now(),
+        email: emailController!.trim(),
+        lastName: lastNameController!.trim(),
+        name: nameController!.trim(),
+        uid: userRef.id,
+        id: id,
+        followerCount: 0,
+        followingCount: 0,
+        fcmToken: fcmToken!);
     final json = user.toJson();
     await userRef.set(json).whenComplete(() async {
       final userFollow = FollowModel(followers: [], following: []);

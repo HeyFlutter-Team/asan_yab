@@ -62,6 +62,11 @@ dependencies:
   json_annotation: ^4.8.1
   build_runner: ^2.4.7
   json_serializable: ^6.7.1
+  ionicons: ^0.2.2
+  awesome_notifications: ^0.8.2
+  fluttertoast: ^8.2.4
+  emoji_picker_flutter: ^1.6.3
+  timeago: ^3.6.0
 
 
 
