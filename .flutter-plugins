@@ -1,9 +1,11 @@
 # This is a generated file; do not edit or check into version control.
+awesome_notifications=C:\\Users\\Daniel\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\awesome_notifications-0.8.2\\
 cloud_firestore=C:\\Users\\Daniel\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\cloud_firestore-4.14.0\\
 cloud_firestore_web=C:\\Users\\Daniel\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\cloud_firestore_web-3.9.0\\
 cloud_functions=C:\\Users\\Daniel\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\cloud_functions-4.6.0\\
 cloud_functions_web=C:\\Users\\Daniel\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\cloud_functions_web-4.6.11\\
 connectivity_plus=C:\\Users\\Daniel\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\connectivity_plus-4.0.2\\
+emoji_picker_flutter=C:\\Users\\Daniel\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\emoji_picker_flutter-1.6.3\\
 file_picker=C:\\Users\\Daniel\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\file_picker-6.1.1\\
 file_selector_linux=C:\\Users\\Daniel\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\file_selector_linux-0.9.2+1\\
 file_selector_macos=C:\\Users\\Daniel\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\file_selector_macos-0.9.3+3\\
@@ -23,6 +25,7 @@ flutter_local_notifications=C:\\Users\\Daniel\\AppData\\Local\\Pub\\Cache\\hoste
 flutter_native_splash=C:\\Users\\Daniel\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\flutter_native_splash-2.3.7\\
 flutter_phone_direct_caller=C:\\Users\\Daniel\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\flutter_phone_direct_caller-2.1.1\\
 flutter_plugin_android_lifecycle=C:\\Users\\Daniel\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\flutter_plugin_android_lifecycle-2.0.17\\
+fluttertoast=C:\\Users\\Daniel\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\fluttertoast-8.2.4\\
 geocoding=C:\\Users\\Daniel\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\geocoding-2.1.1\\
 geocoding_android=C:\\Users\\Daniel\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\geocoding_android-2.1.2\\
 geocoding_ios=C:\\Users\\Daniel\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\geocoding_ios-2.1.1\\

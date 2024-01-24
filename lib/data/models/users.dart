@@ -13,6 +13,7 @@ class Users {
   final List<String> ownerPlaceName;
   final int followerCount;
   final int followingCount;
+  final String fcmToken;
 
   Users({
     this.owner = const [],
@@ -27,6 +28,7 @@ class Users {
     required this.createdAt,
     this.followerCount = 0,
     this.followingCount = 0,
+    required this.fcmToken,
   });
 
   Map<String, dynamic> toJson() => {
@@ -42,25 +44,26 @@ class Users {
         'ownerPlaceName': ownerPlaceName,
         'followerCount': followerCount,
         'followingCount': followingCount,
+        'fcmToken': fcmToken,
       };
 
   factory Users.fromMap(Map<String, dynamic> json) {
     return Users(
-      name: json['name'],
-      lastName: json['lastName'],
-      email: json['email'],
-      createdAt: json['createdAt'] != null
-          ? (json['createdAt'] as Timestamp)
-          : Timestamp.now(), // Ensure correct Timestamp conversion
-      imageUrl: json['imageUrl'],
-      userType: json['userType'],
-      uid: json['uid'],
-      id: json['id'],
-      owner: List<String>.from(json['owner']),
-      ownerPlaceName: List<String>.from(json['ownerPlaceName']),
-      followerCount: json['followerCount'],
-      followingCount: json['followingCount'],
-    );
+        name: json['name'],
+        lastName: json['lastName'],
+        email: json['email'],
+        createdAt: json['createdAt'] != null
+            ? (json['createdAt'] as Timestamp)
+            : Timestamp.now(), // Ensure correct Timestamp conversion
+        imageUrl: json['imageUrl'],
+        userType: json['userType'],
+        uid: json['uid'],
+        id: json['id'],
+        owner: List<String>.from(json['owner']),
+        ownerPlaceName: List<String>.from(json['ownerPlaceName']),
+        followerCount: json['followerCount'],
+        followingCount: json['followingCount'],
+        fcmToken: json['fcmToken']);
   }
   Users copyWith({
     int? id,
@@ -75,20 +78,21 @@ class Users {
     List<String>? ownerPlaceName,
     int? followerCount,
     int? followingCount,
+    String? fcmToken,
   }) {
     return Users(
-      id: id ?? this.id,
-      uid: uid ?? this.uid,
-      name: name ?? this.name,
-      lastName: lastName ?? this.lastName,
-      email: email ?? this.email,
-      createdAt: createdAt ?? this.createdAt,
-      imageUrl: imageUrl ?? this.imageUrl,
-      userType: userType ?? this.userType,
-      owner: owner ?? this.owner,
-      ownerPlaceName: ownerPlaceName ?? this.ownerPlaceName,
-      followerCount: followerCount ?? this.followerCount,
-      followingCount: followingCount ?? this.followingCount,
-    );
+        id: id ?? this.id,
+        uid: uid ?? this.uid,
+        name: name ?? this.name,
+        lastName: lastName ?? this.lastName,
+        email: email ?? this.email,
+        createdAt: createdAt ?? this.createdAt,
+        imageUrl: imageUrl ?? this.imageUrl,
+        userType: userType ?? this.userType,
+        owner: owner ?? this.owner,
+        ownerPlaceName: ownerPlaceName ?? this.ownerPlaceName,
+        followerCount: followerCount ?? this.followerCount,
+        followingCount: followingCount ?? this.followingCount,
+        fcmToken: fcmToken ?? this.fcmToken);
   }
 }
