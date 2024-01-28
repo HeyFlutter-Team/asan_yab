@@ -12,6 +12,7 @@ class MessageModel with _$MessageModel {
     required String content,
     required DateTime sentTime,
     required MessageType messageType,
+    required String replayMessage,
   }) = _MessageModel;
 
   MessageModel._();

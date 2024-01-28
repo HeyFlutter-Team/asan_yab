@@ -8,6 +8,7 @@ import 'package:asan_yab/presentation/pages/profile/list_of_follow.dart';
 import 'package:asan_yab/presentation/pages/profile/show_profile_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:asan_yab/presentation/widgets/buildProgress.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -154,6 +155,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   child: IconButton(
                     onPressed: () async {
                       if (FirebaseAuth.instance.currentUser != null) {
+                        await FirebaseFirestore.instance
+                            .collection('User')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .update({'isOnline': false, 'fcmToken': "token"});
                         await FirebaseAuth.instance.signOut().whenComplete(() =>
                             Navigator.pushReplacement(
                                 context,

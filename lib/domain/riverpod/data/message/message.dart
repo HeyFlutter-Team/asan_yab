@@ -41,11 +41,15 @@ class MessageProvider extends StateNotifier<Users?> {
   }
 
   Future<void> sendText(
-      {required String receiverId, required BuildContext context}) async {
+      {required String receiverId,
+      required BuildContext context,
+      required replayMessage}) async {
     try {
       if (textController.text.isNotEmpty) {
         await messageRepo.addTextMessage(
-            content: textController.text, receiverId: receiverId);
+            content: textController.text,
+            receiverId: receiverId,
+            replayMessage: replayMessage);
         // textController.clear();
         // FocusScope.of(context).unfocus();
       }
@@ -78,3 +82,4 @@ class MessageProvider extends StateNotifier<Users?> {
 }
 
 final emojiShowingProvider = StateProvider((ref) => false);
+final replayProvider = StateProvider((ref) => '');

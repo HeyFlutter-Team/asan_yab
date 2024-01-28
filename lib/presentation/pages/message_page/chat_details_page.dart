@@ -1,11 +1,13 @@
 import 'package:asan_yab/domain/riverpod/data/message/message.dart';
 import 'package:asan_yab/domain/riverpod/data/message/message_data.dart';
 import 'package:asan_yab/domain/riverpod/data/message/message_history.dart';
+import 'package:asan_yab/domain/riverpod/data/message/message_seen.dart';
 import 'package:asan_yab/domain/riverpod/data/message/messages_notifier.dart';
 import 'package:asan_yab/domain/riverpod/data/other_user_data.dart';
 import 'package:asan_yab/presentation/widgets/message/app_bar_chat_details.dart';
 import 'package:asan_yab/presentation/widgets/message/chat_messages.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,16 +45,23 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
           ref.read(messageProvider.notifier).clearState();
           ref.read(messageNotifierProvider.notifier).fetchMessage();
           ref.read(messageHistory.notifier).getMessageHistory();
+          ref
+              .read(seenMassageProvider.notifier)
+              .messageIsSeen(
+                  newProfileUser.uid!, FirebaseAuth.instance.currentUser!.uid)
+              .whenComplete(
+                  () => ref.read(seenMassageProvider.notifier).isNewMassage());
+
           return true;
         },
         child: Scaffold(
           backgroundColor: Colors.white70.withOpacity(0.95),
           appBar: AppBarChatDetails(
               userId: newProfileUser!.uid!,
-              employee: newProfileUser.userType ?? 'no',
-              name: newProfileUser.name ?? 'no',
-              // isOnline: newProfileUser.online ?? true,
-              urlImage: newProfileUser.imageUrl ?? 'r'),
+              employee: newProfileUser.userType,
+              name: newProfileUser.name,
+              isOnline: newProfileUser.isOnline,
+              urlImage: newProfileUser.imageUrl),
           body: Stack(
             fit: StackFit.expand,
             children: [
@@ -60,16 +69,39 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                   ? const SizedBox()
                   : ChatMessages(
                       receiverId: newProfileUser.uid!,
-                      urlImage: newProfileUser.imageUrl!),
+                      urlImage: newProfileUser.imageUrl),
               Align(
                 alignment: Alignment.bottomLeft,
                 child: Container(
-                  padding: const EdgeInsets.only(left: 0, bottom: 10, top: 4),
-                  height: !ref.watch(emojiShowingProvider) ? 70 : 320,
+                  padding: const EdgeInsets.only(left: 4, bottom: 10, top: 4),
+                  height: !ref.watch(emojiShowingProvider)
+                      ? (ref.watch(replayProvider) == '' ? 64 : 100)
+                      : 350,
                   width: double.infinity,
                   color: Colors.white,
                   child: Column(
                     children: [
+                      Row(
+                        children: [
+                          ref.watch(replayProvider) == ''
+                              ? const SizedBox()
+                              : Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 18.0),
+                                      child: Text(
+                                        'Replay: ${ref.watch(replayProvider)}',
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w300,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                        ],
+                      ),
                       Row(
                         children: <Widget>[
                           Row(
@@ -117,6 +149,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                           // const SizedBox(
                           //   width: 15,
                           // ),
+
                           Expanded(
                             child: TextField(
                               onTap: () {
@@ -136,6 +169,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                             ),
                           ),
                           const SizedBox(width: 15),
+
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 elevation: 0,
@@ -148,7 +182,9 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                   .read(messageProfileProvider.notifier)
                                   .sendText(
                                       receiverId: newProfileUser.uid!,
-                                      context: context);
+                                      context: context,
+                                      replayMessage: ref.watch(replayProvider));
+                              ref.read(replayProvider.notifier).state = '';
                               ref
                                   .read(messageProfileProvider.notifier)
                                   .textController

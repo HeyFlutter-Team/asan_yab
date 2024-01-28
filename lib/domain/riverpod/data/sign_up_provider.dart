@@ -73,7 +73,8 @@ class UserDetails {
         id: id,
         followerCount: 0,
         followingCount: 0,
-        fcmToken: fcmToken!);
+        fcmToken: fcmToken!,
+        isOnline: true);
     final json = user.toJson();
     await userRef.set(json).whenComplete(() async {
       final userFollow = FollowModel(followers: [], following: []);

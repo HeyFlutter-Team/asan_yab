@@ -25,6 +25,7 @@ mixin _$MessageModel {
   String get content => throw _privateConstructorUsedError;
   DateTime get sentTime => throw _privateConstructorUsedError;
   MessageType get messageType => throw _privateConstructorUsedError;
+  String get replayMessage => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,7 +44,8 @@ abstract class $MessageModelCopyWith<$Res> {
       String receiverId,
       String content,
       DateTime sentTime,
-      MessageType messageType});
+      MessageType messageType,
+      String replayMessage});
 }
 
 /// @nodoc
@@ -64,6 +66,7 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
     Object? content = null,
     Object? sentTime = null,
     Object? messageType = null,
+    Object? replayMessage = null,
   }) {
     return _then(_value.copyWith(
       senderId: null == senderId
@@ -86,6 +89,10 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
           ? _value.messageType
           : messageType // ignore: cast_nullable_to_non_nullable
               as MessageType,
+      replayMessage: null == replayMessage
+          ? _value.replayMessage
+          : replayMessage // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -103,7 +110,8 @@ abstract class _$$MessageModelImplCopyWith<$Res>
       String receiverId,
       String content,
       DateTime sentTime,
-      MessageType messageType});
+      MessageType messageType,
+      String replayMessage});
 }
 
 /// @nodoc
@@ -122,6 +130,7 @@ class __$$MessageModelImplCopyWithImpl<$Res>
     Object? content = null,
     Object? sentTime = null,
     Object? messageType = null,
+    Object? replayMessage = null,
   }) {
     return _then(_$MessageModelImpl(
       senderId: null == senderId
@@ -144,6 +153,10 @@ class __$$MessageModelImplCopyWithImpl<$Res>
           ? _value.messageType
           : messageType // ignore: cast_nullable_to_non_nullable
               as MessageType,
+      replayMessage: null == replayMessage
+          ? _value.replayMessage
+          : replayMessage // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -157,7 +170,8 @@ class _$MessageModelImpl extends _MessageModel {
       required this.receiverId,
       required this.content,
       required this.sentTime,
-      required this.messageType})
+      required this.messageType,
+      required this.replayMessage})
       : super._();
 
   factory _$MessageModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -173,14 +187,16 @@ class _$MessageModelImpl extends _MessageModel {
   final DateTime sentTime;
   @override
   final MessageType messageType;
+  @override
+  final String replayMessage;
 
   @override
   String toString() {
-    return 'MessageModel(senderId: $senderId, receiverId: $receiverId, content: $content, sentTime: $sentTime, messageType: $messageType)';
+    return 'MessageModel(senderId: $senderId, receiverId: $receiverId, content: $content, sentTime: $sentTime, messageType: $messageType, replayMessage: $replayMessage)';
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MessageModelImpl &&
@@ -192,13 +208,15 @@ class _$MessageModelImpl extends _MessageModel {
             (identical(other.sentTime, sentTime) ||
                 other.sentTime == sentTime) &&
             (identical(other.messageType, messageType) ||
-                other.messageType == messageType));
+                other.messageType == messageType) &&
+            (identical(other.replayMessage, replayMessage) ||
+                other.replayMessage == replayMessage));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, senderId, receiverId, content, sentTime, messageType);
+  int get hashCode => Object.hash(runtimeType, senderId, receiverId, content,
+      sentTime, messageType, replayMessage);
 
   @JsonKey(ignore: true)
   @override
@@ -220,7 +238,8 @@ abstract class _MessageModel extends MessageModel {
       required final String receiverId,
       required final String content,
       required final DateTime sentTime,
-      required final MessageType messageType}) = _$MessageModelImpl;
+      required final MessageType messageType,
+      required final String replayMessage}) = _$MessageModelImpl;
   _MessageModel._() : super._();
 
   factory _MessageModel.fromJson(Map<String, dynamic> json) =
@@ -236,6 +255,8 @@ abstract class _MessageModel extends MessageModel {
   DateTime get sentTime;
   @override
   MessageType get messageType;
+  @override
+  String get replayMessage;
   @override
   @JsonKey(ignore: true)
   _$$MessageModelImplCopyWith<_$MessageModelImpl> get copyWith =>

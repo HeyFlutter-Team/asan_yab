@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class HistoryMessage {
   final fireStore = FirebaseFirestore.instance;
   List<String> usersId = [];
+  List<bool> isNewMessage = [];
   Future<List<String>> getOtherUserId() async {
     List<Users> data = [];
     try {
