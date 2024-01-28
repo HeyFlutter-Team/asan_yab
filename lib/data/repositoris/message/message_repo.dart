@@ -9,14 +9,17 @@ class MessageRepo {
   Future<void> addTextMessage({
     required String content,
     required String receiverId,
+    required String replayMessage,
   }) async {
     try {
       final message = MessageModel(
-          senderId: FirebaseAuth.instance.currentUser!.uid,
-          receiverId: receiverId,
-          content: content,
-          sentTime: DateTime.now().toUtc(),
-          messageType: MessageType.text);
+        senderId: FirebaseAuth.instance.currentUser!.uid,
+        receiverId: receiverId,
+        content: content,
+        sentTime: DateTime.now().toUtc(),
+        messageType: MessageType.text,
+        replayMessage: replayMessage,
+      );
       await addMessageToChat(receiverId: receiverId, message: message);
     } catch (e) {
       print(e);
@@ -28,6 +31,7 @@ class MessageRepo {
     required String content,
     required String receiverId,
     required int currentUserCoinCount,
+    String? replayMessage,
   }) async {
     try {
       final message = MessageModel(
@@ -36,6 +40,7 @@ class MessageRepo {
         content: content,
         sentTime: DateTime.now().toUtc(),
         messageType: MessageType.sticker,
+        replayMessage: replayMessage ?? '',
       );
       await addMessageToChat(receiverId: receiverId, message: message);
     } catch (e) {
@@ -53,7 +58,11 @@ class MessageRepo {
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('chat')
         .doc(receiverId)
-        .set({'uid': receiverId, 'times': Timestamp.now()});
+        .set({
+      'uid': receiverId,
+      'times': Timestamp.now(),
+      "last_message": true
+    });
     await FirebaseFirestore.instance
         .collection('User')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -69,7 +78,8 @@ class MessageRepo {
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .set({
       'uid': FirebaseAuth.instance.currentUser!.uid,
-      'times': Timestamp.now()
+      'times': Timestamp.now(),
+      'last_message': true,
     });
     await FirebaseFirestore.instance
         .collection('User')

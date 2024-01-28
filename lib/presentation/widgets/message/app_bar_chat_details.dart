@@ -1,5 +1,6 @@
 import 'package:asan_yab/domain/riverpod/data/message/message_data.dart';
 import 'package:asan_yab/domain/riverpod/data/message/message_history.dart';
+import 'package:asan_yab/domain/riverpod/data/message/message_seen.dart';
 import 'package:asan_yab/domain/riverpod/data/message/messages_notifier.dart';
 import 'package:asan_yab/domain/riverpod/screen/follow_checker.dart';
 import 'package:asan_yab/presentation/pages/profile/other_profile.dart';
@@ -12,13 +13,13 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
   const AppBarChatDetails(
       {required this.urlImage,
       required this.name,
-      // required this.isOnline,
+      required this.isOnline,
       required this.employee,
       required this.userId,
       super.key});
   final String urlImage;
   final String name;
-  // final bool isOnline;
+  final bool isOnline;
   final String employee;
   final String userId;
 
@@ -43,6 +44,14 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
                             .read(messageNotifierProvider.notifier)
                             .fetchMessage();
                         ref.read(messageHistory.notifier).getMessageHistory();
+                        ref
+                            .read(seenMassageProvider.notifier)
+                            .messageIsSeen(
+                                userId, FirebaseAuth.instance.currentUser!.uid)
+                            .whenComplete(() => ref
+                                .read(seenMassageProvider.notifier)
+                                .isNewMassage());
+
                         Navigator.pop(context);
                       },
                       icon: const Icon(
@@ -63,26 +72,22 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black87),
                           ),
-                          const Row(
+                          Row(
                             children: [
                               Icon(
                                 Icons.circle,
-                                color: true ? Colors.green : Colors.grey,
+                                color: isOnline ? Colors.green : Colors.grey,
                                 size: 12,
                               ),
                               SizedBox(width: 5),
-                              // Text(
-                              //  true
-                              //       ? AppLocalizations.of(context)?.online ??
-                              //           'Online'
-                              //       : AppLocalizations.of(context)?.offline ??
-                              //           'Offline',
-                              //   style: const TextStyle(
-                              //     color: Colors.black87,
-                              //     fontSize: 13,
-                              //   ),
-                              //   textAlign: TextAlign.center,
-                              // ),
+                              Text(
+                                isOnline ? 'Online' : 'Offline',
+                                style: const TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 13,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
                             ],
                           ),
                         ],

@@ -15,7 +15,7 @@ class ChatMessages extends ConsumerWidget {
     return messages.isEmpty
         ? Container(
             decoration: const BoxDecoration(color: Colors.white70),
-            child: Center(
+            child: const Center(
                 child: Text(
                     'No Message')), //AppLocalizations.of(context)?.noMessage ??
           )
@@ -34,12 +34,14 @@ class ChatMessages extends ConsumerWidget {
                   final isMe = receiverId != messages[index].senderId;
                   return isTextMessage
                       ? MessageBubble(
+                          replayMessage: messages[index].replayMessage,
                           urlImage: urlImage,
                           isMe: isMe,
                           message: messages[index],
                           isImage: false,
                         )
                       : MessageBubble(
+                          replayMessage: messages[index].replayMessage,
                           urlImage: urlImage,
                           isMe: isMe,
                           message: messages[index],

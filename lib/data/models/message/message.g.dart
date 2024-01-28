@@ -13,6 +13,7 @@ _$MessageModelImpl _$$MessageModelImplFromJson(Map<String, dynamic> json) =>
       content: json['content'] as String,
       sentTime: DateTime.parse(json['sentTime'] as String),
       messageType: $enumDecode(_$MessageTypeEnumMap, json['messageType']),
+      replayMessage: json['replayMessage'] as String,
     );
 
 Map<String, dynamic> _$$MessageModelImplToJson(_$MessageModelImpl instance) =>
@@ -22,6 +23,7 @@ Map<String, dynamic> _$$MessageModelImplToJson(_$MessageModelImpl instance) =>
       'content': instance.content,
       'sentTime': instance.sentTime.toIso8601String(),
       'messageType': _$MessageTypeEnumMap[instance.messageType]!,
+      'replayMessage': instance.replayMessage,
     };
 
 const _$MessageTypeEnumMap = {

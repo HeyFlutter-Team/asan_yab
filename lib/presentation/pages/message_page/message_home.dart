@@ -1,6 +1,7 @@
 import 'package:asan_yab/core/res/image_res.dart';
 import 'package:asan_yab/data/models/message/message.dart';
 import 'package:asan_yab/domain/riverpod/data/message/message_history.dart';
+import 'package:asan_yab/domain/riverpod/data/message/message_seen.dart';
 import 'package:asan_yab/domain/riverpod/data/message/messages_notifier.dart';
 import 'package:asan_yab/domain/riverpod/data/other_user_data.dart';
 import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
@@ -31,6 +32,7 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         ref.watch(messageHistory.notifier).getMessageHistory();
         ref.watch(messageNotifierProvider.notifier).fetchMessage();
+        ref.watch(seenMassageProvider.notifier).isNewMassage();
       });
     });
   }
@@ -46,6 +48,7 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
     final messageNotifier = ref.watch(messageHistory);
     final messageDetails = ref.watch(messageNotifierProvider);
     final user = ref.watch(userDetailsProvider);
+    final newMessage = ref.watch(seenMassageProvider);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -134,7 +137,7 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
                                       color: const Color(0xff7c94b6),
                                       image: DecorationImage(
                                         image: CachedNetworkImageProvider(
-                                            user!.imageUrl),
+                                            user.imageUrl),
                                         fit: BoxFit.cover,
                                       ),
                                       shape: BoxShape.circle,
@@ -166,20 +169,22 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
                                                     .toLocal()),
                                         style: TextStyle(fontSize: 10),
                                       ),
+                                      SizedBox(width: 4),
                                     ],
                                   ),
                                   subtitle: messageDetails.isEmpty
                                       ? Text('')
                                       : Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           children: [
                                             if (messageDetails[index]
                                                     .messageType ==
                                                 MessageType.text)
-                                              Expanded(
-                                                  child: Text(
+                                              Text(
                                                 messageDetails[index].content,
                                                 overflow: TextOverflow.ellipsis,
-                                              ))
+                                              )
                                             else
                                               Image.network(
                                                 messageDetails[index]
@@ -190,6 +195,13 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
                                                 width: 20,
                                               ),
                                             const SizedBox(width: 5),
+                                            newMessage[index]
+                                                ? const Icon(
+                                                    Icons.circle,
+                                                    color: Colors.blue,
+                                                    size: 12,
+                                                  )
+                                                : SizedBox(),
                                             Spacer(),
                                           ],
                                         ),

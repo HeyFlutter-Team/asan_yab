@@ -14,6 +14,7 @@ class Users {
   final int followerCount;
   final int followingCount;
   final String fcmToken;
+  final bool isOnline;
 
   Users({
     this.owner = const [],
@@ -29,6 +30,7 @@ class Users {
     this.followerCount = 0,
     this.followingCount = 0,
     required this.fcmToken,
+    required this.isOnline,
   });
 
   Map<String, dynamic> toJson() => {
@@ -45,6 +47,7 @@ class Users {
         'followerCount': followerCount,
         'followingCount': followingCount,
         'fcmToken': fcmToken,
+        'isOnline': isOnline,
       };
 
   factory Users.fromMap(Map<String, dynamic> json) {
@@ -63,7 +66,8 @@ class Users {
         ownerPlaceName: List<String>.from(json['ownerPlaceName']),
         followerCount: json['followerCount'],
         followingCount: json['followingCount'],
-        fcmToken: json['fcmToken']);
+        fcmToken: json['fcmToken'],
+        isOnline: json['isOnline'] ?? false);
   }
   Users copyWith({
     int? id,
@@ -79,6 +83,7 @@ class Users {
     int? followerCount,
     int? followingCount,
     String? fcmToken,
+    bool? isOnline,
   }) {
     return Users(
         id: id ?? this.id,
@@ -93,6 +98,7 @@ class Users {
         ownerPlaceName: ownerPlaceName ?? this.ownerPlaceName,
         followerCount: followerCount ?? this.followerCount,
         followingCount: followingCount ?? this.followingCount,
-        fcmToken: fcmToken ?? this.fcmToken);
+        fcmToken: fcmToken ?? this.fcmToken,
+        isOnline: isOnline ?? this.isOnline);
   }
 }
