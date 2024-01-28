@@ -1,6 +1,4 @@
 import 'package:asan_yab/data/repositoris/language_repository.dart';
-import 'package:asan_yab/data/repositoris/language_repository.dart';
-import 'package:asan_yab/presentation/pages/auth_page.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:asan_yab/presentation/pages/verify_email_page.dart';

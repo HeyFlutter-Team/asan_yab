@@ -2,7 +2,6 @@ import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../domain/riverpod/data/sign_up_provider.dart';
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
 import '../widgets/custom_text_field.dart';
@@ -19,6 +18,7 @@ class PersonalInformation extends ConsumerStatefulWidget {
 class _PersonalInformationState extends ConsumerState<PersonalInformation> {
   final nameController = TextEditingController();
   final lastNameController = TextEditingController();
+  final invitingPersonId=TextEditingController();
   final signUpFormKey = GlobalKey<FormState>();
 
   @override
@@ -68,6 +68,12 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                         ? languageText.second_text_field_valid
                         : null,
                   ),
+                  CustomTextField(
+                    textCapitalization: TextCapitalization.words,
+                    label: languageText.inviter_ID,
+                    controller: invitingPersonId,
+                    hintText: languageText.third_text_field_hint,
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
@@ -86,7 +92,10 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                               emailController: widget.email,
                               lastNameController: lastNameController.text,
                               nameController: nameController.text)
-                          .whenComplete(() {
+                          .whenComplete(()async {
+                        await ref
+                            .read(userRegesterDetailsProvider)
+                            .updateInviterRate(invitingPersonId.text);
                         Navigator.push(
                             context,
                             MaterialPageRoute(

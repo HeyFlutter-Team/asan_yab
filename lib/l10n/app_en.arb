@@ -84,6 +84,8 @@
   "profile_language_listTile": "Change Language",
   "profile_snackBar_catch": "Your internet is down",
   "profile_dark_mode": "Dark Mode",
+  "profile_rate_score": "ُScore",
+
 
 
 
@@ -108,6 +110,8 @@
   "second_text_field_label": "Last Name",
   "second_text_field_hint": "Enter your Last Name",
   "second_text_field_valid": "Your last name is empty",
+  "inviter_ID": "Inviter ID",
+  "third_text_field_hint": "ID of the person who introduced Asan Yab to you",
   "elevated_text": "Enter",
 
 

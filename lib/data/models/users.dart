@@ -11,6 +11,7 @@ class Users {
   final String userType;
   final List<String> owner;
   final List<String> ownerPlaceName;
+  final String invitationRate;
 
   Users({
     this.owner = const [],
@@ -23,6 +24,7 @@ class Users {
     required this.lastName,
     required this.email,
     required this.createdAt,
+    this.invitationRate='0'
   });
 
   Map<String, dynamic> toJson() => {
@@ -36,6 +38,7 @@ class Users {
     'id': id,
     'owner': owner,
     'ownerPlaceName': ownerPlaceName,
+    'invitationRate':invitationRate
   };
 
   factory Users.fromMap(Map<String, dynamic> json) {
@@ -50,6 +53,7 @@ class Users {
       id: json['id'],
       owner: List<String>.from(json['owner']),
       ownerPlaceName: List<String>.from(json['ownerPlaceName']),
+      invitationRate: json['invitationRate']
     );
   }
   Users copyWith({
@@ -63,6 +67,7 @@ class Users {
     String? userType,
     List<String>? owner,
     List<String>? ownerPlaceName,
+    String? invitationRate
   }) {
     return Users(
       id: id ?? this.id,
@@ -75,6 +80,7 @@ class Users {
       userType: userType ?? this.userType,
       owner: owner ?? this.owner,
       ownerPlaceName: ownerPlaceName ?? this.ownerPlaceName,
+      invitationRate: invitationRate??this.invitationRate
     );
   }
 }
