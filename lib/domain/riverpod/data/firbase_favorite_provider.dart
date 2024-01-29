@@ -9,20 +9,22 @@ final getInformationProvider =
     ChangeNotifierProvider<Information>((ref) => Information());
 
 class Information extends ChangeNotifier {
-  List<String> favoriteList = [];
+  List<String> _favoriteList = [];
+  List<String> get favoriteList => _favoriteList;
+
   Future<void> getFavorite() async {
     try {
-      favoriteList = [];
+      _favoriteList = [];
       final data = await FirebaseFirestore.instance
           .collection('Favorite')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .get();
       final data1 = Favorite.fromJson(data.data()!);
-      notifyListeners();
-      favoriteList.addAll(data1.items);
+      _favoriteList.addAll(data1.items);
     } catch (e) {
       debugPrint(e.toString());
     }
+    notifyListeners();
   }
 
   Future<void> setFavorite() async {
@@ -48,18 +50,18 @@ class Information extends ChangeNotifier {
       } else {
         debugPrint('User not logged in');
       }
-      notifyListeners();
     } catch (e) {
       debugPrint('Error updating list: $e');
     }
+    notifyListeners();
   }
 
   void toggle(String id) {
     final isExist = favoriteList.contains(id);
     if (isExist) {
-      favoriteList.remove(id);
+      _favoriteList.remove(id);
     } else {
-      favoriteList.add(id);
+      _favoriteList.add(id);
     }
     debugPrint("$favoriteList");
     notifyListeners();

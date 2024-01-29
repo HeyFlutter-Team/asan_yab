@@ -10,7 +10,6 @@ import '../../domain/servers/nearby_places.dart';
 import '../pages/detials_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class NearbyPlaceWidget extends ConsumerWidget {
   const NearbyPlaceWidget({super.key});
 
@@ -21,8 +20,8 @@ class NearbyPlaceWidget extends ConsumerWidget {
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final languageText=AppLocalizations.of(context);
-    final isRTL = ref.watch(languageProvider).code=='fa';
+    final languageText = AppLocalizations.of(context);
+    final isRTL = ref.watch(languageProvider).code == 'fa';
     return place.isEmpty
         ? const SizedBox()
         : Column(
@@ -33,9 +32,10 @@ class NearbyPlaceWidget extends ConsumerWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                     Text(
-                       languageText!.nearbyPlaces_title,
-                      style: const TextStyle(color: Colors.grey, fontSize: 20.0),
+                    Text(
+                      languageText!.nearbyPlaces_title,
+                      style:
+                          const TextStyle(color: Colors.grey, fontSize: 20.0),
                     ),
                     IconButton(
                       onPressed: () => Navigator.push(
@@ -43,7 +43,10 @@ class NearbyPlaceWidget extends ConsumerWidget {
                         MaterialPageRoute(
                             builder: (context) => const NearbyPlacePage()),
                       ),
-                      icon:  Icon(isRTL?Icons.arrow_circle_left_outlined:Icons.arrow_circle_right_outlined,
+                      icon: Icon(
+                        isRTL
+                            ? Icons.arrow_circle_left_outlined
+                            : Icons.arrow_circle_right_outlined,
                         size: 32.0,
                         color: Colors.grey,
                       ),
@@ -154,21 +157,21 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                           borderRadius:
                                               BorderRadius.circular(8)),
                                       padding: const EdgeInsets.all(8),
-                                      child:isRTL
-                                      ?Text(
-                                        '${convertDigitsToFarsi(place[index].distance.toString())} ${languageText.nearbyPlaces_meter_title}',
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                      :Text(
-                                        '${place[index].distance} ${languageText.nearbyPlaces_meter_title}',
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                      child: isRTL
+                                          ? Text(
+                                              '${convertDigitsToFarsi(place[index].distance.toString())} ${languageText.nearbyPlaces_meter_title}',
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            )
+                                          : Text(
+                                              '${place[index].distance} ${languageText.nearbyPlaces_meter_title}',
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                     ),
                                   ),
                                   const SizedBox(height: 10),

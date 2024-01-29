@@ -1,52 +1,31 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
+import * as express from "express";
+import * as cors from "cors";
+import {FieldValue} from "@google-cloud/firestore";
 
-admin.initializeApp();
+admin.initializeApp({
+  credential: admin.credential.applicationDefault(),
+  // Add your other configuration options here if needed
+});
+// main app
+const app = express();
+app.use(cors({origin: true}));
 
 class QuickSort {
   main(arr: any[], key: string, pivot: string): any[] {
     console.log("Unsorted List:", arr);
 
-    this.quickSort(arr, 0, arr.length - 1, key, pivot);
+    const sortedArray: any[] = [...arr];
+    this.quickSort(sortedArray, 0, sortedArray.length - 1, key, pivot);
 
-    console.log("Sorted List:", arr);
+    console.log("Sorted List:", sortedArray);
 
-    function betterNaiveContains(pivot: string, arr: any[], key: string):
-     any[] {
-      if (arr.length === 0) {
-        return [];
-      }
-
-      const result: any[] = [];
-      let low = 0;
-      let high = arr.length - 1;
-
-      while (low <= high) {
-        const middleIndex = Math.floor((low + high) / 2);
-        const middleValue = arr[middleIndex][key];
-
-        if (middleValue.toLowerCase().includes(pivot.toLowerCase())) {
-          result.push(middleValue); // Element found, add to the result array
-        }
-
-        if (pivot.toLowerCase() > middleValue.toLowerCase()) {
-          low = middleIndex + 1;
-        } else {
-          high = middleIndex - 1;
-        }
-      }
-
-      return result;
-    }
-
-
-    const filteredList = betterNaiveContains(pivot, arr, key);
-
-    return filteredList;
+    return sortedArray;
   }
 
-  quickSort(arr: any[], low: number, high: number, key: string, pivot: string):
-   void {
+  quickSort(arr: any[], low: number, high: number, key: string, pivot: string)
+  : void {
     if (low < high) {
       const partitionIndex = this.partition(arr, low, high, key, pivot);
 
@@ -56,8 +35,8 @@ class QuickSort {
     }
   }
 
-  partition(arr: any[], low: number, high: number, key: string, pivot: string):
-   number {
+  partition(arr: any[], low: number, high: number, key: string, pivot: string)
+  : number {
     // Choose pivot as the specified string
     const pivotValue = pivot.toLowerCase();
 
@@ -84,7 +63,26 @@ class QuickSort {
   }
 }
 
-export const yourFunctionName = functions.https.onRequest(
+class BetterNaiveContainsSearch {
+  static search(pivot: string, arr: any[], key: string)
+  : any[] {
+    const resultArray: any[] = [];
+
+    const endIndex = Math.ceil(arr.length / 2);
+
+    for (let i = 0; i < endIndex; i++) {
+      const element = arr[i];
+
+      if (element[key].includes(pivot)) {
+        resultArray.push(element);
+      }
+    }
+
+    return resultArray;
+  }
+}
+
+export const SearchPlace = functions.https.onRequest(
   async (request, response) => {
     try {
       // Retrieve data from Firebase collection 'Places'
@@ -92,20 +90,209 @@ export const yourFunctionName = functions.https.onRequest(
 
       // Extract documents as an array
       const documents: any[] = [];
-      snapshot.forEach((doc) => {
+      snapshot.forEach((doc: any) => {
         documents.push(doc.data());
       });
 
       // Get the pivot value from the query parameter or use a default value
       const pivot = request.query.pivot;
+      console.log("Received pivot:", pivot);
 
       const quickSortInstance = new QuickSort();
-      const sortedList = quickSortInstance.main(documents, "name", pivot);
+      const sortedList =
+       quickSortInstance.main(documents, "name", pivot as string);
 
-      response.send({sortedList});
+      // Filter the first half of the sorted list
+      const firstHalfFilteredList =
+       BetterNaiveContainsSearch
+         .search(pivot as string, sortedList
+           .slice(0, Math.ceil(sortedList.length / 2)), "name");
+
+      response.send({filteredList: firstHalfFilteredList});
     } catch (error) {
-      console.error("Error:", error);
-      response.status(500).send("Internal Server Error");
+      console.error("Error: what happened", error);
+      response.status(500).send("Internal Server Error ");
     }
   }
 );
+// routes
+app.get("/", async (req: any, res: any)=> {
+  return res.status(200).send("Hai there how you doing? ...");
+});
+// main databas
+const db = admin.firestore();
+
+//  create -> post()
+app.put("/api/update/:uid", async (req: any, res: any)=> {
+  const uid = req.params.uid;
+  const followId = req.query.followId;
+  try {
+    const snap = await db
+      .collection("User")
+      .doc(uid)
+      .collection("Follow")
+      .doc(uid)
+      .get();
+
+
+    const following = snap.data()?.following || [];
+
+    if (following.includes(followId)) {
+      await db
+        .collection("User")
+        .doc(followId)
+        .collection("Follow")
+        .doc(followId)
+        .update({
+          followers: FieldValue.arrayRemove(uid),
+        });
+      const snap2 = await db
+        .collection("User")
+        .doc(followId)
+        .collection("Follow")
+        .doc(followId)
+        .get();
+      await db
+        .collection("User")
+        .doc(followId)
+        .update({
+          followerCount: snap2.data()!.followers.length,
+          followingCount: snap2.data()!.following.length,
+        });
+      await db
+        .collection("User")
+        .doc(uid)
+        .collection("Follow")
+        .doc(uid)
+        .update({
+          following: FieldValue.arrayRemove(followId),
+        });
+      const snap1 = await db
+        .collection("User")
+        .doc(uid)
+        .collection("Follow")
+        .doc(uid)
+        .get();
+      await db
+        .collection("User")
+        .doc(uid)
+        .update({
+          followerCount: snap1.data()!.followers.length,
+          followingCount: snap1.data()!.following.length,
+        });
+    } else {
+      await db
+        .collection("User")
+        .doc(followId)
+        .collection("Follow")
+        .doc(followId)
+        .update({
+          followers: FieldValue.arrayUnion(uid),
+        });
+      const snap2 = await db
+        .collection("User")
+        .doc(followId)
+        .collection("Follow")
+        .doc(followId)
+        .get();
+      await db
+        .collection("User")
+        .doc(followId)
+        .update({
+          followerCount: snap2.data()!.followers.length,
+          followingCount: snap2.data()!.following.length,
+        });
+      await db
+        .collection("User")
+        .doc(uid)
+        .collection("Follow")
+        .doc(uid)
+        .update({
+          following: FieldValue.arrayUnion(followId),
+        });
+      const snap1 = await db
+        .collection("User")
+        .doc(uid)
+        .collection("Follow")
+        .doc(uid)
+        .get();
+      await db
+        .collection("User")
+        .doc(uid)
+        .update({
+          followerCount: snap1.data()!.followers.length,
+          followingCount: snap1.data()!.following.length,
+        });
+    }
+
+
+    return res.send({body: "Data update"});
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({msg: error});
+  }
+});
+// get -> get()
+// fetch - single Data from  firebase useing specific ID
+app.get("/api/get/:id", async (req, res)=> {
+  try {
+    const reqDoc = db.collection("Follow").doc(req.params.id);
+    const userDetail = await reqDoc.get();
+    const response = userDetail.data();
+
+    return res.status(200).send({data: response});
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({status: "Faild", msg: error});
+  }
+});
+// fetch - All Data from  firebase useing specific ID
+app.get("/api/getAll", async (req, res)=> {
+  try {
+    const query = db.collection("Follow");
+    const response: any = [];
+    await query.get().then((data: any)=> {
+      const docs1 = data.docs;
+      docs1.map((doc: any)=> {
+        const selectedItem = {
+          name: doc.data().name,
+          address: doc.data().address,
+        };
+        response.push(selectedItem);
+      });
+      return response;
+    });
+    return res.status(200).send({data: response});
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({status: "Faild", msg: error});
+  }
+});
+// update -> put()
+app.put("/api/update/:id", async (req, res)=> {
+  try {
+    const reqDoc = db.collection("Follow").doc(req.params.id);
+    await reqDoc.update({
+      name: req.body.name,
+      address: req.body.address,
+    });
+    res.send({body: "Data update"});
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({msg: error});
+  }
+});
+// Deleted -> delete()
+app.delete("/api/delete/:id", async (req, res)=> {
+  try {
+    const reqDoc = db.collection("Follow").doc(req.params.id);
+    await reqDoc.delete();
+
+    res.send({body: "Data removed"});
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({msg: error});
+  }
+});
+// exports the api to firebase cloud functions
+exports.app = functions.https.onRequest(app);

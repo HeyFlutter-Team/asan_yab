@@ -42,9 +42,10 @@
 
   "buttonNvB_1": "خانه",
   "buttonNvB_2": "مکان جدید",
-  "buttonNvB_3": "پروفایل",
+  "buttonNvB_3": "پیام",
+  "buttonNvB_4": "پروفایل",
 
-
+  "proFile_type": "حساب",
 
 
   "category_title": "دسته بندی ها",
@@ -59,7 +60,8 @@
   "favorite_page_title": "موارد دلخواه",
 
 
-
+  "findingFriendById": "ایدی مورد نظر را  بنویسید",
+  "searchById": "گشتن با آیدی ",
 
   "suggestion_appBar_title": "درخواست مکان جدید",
   "suggestion_1_tf_labelName": "نام مکان",
@@ -116,6 +118,8 @@
   "elevated_text": "ثبت نام",
 
 
+"rating_widget_dialog":"لطفا برای ما امتیاز دهید",
+  "done_click":"تایید",
   "details_page_snack_bar": "برای اضافه کردن به مورد دلخواه اول باید وارد اکانت خود شوید ",
   "details_page_1_custom_card": "توضیحات",
   "details_page_2_custom_card": "گالری",
@@ -139,5 +143,9 @@
   "nearby_place_page_km_away": "کیلومتر تا مقصد",
 
 
-  "update_dialog_page_new_version": "درباره نسخه جدید"
+  "update_dialog_page_new_version": "درباره نسخه جدید",
+  "firstComment": "آخرین نظر در اینجا نشان داده خواهد شد",
+  "comment": "نظرات",
+  "more":"بیشتر",
+  "add_a_comment": "نظر دهید"
 }

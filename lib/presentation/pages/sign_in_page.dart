@@ -2,16 +2,15 @@
 
 import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
-import 'package:asan_yab/presentation/pages/personal_information_page.dart';
 import 'package:asan_yab/presentation/pages/sign_up_page.dart';
 import 'package:asan_yab/presentation/widgets/custom_text_field.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../domain/riverpod/data/sign_in_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../domain/riverpod/data/sign_in_provider.dart';
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
 
 class LogInPage extends ConsumerStatefulWidget {
@@ -158,8 +157,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
                 height: 10,
               ),
               Consumer(
-                builder: (context, sref, child) =>
-                 ElevatedButton(
+                builder: (context, sref, child) => ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red.shade800,
                       minimumSize: const Size(340, 55),
@@ -175,12 +173,22 @@ class _LogInPageState extends ConsumerState<LogInPage>
                       prefs.setString('email', emailCTRL.text);
                       prefs.setString('password', passwordCTRL.text);
                     }
-                    await ref.read(signInProvider).signIn(
-                        context: context,
-                        email: emailCTRL.text,
-                        password: passwordCTRL.text).whenComplete(()=>ref.watch(userDetailsProvider)).whenComplete(() => Navigator.pushReplacement(context, MaterialPageRoute(builder:(context) =>  const MainPage())));
-
-
+                    await ref
+                        .read(signInProvider)
+                        .signIn(
+                            context: context,
+                            email: emailCTRL.text,
+                            password: passwordCTRL.text)
+                        .whenComplete(() => ref.watch(userDetailsProvider))
+                        .whenComplete(() {
+                      ref
+                          .read(buttonNavigationProvider.notifier)
+                          .selectedIndex(0);
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const MainPage()));
+                    });
                   },
                   child: Text(
                     languageText.sign_in_elbT,
@@ -222,17 +230,13 @@ class _LogInPageState extends ConsumerState<LogInPage>
               const SizedBox(
                 height: 20,
               ),
-             Center(
-               child:
-               loadingState
-                   ?  const CircularProgressIndicator(
-
-                 color: Colors.red,
-
-               )
-
-                   : const SizedBox(),
-             )
+              Center(
+                child: loadingState
+                    ? const CircularProgressIndicator(
+                        color: Colors.red,
+                      )
+                    : const SizedBox(),
+              )
             ],
           ),
         ),
@@ -240,5 +244,3 @@ class _LogInPageState extends ConsumerState<LogInPage>
     );
   }
 }
-
-

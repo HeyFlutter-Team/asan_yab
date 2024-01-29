@@ -46,6 +46,8 @@ Future<void> main() async {
   //firebase messegaing
 
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  //
+  // FirebaseFirestore.instance.useFirestoreEmulator('host', '');
 
   runApp(ProviderScope(
     overrides: [languageProvider.overrideWith((ref) => language)],
