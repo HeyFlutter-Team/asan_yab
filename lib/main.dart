@@ -98,14 +98,13 @@ class _MyAppState extends ConsumerState<MyApp> {
       builder: (context, child) {
         return Theme(
           data: ThemeData(
-              useMaterial3: true,
-              brightness: Theme.of(context).brightness,
-              fontFamily: 'Shabnam',
-              // appBarTheme: AppBarTheme(
-              //   backgroundColor: Theme.of(context).brightness == Brightness.dark
-              //       ? Colors.black.withOpacity(0.1)
-              //       : Colors.white,
-              // )
+            brightness: Theme.of(context).brightness,
+            fontFamily: 'Shabnam',
+            // appBarTheme: AppBarTheme(
+            //   backgroundColor: Theme.of(context).brightness == Brightness.dark
+            //       ? Colors.black.withOpacity(0.1)
+            //       : Colors.white,
+            // )
           ),
           child: child!,
         );
