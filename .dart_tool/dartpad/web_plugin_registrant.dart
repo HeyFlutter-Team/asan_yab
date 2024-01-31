@@ -9,6 +9,7 @@
 import 'package:cloud_firestore_web/cloud_firestore_web.dart';
 import 'package:cloud_functions_web/cloud_functions_web.dart';
 import 'package:connectivity_plus/src/connectivity_plus_web.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter_web.dart';
 import 'package:file_picker/_internal/file_picker_web.dart';
 import 'package:firebase_analytics_web/firebase_analytics_web.dart';
 import 'package:firebase_auth_web/firebase_auth_web.dart';
@@ -30,6 +31,7 @@ void registerPlugins([final Registrar? pluginRegistrar]) {
   FirebaseFirestoreWeb.registerWith(registrar);
   FirebaseFunctionsWeb.registerWith(registrar);
   ConnectivityPlusWebPlugin.registerWith(registrar);
+  EmojiPickerFlutterPluginWeb.registerWith(registrar);
   FilePickerWeb.registerWith(registrar);
   FirebaseAnalyticsWeb.registerWith(registrar);
   FirebaseAuthWeb.registerWith(registrar);

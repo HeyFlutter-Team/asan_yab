@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../data/models/comment_model.dart';
 import '../../data/models/users_info.dart';
 import '../../domain/riverpod/data/restricted_words.dart';
+import '../pages/themeProvider.dart';
 import 'comment_tile.dart';
 
 class Comments extends ConsumerStatefulWidget {
@@ -86,6 +87,9 @@ class _CommentsState extends ConsumerState<Comments> {
                         ),
                       ),
                     ],
+                  ),
+                  const SizedBox(
+                    height: 5,
                   )
                 ],
               ),
@@ -120,6 +124,7 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
   final TextEditingController _commentController = TextEditingController();
   late final CollectionReference commentsCollection;
   late final CollectionReference usersCollection;
+  bool emojiShowing = false;
 
   @override
   void initState() {
@@ -130,32 +135,93 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final themeModel = ref.watch(themeModelProvider);
     final languageText = AppLocalizations.of(context);
     return Container(
-      padding: const EdgeInsets.all(16.0),
       height: MediaQuery.of(context).size.height * 0.70,
       child: Column(
         children: [
-          Row(
-            children: [
-              //comment's textFiled
-              SizedBox(
-                width: MediaQuery.of(context).size.width - 100,
-                child: TextField(
-                  controller: _commentController,
-                  decoration: InputDecoration(
-                    hintText: '${languageText!.add_a_comment}...',
+          Container(
+            decoration: BoxDecoration(
+              color: (themeModel.currentThemeMode == ThemeMode.dark)
+                  ? Colors.black38
+                  : Colors.white70,
+              borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(28), topLeft: Radius.circular(28)),
+            ),
+            height: 80,
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 13),
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: const Text(
+                      "🙂",
+                      style: TextStyle(fontSize: 20),
+                    ),
                   ),
                 ),
-              ),
-              //done icon
-              IconButton(
-                  onPressed: () {
-                    _submitComment(_commentController.text, context);
-                    _commentController.clear();
-                  },
-                  icon: const Icon(Icons.send))
-            ],
+                //comment's textFiled
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width - 100,
+                  child: TextField(
+                    controller: _commentController,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: (themeModel.currentThemeMode ==
+                                      ThemeMode.dark)
+                                  ? Colors.black26
+                                  : Colors.black),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        hintText: '${languageText!.add_a_comment}...',
+                        hintStyle: TextStyle(
+                            color:
+                                (themeModel.currentThemeMode == ThemeMode.dark)
+                                    ? Colors.grey[500]
+                                    : Colors.black),
+                        fillColor:
+                            (themeModel.currentThemeMode == ThemeMode.dark)
+                                ? Colors.grey[900]
+                                : Colors.grey[300],
+                        filled: true,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: (themeModel.currentThemeMode ==
+                                      ThemeMode.dark)
+                                  ? Colors.white10
+                                  : Colors.black,
+                              width: 2),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: (themeModel.currentThemeMode ==
+                                        ThemeMode.dark)
+                                    ? Colors.black38
+                                    : Colors.transparent,
+                                width: 2),
+                            borderRadius: BorderRadius.circular(20))),
+                  ),
+                ),
+                //done icon
+                IconButton(
+                    onPressed: () {
+                      _submitComment(_commentController.text, context);
+                      _commentController.clear();
+                    },
+                    icon: Icon(
+                      Icons.send,
+                      color: (themeModel.currentThemeMode == ThemeMode.dark)
+                          ? Colors.grey
+                          : Colors.black87,
+                    ))
+              ],
+            ),
           ),
           const SizedBox(height: 20.0),
           Expanded(

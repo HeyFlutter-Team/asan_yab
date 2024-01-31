@@ -18,7 +18,7 @@ class _MessagePageState extends ConsumerState<MessagePage> {
         backgroundColor: Colors.white,
         shadowColor: Colors.white70,
         elevation: 5,
-        title: Row(
+        title: const Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
@@ -87,11 +87,10 @@ class _MessagePageState extends ConsumerState<MessagePage> {
                       Expanded(
                         child: TextField(
                           onTap: () {},
-                          decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 7),
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 7),
                             hintText: "Say Something ... ",
-                            hintStyle: const TextStyle(color: Colors.black54),
+                            hintStyle: TextStyle(color: Colors.black54),
                             border: InputBorder.none,
                           ),
                           controller: ref
