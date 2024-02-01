@@ -79,7 +79,7 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
                                 color: isOnline ? Colors.green : Colors.grey,
                                 size: 12,
                               ),
-                              SizedBox(width: 5),
+                              const SizedBox(width: 5),
                               Text(
                                 isOnline ? 'Online' : 'Offline',
                                 style: const TextStyle(

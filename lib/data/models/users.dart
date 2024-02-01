@@ -71,7 +71,7 @@ class Users {
         followingCount: json['followingCount'],
         fcmToken: json['fcmToken'],
         isOnline: json['isOnline'] ?? false,
-        invitationRate: json['invitationRate']
+        invitationRate: json['invitationRate']??'0'
     );
 
   }
