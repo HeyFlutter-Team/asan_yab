@@ -56,7 +56,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
     debugPrint('Ui is load : $data ');
     debugPrint('Ui is load : ${ref.watch(hasMore)} ');
 
-    return ref.watch(loadingDataProvider)
+    return ref.watch(loadingDataProvider) || ref.watch(loadingProvider)
         ? const Center(
             child: CircularProgressIndicator(
               color: Colors.blueGrey,
@@ -117,7 +117,8 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                         ),
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.only(right: 12.0,left: 12),
+                            padding:
+                                const EdgeInsets.only(right: 12.0, left: 12),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -125,11 +126,10 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                                   data[index].name!,
                                   overflow: TextOverflow.fade,
                                   maxLines: 2,
-                                  style: const TextStyle(
-                                      fontSize: 18.0),
+                                  style: const TextStyle(fontSize: 18.0),
                                 ),
                                 const SizedBox(height: 12.0),
-                                data[index].adresses[0].phone.isEmpty
+                                data[index].addresses[0].phone.isEmpty
                                     ? const SizedBox()
                                     : SizedBox(
                                         width: 180,
@@ -145,34 +145,64 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                                           onPressed: () async {
                                             await FlutterPhoneDirectCaller
                                                 .callNumber(data[index]
-                                                    .adresses[0]
+                                                    .addresses[0]
                                                     .phone);
                                           },
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Text(
-                                          isRTL
-                                               ? convertDigitsToFarsi(data[index]
-                                                    .adresses
-                                                    .first
-                                                    .phone)
-                                          :data[index]
-                                                  .adresses
-                                                  .first
-                                                  .phone,
-                                                style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16.0),
-                                              ),
-                                              const Icon(
-                                                Icons.phone_android,
-                                                color: Colors.green,
-                                                size: 25,
-                                              ),
-                                            ],
-                                          ),
+                                          child: isRTL
+                                              ? Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    Text(
+                                                      isRTL
+                                                          ? convertDigitsToFarsi(
+                                                              data[index]
+                                                                  .addresses
+                                                                  .first
+                                                                  .phone)
+                                                          : data[index]
+                                                              .addresses
+                                                              .first
+                                                              .phone,
+                                                      style: const TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16.0),
+                                                    ),
+                                                    const Icon(
+                                                      Icons.phone_android,
+                                                      color: Colors.green,
+                                                      size: 25,
+                                                    ),
+                                                  ],
+                                                )
+                                              : Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.phone_android,
+                                                      color: Colors.green,
+                                                      size: 25,
+                                                    ),
+                                                    Text(
+                                                      isRTL
+                                                          ? convertDigitsToFarsi(
+                                                              data[index]
+                                                                  .addresses
+                                                                  .first
+                                                                  .phone)
+                                                          : data[index]
+                                                              .addresses
+                                                              .first
+                                                              .phone,
+                                                      style: const TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16.0),
+                                                    ),
+                                                  ],
+                                                ),
                                         ),
                                       ),
                               ],

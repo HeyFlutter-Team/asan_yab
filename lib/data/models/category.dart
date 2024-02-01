@@ -3,12 +3,14 @@ class Category {
   final String categoryName;
   final String iconCode;
   final String color;
+  final String? enCategoryName;
 
   Category({
     required this.id,
     required this.categoryName,
     required this.iconCode,
     required this.color,
+    this.enCategoryName
   });
 
   factory Category.fromJson(Map<String, dynamic> json) {
@@ -17,6 +19,7 @@ class Category {
       categoryName: json['categoryName'],
       iconCode: json['iconCode'],
       color: json['color'],
+      enCategoryName: json['enCategoryName']??''
     );
   }
 
@@ -26,6 +29,7 @@ class Category {
       'categoryName': categoryName,
       'iconCode': iconCode,
       'color': color,
+      'enCategoryName':enCategoryName
     };
   }
 }

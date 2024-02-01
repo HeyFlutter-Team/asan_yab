@@ -1,9 +1,12 @@
+import 'package:asan_yab/data/models/language.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../core/utils/convert_digits_to_farsi.dart';
+import '../../data/repositoris/language_repository.dart';
 
-class UpdateDialog extends StatefulWidget {
+class UpdateDialog extends ConsumerStatefulWidget {
   final String version;
   final String description;
   final String appLink;
@@ -18,10 +21,10 @@ class UpdateDialog extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<UpdateDialog> createState() => _UpdateDialogState();
+  ConsumerState<UpdateDialog> createState() => _UpdateDialogState();
 }
 
-class _UpdateDialogState extends State<UpdateDialog> {
+class _UpdateDialogState extends ConsumerState<UpdateDialog> {
   double screenHeight = 0;
   double screenWidth = 0;
 
@@ -45,6 +48,8 @@ class _UpdateDialogState extends State<UpdateDialog> {
   }
 
   Widget content(BuildContext context) {
+    final isRTL = ref.watch(languageProvider).code == 'fa';
+    final languageText=AppLocalizations.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -96,17 +101,19 @@ class _UpdateDialogState extends State<UpdateDialog> {
                           flex: 1,
                           child: Stack(
                             children: [
-                              const Align(
+                               Align(
                                 alignment: Alignment.centerRight,
                                 child: Text(
-                                  "درباره نسخه جدید",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  languageText!.update_dialog_page_new_version,
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  convertDigitsToFarsi(widget.version),
+                                  isRTL
+                                  ?convertDigitsToFarsi(widget.version)
+                                  :widget.version,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),

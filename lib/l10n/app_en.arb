@@ -38,21 +38,26 @@
 
   "buttonNvB_1": "Home",
   "buttonNvB_2": "New Place",
-  "buttonNvB_3": "Profile",
+  "buttonNvB_3": "Message",
+  "buttonNvB_4": "Profile",
 
 
-
+ "proFile_type": "Account",
 
   "category_title": "Categories",
 
 
 
   "nearbyPlaces_title": "Nearby places",
-  "nearbyPlaces_meter_title": "meters to the destination",
+  "nearbyPlaces_meter_title": "meters away",
 
 
 
   "favorite_page_title": "Favorites",
+
+
+  "findingFriendById": "Finding your new friend by Id",
+  "searchById": "Search by Id ",
 
 
 
@@ -77,12 +82,13 @@
 
   "profile_future_error": "Information not available",
   "profile_copy_id_snack_bar": "Your ID was copied to the clipboard",
-  "profile_about_us_listTile": "About us",
+  "profile_about_us_listTile": "About Us",
   "profile_edit_button_text": "Edit",
   "profile_buttonSheet_camera": "Camera",
   "profile_buttonSheet_gallery": "Gallery",
-  "profile_language_listTile": "Language",
+  "profile_language_listTile": "Change Language",
   "profile_snackBar_catch": "Your internet is down",
+  "profile_dark_mode": "Dark Mode",
 
 
 
@@ -110,9 +116,51 @@
   "elevated_text": "Enter",
 
 
+  "rating_widget_dialog":"Please leave a star rating",
+
+  "done_click":"Done",
+
+  "elevated_text": "Enter",
+
+
   "details_page_snack_bar": "To add to favorites you must first log in to your account",
   "details_page_1_custom_card": "Description",
   "details_page_2_custom_card": "Gallery",
-  "details_page_3_custom_card": "Specifications"
+  "details_page_3_custom_card": "Specifications",
+  "details_page_4_custom_card": "New Items",
+  "details_page_5_custom_card": "Name",
+  "details_page_6_custom_card": "Price",
+  "details_page_7_custom_card": "ِDoctor",
+  "details_page_8_custom_card": "ٍExpert",
+  "details_page_9_custom_card": "Time",
+
+
+
+
+
+
+  "about_us_page_appbar_title": "About Us",
+
+
+
+  "nearby_place_page_title": "NearBy Places",
+  "nearby_place_page_active_location": "Activate your location",
+  "nearby_place_page_distances": "Choose the distance you want",
+  "nearby_place_page_meter": "Meter",
+  "nearby_place_page_km": "km",
+  "nearby_place_page_meter_away": "Meters away",
+  "nearby_place_page_km_away": "Km away",
+
+
+
+
+  "update_dialog_page_new_version": "About the new version",
+  "firstComment": "The last comment will be shown here",
+  "comment": "Comments",
+  "more":"More",
+  "add_a_comment": "Add a Comment"
+
+
+
 
 }

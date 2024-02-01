@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../core/res/image_res.dart';
 
 class AboutUsPage extends StatelessWidget {
@@ -12,11 +12,12 @@ class AboutUsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+    final languageText=AppLocalizations.of(context);
     return Scaffold(
       // backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        title: const Text(
-          ' در باره ما',
+        title:  Text(
+          languageText!.about_us_page_appbar_title,
           // style: TextStyle(color: Colors.black),
         ),
         elevation: 0,

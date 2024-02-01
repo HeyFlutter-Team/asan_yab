@@ -1,7 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CustomTextField extends StatelessWidget {
+import '../pages/themeProvider.dart';
+
+class CustomTextField extends ConsumerStatefulWidget {
   final bool obscureText;
   final TextCapitalization textCapitalization;
   final Widget? suffixIcon;
@@ -23,7 +26,13 @@ class CustomTextField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  ConsumerState<CustomTextField> createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends ConsumerState<CustomTextField> {
+  @override
   Widget build(BuildContext context) {
+    final themeModel = ref.watch(themeModelProvider);
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.17,
       width: MediaQuery.of(context).size.width * 0.9,
@@ -32,7 +41,7 @@ class CustomTextField extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
-            '  $label',
+            '  ${widget.label}',
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w400,
@@ -42,12 +51,14 @@ class CustomTextField extends StatelessWidget {
             height: 5,
           ),
           TextFormField(
-              textCapitalization: textCapitalization,
-              obscureText: obscureText,
-              controller: controller,
+              textCapitalization: widget.textCapitalization,
+              obscureText: widget.obscureText,
+              controller: widget.controller,
               decoration: InputDecoration(
-                suffixIcon: suffixIcon,
-                border: const OutlineInputBorder(),
+                suffixIcon: widget.suffixIcon,
+                border: const OutlineInputBorder(
+                  borderSide: BorderSide()
+                ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(
@@ -57,8 +68,10 @@ class CustomTextField extends StatelessWidget {
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
-                      width: 1, color: Colors.black.withOpacity(0.44)),
+                  borderSide:  BorderSide(
+                    color:themeModel.currentThemeMode == ThemeMode.dark?Colors.white
+                      :Colors.black,
+                      width: 1),
                 ),
                 errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -68,11 +81,11 @@ class CustomTextField extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(width: 1, color: Colors.red),
                 ),
-                hintText: hintText,
+                hintText: widget.hintText,
               ),
-              keyboardType: keyboardType,
+              keyboardType: widget.keyboardType,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: validator),
+              validator: widget.validator),
         ],
       ),
     );

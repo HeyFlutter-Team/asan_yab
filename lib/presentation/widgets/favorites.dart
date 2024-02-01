@@ -3,8 +3,10 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/domain/riverpod/data/firebase_rating_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/utils/convert_digits_to_farsi.dart';
@@ -41,8 +43,8 @@ class _FavoritesState extends ConsumerState<Favorites> {
     final favoriteState = ref.watch(favoriteProvider);
     debugPrint('favorite $favoriteState');
     final favorites = favoriteState.map((e) => e).toList();
-    final languageText=AppLocalizations.of(context);
-    final isRTL = ref.watch(languageProvider).code=='fa';
+    final languageText = AppLocalizations.of(context);
+    final isRTL = ref.watch(languageProvider).code == 'fa';
     print("this is the lenght");
     print(favorites.length);
     return favorites.isEmpty
@@ -51,7 +53,8 @@ class _FavoritesState extends ConsumerState<Favorites> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 16.0, top: 12.0,left: 16),
+                padding:
+                    const EdgeInsets.only(right: 16.0, top: 12.0, left: 16),
                 child: Text(
                   languageText!.favorite_page_title,
                   style: const TextStyle(color: Colors.grey, fontSize: 20.0),
@@ -76,7 +79,9 @@ class _FavoritesState extends ConsumerState<Favorites> {
                     final items = favorites[index];
                     List<String> phoneData =
                         List<String>.from(jsonDecode(items['phone']));
-                    final phoneNumber =isRTL?convertDigitsToFarsi(phoneData[0]):phoneData[0];
+                    final phoneNumber = isRTL
+                        ? convertDigitsToFarsi(phoneData[0])
+                        : phoneData[0];
                     return Stack(
                       children: [
                         Card(
@@ -131,7 +136,7 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                   const SizedBox(height: 10.0),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 12),
+                                        horizontal: 5),
                                     child: Column(
                                       children: [
                                         Text(
@@ -147,19 +152,31 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                             await FlutterPhoneDirectCaller
                                                 .callNumber(phoneNumber);
                                           },
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(phoneNumber,
-                                                  style: const TextStyle(
-                                                      // color: Colors.black,
-
-                                                      )),
-                                              const Icon(Icons.phone_android,
-                                                  color: Colors.green),
-                                            ],
-                                          ),
+                                          child: isRTL
+                                              ? Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    const Icon(
+                                                        Icons.phone_android,
+                                                        color: Colors.green),
+                                                    Text(phoneNumber),
+                                                  ],
+                                                )
+                                              : Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(phoneNumber,
+                                                        overflow: TextOverflow
+                                                            .ellipsis),
+                                                    const Icon(
+                                                        Icons.phone_android,
+                                                        color: Colors.green),
+                                                  ],
+                                                ),
                                         ),
                                       ],
                                     ),
@@ -199,6 +216,53 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                   ),
                           ),
                         ),
+                        widget.isConnected
+                            ? Positioned(
+                                top: 98.0,
+                                left: 10.0,
+                                child: FutureBuilder<double>(
+                                  future: ref
+                                      .read(firebaseRatingProvider)
+                                      .getAverageRatingForPlace(
+                                          favorites[index]['id']),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const CircularProgressIndicator(); // Show loading indicator while fetching rating
+                                    } else if (snapshot.hasError) {
+                                      return const Text(
+                                          'Error fetching rating'); // Show error message if there's an error
+                                    } else {
+                                      final averageRating = snapshot.data ?? 0;
+                                      return Container(
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          border: Border.all(
+                                              width: 4, color: Colors.white),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            averageRating.toStringAsFixed(
+                                                1), // Display the average rating with one decimal place
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                              )
+                            : const SizedBox(
+                                height: 0,
+                              )
                       ],
                     );
                   },
