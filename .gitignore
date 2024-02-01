@@ -32,7 +32,7 @@ migrate_working_dir/
 .pub/
 /build/
 .pubspec.lock
-
+.fvm/
 # Symbolication related
 app.*.symbols
 
