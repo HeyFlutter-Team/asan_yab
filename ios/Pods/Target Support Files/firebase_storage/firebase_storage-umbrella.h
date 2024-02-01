@@ -10,7 +10,9 @@
 #endif
 #endif
 
+#import "firebase_storage_messages.g.h"
 #import "FLTFirebaseStoragePlugin.h"
+#import "FLTTaskStateChannelStreamHandler.h"
 
 FOUNDATION_EXPORT double firebase_storageVersionNumber;
 FOUNDATION_EXPORT const unsigned char firebase_storageVersionString[];

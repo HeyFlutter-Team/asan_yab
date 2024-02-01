@@ -23,7 +23,6 @@ static const double kSeattleLatitudeDegrees = 47.6089945;
 static const double kSeattleLongitudeDegrees = -122.3410462;
 static const double kZoom = 14;
 static const double kStrokeWidth = 20;
-static NSString *const kMapIDDemo = @"11153850776783499500";
 
 @implementation StampedPolylinesViewController
 
@@ -44,7 +43,7 @@ static NSString *const kMapIDDemo = @"11153850776783499500";
   [path addLatitude:kSeattleLatitudeDegrees - 0.005 longitude:kSeattleLongitudeDegrees - 0.005];
   [path addLatitude:kSeattleLatitudeDegrees - 0.007 longitude:kSeattleLongitudeDegrees + 0.001];
 
-  UIImage *_Nonnull stamp = (UIImage * _Nonnull)[UIImage imageNamed:@"voyager"];
+  UIImage *_Nonnull stamp = (UIImage *_Nonnull)[UIImage imageNamed:@"voyager"];
   GMSStrokeStyle *solidStroke = [GMSStrokeStyle solidColor:[UIColor redColor]];
   solidStroke.stampStyle = [GMSTextureStyle textureStyleWithImage:stamp];
 
@@ -59,7 +58,7 @@ static NSString *const kMapIDDemo = @"11153850776783499500";
   [texturePath addLatitude:kSeattleLatitudeDegrees - 0.012
                  longitude:kSeattleLongitudeDegrees - 0.008];
 
-  UIImage *_Nonnull textureStamp = (UIImage * _Nonnull)[UIImage imageNamed:@"aeroplane"];
+  UIImage *_Nonnull textureStamp = (UIImage *_Nonnull)[UIImage imageNamed:@"aeroplane"];
 
   GMSStrokeStyle *gradientStroke = [GMSStrokeStyle gradientFromColor:[UIColor magentaColor]
                                                              toColor:[UIColor greenColor]];

@@ -41,7 +41,7 @@ Future<void> main() async {
     return true;
   };
   //firebase messegaing
-
+  FirebaseMessaging.instance.requestPermission();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   runApp(ProviderScope(
