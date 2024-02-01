@@ -89,7 +89,8 @@
   "profile_buttonSheet_gallery": "گالری",
   "profile_language_listTile": "تغییر زبان",
   "profile_snackBar_catch": "انترنت شما قطع است",
-"profile_dark_mode": "حالت تاریک",
+  "profile_dark_mode": "حالت تاریک",
+  "profile_rate_score": "امتیاز",
 
 
 
@@ -112,6 +113,8 @@
   "second_text_field_label": "تخلص",
   "second_text_field_hint": "نخلص خود را وارد کنید",
   "second_text_field_valid": "تخلص خالی است",
+  "inviter_ID": "آیدی شخص دعوت کننده",
+  "third_text_field_hint": "آیدی شخصی که آسان یاب را به شما معرفی کرده است",
   "elevated_text": "ثبت نام",
 
 

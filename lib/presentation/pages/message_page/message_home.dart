@@ -54,10 +54,10 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
         automaticallyImplyLeading: false,
         title: Column(
           children: [
-            Text(user!.name),
+            Text('${user?.name}'),
             const SizedBox(height: 4),
             Text(
-              "${user.userType} ${AppLocalizations.of(context)!.proFile_type}",
+              "${user?.userType} ${AppLocalizations.of(context)!.proFile_type}",
               style: const TextStyle(color: Colors.grey, fontSize: 12),
             ),
           ],
@@ -75,7 +75,9 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
               icon: const Icon(Icons.search)),
         ],
       ),
-      body: Column(
+      body:
+      user?.invitationRate=='2'?
+      Column(
         children: [
           const SizedBox(height: 12),
           messageNotifier.isEmpty
@@ -137,7 +139,7 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
                                       color: const Color(0xff7c94b6),
                                       image: DecorationImage(
                                         image: CachedNetworkImageProvider(
-                                            user.imageUrl),
+                                            '${user?.imageUrl}'),
                                         fit: BoxFit.cover,
                                       ),
                                       shape: BoxShape.circle,
@@ -156,10 +158,10 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
                                     children: [
                                       Text(
                                         userForChat.name,
-                                        style: TextStyle(color: Colors.black),
+                                        style: const TextStyle(color: Colors.black),
                                       ),
                                       const SizedBox(width: 5),
-                                      Spacer(),
+                                      const Spacer(),
                                       Text(
                                         messageDetails.isEmpty
                                             ? ''
@@ -167,13 +169,13 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
                                                 messageDetails[index]
                                                     .sentTime
                                                     .toLocal()),
-                                        style: TextStyle(fontSize: 10),
+                                        style: const TextStyle(fontSize: 10),
                                       ),
-                                      SizedBox(width: 4),
+                                      const SizedBox(width: 4),
                                     ],
                                   ),
                                   subtitle: messageDetails.isEmpty
-                                      ? Text('')
+                                      ? const Text('')
                                       : Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
@@ -201,8 +203,8 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
                                                     color: Colors.blue,
                                                     size: 12,
                                                   )
-                                                : SizedBox(),
-                                            Spacer(),
+                                                : const SizedBox(),
+                                            const Spacer(),
                                           ],
                                         ),
                                 ),
@@ -215,6 +217,9 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
                   ),
                 ),
         ],
+      )
+      :const Center(
+        child: Text('For chatting your rate should be 2 or more than 2'),
       ),
     );
   }

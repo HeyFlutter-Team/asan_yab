@@ -81,6 +81,27 @@ class UserDetails {
       await FollowRepo().newUser(userRef.id, userFollow);
     });
   }
+  Future<void> updateInviterRate(String inviterId) async {
+    try {
+      final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('User')
+          .where('id', isEqualTo: int.parse(inviterId))
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final DocumentSnapshot inviterDoc = querySnapshot.docs.first;
+        final int currentRate = int.parse(inviterDoc['invitationRate'] ?? '0');
+        final int newRate = currentRate + 1;
+
+        await FirebaseFirestore.instance
+            .collection('User')
+            .doc(inviterDoc.id)
+            .update({'invitationRate': newRate.toString()});
+      }
+    } catch (e) {
+      print('Error updating inviter rate: $e');
+    }
+}
 }
 
 final userRegesterDetailsProvider = Provider((ref) => UserDetails());

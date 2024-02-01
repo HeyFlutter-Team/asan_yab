@@ -288,6 +288,18 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               const Divider(
                 color: Colors.grey,
               ),
+              ListTile(
+                title: Text(
+                    '${languageText.profile_rate_score} ${usersData?.invitationRate}'),
+                leading: const Icon(
+                  color: Colors.red,
+                  Icons.star_rate_outlined,
+                  size: 30,
+                ),
+              ),
+              const Divider(
+                color: Colors.grey,
+              ),
               const SizedBox(
                 height: 5,
               ),

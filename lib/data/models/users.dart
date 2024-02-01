@@ -11,6 +11,7 @@ class Users {
   final String userType;
   final List<String> owner;
   final List<String> ownerPlaceName;
+  final String invitationRate;
   final int followerCount;
   final int followingCount;
   final String fcmToken;
@@ -31,6 +32,7 @@ class Users {
     this.followingCount = 0,
     required this.fcmToken,
     required this.isOnline,
+    this.invitationRate='0'
   });
 
   Map<String, dynamic> toJson() => {
@@ -48,6 +50,7 @@ class Users {
         'followingCount': followingCount,
         'fcmToken': fcmToken,
         'isOnline': isOnline,
+        'invitationRate':invitationRate
       };
 
   factory Users.fromMap(Map<String, dynamic> json) {
@@ -67,7 +70,10 @@ class Users {
         followerCount: json['followerCount'],
         followingCount: json['followingCount'],
         fcmToken: json['fcmToken'],
-        isOnline: json['isOnline'] ?? false);
+        isOnline: json['isOnline'] ?? false,
+        invitationRate: json['invitationRate']??'0'
+    );
+
   }
   Users copyWith({
     int? id,
@@ -84,6 +90,7 @@ class Users {
     int? followingCount,
     String? fcmToken,
     bool? isOnline,
+    String? invitationRate
   }) {
     return Users(
         id: id ?? this.id,
@@ -99,6 +106,8 @@ class Users {
         followerCount: followerCount ?? this.followerCount,
         followingCount: followingCount ?? this.followingCount,
         fcmToken: fcmToken ?? this.fcmToken,
-        isOnline: isOnline ?? this.isOnline);
+        isOnline: isOnline ?? this.isOnline,
+        invitationRate: invitationRate??this.invitationRate
+    );
   }
 }
