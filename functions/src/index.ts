@@ -85,16 +85,16 @@ class BetterNaiveContainsSearch {
 export const SearchPlace = functions.https.onRequest(
   async (request, response) => {
     try {
-      // Retrieve data from Firebase collection 'Places'
+
       const snapshot = await admin.firestore().collection("Places").get();
 
-      // Extract documents as an array
+
       const documents: any[] = [];
       snapshot.forEach((doc: any) => {
         documents.push(doc.data());
       });
 
-      // Get the pivot value from the query parameter or use a default value
+
       const pivot = request.query.pivot;
       console.log("Received pivot:", pivot);
 
@@ -102,7 +102,7 @@ export const SearchPlace = functions.https.onRequest(
       const sortedList =
        quickSortInstance.main(documents, "name", pivot as string);
 
-      // Filter the first half of the sorted list
+
       const firstHalfFilteredList =
        BetterNaiveContainsSearch
          .search(pivot as string, sortedList
