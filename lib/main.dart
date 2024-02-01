@@ -10,10 +10,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'data/models/language.dart';
 import 'firebase_options.dart';
 
@@ -81,9 +80,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     final language = ref.watch(languageProvider);
     return MaterialApp(
       navigatorKey: navigatorKey,
-      themeMode: themeModel.currentThemeMode != ThemeMode.system
-          ? themeModel.currentThemeMode
-          : ThemeMode.light,
+      themeMode: themeModel.currentThemeMode,
       darkTheme: ThemeData.dark().copyWith(
         textTheme: ThemeData.dark().textTheme.apply(
               bodyColor: Colors.white,
