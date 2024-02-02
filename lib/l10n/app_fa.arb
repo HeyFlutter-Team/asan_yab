@@ -42,9 +42,10 @@
 
   "buttonNvB_1": "خانه",
   "buttonNvB_2": "مکان جدید",
-  "buttonNvB_3": "پروفایل",
+  "buttonNvB_3": "پیام",
+  "buttonNvB_4": "پروفایل",
 
-
+  "proFile_type": "حساب",
 
 
   "category_title": "دسته بندی ها",
@@ -59,7 +60,8 @@
   "favorite_page_title": "موارد دلخواه",
 
 
-
+  "findingFriendById": "ایدی مورد نظر را  بنویسید",
+  "searchById": "گشتن با آیدی ",
 
   "suggestion_appBar_title": "درخواست مکان جدید",
   "suggestion_1_tf_labelName": "نام مکان",
@@ -80,14 +82,15 @@
 
 
   "profile_future_error": "اطلاعات در دسترس نیست",
-  "profile_copy_id_snack_bar": " آیدی شما در کلیپ بورد کبی شد",
+  "profile_copy_id_snack_bar": " آیدی شما در کلیپ بورد کپی شد",
   "profile_about_us_listTile": "درباره ما",
   "profile_edit_button_text": "ویرایش",
   "profile_buttonSheet_camera": "کامره",
   "profile_buttonSheet_gallery": "گالری",
-  "profile_language_listTile": "زبان",
+  "profile_language_listTile": "تغییر زبان",
   "profile_snackBar_catch": "انترنت شما قطع است",
-
+  "profile_dark_mode": "حالت تاریک",
+  "profile_rate_score": "امتیاز",
 
 
 
@@ -110,13 +113,39 @@
   "second_text_field_label": "تخلص",
   "second_text_field_hint": "نخلص خود را وارد کنید",
   "second_text_field_valid": "تخلص خالی است",
+  "inviter_ID": "آیدی شخص دعوت کننده",
+  "third_text_field_hint": "آیدی شخصی که آسان یاب را به شما معرفی کرده است",
   "elevated_text": "ثبت نام",
 
 
+"rating_widget_dialog":"لطفا برای ما امتیاز دهید",
+  "done_click":"تایید",
   "details_page_snack_bar": "برای اضافه کردن به مورد دلخواه اول باید وارد اکانت خود شوید ",
   "details_page_1_custom_card": "توضیحات",
   "details_page_2_custom_card": "گالری",
-  "details_page_3_custom_card": "مشخصات"
+  "details_page_3_custom_card": "مشخصات",
+  "details_page_4_custom_card": "اجناس جدید",
+  "details_page_5_custom_card": "نام",
+  "details_page_6_custom_card": "قیمت",
+  "details_page_7_custom_card": "داکتر",
+  "details_page_8_custom_card": "نخصص",
+  "details_page_9_custom_card": "تایم",
 
 
+  "about_us_page_appbar_title": " در باره ما",
+
+  "nearby_place_page_title": "مکان های نزدیک",
+  "nearby_place_page_active_location": "لوکشن خود را فعال کنید",
+"nearby_place_page_distances": "فاصله مورد نظر خود را انتخاب کنید",
+  "nearby_place_page_meter": "متر",
+  "nearby_place_page_km": "کیلومتر",
+  "nearby_place_page_meter_away": " متر تا مقصد",
+  "nearby_place_page_km_away": "کیلومتر تا مقصد",
+
+
+  "update_dialog_page_new_version": "درباره نسخه جدید",
+  "firstComment": "آخرین نظر در اینجا نشان داده خواهد شد",
+  "comment": "نظرات",
+  "more":"بیشتر",
+  "add_a_comment": "نظر دهید"
 }

@@ -33,6 +33,7 @@ migrate_working_dir/
 /build/
 .pubspec.lock
 .fvm/
+ ios/.symlinks/
 # Symbolication related
 app.*.symbols
 
@@ -43,5 +44,3 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-ios/Runner.xcworkspace/xcuserdata/harisatiq.xcuserdatad/UserInterfaceState.xcuserstate
-ios/Runner.xcworkspace/xcuserdata/harisatiq.xcuserdatad/UserInterfaceState.xcuserstate

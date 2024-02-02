@@ -64,7 +64,7 @@ class NearbyPlace extends StateNotifier<List<Place>> {
     final locationsRef = await placeRepository.fetchPlaces();
     nearestLocations.clear();
     for (final doc in locationsRef) {
-      for (final addressN in doc.adresses) {
+      for (final addressN in doc.addresses) {
         debugPrint(' ${doc.name}');
         if (addressN.lat.isNotEmpty) {
           final double lat = double.parse(addressN.lat);

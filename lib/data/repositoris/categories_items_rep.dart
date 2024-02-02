@@ -30,7 +30,7 @@ class CategoriesItemsRepository {
       return PlaceReponse(
         docs: places,
         lastItem: data.docs.last,
-        totalItem: countItem.count,
+        totalItem: countItem.count!,
       );
     } catch (e) {
       debugPrint('error of place $e');

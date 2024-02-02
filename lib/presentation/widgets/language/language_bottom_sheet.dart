@@ -56,8 +56,9 @@ class _LanguagePopUpState extends ConsumerState<LanguageBottomSheet> {
         '${AppLocalizations.of(context)!.profile_language_listTile} ${selectedLanguage.state!.flag}',
       )
           : Text(
-        AppLocalizations.of(context)!.profile_language_listTile,
-      ),
+           '${AppLocalizations.of(context)!.profile_language_listTile} 🇦🇫', // Replace with your default language flag text
+
+                    ),
       leading: const Icon(Icons.language, color: Colors.red, size: 30),
     );
   }

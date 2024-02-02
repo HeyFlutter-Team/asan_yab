@@ -1,7 +1,9 @@
+import 'package:asan_yab/data/repositoris/language_repository.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
-import 'package:asan_yab/data/repositoris/language_repository.dart';
+import 'package:asan_yab/presentation/pages/verify_email_page.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -43,6 +45,8 @@ Future<void> main() async {
   //firebase messegaing
   FirebaseMessaging.instance.requestPermission();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  //
+  // FirebaseFirestore.instance.useFirestoreEmulator('host', '');
 
   runApp(ProviderScope(
     overrides: [languageProvider.overrideWith((ref) => language)],
@@ -94,17 +98,42 @@ class _MyAppState extends ConsumerState<MyApp> {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: Locale(language.code),
-      home: const MainPage(),
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text('خطا در اتصال'),
+            );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Colors.red,
+              ),
+            );
+          } else if (snapshot.hasData && snapshot.data != null) {
+            final user = snapshot.data!;
+            if (user.emailVerified) {
+              return const MainPage();
+            } else {
+              return VerifyEmailPage(
+                email: user.email,
+              );
+            }
+          } else {
+            return const MainPage();
+          }
+        },
+      ),
       builder: (context, child) {
         return Theme(
           data: ThemeData(
+            useMaterial3: true,
             brightness: Theme.of(context).brightness,
             fontFamily: 'Shabnam',
             // appBarTheme: AppBarTheme(
-            //   backgroundColor: Theme.of(context).brightness == Brightness.dark
-            //       ? Colors.black.withOpacity(0.1)
-            //       : Colors.white,
-            // )
+
+            // Add other theme configurations here if needed
           ),
           child: child!,
         );
