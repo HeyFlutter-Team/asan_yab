@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:asan_yab/core/utils/convert_digits_to_farsi.dart';
 import 'package:asan_yab/domain/riverpod/data/following_data.dart';
 import 'package:asan_yab/presentation/pages/about_us_page.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
@@ -187,10 +188,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ListOfFollow(),
+                        builder: (context) => const ListOfFollow(),
                       ));
                 },
-                title: Text('دنبال کننده ها'),
+                title:  Text(languageText!.profile_followers),
                 leading: const Icon(
                   color: Colors.red,
                   Icons.person_2_outlined,
@@ -201,7 +202,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 color: Colors.grey,
               ),
               ListTile(
-                title: Text('${usersData?.id}'),
+                title: Text('${isRTL?convertDigitsToFarsi('${usersData?.id}'):usersData?.id}'),
                 leading: const Icon(
                   color: Colors.red,
                   Icons.account_circle,
@@ -213,7 +214,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       .copyToClipboard('${usersData?.id}');
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(languageText!.profile_copy_id_snack_bar),
+                      content: Text(languageText.profile_copy_id_snack_bar),
                       duration: const Duration(seconds: 2),
                     ),
                   );
@@ -250,7 +251,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 color: Colors.grey,
               ),
               ListTile(
-                title: Text(languageText!.profile_dark_mode),
+                title: Text(languageText.profile_dark_mode),
                 leading: const Icon(
                   color: Colors.red,
                   Icons.dark_mode_outlined,
@@ -290,7 +291,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               ),
               ListTile(
                 title: Text(
-                    '${languageText.profile_rate_score} ${usersData?.invitationRate}'),
+                    '${languageText.profile_rate_score} ${isRTL?convertDigitsToFarsi('${usersData?.invitationRate}'):usersData?.invitationRate}'),
                 leading: const Icon(
                   color: Colors.red,
                   Icons.star_rate_outlined,

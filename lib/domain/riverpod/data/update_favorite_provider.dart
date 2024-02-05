@@ -16,7 +16,7 @@ class UpdateFavorite extends ChangeNotifier {
   Future<void> update(BuildContext context, WidgetRef ref) async {
     await ref.read(getInformationProvider.notifier).getFavorite();
     List<String> firebaseId =
-        await ref.watch(getInformationProvider).favoriteList;
+        ref.watch(getInformationProvider).favoriteList;
     List<String> phoneId =
         ref.watch(favoriteProvider).map((e) => e['id'].toString()).toList();
 

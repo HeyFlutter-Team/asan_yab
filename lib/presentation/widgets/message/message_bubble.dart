@@ -37,7 +37,9 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
 
   @override
   Widget build(BuildContext context) {
-    overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final themDark=Theme.of(context).brightness == Brightness.dark;
+
+  overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
     final profileDetails = ref.watch(userDetailsProvider);
     return Align(
       alignment: widget.isMe ? Alignment.topRight : Alignment.topLeft,
@@ -49,133 +51,150 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
           if (widget.isMe == false)
             Container(
               margin: const EdgeInsets.only(top: 10, right: 8, left: 8),
-              child: CircleAvatar(
-                backgroundImage: CachedNetworkImageProvider(widget.urlImage),
-                maxRadius: 20,
-              ),
-            ),
-          Container(
-            decoration: BoxDecoration(
-              color: widget.isMe ? Colors.blueAccent : Colors.white,
-              borderRadius: widget.isMe
-                  ? const BorderRadius.only(
-                      topRight: Radius.circular(22),
-                      topLeft: Radius.circular(22),
-                      bottomLeft: Radius.circular(22),
+              child: widget.urlImage != ''
+                  ? CircleAvatar(
+                      backgroundImage:
+                          CachedNetworkImageProvider(widget.urlImage),
+                      maxRadius: 20,
                     )
-                  : const BorderRadius.only(
-                      topRight: Radius.circular(22),
-                      topLeft: Radius.circular(22),
-                      bottomRight: Radius.circular(22),
+                  : const CircleAvatar(
+                      backgroundImage: AssetImage('assets/avatar.jpg'),
+                      maxRadius: 20,
                     ),
             ),
-            margin: const EdgeInsets.only(top: 10, right: 8, left: 8),
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: widget.isMe
-                  ? CrossAxisAlignment.start
-                  : CrossAxisAlignment.end,
-              children: [
-                widget.isImage
-                    ? Column(
-                        children: [
-                          Container(
-                            height: 200,
-                            width: 200,
-                            alignment: Alignment.bottomCenter,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              image: DecorationImage(
-                                  image: CachedNetworkImageProvider(
-                                      widget.message.content.split(' ').first),
-                                  fit: BoxFit.fill),
-                            ),
-                          ),
-                        ],
+          Flexible(
+            child: Container(
+              width: 120,
+              decoration: BoxDecoration(
+                color: widget.isMe ?themDark? Colors.white70:Colors.black12: Colors.brown.shade300,
+                // color: widget.isMe ? Colors.purple : Colors.black,
+                borderRadius: widget.isMe
+                    ? const BorderRadius.only(
+                        topRight: Radius.circular(22),
+                        topLeft: Radius.circular(22),
+                        bottomLeft: Radius.circular(22),
                       )
-                    : InkWell(
-                        onTapDown: getPosition,
-                        onLongPress: () => showMenu(
-                            context: context,
-                            position: relRectSize,
-                            items: [
-                              PopupMenuItem(
-                                onTap: () {
-                                  if (widget.isMe) {
-                                    ref
-                                        .read(deleteMessagesProvider.notifier)
-                                        .deleteSingleMessage(
-                                            FirebaseAuth
-                                                .instance.currentUser!.uid,
-                                            widget.message.receiverId,
-                                            widget.message.content);
-                                  }
-                                },
-                                child: const Row(
-                                  children: [
-                                    Text(
-                                      'Deleted',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 14),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              PopupMenuItem(
-                                onTap: () {
-                                  ref.read(replayProvider.notifier).state =
-                                      widget.message.content;
-                                },
-                                child: const Row(
-                                  children: [
-                                    Text(
-                                      'Replay',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 14),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ]),
-                        child: Column(
+                    : const BorderRadius.only(
+                        topRight: Radius.circular(22),
+                        topLeft: Radius.circular(22),
+                        bottomRight: Radius.circular(22),
+                      ),
+              ),
+              margin: const EdgeInsets.only(top: 10, right: 8, left: 8),
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: widget.isMe
+                    ? CrossAxisAlignment.start
+                    : CrossAxisAlignment.end,
+                children: [
+                  widget.isImage
+                      ? Column(
                           children: [
-                            widget.replayMessage == ''
-                                ? SizedBox()
-                                : Text(
-                                    "replay to: ${widget.message.replayMessage}",
-                                    style: TextStyle(
-                                        color: widget.isMe
-                                            ? Colors.black
-                                            : Colors.black),
-                                  ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              widget.message.content,
-                              style: TextStyle(
-                                  color: widget.isMe
-                                      ? Colors.black
-                                      : Colors.black),
+                            Container(
+                              height: 200,
+                              width: 200,
+                              alignment: Alignment.bottomCenter,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                image: DecorationImage(
+                                    image: CachedNetworkImageProvider(widget
+                                        .message.content
+                                        .split(' ')
+                                        .first),
+                                    fit: BoxFit.fill),
+                              ),
                             ),
                           ],
+                        )
+                      : InkWell(
+                          onTapDown: getPosition,
+                          onLongPress: () => showMenu(
+                              context: context,
+                              position: relRectSize,
+                              items: [
+                                PopupMenuItem(
+                                  onTap: () {
+                                    if (widget.isMe) {
+                                      ref
+                                          .read(deleteMessagesProvider.notifier)
+                                          .deleteSingleMessage(
+                                              FirebaseAuth
+                                                  .instance.currentUser!.uid,
+                                              widget.message.receiverId,
+                                              widget.message.content);
+                                    }
+                                  },
+                                  child: const Row(
+                                    children: [
+                                      Text(
+                                        'Deleted',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  onTap: () {
+                                    ref.read(replayProvider.notifier).state =
+                                        widget.message.content;
+                                  },
+                                  child: const Row(
+                                    children: [
+                                      Text(
+                                        'Replay',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ]),
+                          child: Column(
+                            children: [
+                              widget.replayMessage == ''
+                                  ? const SizedBox()
+                                  : Text(
+                                      "replay to: ${widget.message.replayMessage}",
+                                      style: TextStyle(
+                                          color: widget.isMe
+                                              ? Colors.black
+                                              : Colors.black),
+                                    ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(widget.message.content,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: widget.isMe
+                                        ? Colors.black
+                                        : Colors.black,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  maxLines: 50),
+                            ],
+                          ),
                         ),
-                      ),
-                // const SizedBox(height: 5),
-                // Text(timeago.format(message.sentTime.toLocal()))
-              ],
+                  // const SizedBox(height: 5),
+                  // Text(timeago.format(message.sentTime.toLocal()))
+                ],
+              ),
             ),
           ),
           if (widget.isMe == true)
             Container(
               margin: const EdgeInsets.only(top: 10, right: 8, left: 8),
               child: profileDetails!.imageUrl.isEmpty
-                  ? Image.asset("assets/avatar.jpg")
+                  ? const CircleAvatar(
+                      backgroundImage: AssetImage('assets/avatar.jpg'),
+                      maxRadius: 20,
+                    )
                   : CircleAvatar(
                       backgroundImage:
                           CachedNetworkImageProvider(profileDetails.imageUrl),

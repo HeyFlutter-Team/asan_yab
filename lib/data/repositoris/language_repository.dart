@@ -29,5 +29,5 @@ final sharedPreferencesProvider=
 final languageRepositoryProvider=
     Provider<LanguageRepository>((ref)=>LanguageRepository(ref: ref));
 
-final selectedLanguageProvider = StateProvider<Language?>((ref) => null);
+final selectedLanguageProvider = StateProvider<Language?>((ref) => Language.farsi);
 final languageProvider = StateProvider<Language>((ref) => Language.farsi);

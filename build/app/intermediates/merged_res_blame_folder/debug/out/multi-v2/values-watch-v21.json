@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.heyflutter.asanYab.app-mergeDebugResources-55:/values-watch-v21/values-watch-v21.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\E H C\\.gradle\\caches\\transforms-3\\e40df0553eacbc4a285cbbc7d40b31ce\\transformed\\appcompat-1.6.1\\res\\values-watch-v21\\values-watch-v21.xml",
+                    "from": {
+                        "startLines": "2,6,10",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,271,499",
+                        "endLines": "5,9,13",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "266,494,724"
+                    }
+                }
+            ]
+        }
+    ]
+}
