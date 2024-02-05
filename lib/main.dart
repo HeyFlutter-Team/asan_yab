@@ -70,11 +70,6 @@ class _MyAppState extends ConsumerState<MyApp> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final themeModel = ref.watch(themeModelProvider);
     final language = ref.watch(languageProvider);
