@@ -311,8 +311,8 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
                         style: const TextStyle(fontSize: 18, color: Colors.grey),
                       ),
                       const SizedBox(width: 2,),
-                      Text(isRTL?convertDigitsToFarsi(' ${user?.invitationRate}'):
-                        ' ${user?.invitationRate}',
+                      Text(isRTL?convertDigitsToFarsi('  ${user?.invitationRate}'):
+                        '  ${user?.invitationRate}',
                         style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
