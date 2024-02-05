@@ -91,6 +91,8 @@
   "profile_snackBar_catch": "انترنت شما قطع است",
   "profile_dark_mode": "حالت تاریک",
   "profile_rate_score": "امتیاز",
+  "profile_followers": "دنبال کننده ها",
+  "profile_following": "دنبال شونده ها",
 
 
 
@@ -147,5 +149,12 @@
   "firstComment": "آخرین نظر در اینجا نشان داده خواهد شد",
   "comment": "نظرات",
   "more":"بیشتر",
-  "add_a_comment": "نظر دهید"
+  "add_a_comment": "نظر دهید",
+  "chat_screen": "برای دسترسی به چت، \nامتیاز شما باید ۲ یا بیشتر باشد",
+  "chat_message": "پیام",
+  "message_check_user1": "برای دسترسی به چت باید\n وارد اکانت خود شوید...",
+  "message_check_user2": "وارد شدن به ایمیل",
+  "message_personal_score": "امتیاز فعلی",
+  "message_description": "برای امتیاز گرفتن \nشما باید آسان یاب را\n به دو نفر از دوستان تان معرفی کنید \nو آنها باید آیدی شخصی شمارا در\n قسمت ذکر شده در پایین در هنگام ثبت نام وارد کنند...>",
+  "message_your_id": "آیدی شما..>"
 }

@@ -1,6 +1,7 @@
 import 'package:asan_yab/domain/riverpod/config/notification_repo.dart';
 import 'package:asan_yab/presentation/pages/message_page/message_home.dart';
 import 'package:asan_yab/presentation/pages/profile/profile_page.dart';
+import 'package:asan_yab/presentation/widgets/message/message_check_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -70,7 +71,7 @@ class _MainPageState extends ConsumerState<MainPage>
                   .isConnected),
           const SuggestionPage(),
           FirebaseAuth.instance.currentUser == null
-              ? const AuthPage()
+              ? const MessageCheckUser()
               : const MessageHome(),
           FirebaseAuth.instance.currentUser == null
               ? const AuthPage()

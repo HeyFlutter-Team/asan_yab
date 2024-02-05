@@ -10,13 +10,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
-  const AppBarChatDetails(
-      {required this.urlImage,
-      required this.name,
-      required this.isOnline,
-      required this.employee,
-      required this.userId,
-      super.key});
+  const AppBarChatDetails({
+    required this.urlImage,
+    required this.name,
+    required this.isOnline,
+    required this.employee,
+    required this.userId,
+    Key? key,
+  }) : super(key: key);
+
   final String urlImage;
   final String name;
   final bool isOnline;
@@ -25,11 +27,15 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Check if the widget is still mounted before using ref
+    if (!context.mounted) {
+      return const SizedBox.shrink();
+    }
+
     return SizedBox(
       child: AppBar(
         elevation: 1,
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
         flexibleSpace: SafeArea(
           child: Container(
             padding: const EdgeInsets.only(right: 16),
@@ -48,84 +54,96 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
                             .read(seenMassageProvider.notifier)
                             .messageIsSeen(
                                 userId, FirebaseAuth.instance.currentUser!.uid)
-                            .whenComplete(() => ref
+                            .whenComplete(() {
+                          if (context.mounted) {
+                            ref
                                 .read(seenMassageProvider.notifier)
-                                .isNewMassage());
+                                .isNewMassage();
+                          }
+                        });
 
                         Navigator.pop(context);
                       },
                       icon: const Icon(
                         Icons.arrow_back_ios_outlined,
-                        color: Colors.black,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            name,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black87),
+
+                  ],
+                ),
+
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        name,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 3.0),
+                            child: Icon(
+                              Icons.circle,
+                              color: isOnline ? Colors.green : Colors.grey,
+                              size: 12,
+                            ),
                           ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.circle,
-                                color: isOnline ? Colors.green : Colors.grey,
-                                size: 12,
-                              ),
-                              const SizedBox(width: 5),
-                              Text(
-                                isOnline ? 'Online' : 'Offline',
-                                style: const TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 13,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                          const SizedBox(width: 5),
+                          Text(
+                            isOnline ? 'Online' : 'Offline',
+                            style: const TextStyle(
+                              fontSize: 13,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 const Spacer(),
                 Row(
                   children: [
                     const SizedBox(width: 5),
-                    InkWell(
-                      onTap: () {
-                        ref.read(loadingIconChat.notifier).state = false;
-                        ref
-                            .read(followerProvider.notifier)
-                            .followOrUnFollow(
-                                FirebaseAuth.instance.currentUser!.uid, userId)
-                            .whenComplete(
-                              () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const OtherProfile(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: () {
+                          ref.read(loadingIconChat.notifier).state = false;
+                          ref
+                              .read(followerProvider.notifier)
+                              .followOrUnFollow(
+                                  FirebaseAuth.instance.currentUser!.uid,
+                                  userId)
+                              .whenComplete(
+                                () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const OtherProfile(),
+                                  ),
                                 ),
+                              );
+                        },
+                        child: urlImage == ''
+                            ? const CircleAvatar(
+                                backgroundImage:
+                                    AssetImage('assets/avatar.jpg'),
+                                maxRadius: 20,
+                              )
+                            : CircleAvatar(
+                                backgroundImage:
+                                    CachedNetworkImageProvider(urlImage),
+                                maxRadius: 20,
                               ),
-                            );
-                      },
-                      child: urlImage == ''
-                          ? const CircleAvatar(
-                              backgroundImage:
-                                  AssetImage('assets/images/p3.webp'),
-                              maxRadius: 20,
-                            )
-                          : CircleAvatar(
-                              backgroundImage:
-                                  CachedNetworkImageProvider(urlImage),
-                              maxRadius: 20,
-                            ),
+                      ),
                     ),
                   ],
                 )
@@ -138,7 +156,6 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement preferredSize
   Size get preferredSize => const Size.fromHeight(70);
 }
 
