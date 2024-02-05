@@ -31,7 +31,9 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
-
+.pubspec.lock
+.fvm/
+ ios/.symlinks/
 # Symbolication related
 app.*.symbols
 
@@ -42,5 +44,3 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-
-*.env
