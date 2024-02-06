@@ -53,6 +53,12 @@
       <excludeFolder url="file://$MODULE_DIR$/linux/flutter/ephemeral/.plugin_symlinks/image_picker_linux/example/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/linux/flutter/ephemeral/.plugin_symlinks/image_picker_linux/example/build" />
       <excludeFolder url="file://$MODULE_DIR$/linux/flutter/ephemeral/.plugin_symlinks/image_picker_linux/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/.fvm/flutter_sdk/bin/cache/dart-sdk/lib/_internal/js_runtime/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/.fvm/flutter_sdk/bin/cache/dart-sdk/lib/_internal/js_runtime/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/.fvm/flutter_sdk/bin/cache/dart-sdk/lib/_internal/js_runtime/build" />
+      <excludeFolder url="file://$MODULE_DIR$/.fvm/flutter_sdk/packages/flutter_tools/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/.fvm/flutter_sdk/packages/flutter_tools/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/.fvm/flutter_sdk/packages/flutter_tools/build" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 30 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
