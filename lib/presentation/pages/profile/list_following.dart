@@ -24,99 +24,112 @@ class _ListOfFollowingState extends ConsumerState<ListOfFollowing> {
     debugPrint('following ${persons.length}');
     return Scaffold(
       body: ref.watch(loadingFollowingDataProvider)
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(
                 color: Colors.pinkAccent,
               ),
             )
           : ref.watch(loadingFollowers)
-              ? ListView.builder(
-                  itemCount: persons.length,
-                  itemBuilder: (context, index) {
-                    debugPrint("is ture ${persons[index]['user'].uid! == uid}");
-                    return ListTile(
-                      onTap: () {
-                        // todo for visite
+              ? Column(
+                children: [
+                  const SizedBox(height: 14,),
+                  ListView.builder(
+                      itemCount: persons.length,
+                      itemBuilder: (context, index) {
+                        debugPrint("is ture ${persons[index]['user'].uid! == uid}");
+                        return ListTile(
+                          onTap: () {
+                            // todo for visite
+                          },
+                          title: Text(persons[index]['user'].name!),
+                          leading: CircleAvatar(
+                            radius: 33,
+                            backgroundImage: CachedNetworkImageProvider(
+                                persons[index]['user'].imageUrl!),
+                          ),
+                          trailing: ElevatedButton(
+                            onPressed: () async {
+                              await ref
+                                  .read(followHttpsProvider.notifier)
+                                  .updateFollowers(uid, persons[index]['user'].uid!)
+                                  .whenComplete(() => ref
+                                      .read(followerProvider.notifier)
+                                      .followOrUnFollow(
+                                          uid, persons[index]['user'].uid!))
+                                  .whenComplete(() => ref
+                                          .read(listOfDataProvider.notifier)
+                                          .state[index]['follow'] =
+                                      !persons[index]['follow']);
+                              if (context.mounted) {
+                                ref
+                                    .read(userDetailsProvider.notifier)
+                                    .getCurrentUserData(context);
+                              }
+                            },
+                            child: Text(
+                                persons[index]['follow'] ? 'Follow' : 'Unfollow'),
+                          ),
+                        );
                       },
-                      title: Text(persons[index]['user'].name!),
-                      leading: CircleAvatar(
-                        radius: 33,
-                        backgroundImage: CachedNetworkImageProvider(
-                            persons[index]['user'].imageUrl!),
-                      ),
-                      trailing: ElevatedButton(
-                        onPressed: () async {
-                          await ref
-                              .read(followHttpsProvider.notifier)
-                              .updateFollowers(uid, persons[index]['user'].uid!)
-                              .whenComplete(() => ref
-                                  .read(followerProvider.notifier)
-                                  .followOrUnFollow(
-                                      uid, persons[index]['user'].uid!))
-                              .whenComplete(() => ref
-                                      .read(listOfDataProvider.notifier)
-                                      .state[index]['follow'] =
-                                  !persons[index]['follow']);
-                          if (context.mounted) {
-                            ref
-                                .read(userDetailsProvider.notifier)
-                                .getCurrentUserData(context);
-                          }
-                        },
-                        child: Text(
-                            persons[index]['follow'] ? 'Follow' : 'Unfollow'),
-                      ),
-                    );
-                  },
-                )
-              : ListView.builder(
-                  itemCount: persons.length,
-                  itemBuilder: (context, index) {
-                    debugPrint("is ture ${persons[index]['user'].uid! == uid}");
-                    return ListTile(
-                      onTap: () {
-                        ref
-                            .read(followHttpsProvider.notifier)
-                            .updateFollowers(uid, persons[index]['user'].uid!)
-                            .whenComplete(() => ref
-                                .read(followerProvider.notifier)
-                                .followOrUnFollow(
-                                    FirebaseAuth.instance.currentUser!.uid,
-                                    persons[index]['user'].uid!));
+                    ),
+                ],
+              )
+              : Column(
+                children: [
+                  const SizedBox(height: 14,),
 
-                        // todo for visite
-                      },
-                      title: Text(persons[index]['user'].name!),
-                      leading: CircleAvatar(
-                        radius: 33,
-                        backgroundImage: CachedNetworkImageProvider(
-                            persons[index]['user'].imageUrl!),
-                      ),
-                      trailing: ElevatedButton(
-                        onPressed: () async {
-                          await ref
-                              .read(followHttpsProvider.notifier)
-                              .updateFollowers(uid, persons[index]['user'].uid!)
-                              .whenComplete(() => ref
-                                  .read(followerProvider.notifier)
-                                  .followOrUnFollow(
-                                      uid, persons[index]['user'].uid!))
-                              .whenComplete(() => ref
-                                      .read(listOfDataProvider.notifier)
-                                      .state[index]['follow'] =
-                                  !persons[index]['follow']);
-                          if (context.mounted) {
-                            ref
-                                .read(userDetailsProvider.notifier)
-                                .getCurrentUserData(context);
-                          }
+                  Expanded(
+                    child: ListView.builder(
+                        itemCount: persons.length,
+                        itemBuilder: (context, index) {
+                          debugPrint("is ture ${persons[index]['user'].uid! == uid}");
+                          return ListTile(
+                            onTap: () {
+                              ref
+                                  .read(followHttpsProvider.notifier)
+                                  .updateFollowers(uid, persons[index]['user'].uid!)
+                                  .whenComplete(() => ref
+                                      .read(followerProvider.notifier)
+                                      .followOrUnFollow(
+                                          FirebaseAuth.instance.currentUser!.uid,
+                                          persons[index]['user'].uid!));
+
+                              // todo for visite
+                            },
+                            title: Text(persons[index]['user'].name!),
+                            leading: CircleAvatar(
+                              radius: 33,
+                              backgroundImage: CachedNetworkImageProvider(
+                                  persons[index]['user'].imageUrl!),
+                            ),
+                            trailing: ElevatedButton(
+                              onPressed: () async {
+                                await ref
+                                    .read(followHttpsProvider.notifier)
+                                    .updateFollowers(uid, persons[index]['user'].uid!)
+                                    .whenComplete(() => ref
+                                        .read(followerProvider.notifier)
+                                        .followOrUnFollow(
+                                            uid, persons[index]['user'].uid!))
+                                    .whenComplete(() => ref
+                                            .read(listOfDataProvider.notifier)
+                                            .state[index]['follow'] =
+                                        !persons[index]['follow']);
+                                if (context.mounted) {
+                                  ref
+                                      .read(userDetailsProvider.notifier)
+                                      .getCurrentUserData(context);
+                                }
+                              },
+                              child: Text(
+                                  persons[index]['follow'] ? 'Follow' : 'Unfollow'),
+                            ),
+                          );
                         },
-                        child: Text(
-                            persons[index]['follow'] ? 'Follow' : 'Unfollow'),
                       ),
-                    );
-                  },
-                ),
+                  ),
+                ],
+              ),
     );
   }
 }

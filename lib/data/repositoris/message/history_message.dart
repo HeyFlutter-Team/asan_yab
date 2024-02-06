@@ -36,9 +36,12 @@ class HistoryMessage {
       List<Users> data = [];
       for (final uid in uidList) {
         final userDataSnapshot =
-            await fireStore.collection('User').doc(uid).get();
-        final userData = Users.fromMap(userDataSnapshot.data()!);
-        data.add(userData);
+        await fireStore.collection('User').doc(uid).get();
+
+        if (userDataSnapshot.exists) {
+          final userData = Users.fromMap(userDataSnapshot.data()!);
+          data.add(userData);
+        }
       }
       return data;
     } catch (e) {

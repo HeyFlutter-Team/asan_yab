@@ -1,0 +1,101 @@
+Flutter crash report.
+Please report a bug at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter --no-color pub get
+
+## exception
+
+FormatException: FormatException: Unexpected end of input (at character 1)
+
+^
+
+
+```
+#0      _ChunkedJsonParser.fail (dart:convert-patch/convert_patch.dart:1383:5)
+#1      _ChunkedJsonParser.close (dart:convert-patch/convert_patch.dart:501:7)
+#2      _parseJson (dart:convert-patch/convert_patch.dart:36:10)
+#3      JsonDecoder.convert (dart:convert/json.dart:610:36)
+#4      JsonCodec.decode (dart:convert/json.dart:216:41)
+#5      _DefaultPub._updatePackageConfig (package:flutter_tools/src/dart/pub.dart:753:14)
+<asynchronous suspension>
+#6      _DefaultPub._updateVersionAndPackageConfig (package:flutter_tools/src/dart/pub.dart:707:5)
+<asynchronous suspension>
+#7      _DefaultPub.interactively (package:flutter_tools/src/dart/pub.dart:538:7)
+<asynchronous suspension>
+#8      PackagesGetCommand.runCommand (package:flutter_tools/src/commands/packages.dart:314:7)
+<asynchronous suspension>
+#9      FlutterCommand.run.<anonymous closure> (package:flutter_tools/src/runner/flutter_command.dart:1297:27)
+<asynchronous suspension>
+#10     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:150:19)
+<asynchronous suspension>
+#11     CommandRunner.runCommand (package:args/command_runner.dart:212:13)
+<asynchronous suspension>
+#12     FlutterCommandRunner.runCommand.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:339:9)
+<asynchronous suspension>
+#13     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:150:19)
+<asynchronous suspension>
+#14     FlutterCommandRunner.runCommand (package:flutter_tools/src/runner/flutter_command_runner.dart:285:5)
+<asynchronous suspension>
+#15     run.<anonymous closure>.<anonymous closure> (package:flutter_tools/runner.dart:115:9)
+<asynchronous suspension>
+#16     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:150:19)
+<asynchronous suspension>
+#17     main (package:flutter_tools/executable.dart:90:3)
+<asynchronous suspension>
+```
+
+## flutter doctor
+
+```
+[!] Flutter (Channel stable, 3.13.2, on macOS 14.2.1 23C71 darwin-arm64, locale en-PK)
+    • Flutter version 3.13.2 on channel stable at /Users/harisatiq/fvm/versions/3.13.2
+    ! Warning: `flutter` on your path resolves to /Users/harisatiq/Documents/flutter/bin/flutter, which is not inside your current Flutter SDK checkout at /Users/harisatiq/fvm/versions/3.13.2. Consider adding /Users/harisatiq/fvm/versions/3.13.2/bin to the front of your path.
+    ! Warning: `dart` on your path resolves to /Users/harisatiq/Documents/flutter/bin/dart, which is not inside your current Flutter SDK checkout at /Users/harisatiq/fvm/versions/3.13.2. Consider adding /Users/harisatiq/fvm/versions/3.13.2/bin to the front of your path.
+    • Upstream repository git@github.com:flutter/flutter.git
+    • Framework revision ff5b5b5fa6 (6 months ago), 2023-08-24 08:12:28 -0500
+    • Engine revision b20183e040
+    • Dart version 3.1.0
+    • DevTools version 2.25.0
+    • If those were intentional, you can disregard the above warnings; however it is recommended to use "git" directly to perform update checks and upgrades.
+
+[✓] Android toolchain - develop for Android devices (Android SDK version 34.0.0-rc1)
+    • Android SDK at /Users/harisatiq/Library/Android/sdk
+    • Platform android-34, build-tools 34.0.0-rc1
+    • Java binary at: /Applications/Android Studio.app/Contents/jbr/Contents/Home/bin/java
+    • Java version OpenJDK Runtime Environment (build 17.0.7+0-17.0.7b1000.6-10550314)
+    • All Android licenses accepted.
+
+[✓] Xcode - develop for iOS and macOS (Xcode 15.1)
+    • Xcode at /Applications/Xcode.app/Contents/Developer
+    • Build 15C65
+    • CocoaPods version 1.14.2
+
+[✓] Chrome - develop for the web
+    • Chrome at /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+
+[✓] Android Studio (version 2023.1)
+    • Android Studio at /Applications/Android Studio.app/Contents
+    • Flutter plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/9212-flutter
+    • Dart plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/6351-dart
+    • Java version OpenJDK Runtime Environment (build 17.0.7+0-17.0.7b1000.6-10550314)
+
+[✓] VS Code (version 1.86.0)
+    • VS Code at /Applications/Visual Studio Code.app/Contents
+    • Flutter extension version 3.80.0
+
+[✓] Connected device (3 available)
+    • sdk gphone64 arm64 (mobile) • emulator-5554 • android-arm64  • Android 12 (API 32) (emulator)
+    • macOS (desktop)             • macos         • darwin-arm64   • macOS 14.2.1 23C71 darwin-arm64
+    • Chrome (web)                • chrome        • web-javascript • Google Chrome 121.0.6167.139
+    ! Error: Browsing on the local area network for Haris’s iPhone. Ensure the device is unlocked and attached with a cable or associated with the same local area network as this Mac.
+      The device must be opted into Developer Mode to connect wirelessly. (code -27)
+
+[✓] Network resources
+    • All expected network resources are available.
+
+! Doctor found issues in 1 category.
+```

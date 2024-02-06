@@ -90,6 +90,9 @@
   "profile_snackBar_catch": "Your internet is down",
   "profile_dark_mode": "Dark Mode",
   "profile_rate_score": "ُScore",
+  "profile_followers": "Followers",
+  "profile_following": "Following",
+
 
 
 
@@ -124,7 +127,6 @@
 
   "done_click":"Done",
 
-  "elevated_text": "Enter",
 
 
   "details_page_snack_bar": "To add to favorites you must first log in to your account",
@@ -162,7 +164,16 @@
   "firstComment": "The last comment will be shown here",
   "comment": "Comments",
   "more":"More",
-  "add_a_comment": "Add a Comment"
+  "add_a_comment": "Add a Comment",
+  "chat_screen": "To access the chat, your score must be 2 or more",
+  "chat_message": "Message",
+  "message_check_user1": "To access the chat you must\n  Log in to your account...",
+  "message_check_user2": "Enter to Email",
+  "message_personal_score": "current score",
+  "message_description": "To get points, \n you must introduce Asan Yab \n to two of your friends \n and they must enter your personal ID in the field \n mentioned below during registration...>",
+  "message_your_id": "Your Id...>"
+
+
 
 
 

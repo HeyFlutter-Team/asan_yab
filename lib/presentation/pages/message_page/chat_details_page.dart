@@ -11,6 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChatDetailPage extends ConsumerStatefulWidget {
   const ChatDetailPage({super.key, this.uid});
@@ -40,6 +41,9 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
   @override
   Widget build(BuildContext context) {
     final newProfileUser = ref.watch(otherUserProvider);
+    final themDark=Theme.of(context).brightness == Brightness.dark;
+    final languageText = AppLocalizations.of(context);
+
     return WillPopScope(
         onWillPop: () async {
           ref.read(messageProvider.notifier).clearState();
@@ -55,7 +59,6 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
           return true;
         },
         child: Scaffold(
-          backgroundColor: Colors.white70.withOpacity(0.95),
           appBar: AppBarChatDetails(
               userId: newProfileUser!.uid!,
               employee: newProfileUser.userType,
@@ -78,7 +81,6 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                       ? (ref.watch(replayProvider) == '' ? 64 : 100)
                       : 350,
                   width: double.infinity,
-                  color: Colors.white,
                   child: Column(
                     children: [
                       Row(
@@ -95,7 +97,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                         style: const TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w300,
-                                            color: Colors.black),
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -106,21 +108,24 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                         children: <Widget>[
                           Row(
                             children: [
-                              GestureDetector(
-                                onTap: () {
-                                  ref
-                                      .read(emojiShowingProvider.notifier)
-                                      .state = !ref.watch(emojiShowingProvider);
-                                  if (ref.watch(emojiShowingProvider)) {
-                                    FocusManager.instance.primaryFocus
-                                        ?.unfocus();
-                                  }
-                                },
-                                child: Icon(
-                                  Icons.emoji_emotions_outlined,
-                                  color: ref.watch(emojiShowingProvider)
-                                      ? Colors.red
-                                      : Colors.black45,
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    ref
+                                        .read(emojiShowingProvider.notifier)
+                                        .state = !ref.watch(emojiShowingProvider);
+                                    if (ref.watch(emojiShowingProvider)) {
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                    }
+                                  },
+                                  child: Icon(
+                                    Icons.emoji_emotions_outlined,
+                                    color: ref.watch(emojiShowingProvider)
+                                        ? Colors.red
+                                        :themDark?Colors.white: Colors.black45,
+                                  ),
                                 ),
                               ),
                             ],
@@ -151,29 +156,36 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                           // ),
 
                           Expanded(
-                            child: TextField(
-                              onTap: () {
-                                ref.read(emojiShowingProvider.notifier).state =
-                                    false;
-                              },
-                              decoration: const InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 7),
-                                hintText: "Say Something ... ",
-                                hintStyle: TextStyle(color: Colors.black54),
-                                border: InputBorder.none,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 7),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(40),
+                                color: themDark ? Colors.grey.shade800 : null,
                               ),
-                              controller: ref
-                                  .watch(messageProfileProvider.notifier)
-                                  .textController,
+                              child: TextField(
+                                onTap: () {
+                                  ref.read(emojiShowingProvider.notifier).state = false;
+                                },
+                                decoration:  InputDecoration(
+                                  contentPadding: EdgeInsets.zero,
+                                  hintText: languageText?.chat_message,
+                                  border: InputBorder.none,
+                                ),
+                                controller: ref.watch(messageProfileProvider.notifier).textController,
+                              ),
                             ),
                           ),
+
                           const SizedBox(width: 15),
 
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
+                              backgroundColor: themDark?Colors.grey.shade800:null,
                                 elevation: 0,
-                                backgroundColor: Colors.transparent,
                                 shape: const CircleBorder(),
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 10, horizontal: 10)),
@@ -264,9 +276,9 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                     recentTabBehavior: RecentTabBehavior.RECENT,
                                     recentsLimit: 28,
                                     replaceEmojiOnLimitExceed: false,
-                                    noRecents: Text(
+                                    noRecents: const Text(
                                       'لا توجد رموز تعبيرية حديثة',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 20, color: Colors.black26),
                                       textAlign: TextAlign.center,
                                     ),

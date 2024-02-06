@@ -13,43 +13,41 @@ class ChatMessages extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final messages = ref.watch(messageProvider);
     return messages.isEmpty
-        ? Container(
-            decoration: const BoxDecoration(color: Colors.white70),
-            child: const Center(
-                child: Text(
-                    'No Message')), //AppLocalizations.of(context)?.noMessage ??
-          )
-        : Container(
-            decoration: const BoxDecoration(color: Colors.white12),
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 75),
-              child: ListView.builder(
-                controller:
-                    ref.watch(messageProvider.notifier).scrollController,
-                itemCount: messages.length,
-                itemBuilder: (context, index) {
-                  final isTextMessage =
-                      messages[index].messageType == MessageType.text;
+        ? const Center(
+            child: Text(
+                'No Message'))
+        : Padding(
+          padding: const EdgeInsets.only(bottom: 75),
+          child: ListView.builder(
+            controller:
+                ref.watch(messageProvider.notifier).scrollController,
+            itemCount: messages.length,
+            itemBuilder: (context, index) {
+              if (index < 0 || index >= messages.length) {
+                // Return an empty container or handle this case appropriately
+                return Container();
+              }
+              final isTextMessage =
+                  messages[index].messageType == MessageType.text;
 
-                  final isMe = receiverId != messages[index].senderId;
-                  return isTextMessage
-                      ? MessageBubble(
-                          replayMessage: messages[index].replayMessage,
-                          urlImage: urlImage,
-                          isMe: isMe,
-                          message: messages[index],
-                          isImage: false,
-                        )
-                      : MessageBubble(
-                          replayMessage: messages[index].replayMessage,
-                          urlImage: urlImage,
-                          isMe: isMe,
-                          message: messages[index],
-                          isImage: true,
-                        );
-                },
-              ),
-            ),
-          );
+              final isMe = receiverId != messages[index].senderId;
+              return isTextMessage
+                  ? MessageBubble(
+                      replayMessage: messages[index].replayMessage,
+                      urlImage: urlImage,
+                      isMe: isMe,
+                      message: messages[index],
+                      isImage: false,
+                    )
+                  : MessageBubble(
+                      replayMessage: messages[index].replayMessage,
+                      urlImage: urlImage,
+                      isMe: isMe,
+                      message: messages[index],
+                      isImage: true,
+                    );
+            },
+          ),
+        );
   }
 }
