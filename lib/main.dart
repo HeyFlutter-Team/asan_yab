@@ -43,7 +43,7 @@ Future<void> main() async {
     return true;
   };
   //firebase messegaing
-  FirebaseMessaging.instance.requestPermission();
+
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   //
   // FirebaseFirestore.instance.useFirestoreEmulator('host', '');
@@ -67,11 +67,6 @@ class _MyAppState extends ConsumerState<MyApp> {
     super.initState();
     ref.read(themeModelProvider.notifier).initialize().whenComplete(
         () => ref.read(themeModelProvider.notifier).loadSavedTheme());
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
