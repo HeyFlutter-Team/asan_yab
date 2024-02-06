@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:asan_yab/core/utils/download_image.dart';
 import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/domain/riverpod/data/toggle_favorite.dart';
+import 'package:asan_yab/presentation/pages/doctors_page.dart';
 import 'package:asan_yab/presentation/pages/newItem_shop.dart';
 import 'package:asan_yab/presentation/widgets/comments.dart';
 
@@ -313,7 +314,9 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 12),
                                       scrollDirection: Axis.horizontal,
-                                      itemCount: places.itemImages!.length >= 5 ? 5 :  places.itemImages!.length,
+                                      itemCount: places.itemImages!.length >= 5
+                                          ? 5
+                                          : places.itemImages!.length,
                                       itemBuilder: (context, index) {
                                         return Padding(
                                           padding: const EdgeInsets.only(
@@ -340,8 +343,11 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                             child: Container(
                                               width: size.width * 0.25,
                                               decoration: BoxDecoration(
-                                                color:Theme.of(context).brightness == Brightness.light
-                                                    ? Colors.grey.shade100// Set light theme color
+                                                color: Theme.of(context)
+                                                            .brightness ==
+                                                        Brightness.light
+                                                    ? Colors.grey
+                                                        .shade100 // Set light theme color
                                                     : Colors.black12,
                                                 borderRadius:
                                                     BorderRadius.circular(30),
@@ -352,11 +358,19 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                 children: [
                                                   ClipRRect(
                                                     borderRadius:
-                                                    const BorderRadius.only(
-                                                        topRight: Radius.circular(30),
-                                                        topLeft: Radius.circular(30),
-                                                        bottomLeft: Radius.circular(10),
-                                                        bottomRight: Radius.circular(10)),
+                                                        const BorderRadius.only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    30),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    30),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
                                                     child: CachedNetworkImage(
                                                       imageUrl: places
                                                           .itemImages![index]
@@ -380,10 +394,11 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                     places.itemImages![index]
                                                         .name,
                                                     style: const TextStyle(
-                                                      overflow:TextOverflow.fade,
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                        FontWeight.bold,
+                                                      overflow:
+                                                          TextOverflow.fade,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
                                                   ),
                                                   const SizedBox(height: 4),
@@ -392,36 +407,51 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                     maxLines: 1,
                                                     text: isRTL
                                                         ? TextSpan(children: [
-                                                      TextSpan(
-                                                        text:
-                                                        '${convertDigitsToFarsi(places.itemImages![index].price)} ',
-                                                        style: const TextStyle(
-                                                            fontSize: 15, fontWeight: FontWeight.bold),
-                                                      ),
-                                                      const TextSpan(
-                                                        text: 'افغانی',
-                                                        style: TextStyle(
-                                                            fontSize: 15,
-                                                            color: Colors.blue,
-                                                            fontWeight: FontWeight.bold),
-                                                      )
-                                                    ])
+                                                            TextSpan(
+                                                              text:
+                                                                  '${convertDigitsToFarsi(places.itemImages![index].price)} ',
+                                                              style: TextStyle(
+                                                                  fontSize: 15,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                color: Colors.green.shade500
+                                                              ),
+                                                            ),
+                                                             TextSpan(
+                                                              text: 'افغانی',
+                                                              style: TextStyle(
+                                                                  fontSize: 15,
+                                                                  color: Colors
+                                                                      .green.shade500,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            )
+                                                          ])
                                                         : TextSpan(children: [
-                                                      TextSpan(
-                                                        text: '${places.itemImages![index].price} ',
-                                                        style: const TextStyle(
-                                                            fontSize: 15, fontWeight: FontWeight.bold,
-                                                            color: Colors.blue
-                                                        ),
-                                                      ),
-                                                      const TextSpan(
-                                                        text: 'AF',
-                                                        style: TextStyle(
-                                                            fontSize: 15,
-                                                            color: Colors.blue,
-                                                            fontWeight: FontWeight.bold),
-                                                      ),
-                                                    ]),
+                                                            TextSpan(
+                                                              text:
+                                                                  '${places.itemImages![index].price} ',
+                                                              style:  TextStyle(
+                                                                  fontSize: 15,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: Colors
+                                                                      .green.shade500),
+                                                            ),
+                                                             TextSpan(
+                                                              text: 'AF',
+                                                              style: TextStyle(
+                                                                  fontSize: 15,
+                                                                  color: Colors
+                                                                      .green.shade500,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                          ]),
                                                   ),
                                                 ],
                                               ),
@@ -451,9 +481,20 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                           ),
                                         ),
                                         const SizedBox(width: 15),
-                                        const Icon(
-                                          Icons.arrow_circle_right_outlined,
-                                          size: 25,
+                                        IconButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const Doctors_Page(),
+                                              ),
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.arrow_circle_right_outlined,
+                                            size: 25,
+                                          ),
                                           // color: Colors.black54,
                                         ),
                                         const SizedBox(height: 12)
@@ -475,7 +516,9 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 12),
                                       scrollDirection: Axis.horizontal,
-                                      itemCount: places.doctors!.length,
+                                      itemCount: places.doctors!.length >= 5
+                                          ? 5
+                                          : places.doctors!.length,
                                       itemBuilder: (context, index) {
                                         return Padding(
                                           padding: const EdgeInsets.only(
@@ -487,7 +530,12 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                             width: size.width * 0.25,
                                             height: 160,
                                             decoration: BoxDecoration(
-                                              color: Colors.grey.shade100,
+                                              color: Theme.of(context)
+                                                  .brightness ==
+                                                  Brightness.light
+                                                  ? Colors.grey
+                                                  .shade100 // Set light theme color
+                                                  : Colors.black12,
                                               borderRadius:
                                                   BorderRadius.circular(22),
                                             ),
@@ -497,16 +545,24 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                               children: [
                                                 ClipRRect(
                                                   borderRadius:
-                                                  const BorderRadius.only(
-                                                      topRight: Radius.circular(22),
-                                                      topLeft: Radius.circular(22),
-                                                      bottomLeft: Radius.circular(10),
-                                                      bottomRight: Radius.circular(10)),
+                                                      const BorderRadius.only(
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  22),
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  22),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  10)),
                                                   child: CachedNetworkImage(
                                                     imageUrl: places
                                                         .doctors![index]
                                                         .imageUrl,
-                                                    width: size.width*0.24,
+                                                    width: size.width * 0.24,
                                                     height: size.height * 0.13,
                                                     fit: BoxFit.cover,
                                                     placeholder:
@@ -522,26 +578,33 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                 Text(
                                                   places.doctors![index].name,
                                                   style: const TextStyle(
-                                                    fontSize: 14,
+                                                    fontSize: 15,
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
                                                 const SizedBox(height: 4),
                                                 Text(
+                                                  maxLines: 1,
+                                                  overflow:TextOverflow.fade,
                                                   places.doctors![index].title,
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.blue,
-                                                    fontWeight: FontWeight.w500
-                                                  ),
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color:
+                                                          Colors.green.shade400,
+                                                      fontWeight:
+                                                          FontWeight.w500),
                                                 ),
                                                 const SizedBox(height: 4),
                                                 Text(
+                                                  maxLines: 1,
+                                                  overflow:TextOverflow.fade,
                                                   '${languageText?.details_page_9_custom_card}: ${isRTL ? convertDigitsToFarsi(places.doctors![index].time) : places.doctors![index].time}',
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.blue,
-                                                  ),
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color:
+                                                          Colors.green.shade500,
+                                                      fontWeight:
+                                                          FontWeight.w500),
                                                 ),
                                               ],
                                             ),

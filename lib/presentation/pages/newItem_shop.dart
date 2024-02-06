@@ -28,7 +28,8 @@ class _ItemsSoppingState extends ConsumerState<ItemsSopping> {
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2, // Number of columns
           crossAxisSpacing: 5.0, // Spacing between columns
-          mainAxisSpacing: 8.0, // Spacing between rows
+          mainAxisSpacing: 8.0,
+          childAspectRatio: 0.9// Spacing between rows
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12),
         scrollDirection: Axis.vertical,
@@ -72,7 +73,7 @@ class _ItemsSoppingState extends ConsumerState<ItemsSopping> {
                       child: CachedNetworkImage(
                         imageUrl: places.itemImages![index].imageUrl,
                         width: double.infinity,
-                        height: size.height * 0.13,
+                        height: size.height * 0.14,
                         fit: BoxFit.cover,
                         placeholder: (context, url) => Image.asset(
                           ImageRes.asanYab,
@@ -81,7 +82,7 @@ class _ItemsSoppingState extends ConsumerState<ItemsSopping> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 10),
                     Text(
                       maxLines: 1,
                       places.itemImages![index].name,
@@ -91,7 +92,7 @@ class _ItemsSoppingState extends ConsumerState<ItemsSopping> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 4),
+
                     RichText(
                       overflow: TextOverflow.clip,
                       maxLines: 1,
@@ -100,30 +101,33 @@ class _ItemsSoppingState extends ConsumerState<ItemsSopping> {
                               TextSpan(
                                 text:
                                     '${convertDigitsToFarsi(places.itemImages![index].price)} ',
-                                style: const TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                style:  TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold,
+                                  color: Colors.green.shade500
+
+                                ),
                               ),
-                              const TextSpan(
+                               TextSpan(
                                 text: 'افغانی',
                                 style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.blue,
+                                    fontSize: 16,
+                                    color: Colors.green.shade500,
                                     fontWeight: FontWeight.bold),
                               )
                             ])
                           : TextSpan(children: [
                               TextSpan(
                                 text: '${places.itemImages![index].price} ',
-                                style: const TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold,
-                                  color: Colors.blue
+                                style:  TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold,
+                                  color: Colors.green.shade500
                                 ),
                               ),
-                              const TextSpan(
+                               TextSpan(
                                 text: 'AF',
                                 style: TextStyle(
                                     fontSize: 15,
-                                    color: Colors.blue,
+                                    color: Colors.green.shade500,
                                     fontWeight: FontWeight.bold),
                               ),
                             ]),
