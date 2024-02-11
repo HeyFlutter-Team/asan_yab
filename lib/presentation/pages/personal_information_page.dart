@@ -52,7 +52,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                   ),
                   CustomTextField(
                     textCapitalization: TextCapitalization.words,
-                    label: languageText!.first_text_field_label,
+                    label: '${languageText!.first_text_field_label} ✨',
                     controller: nameController,
                     hintText: languageText.first_text_field_hint,
                     validator: (p0) => p0!.isEmpty
@@ -61,7 +61,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                   ),
                   CustomTextField(
                     textCapitalization: TextCapitalization.words,
-                    label: languageText.second_text_field_label,
+                    label: '${languageText.second_text_field_label} ✨',
                     controller: lastNameController,
                     hintText: languageText.second_text_field_hint,
                     validator: (p0) => p0!.isEmpty

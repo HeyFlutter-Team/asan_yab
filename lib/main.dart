@@ -117,7 +117,7 @@ class _MyAppState extends ConsumerState<MyApp> {
               return const MainPage();
             } else {
               return VerifyEmailPage(
-                email: user.email,
+                email: '${user.email}',
               );
             }
           } else {

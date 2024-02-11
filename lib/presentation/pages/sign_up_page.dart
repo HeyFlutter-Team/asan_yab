@@ -55,6 +55,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     label: languageText!.sign_in_email,
                     controller: emailController,
                     hintText: languageText.sign_in_email_hintText,
+                    keyboardType: TextInputType.emailAddress,
                     validator: (p0) {
                       if (p0!.isEmpty ||
                           p0.length < 10 && !EmailValidator.validate(p0)) {

@@ -17,7 +17,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get sign_in_email_2_valid => 'ایمیل شما اشتباه است';
 
   @override
-  String get sign_in_email_3_valid => 'فورمت ایمیل شما اشتباه است';
+  String get sign_in_email_3_valid => 'فرمت ایمیل شما اشتباه است';
 
   @override
   String get sign_in_password => 'رمز';
@@ -29,7 +29,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get sign_in_password_1_valid => 'رمز خود را وارد کنید';
 
   @override
-  String get sign_in_password_2_valid => 'رمز باید شیش کاراکتر یا بیشتر از شیش تا باشد';
+  String get sign_in_password_2_valid => 'رمز باید ۶ کاراکتر یا بیشتر از ۶ تا باشد';
 
   @override
   String get sign_in_checkBox => 'مرا بخاطر داشته باش';

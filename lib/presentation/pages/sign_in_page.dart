@@ -94,6 +94,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
                 label: languageText!.sign_in_email,
                 controller: emailCTRL,
                 hintText: languageText.sign_in_email_hintText,
+                keyboardType: TextInputType.emailAddress,
                 validator: (p0) {
                   if (p0!.isEmpty) {
                     return languageText.sign_in_email_1_valid;

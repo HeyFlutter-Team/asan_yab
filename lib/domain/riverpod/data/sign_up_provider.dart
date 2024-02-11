@@ -37,6 +37,7 @@ class SignUpNotifier {
           MaterialPageRoute(
               builder: (context) => VerifyEmailPage(
                     email: email,
+                password: password.toString(),
                   )));
     } on FirebaseAuthException catch (e) {
       final languageText = AppLocalizations.of(context);
@@ -90,13 +91,13 @@ class UserDetails {
 
       if (querySnapshot.docs.isNotEmpty) {
         final DocumentSnapshot inviterDoc = querySnapshot.docs.first;
-        final int currentRate = int.parse(inviterDoc['invitationRate'] ?? '0');
+        final int currentRate = inviterDoc['invitationRate'] ?? 0;
         final int newRate = currentRate + 1;
 
         await FirebaseFirestore.instance
             .collection('User')
             .doc(inviterDoc.id)
-            .update({'invitationRate': newRate.toString()});
+            .update({'invitationRate': newRate});
       }
     } catch (e) {
       print('Error updating inviter rate: $e');

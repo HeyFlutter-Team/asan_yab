@@ -7,6 +7,7 @@ import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/profile/edit_profile_page.dart';
 import 'package:asan_yab/presentation/pages/profile/list_of_follow.dart';
 import 'package:asan_yab/presentation/pages/profile/show_profile_page.dart';
+import 'package:asan_yab/presentation/pages/sign_in_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:asan_yab/presentation/widgets/buildProgress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -40,6 +41,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       },
     );
   }
+
+
 
   final userName = FirebaseAuth.instance.currentUser;
   @override
@@ -171,7 +174,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       Icons.logout,
                       color: Colors.white,
                     ),
-                  ))
+                  )),
+
             ],
           ),
         ),

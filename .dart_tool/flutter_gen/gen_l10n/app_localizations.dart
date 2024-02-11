@@ -144,7 +144,7 @@ abstract class AppLocalizations {
   /// No description provided for @sign_in_password_2_valid.
   ///
   /// In en, this message translates to:
-  /// **'The password must be six characters or more'**
+  /// **'The password must be 6 characters or more'**
   String get sign_in_password_2_valid;
 
   /// No description provided for @sign_in_checkBox.

@@ -81,7 +81,7 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
             actions: [
               IconButton(
                   onPressed: () {
-                    user?.invitationRate=='2'?
+                    user!.invitationRate >= 2?
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -94,7 +94,7 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
           ),
         ),
       ),
-      body: user?.invitationRate == '2'
+      body: user!=null?user.invitationRate >= 2
           ? Column(
                 children: [
                   const SizedBox(height: 12),
@@ -311,8 +311,8 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
                         style: const TextStyle(fontSize: 18, color: Colors.grey),
                       ),
                       const SizedBox(width: 2,),
-                      Text(isRTL?convertDigitsToFarsi('  ${user?.invitationRate}'):
-                        '  ${user?.invitationRate}',
+                      Text(isRTL?convertDigitsToFarsi('  ${user.invitationRate}'):
+                        '  ${user.invitationRate}',
                         style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -372,11 +372,11 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
                                 color: Colors.red.shade800.withOpacity(0.5),
                                 child: Center(
                                   child: TextButton(
-                                    child: Text(isRTL?convertDigitsToFarsi('${user?.id}'):'${user?.id}'),
+                                    child: Text(isRTL?convertDigitsToFarsi('${user.id}'):'${user.id}'),
                                     onPressed: () {
                                       ref
                                           .read(userDetailsProvider.notifier)
-                                          .copyToClipboard('${user?.id}');
+                                          .copyToClipboard('${user.id}');
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(
@@ -398,7 +398,8 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
                   )
                 ],
               ),
-            ),
+            )
+      :const Text('null'),
     );
   }
 }

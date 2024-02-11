@@ -29,7 +29,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sign_in_password_1_valid => 'Enter your password';
 
   @override
-  String get sign_in_password_2_valid => 'The password must be six characters or more';
+  String get sign_in_password_2_valid => 'The password must be 6 characters or more';
 
   @override
   String get sign_in_checkBox => 'Remember me';
