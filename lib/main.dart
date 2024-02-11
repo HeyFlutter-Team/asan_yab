@@ -80,7 +80,9 @@ class _MyAppState extends ConsumerState<MyApp> {
     final language = ref.watch(languageProvider);
     return MaterialApp(
       navigatorKey: navigatorKey,
-      themeMode: themeModel.currentThemeMode,
+      themeMode: themeModel.currentThemeMode!= ThemeMode.system
+          ? themeModel.currentThemeMode
+          : ThemeMode.light,
       darkTheme: ThemeData.dark().copyWith(
         textTheme: ThemeData.dark().textTheme.apply(
               bodyColor: Colors.white,
