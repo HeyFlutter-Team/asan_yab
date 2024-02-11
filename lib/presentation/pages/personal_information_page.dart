@@ -18,7 +18,7 @@ class PersonalInformation extends ConsumerStatefulWidget {
 class _PersonalInformationState extends ConsumerState<PersonalInformation> {
   final nameController = TextEditingController();
   final lastNameController = TextEditingController();
-  final invitingPersonId=TextEditingController();
+  final invitingPersonId = TextEditingController();
   final signUpFormKey = GlobalKey<FormState>();
 
   @override
@@ -95,7 +95,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                               emailController: widget.email,
                               lastNameController: lastNameController.text,
                               nameController: nameController.text)
-                          .whenComplete(()async {
+                          .whenComplete(() async {
                         await ref
                             .read(userRegesterDetailsProvider)
                             .updateInviterRate(invitingPersonId.text);
@@ -109,7 +109,10 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                             .selectedIndex(0);
                       });
                     },
-                    child: Text(languageText.elevated_text),
+                    child: Text(
+                      languageText.elevated_text,
+                      style: TextStyle(fontSize: 17, color: Colors.white),
+                    ),
                   ),
                 ],
               ),

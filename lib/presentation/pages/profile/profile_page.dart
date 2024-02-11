@@ -18,7 +18,6 @@ import '../../../data/models/language.dart';
 import '../../../data/repositoris/language_repository.dart';
 import '../../../domain/riverpod/data/profile_data_provider.dart';
 import '../../widgets/language/language_bottom_sheet.dart';
-import '../verify_email_page.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
