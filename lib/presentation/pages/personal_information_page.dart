@@ -54,6 +54,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                     textCapitalization: TextCapitalization.words,
                     label: '${languageText!.first_text_field_label} ✨',
                     controller: nameController,
+                    keyboardType: TextInputType.emailAddress,
                     hintText: languageText.first_text_field_hint,
                     validator: (p0) => p0!.isEmpty
                         ? languageText.first_text_field_valid
@@ -64,6 +65,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                     label: '${languageText.second_text_field_label} ✨',
                     controller: lastNameController,
                     hintText: languageText.second_text_field_hint,
+                    keyboardType: TextInputType.emailAddress,
                     validator: (p0) => p0!.isEmpty
                         ? languageText.second_text_field_valid
                         : null,
@@ -73,6 +75,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                     label: languageText.inviter_ID,
                     controller: invitingPersonId,
                     hintText: languageText.third_text_field_hint,
+                    keyboardType: TextInputType.emailAddress,
                   ),
                   const SizedBox(
                     height: 10,

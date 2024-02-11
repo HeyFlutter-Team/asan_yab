@@ -37,7 +37,6 @@ class SignUpNotifier {
           MaterialPageRoute(
               builder: (context) => VerifyEmailPage(
                     email: email,
-                password: password.toString(),
                   )));
     } on FirebaseAuthException catch (e) {
       final languageText = AppLocalizations.of(context);

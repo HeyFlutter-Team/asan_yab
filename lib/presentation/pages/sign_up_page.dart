@@ -75,6 +75,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       icon: const Icon(Icons.remove_red_eye_outlined)),
                   label: languageText.sign_in_password,
                   controller: passwordController,
+                  keyboardType: TextInputType.emailAddress,
                   hintText: languageText.sign_in_password_hintText,
                   validator: (p0) => p0!.length < 6
                       ? languageText.sign_in_password_2_valid
@@ -84,6 +85,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   obscureText: true,
                   label: languageText.sign_up_confirm_p,
                   controller: confirmPasswordController,
+                  keyboardType: TextInputType.emailAddress,
                   hintText: languageText.sign_up_confirm_p_hint_text,
                   validator: (p0) {
                     if (p0!.isEmpty) {
@@ -100,11 +102,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     children: [
                       TextSpan(
                         text: languageText.sign_up_account_text,
-                        style: const TextStyle(color: Colors.grey),
+                        style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 15),
                       ),
                       TextSpan(
                         text: '  ${languageText.sign_up_account_text1}',
-                        style: const TextStyle(color: Colors.blue),
+                        style: const TextStyle(color: Colors.blue,fontSize: 15),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             Navigator.pop(context);

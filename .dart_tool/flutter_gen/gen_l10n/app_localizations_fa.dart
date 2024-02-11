@@ -89,6 +89,15 @@ class AppLocalizationsFa extends AppLocalizations {
   String get verify_tbt_text => 'لغو';
 
   @override
+  String get verify_email_dialog => 'یک حساب آسان یاب به ایمیل داده شده در بالا ساخته شده است اگر (بدون تایید کردن ایمیل خود و پر کردن فورم معرفی نامه در صفحه بعدی) از این صفحه خارج شوید دیگر با این ایمیل وارد آسان یاب شده نمی توانید';
+
+  @override
+  String get verify_email_give_up => 'انصراف';
+
+  @override
+  String get verify_email_continue => 'ادامه';
+
+  @override
   String get buttonNvB_1 => 'خانه';
 
   @override

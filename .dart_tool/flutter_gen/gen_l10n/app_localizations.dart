@@ -261,6 +261,24 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get verify_tbt_text;
 
+  /// No description provided for @verify_email_dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'An Asan Yab account has been \n created to the following email address.\n If you leave this page\n (without confirming your email and filling\n out the introduction form on the next page),\n you will no longer be able to\n enter Asan Yab with this email.'**
+  String get verify_email_dialog;
+
+  /// No description provided for @verify_email_give_up.
+  ///
+  /// In en, this message translates to:
+  /// **'Give Up'**
+  String get verify_email_give_up;
+
+  /// No description provided for @verify_email_continue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get verify_email_continue;
+
   /// No description provided for @buttonNvB_1.
   ///
   /// In en, this message translates to:

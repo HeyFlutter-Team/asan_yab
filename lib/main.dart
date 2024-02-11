@@ -1,5 +1,7 @@
 import 'package:asan_yab/data/repositoris/language_repository.dart';
+import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
+import 'package:asan_yab/presentation/pages/personal_information_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:asan_yab/presentation/pages/verify_email_page.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -78,6 +80,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     final themeModel = ref.watch(themeModelProvider);
     final language = ref.watch(languageProvider);
+    final userData=ref.watch(userDetailsProvider);
     return MaterialApp(
       navigatorKey: navigatorKey,
       themeMode: themeModel.currentThemeMode,
@@ -114,7 +117,12 @@ class _MyAppState extends ConsumerState<MyApp> {
           } else if (snapshot.hasData && snapshot.data != null) {
             final user = snapshot.data!;
             if (user.emailVerified) {
-              return const MainPage();
+              if(userData?.name !='' && userData?.lastName != '') {
+                return const MainPage();
+              }
+              else{
+                return  PersonalInformation(email: user.email,);
+              }
             } else {
               return VerifyEmailPage(
                 email: '${user.email}',

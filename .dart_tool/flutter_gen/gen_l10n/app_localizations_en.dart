@@ -89,6 +89,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get verify_tbt_text => 'Cancel';
 
   @override
+  String get verify_email_dialog => 'An Asan Yab account has been \n created to the following email address.\n If you leave this page\n (without confirming your email and filling\n out the introduction form on the next page),\n you will no longer be able to\n enter Asan Yab with this email.';
+
+  @override
+  String get verify_email_give_up => 'Give Up';
+
+  @override
+  String get verify_email_continue => 'Continue';
+
+  @override
   String get buttonNvB_1 => 'Home';
 
   @override
