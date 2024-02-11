@@ -45,19 +45,23 @@ class _RatingWidgetsState extends ConsumerState<RatingWidgets> {
           children: [
             GestureDetector(
               onTap: () {
-                showRating();
+                bool isLogin = FirebaseAuth.instance.currentUser != null;
+                if (isLogin) showRating();
               },
               child: Text(
                 isRTL
                     ? convertDigitsToFarsi(
-                        "${firebaseRatingState.averageRatingProvider}")
-                    : "${firebaseRatingState.averageRatingProvider}",
+                        "${firebaseRatingState.averageRatingProvider}"
+                            .substring(0, 3))
+                    : "${firebaseRatingState.averageRatingProvider}"
+                        .substring(0, 3),
                 style: const TextStyle(fontSize: 26),
               ),
             ),
             GestureDetector(
               onTap: () {
-                showRating();
+                bool isLogin = FirebaseAuth.instance.currentUser != null;
+                if (isLogin) showRating();
               },
               child: stars(),
             ),

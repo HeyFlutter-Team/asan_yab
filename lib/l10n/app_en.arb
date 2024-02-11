@@ -158,7 +158,10 @@
   "firstComment": "The last comment will be shown here",
   "comment": "Comments",
   "more":"More",
-  "add_a_comment": "Add a Comment"
+  "add_a_comment": "Add a Comment",
+  "for_add_comment": "for add comment",
+  "log_in": "Log in"
+
 
 
 

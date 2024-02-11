@@ -144,5 +144,7 @@
   "firstComment": "آخرین نظر در اینجا نشان داده خواهد شد",
   "comment": "نظرات",
   "more":"بیشتر",
-  "add_a_comment": "نظر دهید"
+  "add_a_comment": "نظر دهید",
+  "for_add_comment": "برای افزودن نظر",
+  "log_in": "وارد شوید"
 }
