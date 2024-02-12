@@ -35,7 +35,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
       debugPrint('id for cat ${widget.id}');
       ref.read(idProvider.notifier).state = widget.id;
       Future.delayed(
-        Duration(milliseconds: 100),
+        const Duration(milliseconds: 100),
         () {
           WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
             ref.read(catLazyLoading.notifier).loadMoreData();
