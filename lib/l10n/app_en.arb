@@ -7,7 +7,7 @@
   "sign_in_password": "Password",
   "sign_in_password_hintText": "Enter your password",
   "sign_in_password_1_valid": "Enter your password",
-  "sign_in_password_2_valid": "The password must be six characters or more",
+  "sign_in_password_2_valid": "The password must be 6 characters or more",
   "sign_in_checkBox": "Remember me",
   "sign_in_elbT": "  Sign In",
   "sig_in_account_text": "Don't have a previous account?",
@@ -33,7 +33,9 @@
   "verify_body_text": "A confirmation link has been sent to your email!\n   Please click on it to confirm your email.\n If you press the link,\n press send again!",
   "verify_elb_text": "Resend",
   "verify_tbt_text": "Cancel",
-
+  "verify_email_dialog": "An Asan Yab account has been \n created to the following email address.\n If you leave this page\n (without confirming your email and filling\n out the introduction form on the next page),\n you will no longer be able to\n enter Asan Yab with this email.",
+  "verify_email_give_up": "Give Up",
+  "verify_email_continue": "Continue",
 
 
   "buttonNvB_1": "Home",

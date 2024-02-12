@@ -80,9 +80,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     final language = ref.watch(languageProvider);
     return MaterialApp(
       navigatorKey: navigatorKey,
-      themeMode: themeModel.currentThemeMode!= ThemeMode.system
-          ? themeModel.currentThemeMode
-          : ThemeMode.light,
+      themeMode: themeModel.currentThemeMode,
       darkTheme: ThemeData.dark().copyWith(
         textTheme: ThemeData.dark().textTheme.apply(
               bodyColor: Colors.white,
@@ -119,7 +117,7 @@ class _MyAppState extends ConsumerState<MyApp> {
               return const MainPage();
             } else {
               return VerifyEmailPage(
-                email: user.email,
+                email: '${user.email}',
               );
             }
           } else {

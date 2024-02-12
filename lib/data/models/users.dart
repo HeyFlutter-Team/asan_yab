@@ -11,7 +11,7 @@ class Users {
   final String userType;
   final List<String> owner;
   final List<String> ownerPlaceName;
-  final String invitationRate;
+  final int invitationRate;
   final int followerCount;
   final int followingCount;
   final String fcmToken;
@@ -32,7 +32,7 @@ class Users {
     this.followingCount = 0,
     required this.fcmToken,
     required this.isOnline,
-    this.invitationRate='0'
+    this.invitationRate = 0
   });
 
   Map<String, dynamic> toJson() => {
@@ -71,7 +71,7 @@ class Users {
         followingCount: json['followingCount'],
         fcmToken: json['fcmToken'],
         isOnline: json['isOnline'] ?? false,
-        invitationRate: json['invitationRate']??'0'
+        invitationRate: json['invitationRate']
     );
 
   }
@@ -90,7 +90,7 @@ class Users {
     int? followingCount,
     String? fcmToken,
     bool? isOnline,
-    String? invitationRate
+    int? invitationRate
   }) {
     return Users(
         id: id ?? this.id,
