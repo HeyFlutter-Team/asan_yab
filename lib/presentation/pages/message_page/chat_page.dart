@@ -1,7 +1,8 @@
-import 'package:asan_yab/domain/riverpod/data/message.dart';
-import 'package:asan_yab/presentation/pages/message_page/chat_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../domain/riverpod/data/message/message.dart';
+import '../../widgets/message/chat_messages.dart';
 
 class MessagePage extends ConsumerStatefulWidget {
   const MessagePage({super.key});
