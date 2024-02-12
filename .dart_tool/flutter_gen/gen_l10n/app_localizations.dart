@@ -782,6 +782,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your Id...>'**
   String get message_your_id;
+
+  /// No description provided for @for_add_comment.
+  ///
+  /// In en, this message translates to:
+  /// **'for add comment'**
+  String get for_add_comment;
+
+  /// No description provided for @log_in.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in'**
+  String get log_in;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
