@@ -14,7 +14,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../../data/models/language.dart';
 import '../../../data/repositoris/language_repository.dart';
 import '../../../domain/riverpod/data/profile_data_provider.dart';
@@ -78,7 +77,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   padding: const EdgeInsets.only(bottom: 50.0),
                   child: Center(
                     child: Text(
-                      '${usersData?.name} ${usersData?.lastName}',
+                      '${usersData?.name}',
                       style: const TextStyle(color: Colors.white, fontSize: 28),
                     ),
                   ),
@@ -160,18 +159,22 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                             .collection('User')
                             .doc(FirebaseAuth.instance.currentUser!.uid)
                             .update({'isOnline': false, 'fcmToken': "token"});
-                        await FirebaseAuth.instance.signOut().whenComplete(() =>
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const MainPage())));
+
+                        await FirebaseAuth.instance.signOut();
+
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MainPage(),
+                          ),
+                        );
                       }
                     },
                     icon: const Icon(
                       Icons.logout,
                       color: Colors.white,
                     ),
-                  ))
+                  )),
             ],
           ),
         ),
@@ -191,7 +194,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         builder: (context) => const ListOfFollow(),
                       ));
                 },
-                title:  Text(languageText!.profile_followers),
+                title: Text(languageText!.profile_followers),
                 leading: const Icon(
                   color: Colors.red,
                   Icons.person_2_outlined,
@@ -202,7 +205,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 color: Colors.grey,
               ),
               ListTile(
-                title: Text('${isRTL?convertDigitsToFarsi('${usersData?.id}'):usersData?.id}'),
+                title: Text(
+                    '${isRTL ? convertDigitsToFarsi('${usersData?.id}') : usersData?.id}'),
                 leading: const Icon(
                   color: Colors.red,
                   Icons.account_circle,
@@ -291,7 +295,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               ),
               ListTile(
                 title: Text(
-                    '${languageText.profile_rate_score} ${isRTL?convertDigitsToFarsi('${usersData?.invitationRate}'):usersData?.invitationRate}'),
+                    '${languageText.profile_rate_score} ${isRTL ? convertDigitsToFarsi('${usersData?.invitationRate}') : usersData?.invitationRate}'),
                 leading: const Icon(
                   color: Colors.red,
                   Icons.star_rate_outlined,

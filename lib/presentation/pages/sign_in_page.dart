@@ -5,6 +5,7 @@ import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/sign_up_page.dart';
 import 'package:asan_yab/presentation/widgets/custom_text_field.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -94,6 +95,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
                 label: languageText!.sign_in_email,
                 controller: emailCTRL,
                 hintText: languageText.sign_in_email_hintText,
+                keyboardType: TextInputType.emailAddress,
                 validator: (p0) {
                   if (p0!.isEmpty) {
                     return languageText.sign_in_email_1_valid;
@@ -110,6 +112,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
                   label: languageText.sign_in_password,
                   controller: passwordCTRL,
                   hintText: languageText.sign_in_password_hintText,
+                  keyboardType: TextInputType.emailAddress,
                   obscureText: ref.watch(isObscureProvider),
                   suffixIcon: IconButton(
                       onPressed: () =>
@@ -173,22 +176,22 @@ class _LogInPageState extends ConsumerState<LogInPage>
                       prefs.setString('email', emailCTRL.text);
                       prefs.setString('password', passwordCTRL.text);
                     }
-                    await ref
-                        .read(signInProvider)
-                        .signIn(
-                            context: context,
-                            email: emailCTRL.text,
-                            password: passwordCTRL.text)
-                        .whenComplete(() => ref.watch(userDetailsProvider))
-                        .whenComplete(() {
-                      ref
-                          .read(buttonNavigationProvider.notifier)
-                          .selectedIndex(0);
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MainPage()));
-                    });
+                      await ref
+                          .read(signInProvider)
+                          .signIn(
+                          context: context,
+                          email: emailCTRL.text,
+                          password: passwordCTRL.text)
+                          .whenComplete(() => ref.watch(userDetailsProvider))
+                          .whenComplete(() {
+                        ref
+                            .read(buttonNavigationProvider.notifier)
+                            .selectedIndex(0);
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MainPage()));
+                      });
                   },
                   child: Text(
                     languageText.sign_in_elbT,
@@ -202,6 +205,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
               Text(
                 languageText.sig_in_account_text,
                 style: const TextStyle(
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
                 ),
               ),
