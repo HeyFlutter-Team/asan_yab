@@ -21,7 +21,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
   final invitingPersonId = TextEditingController();
   final signUpFormKey = GlobalKey<FormState>();
 
-  @override
+  @override 
   void dispose() {
     nameController.dispose();
     lastNameController.dispose();

@@ -51,6 +51,13 @@ class VerticalDataNotifier extends ChangeNotifier {
     notifyListeners(); // Notify listeners whenever isLoading changes
   }
 
+  onBackspacePressed() {
+    controller
+      ..text = controller.text.characters.toString()
+      ..selection = TextSelection.fromPosition(
+          TextPosition(offset: controller.text.length));
+  }
+
   Future<void> fetchMoreData(String postId) async {
     _isLoading = true;
     Future.delayed(const Duration(seconds: 1)).then((value) async {

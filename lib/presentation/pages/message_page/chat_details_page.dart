@@ -41,7 +41,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
   @override
   Widget build(BuildContext context) {
     final newProfileUser = ref.watch(otherUserProvider);
-    final themDark=Theme.of(context).brightness == Brightness.dark;
+    final themDark = Theme.of(context).brightness == Brightness.dark;
     final languageText = AppLocalizations.of(context);
 
     return WillPopScope(
@@ -95,8 +95,8 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                       child: Text(
                                         'Replay: ${ref.watch(replayProvider)}',
                                         style: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w300,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w300,
                                         ),
                                       ),
                                     ),
@@ -113,8 +113,9 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                 child: GestureDetector(
                                   onTap: () {
                                     ref
-                                        .read(emojiShowingProvider.notifier)
-                                        .state = !ref.watch(emojiShowingProvider);
+                                            .read(emojiShowingProvider.notifier)
+                                            .state =
+                                        !ref.watch(emojiShowingProvider);
                                     if (ref.watch(emojiShowingProvider)) {
                                       FocusManager.instance.primaryFocus
                                           ?.unfocus();
@@ -124,7 +125,9 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                     Icons.emoji_emotions_outlined,
                                     color: ref.watch(emojiShowingProvider)
                                         ? Colors.red
-                                        :themDark?Colors.white: Colors.black45,
+                                        : themDark
+                                            ? Colors.white
+                                            : Colors.black45,
                                   ),
                                 ),
                               ),
@@ -157,7 +160,8 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
 
                           Expanded(
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 7),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 7),
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   color: Colors.grey,
@@ -168,14 +172,18 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                               ),
                               child: TextField(
                                 onTap: () {
-                                  ref.read(emojiShowingProvider.notifier).state = false;
+                                  ref
+                                      .read(emojiShowingProvider.notifier)
+                                      .state = false;
                                 },
-                                decoration:  InputDecoration(
+                                decoration: InputDecoration(
                                   contentPadding: EdgeInsets.zero,
                                   hintText: languageText?.chat_message,
                                   border: InputBorder.none,
                                 ),
-                                controller: ref.watch(messageProfileProvider.notifier).textController,
+                                controller: ref
+                                    .watch(messageProfileProvider.notifier)
+                                    .textController,
                               ),
                             ),
                           ),
@@ -184,7 +192,8 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
 
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: themDark?Colors.grey.shade800:null,
+                                backgroundColor:
+                                    themDark ? Colors.grey.shade800 : null,
                                 elevation: 0,
                                 shape: const CircleBorder(),
                                 padding: const EdgeInsets.symmetric(

@@ -64,7 +64,10 @@ class _CommentTileState extends ConsumerState<CommentTile> {
                     ],
                   ),
                   const SizedBox(height: 4.0),
-                  Text(widget.comment.text),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    child: Text(widget.comment.text),
+                  ),
                 ],
               );
             }
