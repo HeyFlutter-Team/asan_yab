@@ -22,17 +22,8 @@ class CommentTile extends ConsumerStatefulWidget {
 }
 
 class _CommentTileState extends ConsumerState<CommentTile> {
-  late Future<UsersInfo> _userInfoFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _userInfoFuture =
-          ref.read(commentProvider.notifier).getUserInfo(widget.comment.uid);
-    });
-  }
-
+  late final Future<UsersInfo> _userInfoFuture =
+      ref.read(commentProvider.notifier).getUserInfo(widget.comment.uid);
   @override
   Widget build(BuildContext context) {
     final currentUser = FirebaseAuth.instance.currentUser;
@@ -88,48 +79,4 @@ class _CommentTileState extends ConsumerState<CommentTile> {
       ),
     );
   }
-
-  // void _showOptionsBottomSheet(BuildContext context, bool isOwner) {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return Column(
-  //         mainAxisSize: MainAxisSize.min,
-  //         children: [
-  //           isOwner
-  //               ? ListTile(
-  //                   leading: const Icon(Icons.delete),
-  //                   title: const Text('Delete'),
-  //                   onTap: () {
-  //                     Navigator.pop(context); // Close the bottom sheet
-  //                     if (isOwner) {
-  //                       widget.onDelete(); // Perform delete action
-  //                     }
-  //                   },
-  //                 )
-  //               : const SizedBox(height: 0),
-  //           ListTile(
-  //             leading: const Icon(Icons.report),
-  //             title: const Text('Report'),
-  //             onTap: () {
-  //               Navigator.pop(context); // Close the bottom sheet
-  //               // Implement report action
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
-  //
-  // Future<UsersInfo> _getUserInfo(String uid) async {
-  //   // Assuming you have a collection called 'users' with user information
-  //   final userDoc =
-  //       await FirebaseFirestore.instance.collection('User').doc(uid).get();
-  //
-  //   // Assuming UsersInfo has a constructor that takes the document snapshot
-  //   return userDoc.exists
-  //       ? UsersInfo.fromDocument(userDoc)
-  //       : UsersInfo(name: "unknown", imageUrl: "", uid: uid);
-  // }
 }

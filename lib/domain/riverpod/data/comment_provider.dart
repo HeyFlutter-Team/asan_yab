@@ -183,7 +183,7 @@ class VerticalDataNotifier extends ChangeNotifier {
             isOwner
                 ? ListTile(
                     leading: const Icon(Icons.delete),
-                    title: const Text('Deleteeeee'),
+                    title: const Text('Delete'),
                     onTap: () {
                       Navigator.pop(context); // Close the bottom sheet
                       if (isOwner) {
