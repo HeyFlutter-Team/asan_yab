@@ -29,7 +29,10 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
   @override
   void initState() {
     super.initState();
-    ref.read(commentProvider.notifier).fetchMoreData(widget.postId);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(commentProvider.notifier).setComments([]);
+      ref.read(commentProvider.notifier).fetchMoreData(widget.postId);
+    });
   }
 
   @override

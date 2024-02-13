@@ -1,3 +1,4 @@
+import 'package:asan_yab/domain/riverpod/data/comment_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,10 @@ class _CommentTileState extends ConsumerState<CommentTile> {
   @override
   void initState() {
     super.initState();
-    _userInfoFuture = _getUserInfo(widget.comment.uid);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _userInfoFuture =
+          ref.read(commentProvider.notifier).getUserInfo(widget.comment.uid);
+    });
   }
 
   @override
@@ -76,54 +80,56 @@ class _CommentTileState extends ConsumerState<CommentTile> {
         trailing: IconButton(
           icon: const Icon(Icons.more_vert),
           onPressed: () {
-            _showOptionsBottomSheet(context, isOwner);
+            ref
+                .read(commentProvider.notifier)
+                .showOptionsBottomSheet(context, isOwner, widget.onDelete);
           },
         ), // Show options icon only for the owner
       ),
     );
   }
 
-  void _showOptionsBottomSheet(BuildContext context, bool isOwner) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            isOwner
-                ? ListTile(
-                    leading: const Icon(Icons.delete),
-                    title: const Text('Delete'),
-                    onTap: () {
-                      Navigator.pop(context); // Close the bottom sheet
-                      if (isOwner) {
-                        widget.onDelete(); // Perform delete action
-                      }
-                    },
-                  )
-                : const SizedBox(height: 0),
-            ListTile(
-              leading: const Icon(Icons.report),
-              title: const Text('Report'),
-              onTap: () {
-                Navigator.pop(context); // Close the bottom sheet
-                // Implement report action
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<UsersInfo> _getUserInfo(String uid) async {
-    // Assuming you have a collection called 'users' with user information
-    final userDoc =
-        await FirebaseFirestore.instance.collection('User').doc(uid).get();
-
-    // Assuming UsersInfo has a constructor that takes the document snapshot
-    return userDoc.exists
-        ? UsersInfo.fromDocument(userDoc)
-        : UsersInfo(name: "unknown", imageUrl: "", uid: uid);
-  }
+  // void _showOptionsBottomSheet(BuildContext context, bool isOwner) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return Column(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: [
+  //           isOwner
+  //               ? ListTile(
+  //                   leading: const Icon(Icons.delete),
+  //                   title: const Text('Delete'),
+  //                   onTap: () {
+  //                     Navigator.pop(context); // Close the bottom sheet
+  //                     if (isOwner) {
+  //                       widget.onDelete(); // Perform delete action
+  //                     }
+  //                   },
+  //                 )
+  //               : const SizedBox(height: 0),
+  //           ListTile(
+  //             leading: const Icon(Icons.report),
+  //             title: const Text('Report'),
+  //             onTap: () {
+  //               Navigator.pop(context); // Close the bottom sheet
+  //               // Implement report action
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
+  //
+  // Future<UsersInfo> _getUserInfo(String uid) async {
+  //   // Assuming you have a collection called 'users' with user information
+  //   final userDoc =
+  //       await FirebaseFirestore.instance.collection('User').doc(uid).get();
+  //
+  //   // Assuming UsersInfo has a constructor that takes the document snapshot
+  //   return userDoc.exists
+  //       ? UsersInfo.fromDocument(userDoc)
+  //       : UsersInfo(name: "unknown", imageUrl: "", uid: uid);
+  // }
 }
