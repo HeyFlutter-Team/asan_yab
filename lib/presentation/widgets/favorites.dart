@@ -246,8 +246,13 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                         ),
                                         child: Center(
                                           child: Text(
-                                            averageRating.toStringAsFixed(
-                                                1), // Display the average rating with one decimal place
+                                            isRTL
+                                                ? convertDigitsToFarsi(
+                                                    averageRating
+                                                        .toStringAsFixed(1))
+                                                : averageRating
+                                                    .toStringAsFixed(1),
+                                            // Display the average rating with one decimal place
                                             style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 20,

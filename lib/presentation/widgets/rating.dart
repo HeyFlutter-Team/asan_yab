@@ -1,3 +1,5 @@
+import 'package:asan_yab/core/utils/convert_digits_to_farsi.dart';
+import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/domain/riverpod/data/firebase_rating_provider.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +9,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../data/repositoris/language_repository.dart';
 import '../pages/themeProvider.dart';
 
 class RatingWidgets extends ConsumerStatefulWidget {
@@ -31,6 +34,7 @@ class _RatingWidgetsState extends ConsumerState<RatingWidgets> {
   @override
   Widget build(BuildContext context) {
     final firebaseRatingState = ref.watch(firebaseRatingProvider);
+    final isRTL = ref.watch(languageProvider).code == 'fa';
 
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -41,16 +45,23 @@ class _RatingWidgetsState extends ConsumerState<RatingWidgets> {
           children: [
             GestureDetector(
               onTap: () {
-                showRating();
+                bool isLogin = FirebaseAuth.instance.currentUser != null;
+                if (isLogin) showRating();
               },
               child: Text(
-                "${firebaseRatingState.averageRatingProvider}",
+                isRTL
+                    ? convertDigitsToFarsi(
+                        "${firebaseRatingState.averageRatingProvider}"
+                            .substring(0, 3))
+                    : "${firebaseRatingState.averageRatingProvider}"
+                        .substring(0, 3),
                 style: const TextStyle(fontSize: 26),
               ),
             ),
             GestureDetector(
               onTap: () {
-                showRating();
+                bool isLogin = FirebaseAuth.instance.currentUser != null;
+                if (isLogin) showRating();
               },
               child: stars(),
             ),

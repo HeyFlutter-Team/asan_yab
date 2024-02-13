@@ -1,23 +1,21 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:asan_yab/core/utils/convert_digits_to_farsi.dart';
-import 'package:asan_yab/domain/riverpod/data/following_data.dart';
 import 'package:asan_yab/presentation/pages/about_us_page.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
-import 'package:asan_yab/presentation/pages/profile/edit_profile_page.dart';
-import 'package:asan_yab/presentation/pages/profile/list_of_follow.dart';
 import 'package:asan_yab/presentation/pages/profile/show_profile_page.dart';
+
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:asan_yab/presentation/widgets/buildProgress.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../data/models/language.dart';
-import '../../../data/repositoris/language_repository.dart';
-import '../../../domain/riverpod/data/profile_data_provider.dart';
-import '../../widgets/language/language_bottom_sheet.dart';
+import '../../data/models/language.dart';
+import '../../data/repositoris/language_repository.dart';
+import '../../domain/riverpod/data/edit_profile_page_provider.dart';
+import '../../domain/riverpod/data/profile_data_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../widgets/language/language_bottom_sheet.dart';
+import 'edit_profile_page.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
@@ -77,7 +75,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   padding: const EdgeInsets.only(bottom: 50.0),
                   child: Center(
                     child: Text(
-                      '${usersData?.name}',
+                      '${usersData?.name} ${usersData?.lastName}',
                       style: const TextStyle(color: Colors.white, fontSize: 28),
                     ),
                   ),
@@ -108,9 +106,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                               ),
                             ),
                             Padding(
-                              padding: isRTL
-                                  ? const EdgeInsets.only(top: 40.0, right: 50)
-                                  : const EdgeInsets.only(top: 40.0, left: 55),
+                              padding:
+                                  const EdgeInsets.only(top: 40.0, right: 50),
                               child: ImageWidgets.buildProgress(ref: ref),
                             ),
                             Positioned(
@@ -155,26 +152,18 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   child: IconButton(
                     onPressed: () async {
                       if (FirebaseAuth.instance.currentUser != null) {
-                        await FirebaseFirestore.instance
-                            .collection('User')
-                            .doc(FirebaseAuth.instance.currentUser!.uid)
-                            .update({'isOnline': false, 'fcmToken': "token"});
-
-                        await FirebaseAuth.instance.signOut();
-
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MainPage(),
-                          ),
-                        );
+                        await FirebaseAuth.instance.signOut().whenComplete(() =>
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const MainPage())));
                       }
                     },
                     icon: const Icon(
                       Icons.logout,
                       color: Colors.white,
                     ),
-                  )),
+                  ))
             ],
           ),
         ),
@@ -182,31 +171,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           child: ListView(
             children: [
               ListTile(
-                onTap: () {
-                  ref.read(listOfDataProvider.notifier).state.clear();
-                  ref.read(listOfDataFollowersProvider.notifier).state.clear();
-                  ref
-                      .read(followingDataProvider.notifier)
-                      .getProfile(FirebaseAuth.instance.currentUser!.uid);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ListOfFollow(),
-                      ));
-                },
-                title: Text(languageText!.profile_followers),
-                leading: const Icon(
-                  color: Colors.red,
-                  Icons.person_2_outlined,
-                  size: 30,
-                ),
-              ),
-              const Divider(
-                color: Colors.grey,
-              ),
-              ListTile(
-                title: Text(
-                    '${isRTL ? convertDigitsToFarsi('${usersData?.id}') : usersData?.id}'),
+                title: Text('${usersData?.id}'),
                 leading: const Icon(
                   color: Colors.red,
                   Icons.account_circle,
@@ -218,7 +183,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       .copyToClipboard('${usersData?.id}');
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(languageText.profile_copy_id_snack_bar),
+                      content: Text(languageText!.profile_copy_id_snack_bar),
                       duration: const Duration(seconds: 2),
                     ),
                   );
@@ -255,7 +220,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 color: Colors.grey,
               ),
               ListTile(
-                title: Text(languageText.profile_dark_mode),
+                title: Text(languageText!.profile_dark_mode),
                 leading: const Icon(
                   color: Colors.red,
                   Icons.dark_mode_outlined,
@@ -293,18 +258,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               const Divider(
                 color: Colors.grey,
               ),
-              ListTile(
-                title: Text(
-                    '${languageText.profile_rate_score} ${isRTL ? convertDigitsToFarsi('${usersData?.invitationRate}') : usersData?.invitationRate}'),
-                leading: const Icon(
-                  color: Colors.red,
-                  Icons.star_rate_outlined,
-                  size: 30,
-                ),
-              ),
-              const Divider(
-                color: Colors.grey,
-              ),
               const SizedBox(
                 height: 5,
               ),
@@ -319,11 +272,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   borderRadius: BorderRadius.circular(32))),
           onPressed: () {
             Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const EditProfilePage(),
-                    ))
-                .then((value) => ref
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const EditProfilePage())).then(
+                (value) => ref
                     .read(userDetailsProvider.notifier)
                     .getCurrentUserData(context));
           },

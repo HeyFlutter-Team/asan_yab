@@ -17,7 +17,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get sign_in_email_2_valid => 'ایمیل شما اشتباه است';
 
   @override
-  String get sign_in_email_3_valid => 'فورمت ایمیل شما اشتباه است';
+  String get sign_in_email_3_valid => 'فرمت ایمیل شما اشتباه است';
 
   @override
   String get sign_in_password => 'رمز';
@@ -29,7 +29,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get sign_in_password_1_valid => 'رمز خود را وارد کنید';
 
   @override
-  String get sign_in_password_2_valid => 'رمز باید شیش کاراکتر یا بیشتر از شیش تا باشد';
+  String get sign_in_password_2_valid => 'رمز باید ۶ کاراکتر یا بیشتر از ۶ تا باشد';
 
   @override
   String get sign_in_checkBox => 'مرا بخاطر داشته باش';
@@ -87,6 +87,15 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get verify_tbt_text => 'لغو';
+
+  @override
+  String get verify_email_dialog => 'یک حساب آسان یاب به ایمیل داده شده در بالا ساخته شده است اگر (بدون تایید کردن ایمیل خود و پر کردن فورم معرفی نامه در صفحه بعدی) از این صفحه خارج شوید دیگر با این ایمیل وارد آسان یاب شده نمی توانید';
+
+  @override
+  String get verify_email_give_up => 'انصراف';
+
+  @override
+  String get verify_email_continue => 'ادامه';
 
   @override
   String get buttonNvB_1 => 'خانه';
@@ -339,4 +348,10 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get message_your_id => 'آیدی شما..>';
+
+  @override
+  String get for_add_comment => 'برای افزودن نظر';
+
+  @override
+  String get log_in => 'وارد شوید';
 }

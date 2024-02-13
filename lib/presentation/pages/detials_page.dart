@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:asan_yab/core/utils/download_image.dart';
 import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/domain/riverpod/data/toggle_favorite.dart';
+import 'package:asan_yab/presentation/pages/doctors_page.dart';
+import 'package:asan_yab/presentation/pages/newitem_shop.dart';
 import 'package:asan_yab/presentation/widgets/comments.dart';
 
 import 'package:asan_yab/presentation/widgets/rating.dart';
@@ -267,19 +269,38 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                       places.itemImages!.isEmpty)
                                   ? const SizedBox()
                                   : Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Icon(
-                                          Icons.add_alert_sharp,
+                                        Expanded(
+                                          child: Text(
+                                            '${languageText?.details_page_4_custom_card}',
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const ItemsSopping(),
+                                              ),
+                                            );
+                                          },
+                                          icon:Icon(
+                                            isRTL
+                                                ? Icons
+                                                .arrow_circle_left_outlined
+                                                : Icons
+                                                .arrow_circle_right_outlined,
+                                            size: 30,
+                                          ),
                                           // color: Colors.black54,
                                         ),
                                         const SizedBox(width: 8),
-                                        Text(
-                                          '${languageText?.details_page_4_custom_card}',
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
                                         const SizedBox(height: 12)
                                       ],
                                     ),
@@ -291,7 +312,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                     places.itemImages!.isEmpty
                                 ? const SizedBox(height: 0)
                                 : SizedBox(
-                                    height: size.height * 0.30,
+                                    height: size.height * 0.25,
                                     child: ListView.separated(
                                       separatorBuilder: (context, index) =>
                                           const SizedBox(
@@ -300,7 +321,9 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 12),
                                       scrollDirection: Axis.horizontal,
-                                      itemCount: places.itemImages!.length,
+                                      itemCount: places.itemImages!.length >= 5
+                                          ? 5
+                                          : places.itemImages!.length,
                                       itemBuilder: (context, index) {
                                         return Padding(
                                           padding: const EdgeInsets.only(
@@ -325,18 +348,16 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                               );
                                             },
                                             child: Container(
-                                              width: size.width * 0.55,
-                                              height: 160,
+                                              width: size.width * 0.25,
                                               decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                            .brightness ==
+                                                        Brightness.light
+                                                    ? Colors.grey
+                                                        .shade100 // Set light theme color
+                                                    : Colors.black12,
                                                 borderRadius:
-                                                    BorderRadius.circular(12),
-                                                boxShadow: const [
-                                                  BoxShadow(
-                                                    spreadRadius: 2,
-                                                    blurRadius: 5,
-                                                    offset: Offset(0, 3),
-                                                  ),
-                                                ],
+                                                    BorderRadius.circular(30),
                                               ),
                                               child: Column(
                                                 crossAxisAlignment:
@@ -344,15 +365,26 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                 children: [
                                                   ClipRRect(
                                                     borderRadius:
-                                                        BorderRadius.circular(
-                                                            22),
+                                                        const BorderRadius.only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    30),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    30),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
                                                     child: CachedNetworkImage(
                                                       imageUrl: places
                                                           .itemImages![index]
                                                           .imageUrl,
-                                                      width: double.infinity,
+                                                      width: size.width * 0.24,
                                                       height:
-                                                          size.height * 0.20,
+                                                          size.height * 0.13,
                                                       fit: BoxFit.cover,
                                                       placeholder:
                                                           (context, url) =>
@@ -365,20 +397,72 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                   ),
                                                   const SizedBox(height: 8),
                                                   Text(
-                                                    '${languageText!.details_page_5_custom_card}: ${places.itemImages![index].name}',
+                                                    maxLines: 1,
+                                                    places.itemImages![index]
+                                                        .name,
                                                     style: const TextStyle(
-                                                      fontSize: 14,
+                                                      overflow:
+                                                          TextOverflow.fade,
+                                                      fontSize: 16,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                     ),
                                                   ),
                                                   const SizedBox(height: 4),
-                                                  Text(
-                                                    '${languageText.details_page_6_custom_card}: ${isRTL ? convertDigitsToFarsi(places.itemImages![index].price) : places.itemImages![index].price}',
-                                                    style: const TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.blue,
-                                                    ),
+                                                  RichText(
+                                                    overflow: TextOverflow.clip,
+                                                    maxLines: 1,
+                                                    text: isRTL
+                                                        ? TextSpan(children: [
+                                                            TextSpan(
+                                                              text:
+                                                                  '${convertDigitsToFarsi(places.itemImages![index].price)} ',
+                                                              style: TextStyle(
+                                                                  fontSize: 15,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: Colors
+                                                                      .green
+                                                                      .shade500),
+                                                            ),
+                                                            TextSpan(
+                                                              text: 'افغانی',
+                                                              style: TextStyle(
+                                                                  fontSize: 15,
+                                                                  color: Colors
+                                                                      .green
+                                                                      .shade500,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            )
+                                                          ])
+                                                        : TextSpan(children: [
+                                                            TextSpan(
+                                                              text:
+                                                                  '${places.itemImages![index].price} ',
+                                                              style: TextStyle(
+                                                                  fontSize: 15,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: Colors
+                                                                      .green
+                                                                      .shade500),
+                                                            ),
+                                                            TextSpan(
+                                                              text: 'AF',
+                                                              style: TextStyle(
+                                                                  fontSize: 15,
+                                                                  color: Colors
+                                                                      .green
+                                                                      .shade500,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                          ]),
                                                   ),
                                                 ],
                                               ),
@@ -392,6 +476,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                             ////younis finish////
 
                             ////hojjat////
+                            SizedBox(height: 8,),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 12),
@@ -399,22 +484,41 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                       places.doctors!.isEmpty)
                                   ? const SizedBox()
                                   : Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.timer,
-                                          // color: Colors.black54,
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
                                           '${languageText?.details_page_7_custom_card}',
                                           style: const TextStyle(
-                                            fontSize: 16,
+                                            fontSize: 17,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        const SizedBox(height: 12)
-                                      ],
-                                    ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Doctors_Page(),
+                                            ),
+                                          );
+                                        },
+                                        icon: Icon(
+                                          isRTL
+                                              ? Icons
+                                                  .arrow_circle_left_outlined
+                                              : Icons
+                                                  .arrow_circle_right_outlined,
+                                          size: 30,
+                                        ),
+                                        // color: Colors.black54,
+                                      ),
+                                      const SizedBox(height: 12)
+                                    ],
+                                  ),
                             ),
                             const SizedBox(
                               height: 5,
@@ -422,7 +526,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                             places.doctors == null || places.doctors!.isEmpty
                                 ? const SizedBox(height: 0)
                                 : SizedBox(
-                                    height: size.height * 0.35,
+                                    height: size.height * 0.28,
                                     child: ListView.separated(
                                       separatorBuilder: (context, index) =>
                                           const SizedBox(
@@ -431,7 +535,9 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 12),
                                       scrollDirection: Axis.horizontal,
-                                      itemCount: places.doctors!.length,
+                                      itemCount: places.doctors!.length >= 5
+                                          ? 5
+                                          : places.doctors!.length,
                                       itemBuilder: (context, index) {
                                         return Padding(
                                           padding: const EdgeInsets.only(
@@ -440,18 +546,17 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                               right: 2,
                                               bottom: 18),
                                           child: Container(
-                                            width: size.width * 0.55,
+                                            width: size.width * 0.25,
                                             height: 160,
                                             decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.light
+                                                  ? Colors.grey
+                                                      .shade100 // Set light theme color
+                                                  : Colors.black12,
                                               borderRadius:
-                                                  BorderRadius.circular(12),
-                                              boxShadow: const [
-                                                BoxShadow(
-                                                  spreadRadius: 2,
-                                                  blurRadius: 5,
-                                                  offset: Offset(0, 3),
-                                                ),
-                                              ],
+                                                  BorderRadius.circular(22),
                                             ),
                                             child: Column(
                                               crossAxisAlignment:
@@ -459,13 +564,25 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                               children: [
                                                 ClipRRect(
                                                   borderRadius:
-                                                      BorderRadius.circular(22),
+                                                      const BorderRadius.only(
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  22),
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  22),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  10)),
                                                   child: CachedNetworkImage(
                                                     imageUrl: places
                                                         .doctors![index]
                                                         .imageUrl,
-                                                    width: double.infinity,
-                                                    height: size.height * 0.20,
+                                                    width: size.width * 0.24,
+                                                    height: size.height * 0.13,
                                                     fit: BoxFit.cover,
                                                     placeholder:
                                                         (context, url) =>
@@ -478,27 +595,35 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                 ),
                                                 const SizedBox(height: 8),
                                                 Text(
-                                                  '${languageText!.details_page_5_custom_card}: ${places.doctors![index].name}',
+                                                  places.doctors![index].name,
                                                   style: const TextStyle(
-                                                    fontSize: 14,
+                                                    fontSize: 15,
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
                                                 const SizedBox(height: 4),
                                                 Text(
-                                                  '${languageText.details_page_8_custom_card}: ${places.doctors![index].title}',
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.blue,
-                                                  ),
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.fade,
+                                                  places.doctors![index].title,
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color:
+                                                          Colors.green.shade400,
+                                                      fontWeight:
+                                                          FontWeight.w500),
                                                 ),
                                                 const SizedBox(height: 4),
                                                 Text(
-                                                  '${languageText.details_page_9_custom_card}: ${isRTL ? convertDigitsToFarsi(places.doctors![index].time) : places.doctors![index].time}',
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.blue,
-                                                  ),
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.fade,
+                                                  '${languageText?.details_page_9_custom_card}: ${isRTL ? convertDigitsToFarsi(places.doctors![index].time) : places.doctors![index].time}',
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color:
+                                                          Colors.green.shade500,
+                                                      fontWeight:
+                                                          FontWeight.w500),
                                                 ),
                                               ],
                                             ),

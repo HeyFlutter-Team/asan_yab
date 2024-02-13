@@ -144,7 +144,7 @@ abstract class AppLocalizations {
   /// No description provided for @sign_in_password_2_valid.
   ///
   /// In en, this message translates to:
-  /// **'The password must be six characters or more'**
+  /// **'The password must be 6 characters or more'**
   String get sign_in_password_2_valid;
 
   /// No description provided for @sign_in_checkBox.
@@ -260,6 +260,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get verify_tbt_text;
+
+  /// No description provided for @verify_email_dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'An Asan Yab account has been \n created to the following email address.\n If you leave this page\n (without confirming your email and filling\n out the introduction form on the next page),\n you will no longer be able to\n enter Asan Yab with this email.'**
+  String get verify_email_dialog;
+
+  /// No description provided for @verify_email_give_up.
+  ///
+  /// In en, this message translates to:
+  /// **'Give Up'**
+  String get verify_email_give_up;
+
+  /// No description provided for @verify_email_continue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get verify_email_continue;
 
   /// No description provided for @buttonNvB_1.
   ///
@@ -764,6 +782,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your Id...>'**
   String get message_your_id;
+
+  /// No description provided for @for_add_comment.
+  ///
+  /// In en, this message translates to:
+  /// **'for add comment'**
+  String get for_add_comment;
+
+  /// No description provided for @log_in.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in'**
+  String get log_in;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

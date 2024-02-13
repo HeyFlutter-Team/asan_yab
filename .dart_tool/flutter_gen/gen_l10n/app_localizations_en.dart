@@ -29,7 +29,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sign_in_password_1_valid => 'Enter your password';
 
   @override
-  String get sign_in_password_2_valid => 'The password must be six characters or more';
+  String get sign_in_password_2_valid => 'The password must be 6 characters or more';
 
   @override
   String get sign_in_checkBox => 'Remember me';
@@ -87,6 +87,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get verify_tbt_text => 'Cancel';
+
+  @override
+  String get verify_email_dialog => 'An Asan Yab account has been \n created to the following email address.\n If you leave this page\n (without confirming your email and filling\n out the introduction form on the next page),\n you will no longer be able to\n enter Asan Yab with this email.';
+
+  @override
+  String get verify_email_give_up => 'Give Up';
+
+  @override
+  String get verify_email_continue => 'Continue';
 
   @override
   String get buttonNvB_1 => 'Home';
@@ -339,4 +348,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get message_your_id => 'Your Id...>';
+
+  @override
+  String get for_add_comment => 'for add comment';
+
+  @override
+  String get log_in => 'Log in';
 }

@@ -54,6 +54,19 @@ class SignInNotifier {
       Navigator.pop(context);
     }
   }
+  Future<void> isMyEmailVerified(BuildContext context)async {
+    final user=FirebaseAuth.instance.currentUser;
+    try{
+      if(!user!.emailVerified){
+          ScaffoldMessenger.of(context).showSnackBar(
+           const SnackBar(content: Text('حساب شما تایید نشده است و فیک میباشد')),
+         );
+      }
+
+    }on FirebaseAuthException catch (e){
+      print(e);
+    }
+  }
 }
 
 
