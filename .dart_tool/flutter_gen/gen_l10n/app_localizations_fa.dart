@@ -348,4 +348,10 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get message_your_id => 'آیدی شما..>';
+
+  @override
+  String get for_add_comment => 'برای افزودن نظر';
+
+  @override
+  String get log_in => 'وارد شوید';
 }

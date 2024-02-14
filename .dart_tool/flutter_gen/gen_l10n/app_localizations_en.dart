@@ -348,4 +348,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get message_your_id => 'Your Id...>';
+
+  @override
+  String get for_add_comment => 'for add comment';
+
+  @override
+  String get log_in => 'Log in';
 }
