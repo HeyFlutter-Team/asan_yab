@@ -9,6 +9,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/riverpod/data/sign_in_provider.dart';
+import '../../main.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
   final Function()? onClickedSignIn;
@@ -97,24 +98,18 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     }
                   },
                 ),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: languageText.sign_up_account_text,
-                        style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 15),
-                      ),
-                      TextSpan(
-                        text: '  ${languageText.sign_up_account_text1}',
-                        style: const TextStyle(color: Colors.blue,fontSize: 15),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.pop(context);
-                          },
-                      ),
-                    ],
-                  ),
-                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [Text(languageText.sign_up_account_text,style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)
+                ,InkWell(
+                    onTap: () {
+                          Navigator.pop(context);
+                    },
+                  child: Text('  ${languageText.sign_up_account_text1}',
+                      style: const TextStyle(color: Colors.blue,fontSize: 15),),
+                )],),
+
                 const SizedBox(
                   height: 10,
                 ),

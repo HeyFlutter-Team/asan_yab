@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Users {
   final int id;
   final String? uid;
-  final String name;
+  late final String name;
   final String lastName;
   final String email;
   final Timestamp createdAt;

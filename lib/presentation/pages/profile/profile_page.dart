@@ -17,6 +17,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/models/language.dart';
 import '../../../data/repositoris/language_repository.dart';
 import '../../../domain/riverpod/data/profile_data_provider.dart';
+import '../../../main.dart';
 import '../../widgets/language/language_bottom_sheet.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
@@ -39,6 +40,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       },
     );
   }
+  Future<void> signOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
 
   final userName = FirebaseAuth.instance.currentUser;
   @override
@@ -47,7 +51,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     final themeModel = ref.watch(themeModelProvider);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     final languageText = AppLocalizations.of(context);
-
     return Scaffold(
         body: Column(
       children: [
@@ -160,8 +163,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                             .doc(FirebaseAuth.instance.currentUser!.uid)
                             .update({'isOnline': false, 'fcmToken': "token"});
 
-                        await FirebaseAuth.instance.signOut();
-
+                        await signOut();
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(

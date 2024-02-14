@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/riverpod/data/sign_in_provider.dart';
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
+import '../../main.dart';
 
 class LogInPage extends ConsumerStatefulWidget {
   final Function()? onClickedSignUp;
