@@ -1,4 +1,5 @@
 import 'package:asan_yab/data/repositoris/language_repository.dart';
+import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:asan_yab/presentation/pages/verify_email_page.dart';
@@ -49,7 +50,8 @@ Future<void> main() async {
   // FirebaseFirestore.instance.useFirestoreEmulator('host', '');
 
   runApp(ProviderScope(
-    overrides: [languageProvider.overrideWith((ref) => language)],
+    overrides: [languageProvider.overrideWith((ref) => language)
+  ],
     child: const MyApp(),
   ));
 }
@@ -78,6 +80,10 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     final themeModel = ref.watch(themeModelProvider);
     final language = ref.watch(languageProvider);
+    final userName=FirebaseAuth.instance.currentUser?.email;
+    final userData=ref.watch(userDetailsProvider);
+    print('younis userName: ${userName}');
+    print('younis userData ${userData?.name}');
     return MaterialApp(
       navigatorKey: navigatorKey,
       themeMode: themeModel.currentThemeMode,

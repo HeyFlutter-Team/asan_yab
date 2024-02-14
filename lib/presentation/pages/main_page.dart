@@ -79,11 +79,7 @@ class _MainPageState extends ConsumerState<MainPage>
               : const MessageHome(),
           FirebaseAuth.instance.currentUser == null
               ? const AuthPage()
-              :FirebaseAuth.instance.currentUser!.emailVerified?
-          user?.name != '' && user?.lastName!=''?
-                const ProfilePage()
-               : PersonalInformation(email: user?.email,)
-               :VerifyEmailPage(email: FirebaseAuth.instance.currentUser?.email)
+               : const ProfilePage()
         ],
       ),
     );

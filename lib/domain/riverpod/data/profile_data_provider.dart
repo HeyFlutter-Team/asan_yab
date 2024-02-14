@@ -13,41 +13,38 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../data/models/users.dart';
 
-class UserDetails extends StateNotifier<Users?> {
-  UserDetails({Users? user}):super(user);
-Future<Object?> getCurrentUserData(BuildContext context) async {
+class ReadUserDetails extends StateNotifier<Users?> {
+  ReadUserDetails({Users? user}) : super(user);
+
+  Future<void> getCurrentUserData(BuildContext context) async {
     try {
-      final user = FirebaseAuth.instance.currentUser?.uid;
+      final user = FirebaseAuth.instance.currentUser;
 
       if (user != null) {
         final userSnapshot = await FirebaseFirestore.instance
             .collection('User')
-            .doc(user)
+            .doc(user.uid)
             .get();
 
         state = Users.fromMap(userSnapshot.data()!);
-        return state;
       }
     } catch (e) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      print('Error getting current user data: $e');
     }
-    return state;
   }
 
   void disposeUserData() {
     state = null;
   }
 
-
-  copyToClipboard(String text) {
+  void copyToClipboard(String text) {
     FlutterClipboard.copy(text);
   }
 }
 
+
 final userDetailsProvider =
-    StateNotifierProvider<UserDetails, Users?>((ref) => UserDetails());
+    StateNotifierProvider<ReadUserDetails, Users?>((ref) => ReadUserDetails());
 
 
 
