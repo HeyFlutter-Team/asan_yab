@@ -146,8 +146,6 @@
 				E462F2B6287293ECC336BAE7 /* [CP] Embed Pods Frameworks */,
 				8D0973FB1628DBBBBB8B9996 /* [firebase_crashlytics] Crashlytics Upload Symbols */,
 				35796BEE9E0BBD04D6B4E7A9 /* [CP] Copy Pods Resources */,
-				F2295CDA2B8102260099D9F8 /* ShellScript */,
-				F2295CDB2B8102530099D9F8 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -317,40 +315,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		F2295CDA2B8102260099D9F8 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "${PODS_ROOT}/FirebaseCrashlytics/run\n";
-		};
-		F2295CDB2B8102530099D9F8 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "${PODS_ROOT}/FirebaseCrashlytics/upload-symbols\" -gsp \"${PROJECT_DIR}/Runner/GoogleService-Info.plist\" -p ios \"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
