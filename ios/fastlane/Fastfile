@@ -4,9 +4,9 @@ platform :ios do
   
   def generate_api_key
     app_store_connect_api_key(
-      key_id: "FT3HGBJN73",
+      key_id: "C8A4PUXG5G",
       issuer_id: "7ca7cab7-f3fd-4fb6-a1ed-5fe1a20c2db0",
-      key_filepath: "./AuthKey_FT3HGBJN73.p8",
+      key_filepath: "./AuthKey_C8A4PUXG5G.p8",
       duration: 500,
       in_house: false 
     )
