@@ -37,6 +37,7 @@ platform :ios do
     )
 
     api_key = generate_api_key
+
     curr_build_number = app_store_build_number(
       live: false,
       api_key: api_key,
@@ -45,7 +46,7 @@ platform :ios do
     )
 
     increment_build_number(
-      build_number: curr_build_number + 5,
+      build_number: curr_build_number + 1,
     )
 
     build_app(
