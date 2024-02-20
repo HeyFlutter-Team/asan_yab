@@ -55,7 +55,7 @@ platform :ios do
       export_options: {
         "tree_shake_icons": false,
         provisioningProfiles: {
-            "com.heyflutter.asanYab" => "Asan Yab"
+            "com.heyflutter.asanYab" => "match AppStore com.heyflutter.asanYab 1708429553"
           }
       }
     )
