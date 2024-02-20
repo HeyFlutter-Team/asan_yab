@@ -7,7 +7,7 @@ platform :ios do
       key_id: "C8A4PUXG5G",
       issuer_id: "7ca7cab7-f3fd-4fb6-a1ed-5fe1a20c2db0",
       key_filepath: "./AuthKey_C8A4PUXG5G.p8",
-      duration: 500,
+      duration: 1200,
       in_house: false 
     )
   end
@@ -54,6 +54,9 @@ platform :ios do
       export_method: "app-store",
       export_options: {
         "tree_shake_icons": false,
+        provisioningProfiles: {
+            "com.heyflutter.asanYab" => "Asan Yab"
+          }
       }
     )
   end
