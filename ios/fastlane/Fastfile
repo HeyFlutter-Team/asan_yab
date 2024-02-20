@@ -54,9 +54,6 @@ platform :ios do
       export_method: "app-store",
       export_options: {
         "tree_shake_icons": false,
-        provisioningProfiles: {
-            "com.heyflutter.asanYab" => "Asan Yab"
-          }
       }
     )
   end
