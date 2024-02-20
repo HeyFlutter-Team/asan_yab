@@ -45,7 +45,7 @@ platform :ios do
     )
 
     increment_build_number(
-      build_number: curr_build_number + 1,
+      build_number: curr_build_number + 5,
     )
 
     build_app(
