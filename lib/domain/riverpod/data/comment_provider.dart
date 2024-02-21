@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../data/models/comment_model.dart';
+import '../../../data/models/users_info.dart';
 import '../../../presentation/widgets/comment_sheet.dart';
 
 final commentProvider = ChangeNotifierProvider<VerticalDataNotifier>(
@@ -13,6 +14,7 @@ final commentProvider = ChangeNotifierProvider<VerticalDataNotifier>(
 class VerticalDataNotifier extends ChangeNotifier {
   bool _isLoading = false;
   List<CommentM> _comments = [];
+
   List<CommentM> get comments => _comments;
   final TextEditingController _commentController = TextEditingController();
 
@@ -49,6 +51,13 @@ class VerticalDataNotifier extends ChangeNotifier {
   set isLoading(bool value) {
     _isLoading = value;
     notifyListeners(); // Notify listeners whenever isLoading changes
+  }
+
+  onBackspacePressed() {
+    controller
+      ..text = controller.text.characters.toString()
+      ..selection = TextSelection.fromPosition(
+          TextPosition(offset: controller.text.length));
   }
 
   Future<void> fetchMoreData(String postId) async {
@@ -161,5 +170,52 @@ class VerticalDataNotifier extends ChangeNotifier {
       },
     );
     notifyListeners();
+  }
+
+  void showOptionsBottomSheet(
+      BuildContext context, bool isOwner, VoidCallback onDelete) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            isOwner
+                ? ListTile(
+                    leading: const Icon(Icons.delete),
+                    title: const Text('Delete'),
+                    onTap: () {
+                      Navigator.pop(context); // Close the bottom sheet
+                      if (isOwner) {
+                        onDelete(); // Perform delete action
+                      }
+                    },
+                  )
+                : const SizedBox(height: 0),
+            ListTile(
+              leading: const Icon(Icons.report),
+              title: const Text('Report'),
+              onTap: () {
+                Navigator.pop(context); // Close the bottom sheet
+                // Implement report action
+              },
+            ),
+          ],
+        );
+      },
+    );
+    notifyListeners();
+  }
+
+  Future<UsersInfo> getUserInfo(String uid) async {
+    // Assuming you have a collection called 'users' with user information
+    final userDoc =
+        await FirebaseFirestore.instance.collection('User').doc(uid).get();
+
+    // Assuming UsersInfo has a constructor that takes the document snapshot
+    notifyListeners();
+    return userDoc.exists
+        ? UsersInfo.fromDocument(userDoc)
+        : UsersInfo(name: "unknown", imageUrl: "", uid: uid);
   }
 }

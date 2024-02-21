@@ -15,35 +15,29 @@ final updateProvider =
 class UpdateFavorite extends ChangeNotifier {
   Future<void> update(BuildContext context, WidgetRef ref) async {
     await ref.read(getInformationProvider.notifier).getFavorite();
-    List<String> firebaseId =
-        ref.watch(getInformationProvider).favoriteList;
+    List<String> firebaseId = ref.watch(getInformationProvider).favoriteList;
+    await ref.read(favoriteProvider.notifier).fetchUser();
     List<String> phoneId =
         ref.watch(favoriteProvider).map((e) => e['id'].toString()).toList();
-
-    print("thooooooooooooooooooooos${firebaseId.length}");
-    print("thisssssssssssssssssss   ${phoneId.length}");
-
+    print(firebaseId);
     List<String> phoneData = [];
     List<String> addressData = [];
 
     // if  the ides of firebase  are not into the  ides list of phone ,it gets all the information into phone
     // firebase ides ---> phone ides
-
+    //
     for (int i = 0; i < firebaseId.length; i++) {
       if (!(phoneId.contains(firebaseId[i]))) {
-        ref
+        await ref
             .read(getSingleProvider.notifier)
             .fetchSinglePlace(firebaseId[i])
-            .whenComplete(() {
-          final toggle =
-              ref.read(favoriteProvider.notifier).isExist(firebaseId[i]);
-          ref.read(toggleProvider.notifier).toggle(toggle);
-          final provider = ref.read(favoriteProvider.notifier);
+            .whenComplete(() async {
           final places = ref.watch(getSingleProvider);
+
           addressData = [];
           phoneData = [];
 
-          // this loop just add same same addresses and phone numbers that needed into  2 lists , which are above
+          // this loop just add same  addresses and phone numbers that needed into  2 lists , which are above
           //  lists name {phoneData    ,  addressData}
 
           if (places != null) {
@@ -52,11 +46,18 @@ class UpdateFavorite extends ChangeNotifier {
                   '${places.addresses[i].branch}: ${places.addresses[i].address}');
               phoneData.add(places.addresses[i].phone);
             }
-            DownloadImage.getImage(places.logo, places.coverImage, context)
-                .whenComplete(() {
+
+            await DownloadImage.getImage(
+                    places.logo, places.coverImage, context)
+                .then((_) {
               Navigator.pop(context);
-              provider.toggleFavorite(places.id, places, addressData, phoneData,
-                  DownloadImage.logo, DownloadImage.coverImage);
+              ref.read(favoriteProvider.notifier).toggleFavorite(
+                  places.id,
+                  places,
+                  addressData,
+                  phoneData,
+                  DownloadImage.logo,
+                  DownloadImage.coverImage);
             });
           }
         });
@@ -69,8 +70,6 @@ class UpdateFavorite extends ChangeNotifier {
 
     for (int i = 0; i < phoneId.length; i++) {
       if (!(firebaseId.contains(phoneId[i]))) {
-        final toggle = ref.read(favoriteProvider.notifier).isExist(phoneId[i]);
-        ref.read(toggleProvider.notifier).toggle(toggle);
         final provider = ref.read(favoriteProvider.notifier);
         final places = Place(
           categoryId: '',
