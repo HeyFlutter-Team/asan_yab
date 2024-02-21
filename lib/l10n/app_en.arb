@@ -1,0 +1,184 @@
+{
+  "sign_in_email": "Email",
+  "sign_in_email_hintText": "Enter your email",
+  "sign_in_email_1_valid": "please enter your Email",
+  "sign_in_email_2_valid": "Your email is incorrect",
+  "sign_in_email_3_valid": "Your email format is incorrect",
+  "sign_in_password": "Password",
+  "sign_in_password_hintText": "Enter your password",
+  "sign_in_password_1_valid": "Enter your password",
+  "sign_in_password_2_valid": "The password must be 6 characters or more",
+  "sign_in_checkBox": "Remember me",
+  "sign_in_elbT": "  Sign In",
+  "sig_in_account_text": "Don't have a previous account?",
+  "sign_in_2_elbT": "Register",
+  "sign_in_method_1_if": "Your email is not registered in the database",
+  "sign_in_method_2_if": "Your password is incorrect",
+  "sign_in_method_3_if": "For repeated error requests, your account has been blocked. Please try again later",
+
+
+
+  "sign_up_confirm_p": "Confirm password",
+  "sign_up_confirm_p_hint_text": "Repeat password",
+  "sign_up_confirm_p_1_valid": "Enter your password repeatedly",
+  "sign_up_confirm_p_2_valid": "Passwords are not equal",
+  "sign_up_account_text": "Did you already have an account?",
+  "sign_up_account_text1": "Sign In",
+  "sign_up_elbT": "Sign Up",
+  "sign_up_method": "This email has already been used",
+
+
+
+  "verify_appBar_title": "Email confirmation",
+  "verify_body_text": "A confirmation link has been sent to your email!\n   Please click on it to confirm your email.\n If you press the link,\n press send again!",
+  "verify_elb_text": "Resend",
+  "verify_tbt_text": "Cancel",
+  "verify_email_dialog": "An Asan Yab account has been \n created to the following email address.\n If you leave this page\n (without confirming your email and filling\n out the introduction form on the next page),\n you will no longer be able to\n enter Asan Yab with this email.",
+  "verify_email_give_up": "Give Up",
+  "verify_email_continue": "Continue",
+
+
+  "buttonNvB_1": "Home",
+  "buttonNvB_2": "New Place",
+  "buttonNvB_3": "Message",
+  "buttonNvB_4": "Profile",
+
+
+ "proFile_type": "Account",
+
+  "category_title": "Categories",
+
+
+
+  "nearbyPlaces_title": "Nearby places",
+  "nearbyPlaces_meter_title": "meters away",
+
+
+
+  "favorite_page_title": "Favorites",
+
+
+  "findingFriendById": "Finding your new friend by Id",
+  "searchById": "Search by Id ",
+
+
+
+
+  "suggestion_appBar_title": "Request a new location",
+  "suggestion_1_tf_labelName": "Name of the place",
+  "suggestion_1_tf_valid": "Enter your address!",
+  "suggestion_2_tf_labelName": "Address Location",
+  "suggestion_2_tf_valid": "Write address of the location",
+  "suggestion_3_tf_labelName": "Location description",
+  "suggestion_3_tf_valid": "Write a description of the location",
+  "suggestion_4_tf_labelName": "Phone number",
+  "suggestion_4_tf_valid": "Enter your number!",
+  "suggestion_custom_card_title": "Note",
+  "suggestion_custom_card_text": "In this section, you can request us about the place you want, so that we include it in Asan Yab \n\n Also, you can ask us to update the information of the places listed in Asan Yab.",
+  "suggestion_button": "Submit request",
+  "suggestion_customDialog_title": "Submit a location request",
+  "suggestion_customDialog_content": "Your request has been registered",
+  "suggestion_customDialog_textButton": "Return to the previous page",
+
+
+
+  "profile_future_error": "Information not available",
+  "profile_copy_id_snack_bar": "Your ID was copied to the clipboard",
+  "profile_about_us_listTile": "About Us",
+  "profile_edit_button_text": "Edit",
+  "profile_buttonSheet_camera": "Camera",
+  "profile_buttonSheet_gallery": "Gallery",
+  "profile_language_listTile": "Change Language",
+  "profile_snackBar_catch": "Your internet is down",
+  "profile_dark_mode": "Dark Mode",
+  "profile_rate_score": "ُScore",
+  "profile_followers": "Followers",
+  "profile_following": "Following",
+
+
+
+
+
+
+  "edit_appBar_leading": "Save",
+  "edit_1_txf_label": "Name",
+  "edit_2_txf_label": "Last Name",
+
+
+
+  "container_text": "Search in",
+
+
+  "search_bar_hint_text": "Search",
+
+
+
+
+  "first_text_field_label": "Name",
+  "first_text_field_hint": "Enter your Name",
+  "first_text_field_valid": "Your name is empty",
+  "second_text_field_label": "Last Name",
+  "second_text_field_hint": "Enter your Last Name",
+  "second_text_field_valid": "Your last name is empty",
+  "inviter_ID": "Inviter ID",
+  "third_text_field_hint": "ID of the person who introduced Asan Yab to you",
+  "elevated_text": "Enter",
+
+
+  "rating_widget_dialog":"Please leave a star rating",
+
+  "done_click":"Done",
+
+
+
+  "details_page_snack_bar": "To add to favorites you must first log in to your account",
+  "details_page_1_custom_card": "Description",
+  "details_page_2_custom_card": "Gallery",
+  "details_page_3_custom_card": "Specifications",
+  "details_page_4_custom_card": "New Items",
+  "details_page_5_custom_card": "Name",
+  "details_page_6_custom_card": "Price",
+  "details_page_7_custom_card": "ِDoctor",
+  "details_page_8_custom_card": "ٍExpert",
+  "details_page_9_custom_card": "Time",
+
+
+
+
+
+
+  "about_us_page_appbar_title": "About Us",
+
+
+
+  "nearby_place_page_title": "NearBy Places",
+  "nearby_place_page_active_location": "Activate your location",
+  "nearby_place_page_distances": "Choose the distance you want",
+  "nearby_place_page_meter": "Meter",
+  "nearby_place_page_km": "km",
+  "nearby_place_page_meter_away": "Meters away",
+  "nearby_place_page_km_away": "Km away",
+
+
+
+
+  "update_dialog_page_new_version": "About the new version",
+  "firstComment": "The last comment will be shown here",
+  "comment": "Comments",
+  "more":"More",
+  "add_a_comment": "Add a Comment",
+  "chat_screen": "To access the chat, your score must be 2 or more",
+  "chat_message": "Message",
+  "message_check_user1": "To access the chat you must\n  Log in to your account...",
+  "message_check_user2": "Enter to Email",
+  "message_personal_score": "current score",
+  "message_description": "To get points, \n you must introduce Asan Yab \n to two of your friends \n and they must enter your personal ID in the field \n mentioned below during registration...>",
+  "message_your_id": "Your Id...>",
+  "for_add_comment": "for add comment",
+  "log_in": "Log in"
+
+
+
+
+
+}

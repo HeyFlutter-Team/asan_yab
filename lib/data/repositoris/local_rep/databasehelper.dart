@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-
 import '../../models/place.dart';
 
 class DatabaseHelper {
@@ -33,7 +31,8 @@ class DatabaseHelper {
       List<String> phoneDataList,
       bool toggle,
       Int8List logo,
-      Int8List coverImage) async {
+      Int8List coverImage)
+  async {
     String dataAddress = jsonEncode(addressDataList);
     String dataPhone = jsonEncode(phoneDataList);
     final db = await _openDatabase();

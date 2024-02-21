@@ -1,12 +1,15 @@
+import 'package:asan_yab/data/models/language.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../core/res/image_res.dart';
+import '../../data/repositoris/language_repository.dart';
 
 class PageViewItem extends StatelessWidget {
   final int selectedIndex;
@@ -46,7 +49,7 @@ class PageViewItem extends StatelessWidget {
   }
 }
 
-class ImageView extends StatefulWidget {
+class ImageView extends ConsumerStatefulWidget {
   final int selectedIndex;
   final List<String?> gallery;
   const ImageView({
@@ -56,10 +59,10 @@ class ImageView extends StatefulWidget {
   });
 
   @override
-  State<ImageView> createState() => _ImageViewState();
+  ConsumerState<ImageView> createState() => _ImageViewState();
 }
 
-class _ImageViewState extends State<ImageView> {
+class _ImageViewState extends ConsumerState<ImageView> {
   late int currentIndex;
   late PageController pageController;
 
@@ -77,6 +80,7 @@ class _ImageViewState extends State<ImageView> {
 
   @override
   Widget build(BuildContext context) {
+    final isRTL = ref.watch(languageProvider).code=='fa';
     return Material(
       child: Stack(
         alignment: Alignment.bottomCenter,
@@ -138,8 +142,10 @@ class _ImageViewState extends State<ImageView> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  icon: const Icon(
-                    Icons.arrow_back_ios_sharp,
+                  icon:  Icon(
+                    isRTL?
+                    Icons.arrow_back_ios_sharp
+                    :Icons.arrow_forward_ios_sharp,
                     color: Colors.white,
                   )),
             ),

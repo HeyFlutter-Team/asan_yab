@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:asan_yab/data/models/language.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/utils/convert_digits_to_farsi.dart';
+import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
 
 class DetailPageOffline extends ConsumerWidget {
@@ -14,6 +16,7 @@ class DetailPageOffline extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    final isRTL = ref.watch(languageProvider).code == 'fa';
     List<String> phoneData = List<String>.from(jsonDecode(favItem['phone']));
     List<String> addressData =
         List<String>.from(jsonDecode(favItem['address']));
@@ -89,7 +92,7 @@ class DetailPageOffline extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: Text(
                           favItem['name'],
-                          maxLines: 2,
+                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                               fontSize: 24, fontWeight: FontWeight.bold),
@@ -147,8 +150,10 @@ class DetailPageOffline extends ConsumerWidget {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Text(
-                                          convertDigitsToFarsi(
-                                              phoneData[index]),
+                                          isRTL
+                                              ? convertDigitsToFarsi(
+                                                  phoneData[index])
+                                              : phoneData[index],
                                           style: const TextStyle(
                                               fontSize: 16,
                                               color: Colors.black54),
@@ -217,15 +222,14 @@ class CustomCard extends StatelessWidget {
                         children: [
                           const Icon(
                             Icons.library_books,
-                            color: Colors.black54,
                           ),
                           const SizedBox(width: 12),
                           Text(
                             title,
                             style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black54),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),

@@ -1,17 +1,22 @@
-import 'package:asan_yab/data/repositoris/local_rep/notification.dart';
-
+import 'package:asan_yab/domain/riverpod/config/notification_repo.dart';
+import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
+import 'package:asan_yab/presentation/pages/message_page/message_home.dart';
+import 'package:asan_yab/presentation/pages/personal_information_page.dart';
+import 'package:asan_yab/presentation/pages/profile/profile_page.dart';
+import 'package:asan_yab/presentation/pages/verify_email_page.dart';
+import 'package:asan_yab/presentation/widgets/message/message_check_user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/riverpod/config/internet_connectivity_checker.dart';
-
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
-import 'suggestion.dart';
-import 'package:flutter/material.dart';
-
-import 'about_us_page.dart';
+import 'auth_page.dart';
 import 'home_page.dart';
-
-// String? notifTitle, notifBody;
+import 'suggestion.dart';
 
 class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
@@ -20,31 +25,46 @@ class MainPage extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _MainPageState();
 }
 
-class _MainPageState extends ConsumerState<MainPage> {
+class _MainPageState extends ConsumerState<MainPage>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-
+    WidgetsBinding.instance.addObserver(this);
+    setStatus(true);
     ref
         .read(internetConnectivityCheckerProvider.notifier)
         .startStremaing(context);
+    FirebaseAuth.instance.currentUser;
   }
 
-  final pages = [const HomePage(), const SuggestionPage(), const AboutUsPage()];
+  void setStatus(bool status) async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      final token = await FirebaseMessaging.instance.getToken();
+      await FirebaseFirestore.instance
+          .collection('User')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({'isOnline': status, 'fcmToken': token});
+    }
+  }
+
   @override
-  void dispose() {
-    ref
-        .read(internetConnectivityCheckerProvider.notifier)
-        .subscription
-        .cancel();
-    super.dispose();
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      setStatus(true);
+    } else {
+      setStatus(false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final user=ref.watch(userDetailsProvider);
     final selectedIndex = ref.watch(buttonNavigationProvider);
+    FirebaseApi().initInfo();
+    FirebaseApi().getToken();
+    FirebaseApi().initialize(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: buildBottomNavigationBar(),
       body: IndexedStack(
         index: selectedIndex,
@@ -54,15 +74,20 @@ class _MainPageState extends ConsumerState<MainPage> {
                   .watch(internetConnectivityCheckerProvider.notifier)
                   .isConnected),
           const SuggestionPage(),
-          const AboutUsPage()
+          FirebaseAuth.instance.currentUser == null
+              ? const MessageCheckUser()
+              : const MessageHome(),
+          FirebaseAuth.instance.currentUser == null
+              ? const AuthPage()
+               : const ProfilePage()
         ],
       ),
     );
   }
 
   Widget buildBottomNavigationBar() => BottomNavigationBar(
-        selectedFontSize: 20.0,
-        unselectedFontSize: 16.0,
+        selectedFontSize: 18.0,
+        unselectedFontSize: 14.0,
         currentIndex: ref.watch(buttonNavigationProvider),
         selectedItemColor: Colors.red,
         type: BottomNavigationBarType.fixed,
@@ -70,19 +95,23 @@ class _MainPageState extends ConsumerState<MainPage> {
           FocusScope.of(context).unfocus();
           ref.read(buttonNavigationProvider.notifier).selectedIndex(index);
         },
-        backgroundColor: Colors.white,
-        items: const [
+        // backgroundColor: Colors.white,
+        items: [
           BottomNavigationBarItem(
-            label: 'خانه',
-            icon: Icon(Icons.home),
+            label: AppLocalizations.of(context)!.buttonNvB_1,
+            icon: const Icon(Icons.home),
           ),
           BottomNavigationBarItem(
-            label: ' مکان جدید',
-            icon: Icon(Icons.place),
+            label: AppLocalizations.of(context)!.buttonNvB_2,
+            icon: const Icon(Icons.place),
           ),
           BottomNavigationBarItem(
-            label: 'در باره ما',
-            icon: Icon(Icons.person),
+            label: AppLocalizations.of(context)!.buttonNvB_3,
+            icon: const Icon(Icons.message),
+          ),
+          BottomNavigationBarItem(
+            label: AppLocalizations.of(context)!.buttonNvB_4,
+            icon: const Icon(Icons.person),
           ),
         ],
       );

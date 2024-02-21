@@ -4,9 +4,9 @@ platform :ios do
   
   def generate_api_key
     app_store_connect_api_key(
-      key_id: "FLUCGL7SRZ",
+      key_id: "C8A4PUXG5G",
       issuer_id: "7ca7cab7-f3fd-4fb6-a1ed-5fe1a20c2db0",
-      key_filepath: "./AuthKey_FLUCGL7SRZ.p8",
+      key_filepath: "./AuthKey_C8A4PUXG5G.p8",
       duration: 1200,
       in_house: false 
     )
@@ -37,6 +37,7 @@ platform :ios do
     )
 
     api_key = generate_api_key
+
     curr_build_number = app_store_build_number(
       live: false,
       api_key: api_key,
@@ -55,7 +56,7 @@ platform :ios do
       export_options: {
         "tree_shake_icons": false,
         provisioningProfiles: {
-            "com.heyflutter.asanYab" => "match AppStore com.heyflutter.asanYab"
+            "com.heyflutter.asanYab" => "match AppStore com.heyflutter.asanYab 1708429553"
           }
       }
     )

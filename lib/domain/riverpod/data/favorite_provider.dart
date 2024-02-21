@@ -62,7 +62,7 @@ class FavoriteProvider extends StateNotifier<List<Map<String, dynamic>>> {
     state = updatedData;
   }
 
-  void fetchUser() async {
+  Future<void> fetchUser() async {
     List<Map<String, dynamic>> userList = await DatabaseHelper.getData();
     state = userList;
   }

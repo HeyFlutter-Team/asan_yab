@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../data/repositoris/firebase_modle_helper.dart';
-
 import '../widgets/button_widget.dart';
 import '../widgets/text_form_field_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SuggestionPage extends StatefulWidget {
   const SuggestionPage({super.key});
@@ -38,15 +38,14 @@ class _SuggestionPageState extends State<SuggestionPage> {
 
   @override
   Widget build(BuildContext context) {
+    final languageText=AppLocalizations.of(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        title: const Text(
-          'درخواست مکان جدید',
-          style: TextStyle(color: Colors.black),
+        automaticallyImplyLeading: false,
+        title: Text(
+          languageText!.suggestion_appBar_title,
         ),
         elevation: 0,
-        backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -61,41 +60,41 @@ class _SuggestionPageState extends State<SuggestionPage> {
                   const SizedBox(height: 15),
                   TextFieldWidget(
                     addController: nameController,
-                    labelName: 'نام مکان',
+                    labelName: languageText.suggestion_1_tf_labelName,
                     validator: (value) => value != null && value.isEmpty
-                        ? 'مکان خود را وارد کنید!'
+                        ? languageText.suggestion_1_tf_valid
                         : null,
                   ),
                   const SizedBox(height: 10),
                   TextFieldWidget(
                     addController: addressController,
-                    labelName: 'آدرس مکان',
+                    labelName: languageText.suggestion_2_tf_labelName,
                     validator: (value) => value != null && value.isEmpty
-                        ? 'آدرس خود را وارد کنید!'
+                        ? languageText.suggestion_2_tf_valid
                         : null,
                   ),
                   const SizedBox(height: 10),
                   TextFieldWidget(
                     line: 2,
                     addController: typeController,
-                    labelName: 'توضیجات مکان',
+                    labelName: languageText.suggestion_3_tf_labelName,
                     validator: (value) => value != null && value.isEmpty
-                        ? 'توضیجات مکان را بنویسید'
+                        ? languageText.suggestion_3_tf_valid
                         : null,
                   ),
                   const SizedBox(height: 10),
                   TextFieldWidget(
                     addController: phoneController,
-                    labelName: 'شماره تماس',
+                    labelName: languageText.suggestion_4_tf_labelName,
                     validator: (value) => value != null && value.isEmpty
-                        ? 'شماره خود را وارد کنید!'
+                        ? languageText.suggestion_4_tf_valid
                         : null,
                   ),
                   const SizedBox(height: 20),
-                  const CustomCard(
-                    title: 'نوت',
+                  CustomCard(
+                    title: languageText.suggestion_custom_card_title,
                     child: Text(
-                      ' در این بخش شما میتوانید به ما در باره مکان مورد نظر خود درخواست بدهید، تا ما آن را در آسان یاب قرار دهیم \n\n همچنان، شما میتوانید برای آپدیت اطلاعات مکان های درج شده در آسان یاب به ما درخواست بدهید',
+                      languageText.suggestion_custom_card_text,
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -119,7 +118,7 @@ class _SuggestionPageState extends State<SuggestionPage> {
                         controllerClear();
                       }
                     },
-                    titleName: 'ارسال درخواست',
+                    titleName: languageText.suggestion_button,
                     textColor1: Colors.white,
                     btnColor: Colors.grey,
                   ),
@@ -138,13 +137,14 @@ class CustomDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final languageText=AppLocalizations.of(context);
     return AlertDialog(
-      title: const Text('ارسال درخواست مکان'),
-      content: const Text('درخواست شما ثیت گردید'),
+      title: Text(languageText!.suggestion_customDialog_title),
+      content: Text(languageText.suggestion_customDialog_content),
       actions: <Widget>[
         TextButton(
-          child: const Text('بازگشت به صفحه قبلی ',
-              style: TextStyle(
+          child: Text(languageText.suggestion_customDialog_textButton,
+              style: const TextStyle(
                 color: Colors.blueAccent,
               )),
           onPressed: () {
@@ -193,15 +193,15 @@ class CustomCard extends StatelessWidget {
                       children: [
                         const Icon(
                           Icons.info_outline,
-                          color: Colors.black54,
+                          // color: Colors.black54,
                         ),
                         const SizedBox(width: 12),
                         Text(
                           title,
                           style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black54),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),

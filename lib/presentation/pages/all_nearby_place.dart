@@ -1,10 +1,12 @@
+import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/presentation/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../core/utils/convert_digits_to_farsi.dart';
 import '../../data/models/place.dart';
+import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/screen/drop_Down_Buton.dart';
 import '../../domain/servers/nearby_places.dart';
 import '../pages/detials_page.dart';
@@ -16,23 +18,24 @@ class NearbyPlacePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final languageText=AppLocalizations.of(context);
+    final isRTL = ref.watch(languageProvider).code == 'fa';
     final List<Place> place;
     place = ref.watch(nearbyPlace);
 
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
-          backgroundColor: Colors.white,
-          title: const Text(
-            'مکان های نزدیک',
-            style: TextStyle(color: Colors.black),
+          // backgroundColor: Colors.white,
+          title:  Text(
+            languageText!.nearby_place_page_title,
           ),
           leading: IconButton(
             onPressed: () {
               FocusScope.of(context).unfocus();
               Navigator.pop(context);
             },
-            icon: const Icon(Icons.arrow_back, color: Colors.black, size: 25),
+            icon: const Icon(Icons.arrow_back,size: 25),
           ),
         ),
         body: place.isEmpty
@@ -50,7 +53,7 @@ class NearbyPlacePage extends ConsumerWidget {
                             onClicked: () async {
                               await ref.refresh(nearbyPlace.notifier).refresh();
                             },
-                            titleName: 'لوکشن خود را فعال کنید',
+                            titleName: languageText.nearby_place_page_active_location,
                             textColor1: Colors.white,
                             btnColor: Colors.black26),
                       ))
@@ -71,7 +74,7 @@ class NearbyPlacePage extends ConsumerWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 14),
                       child: Row(
                         children: [
-                          const Text('فاصله مورد نظر خود را انتخاب کنید'),
+                           Text(languageText.nearby_place_page_distances),
                           const SizedBox(
                             width: 10,
                           ),
@@ -96,8 +99,12 @@ class NearbyPlacePage extends ConsumerWidget {
                                           const Duration(seconds: 1));
                                     },
                                     value: e,
-                                    child: Text(
-                                        "  ${convertDigitsToFarsi((e < 1 ? (e * 1000).toInt().toString() : e.toInt().toString()))} ${e < 1 ? 'متر' : "کیلومتر"}"));
+                                    child: isRTL
+                                    ?Text(
+                                        "  ${convertDigitsToFarsi((e < 1 ? (e * 1000).toInt().toString() : e.toInt().toString()))} ${e < 1 ? languageText.nearby_place_page_meter : languageText.nearby_place_page_km}")
+                               :Text(
+                                        "  ${(e < 1 ? (e * 1000).toInt().toString() : e.toInt().toString())} ${e < 1 ? languageText.nearby_place_page_meter : languageText.nearby_place_page_km}")
+                                );
                               }).toList(),
                               onChanged: (value) {
                                 ref
@@ -143,7 +150,7 @@ class NearbyPlacePage extends ConsumerWidget {
                                           padding: EdgeInsets.zero,
                                           decoration: BoxDecoration(
                                               borderRadius: const BorderRadius
-                                                      .only(
+                                                  .only(
                                                   topLeft: Radius.circular(12),
                                                   topRight: Radius.circular(12),
                                                   bottomLeft: Radius.elliptical(
@@ -165,7 +172,6 @@ class NearbyPlacePage extends ConsumerWidget {
                                         child: Text(
                                           '${place[index].category}',
                                           style: const TextStyle(
-                                              color: Colors.black,
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold),
                                         ),
@@ -196,7 +202,7 @@ class NearbyPlacePage extends ConsumerWidget {
                                             Flexible(
                                               child: Text(
                                                 place[index]
-                                                    .adresses[0]
+                                                    .addresses[0]
                                                     .address,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(
@@ -222,8 +228,8 @@ class NearbyPlacePage extends ConsumerWidget {
                                           padding: const EdgeInsets.all(8),
                                           child: Text(
                                             place[index].distance < 1000
-                                                ? '${convertDigitsToFarsi(place[index].distance.toString())} متر تا مقصد '
-                                                : '${convertDigitsToFarsi((place[index].distance / 1000).toStringAsFixed(1))} کیلومتر تا مقصد',
+                                                ? isRTL?'${convertDigitsToFarsi(place[index].distance.toString())} ${languageText.nearby_place_page_meter_away}':'${place[index].distance.toString()} ${languageText.nearby_place_page_meter_away}'
+                                                : isRTL?'${convertDigitsToFarsi((place[index].distance / 1000).toStringAsFixed(1))} ${languageText.nearby_place_page_km_away}':'${(place[index].distance / 1000).toStringAsFixed(1)} ${languageText.nearby_place_page_km_away}',
                                             style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 12,

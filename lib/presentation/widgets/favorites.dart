@@ -1,15 +1,21 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'dart:typed_data';
-
+import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/domain/riverpod/data/firebase_rating_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../core/utils/convert_digits_to_farsi.dart';
+import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
+import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../pages/detials_page.dart';
 import '../pages/detials_page_offline.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Favorites extends ConsumerStatefulWidget {
   final bool isConnected;
@@ -34,19 +40,24 @@ class _FavoritesState extends ConsumerState<Favorites> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final value1 = ref.watch(favoriteProvider);
-    debugPrint('favorit $value1');
-    final value = value1.map((e) => e).toList();
-    return value.isEmpty
+    final favoriteState = ref.watch(favoriteProvider);
+    debugPrint('favorite $favoriteState');
+    final favorites = favoriteState.map((e) => e).toList();
+    final languageText = AppLocalizations.of(context);
+    final isRTL = ref.watch(languageProvider).code == 'fa';
+    print("this is the lenght");
+    print(favorites.length);
+    return favorites.isEmpty
         ? const SizedBox()
         : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(right: 16.0, top: 12.0),
+              Padding(
+                padding:
+                    const EdgeInsets.only(right: 16.0, top: 12.0, left: 16),
                 child: Text(
-                  'موارد دلخواه',
-                  style: TextStyle(color: Colors.grey, fontSize: 20.0),
+                  languageText!.favorite_page_title,
+                  style: const TextStyle(color: Colors.grey, fontSize: 20.0),
                 ),
               ),
               Padding(
@@ -60,13 +71,17 @@ class _FavoritesState extends ConsumerState<Favorites> {
                     crossAxisSpacing: 12.0,
                     mainAxisExtent: 230.0,
                   ),
-                  itemCount: value.length,
+                  itemCount: favorites.length,
                   itemBuilder: (context, index) {
-                    final toggle = value[index]['toggle'] == 1 ? true : false;
-                    final items = value[index];
+                    print(favorites[index]);
+                    final toggle =
+                        favorites[index]['toggle'] == 1 ? true : false;
+                    final items = favorites[index];
                     List<String> phoneData =
                         List<String>.from(jsonDecode(items['phone']));
-                    final phoneNumber = convertDigitsToFarsi(phoneData[0]);
+                    final phoneNumber = isRTL
+                        ? convertDigitsToFarsi(phoneData[0])
+                        : phoneData[0];
                     return Stack(
                       children: [
                         Card(
@@ -78,20 +93,20 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                   ? Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            DetailsPage(id: value[index]['id']),
+                                        builder: (context) => DetailsPage(
+                                            id: favorites[index]['id']),
                                       ))
                                   : Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => DetailPageOffline(
-                                            favItem: value[index]),
+                                            favItem: favorites[index]),
                                       ));
                             },
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12.0),
-                                color: Colors.white,
+                                // color: Colors.white,
                               ),
                               child: Column(
                                 children: [
@@ -104,7 +119,7 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                       ),
                                       image: DecorationImage(
                                         image: MemoryImage(Uint8List.fromList(
-                                            value[index]['image'])),
+                                            favorites[index]['image'])),
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -121,35 +136,47 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                   const SizedBox(height: 10.0),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 12),
+                                        horizontal: 5),
                                     child: Column(
                                       children: [
                                         Text(
-                                          value[index]['name'],
+                                          favorites[index]['name'],
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 16.0),
+                                              // color: Colors.black,
+                                              ),
                                         ),
                                         OutlinedButton(
                                           onPressed: () async {
                                             await FlutterPhoneDirectCaller
                                                 .callNumber(phoneNumber);
                                           },
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(phoneNumber,
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 14.0,
-                                                  )),
-                                              const Icon(Icons.phone_android,
-                                                  color: Colors.green),
-                                            ],
-                                          ),
+                                          child: isRTL
+                                              ? Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    const Icon(
+                                                        Icons.phone_android,
+                                                        color: Colors.green),
+                                                    Text(phoneNumber),
+                                                  ],
+                                                )
+                                              : Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(phoneNumber,
+                                                        overflow: TextOverflow
+                                                            .ellipsis),
+                                                    const Icon(
+                                                        Icons.phone_android,
+                                                        color: Colors.green),
+                                                  ],
+                                                ),
                                         ),
                                       ],
                                     ),
@@ -164,9 +191,17 @@ class _FavoritesState extends ConsumerState<Favorites> {
                           top: 10.0,
                           child: IconButton(
                             onPressed: () {
-                              ref
-                                  .read(favoriteProvider.notifier)
-                                  .delete(value[index]['id']);
+                              if (widget.isConnected) {
+                                ref
+                                    .read(getInformationProvider)
+                                    .toggle(favorites[index]['id']);
+
+                                ref.read(getInformationProvider).setFavorite();
+                                ref
+                                    .read(favoriteProvider.notifier)
+                                    .delete(favorites[index]['id']);
+                                print(favorites[index]['id']);
+                              }
                             },
                             icon: toggle
                                 ? const Icon(
@@ -181,6 +216,58 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                   ),
                           ),
                         ),
+                        widget.isConnected
+                            ? Positioned(
+                                top: 98.0,
+                                left: 10.0,
+                                child: FutureBuilder<double>(
+                                  future: ref
+                                      .read(firebaseRatingProvider)
+                                      .getAverageRatingForPlace(
+                                          favorites[index]['id']),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const CircularProgressIndicator(); // Show loading indicator while fetching rating
+                                    } else if (snapshot.hasError) {
+                                      return const Text(
+                                          'Error fetching rating'); // Show error message if there's an error
+                                    } else {
+                                      final averageRating = snapshot.data ?? 0;
+                                      return Container(
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          border: Border.all(
+                                              width: 4, color: Colors.white),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            isRTL
+                                                ? convertDigitsToFarsi(
+                                                    averageRating
+                                                        .toStringAsFixed(1))
+                                                : averageRating
+                                                    .toStringAsFixed(1),
+                                            // Display the average rating with one decimal place
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                              )
+                            : const SizedBox(
+                                height: 0,
+                              )
                       ],
                     );
                   },

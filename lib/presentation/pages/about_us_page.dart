@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../core/res/image_res.dart';
 
 class AboutUsPage extends StatelessWidget {
@@ -12,15 +12,18 @@ class AboutUsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+    final languageText=AppLocalizations.of(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      // backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        title: const Text(
-          ' در باره ما',
-          style: TextStyle(color: Colors.black),
+        title:  Text(
+          languageText!.about_us_page_appbar_title,
+          // style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Colors.white,
         elevation: 0,
+        leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.arrow_back)),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -80,12 +83,16 @@ class AboutUsPage extends StatelessWidget {
                                       launchUrl(
                                           Uri.parse('https://heyflutter.com'));
                                     }),
-                              const TextSpan(
+                              TextSpan(
                                 text:
                                     ' helps you to learn Flutter, Dart, Firebase and App development in one place for all platforms Android, iOS, Web and Desktop. On ',
                                 style: TextStyle(
-                                  color: Colors.black,
                                   fontSize: 16,
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? Colors.black
+                                      : Colors.white,
+                                  // color: Colors.black,
                                 ),
                               ),
                               TextSpan(
@@ -99,12 +106,16 @@ class AboutUsPage extends StatelessWidget {
                                       launchUrl(
                                           Uri.parse('https://heyflutter.com'));
                                     }),
-                              const TextSpan(
+                              TextSpan(
                                 text:
                                     ' website you can explore our 12 weeks Flutter Training that includes many Flutter Courses that help you to learn Flutter efficiently based on your current Flutter skill level from Newbie until Advanced level. This is just the future of learning Flutter! ⚡⚡',
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  // color: Colors.black,
                                   fontSize: 16,
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? Colors.black
+                                      : Colors.white,
                                 ),
                               ),
                             ]),
@@ -133,7 +144,7 @@ class AboutUsPage extends StatelessWidget {
                           ),
                           child: RichText(
                             text: TextSpan(
-                              style: const TextStyle(color: Colors.black54),
+                              style: TextStyle(color: Colors.black54),
                               text: 'This app organized by ',
                               children: [
                                 TextSpan(

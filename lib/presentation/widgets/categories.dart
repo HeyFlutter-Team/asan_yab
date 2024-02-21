@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../data/models/category.dart';
-
+import '../../data/models/language.dart';
+import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/categories_provider.dart';
 import '../pages/category_page.dart';
 import '../pages/list_category_item.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Categories extends ConsumerWidget {
   final RefreshCallback onRefresh;
@@ -17,6 +18,8 @@ class Categories extends ConsumerWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     ref.read(categoriesProvider.notifier).getCategories();
     List<Category> category = ref.watch(categoriesProvider);
+    final isRTL = ref.watch(languageProvider).code=='fa';
+    final languageText=AppLocalizations.of(context);
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: category.isEmpty
@@ -33,9 +36,9 @@ class Categories extends ConsumerWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'دسته بندی ها',
-                        style: TextStyle(color: Colors.grey, fontSize: 20.0),
+                       Text(
+                         languageText!.category_title,
+                        style:const TextStyle(color: Colors.grey, fontSize: 20.0),
                       ),
                       IconButton(
                         onPressed: () => Navigator.push(
@@ -43,8 +46,7 @@ class Categories extends ConsumerWidget {
                           MaterialPageRoute(
                               builder: (context) => const CategoryPage()),
                         ),
-                        icon: const Icon(
-                          Icons.arrow_circle_left_outlined,
+                        icon: Icon(isRTL?Icons.arrow_circle_left_outlined:Icons.arrow_circle_right_outlined,
                           size: 32.0,
                           color: Colors.grey,
                         ),
@@ -68,7 +70,10 @@ class Categories extends ConsumerWidget {
                                 MaterialPageRoute(
                                   builder: (context) => ListCategoryItem(
                                     catId: category[index].id,
-                                    categoryName: category[index].categoryName,
+                                    categoryName:
+                                    isRTL ?
+                                    category[index].categoryName
+                                        :category[index].enCategoryName!,
                                   ),
                                 ));
                           },
@@ -92,7 +97,10 @@ class Categories extends ConsumerWidget {
                                     color: Colors.white,
                                     size: 45.0),
                                 const SizedBox(height: 4),
-                                Text(category[index].categoryName,
+                                Text(
+                                    isRTL?
+                                    category[index].categoryName
+                                    :category[index].enCategoryName!,
                                     maxLines: 1,
                                     style: const TextStyle(
                                       color: Colors.white,
