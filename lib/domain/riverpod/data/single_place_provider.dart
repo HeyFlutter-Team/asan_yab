@@ -10,17 +10,15 @@ final getSingleProvider = StateNotifierProvider<SingleProvider, Place?>(
 class SingleProvider extends StateNotifier<Place?> {
   SingleProvider(super.state);
 
-  Future<Place?> fetchSinglePlace(String id) async {
+  Future fetchSinglePlace(String id) async {
     final database = FirebaseFirestore.instance;
     try {
       final querySnapshot = await database.collection('Places').doc(id).get();
 
       final place = Place.fromJson(querySnapshot.data()!);
       state = place;
-      return state;
     } catch (e) {
       debugPrint(e.toString());
-      return null;
     }
   }
 }
