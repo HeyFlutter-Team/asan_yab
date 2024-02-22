@@ -19,7 +19,7 @@ import 'firebase_options.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print('Handling a background message ${message.data['id']}');
+  debugPrint('Handling a background message ${message.data['id']}');
 }
 
 Future<void> main() async {
@@ -50,8 +50,7 @@ Future<void> main() async {
   // FirebaseFirestore.instance.useFirestoreEmulator('host', '');
 
   runApp(ProviderScope(
-    overrides: [languageProvider.overrideWith((ref) => language)
-  ],
+    overrides: [languageProvider.overrideWith((ref) => language)],
     child: const MyApp(),
   ));
 }
@@ -80,8 +79,8 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     final themeModel = ref.watch(themeModelProvider);
     final language = ref.watch(languageProvider);
-    final userName=FirebaseAuth.instance.currentUser?.email;
-    final userData=ref.watch(userDetailsProvider);
+    final userName = FirebaseAuth.instance.currentUser?.email;
+    final userData = ref.watch(userDetailsProvider);
     print('younis userName: ${userName}');
     print('younis userData ${userData?.name}');
     return MaterialApp(
