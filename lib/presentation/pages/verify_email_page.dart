@@ -205,7 +205,7 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
                       //     );
                     },
                     child: Text(
-                      '${languageText.verify_tbt_text}',
+                      languageText.verify_tbt_text,
                       style: TextStyle(color: Colors.red.shade800,fontSize: 19),
                     ),
                   ),
