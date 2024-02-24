@@ -176,22 +176,24 @@ class _LogInPageState extends ConsumerState<LogInPage>
                       prefs.setString('email', emailCTRL.text);
                       prefs.setString('password', passwordCTRL.text);
                     }
-                      await ref
-                          .read(signInProvider)
-                          .signIn(
-                          context: context,
-                          email: emailCTRL.text,
-                          password: passwordCTRL.text)
-                          .whenComplete(() => ref.watch(userDetailsProvider))
-                          .whenComplete(() {
-                        ref
-                            .read(buttonNavigationProvider.notifier)
-                            .selectedIndex(0);
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MainPage()));
-                      });
+                    await ref
+                        .read(signInProvider)
+                        .signIn(
+                            context: context,
+                            email: emailCTRL.text,
+                            password: passwordCTRL.text)
+                        .whenComplete(() => ref.watch(userDetailsProvider))
+                        .whenComplete(() {
+                      ref
+                          .read(buttonNavigationProvider.notifier)
+                          .selectedIndex(0);
+                      Future.delayed(const Duration(seconds: 1));
+                    }).whenComplete(() {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const MainPage()));
+                    });
                   },
                   child: Text(
                     languageText.sign_in_elbT,

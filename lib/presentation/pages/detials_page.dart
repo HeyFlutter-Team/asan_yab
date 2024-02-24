@@ -5,16 +5,13 @@ import 'package:asan_yab/domain/riverpod/data/toggle_favorite.dart';
 import 'package:asan_yab/presentation/pages/doctors_page.dart';
 import 'package:asan_yab/presentation/pages/newitem_shop.dart';
 import 'package:asan_yab/presentation/widgets/comments.dart';
-
 import 'package:asan_yab/presentation/widgets/rating.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../core/res/image_res.dart';
 import '../../core/utils/convert_digits_to_farsi.dart';
 import '../../data/repositoris/language_repository.dart';
@@ -269,7 +266,8 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                       places.itemImages!.isEmpty)
                                   ? const SizedBox()
                                   : Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Expanded(
                                           child: Text(
@@ -290,12 +288,12 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                               ),
                                             );
                                           },
-                                          icon:Icon(
+                                          icon: Icon(
                                             isRTL
                                                 ? Icons
-                                                .arrow_circle_left_outlined
+                                                    .arrow_circle_left_outlined
                                                 : Icons
-                                                .arrow_circle_right_outlined,
+                                                    .arrow_circle_right_outlined,
                                             size: 30,
                                           ),
                                           // color: Colors.black54,
@@ -476,7 +474,9 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                             ////younis finish////
 
                             ////hojjat////
-                            SizedBox(height: 8,),
+                            SizedBox(
+                              height: 8,
+                            ),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 12),
@@ -484,41 +484,41 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                       places.doctors!.isEmpty)
                                   ? const SizedBox()
                                   : Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          '${languageText?.details_page_7_custom_card}',
-                                          style: const TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.bold,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            '${languageText?.details_page_7_custom_card}',
+                                            style: const TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const Doctors_Page(),
-                                            ),
-                                          );
-                                        },
-                                        icon: Icon(
-                                          isRTL
-                                              ? Icons
-                                                  .arrow_circle_left_outlined
-                                              : Icons
-                                                  .arrow_circle_right_outlined,
-                                          size: 30,
+                                        IconButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const Doctors_Page(),
+                                              ),
+                                            );
+                                          },
+                                          icon: Icon(
+                                            isRTL
+                                                ? Icons
+                                                    .arrow_circle_left_outlined
+                                                : Icons
+                                                    .arrow_circle_right_outlined,
+                                            size: 30,
+                                          ),
+                                          // color: Colors.black54,
                                         ),
-                                        // color: Colors.black54,
-                                      ),
-                                      const SizedBox(height: 12)
-                                    ],
-                                  ),
+                                        const SizedBox(height: 12)
+                                      ],
+                                    ),
                             ),
                             const SizedBox(
                               height: 5,

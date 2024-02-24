@@ -7,6 +7,7 @@ import 'package:asan_yab/presentation/widgets/new_places.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:new_version_plus/new_version_plus.dart';
 
 import '../../domain/riverpod/data/categories_provider.dart';
@@ -29,23 +30,22 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
 
-     ref.read(nearbyPlace.notifier).getNearestLocations();
-     final newVersion = NewVersionPlus(
-       androidId: 'com.heyflutter.asanYab',
-       iOSId: 'com.heyflutter.asanYab',
-     );
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) async {
+        ref.read(nearbyPlace.notifier).getNearestLocations();
+        final newVersion = NewVersionPlus(
+          androidId: 'com.heyflutter.asanYab',
+          iOSId: 'com.heyflutter.asanYab',
+        );
 
+        await ref.refresh(updateProvider.notifier).update(context, ref);
 
-       await ref.refresh(updateProvider.notifier).update(context, ref);
-
-
-     Timer(const Duration(milliseconds: 800), () {
-       checkNewVersion(newVersion, context);
-     });
-   },);
-
+        Timer(const Duration(milliseconds: 800), () {
+          checkNewVersion(newVersion, context);
+        });
+      },
+    );
   }
 
   Future<void> onRefresh() async {
@@ -58,7 +58,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isLogin=FirebaseAuth.instance.currentUser!=null;
+    bool isLogin = FirebaseAuth.instance.currentUser != null;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -79,13 +79,13 @@ class _HomePageState extends ConsumerState<HomePage> {
               widget.isConnected!
                   ? Categories(onRefresh: onRefresh)
                   : const SizedBox(),
-              const SizedBox(height: 32),
+              const SizedBox(height: 5),
               ref.watch(nearbyPlace).isEmpty
                   ? const SizedBox(height: 0)
                   : const NearbyPlaceWidget(),
               isLogin
-              ?Favorites(isConnected: widget.isConnected!)
-              :const SizedBox(),
+                  ? Favorites(isConnected: widget.isConnected!)
+                  : const SizedBox(),
             ],
           ),
         ),
