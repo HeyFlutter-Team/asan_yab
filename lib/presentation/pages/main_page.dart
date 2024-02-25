@@ -59,7 +59,7 @@ class _MainPageState extends ConsumerState<MainPage>
 
   @override
   Widget build(BuildContext context) {
-    final user=ref.watch(userDetailsProvider);
+    final user = ref.watch(userDetailsProvider);
     final selectedIndex = ref.watch(buttonNavigationProvider);
     FirebaseApi().initInfo();
     FirebaseApi().getToken();
@@ -79,11 +79,7 @@ class _MainPageState extends ConsumerState<MainPage>
               : const MessageHome(),
           FirebaseAuth.instance.currentUser == null
               ? const AuthPage()
-              :FirebaseAuth.instance.currentUser!.emailVerified?
-          user?.name != '' && user?.lastName!=''?
-                const ProfilePage()
-               : PersonalInformation(email: user?.email,)
-               :VerifyEmailPage(email: FirebaseAuth.instance.currentUser?.email)
+              : const ProfilePage()
         ],
       ),
     );

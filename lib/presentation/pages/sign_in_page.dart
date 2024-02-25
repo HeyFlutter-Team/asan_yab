@@ -183,11 +183,11 @@ class _LogInPageState extends ConsumerState<LogInPage>
                             email: emailCTRL.text,
                             password: passwordCTRL.text)
                         .whenComplete(() => ref.watch(userDetailsProvider))
-                        .whenComplete(() {
-                      ref
+                        .whenComplete(() {})
+                        .whenComplete(() async {
+                      await ref
                           .read(buttonNavigationProvider.notifier)
                           .selectedIndex(0);
-                      Future.delayed(const Duration(seconds: 1));
                     }).whenComplete(() {
                       Navigator.pushReplacement(
                           context,

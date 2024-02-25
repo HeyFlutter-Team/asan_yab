@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/comment_model.dart';
 import '../../data/models/users.dart';
 import '../../domain/riverpod/data/other_user_data.dart';
-import '../../domain/riverpod/data/search_id.dart';
+
 import '../../domain/riverpod/screen/follow_checker.dart';
 import '../pages/profile/other_profile.dart';
 

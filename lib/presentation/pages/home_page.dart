@@ -7,7 +7,6 @@ import 'package:asan_yab/presentation/widgets/new_places.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:new_version_plus/new_version_plus.dart';
 
 import '../../domain/riverpod/data/categories_provider.dart';
@@ -28,24 +27,31 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   @override
+  @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
-        ref.read(nearbyPlace.notifier).getNearestLocations();
-        final newVersion = NewVersionPlus(
-          androidId: 'com.heyflutter.asanYab',
-          iOSId: 'com.heyflutter.asanYab',
-        );
-
-        await ref.refresh(updateProvider.notifier).update(context, ref);
-
-        Timer(const Duration(milliseconds: 800), () {
-          checkNewVersion(newVersion, context);
-        });
+        if (mounted) {
+          // Use ref only if the widget is still mounted
+          if (mounted) {
+            final newVersion = NewVersionPlus(
+              androidId: 'com.heyflutter.asanYab',
+              iOSId: 'com.heyflutter.asanYab',
+            );
+            Timer(const Duration(seconds: 800), () {
+              checkNewVersion(newVersion, context);
+            });
+          }
+        }
       },
     );
+  }
+
+  @override
+  void dispose() {
+    // Cancel subscription to authentication changes
+    super.dispose();
   }
 
   Future<void> onRefresh() async {
@@ -79,7 +85,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               widget.isConnected!
                   ? Categories(onRefresh: onRefresh)
                   : const SizedBox(),
-              const SizedBox(height: 5),
+              const SizedBox(height: 32),
               ref.watch(nearbyPlace).isEmpty
                   ? const SizedBox(height: 0)
                   : const NearbyPlaceWidget(),

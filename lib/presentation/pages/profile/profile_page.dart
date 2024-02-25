@@ -30,14 +30,15 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(
-      Duration.zero,
-      () {
-        ref.read(userDetailsProvider.notifier).getCurrentUserData(context);
-        ref.read(imageProvider).imageUrl ==
-            ref.read(userDetailsProvider)?.imageUrl;
-      },
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ref.read(userDetailsProvider.notifier).getCurrentUserData(context);
+      ref.read(imageProvider).imageUrl ==
+          ref.read(userDetailsProvider)?.imageUrl;
+    });
+  }
+
+  Future<void> signOut() async {
+    await FirebaseAuth.instance.signOut();
   }
 
   final userName = FirebaseAuth.instance.currentUser;
@@ -47,7 +48,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     final themeModel = ref.watch(themeModelProvider);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     final languageText = AppLocalizations.of(context);
-
     return Scaffold(
         body: Column(
       children: [
@@ -160,8 +160,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                             .doc(FirebaseAuth.instance.currentUser!.uid)
                             .update({'isOnline': false, 'fcmToken': "token"});
 
-                        await FirebaseAuth.instance.signOut();
-
+                        await signOut();
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(

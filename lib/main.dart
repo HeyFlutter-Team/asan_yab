@@ -1,4 +1,5 @@
 import 'package:asan_yab/data/repositoris/language_repository.dart';
+import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:asan_yab/presentation/pages/verify_email_page.dart';
@@ -18,7 +19,7 @@ import 'firebase_options.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print('Handling a background message ${message.data['id']}');
+  debugPrint('Handling a background message ${message.data['id']}');
 }
 
 Future<void> main() async {
@@ -78,6 +79,10 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     final themeModel = ref.watch(themeModelProvider);
     final language = ref.watch(languageProvider);
+    final userName = FirebaseAuth.instance.currentUser?.email;
+    final userData = ref.watch(userDetailsProvider);
+    print('younis userName: ${userName}');
+    print('younis userData ${userData?.name}');
     return MaterialApp(
       navigatorKey: navigatorKey,
       themeMode: themeModel.currentThemeMode,
