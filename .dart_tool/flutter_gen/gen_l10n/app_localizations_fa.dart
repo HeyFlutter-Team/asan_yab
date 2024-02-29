@@ -354,4 +354,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get log_in => 'وارد شوید';
+
+  @override
+  String get download_image_loading => 'لطفا صبر کنید...';
 }

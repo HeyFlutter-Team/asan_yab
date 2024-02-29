@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DownloadImage {
   DownloadImage._();
@@ -23,6 +24,7 @@ class DownloadImage {
   }
 
   static void showDialogBox(BuildContext context) {
+    final languageText = AppLocalizations.of(context);
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -30,18 +32,17 @@ class DownloadImage {
               height: 100,
               child: AlertDialog(
                 elevation: 4,
-                content: const Row(
+                content:  Row(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                       width: 30,
                       child: CircularProgressIndicator(
                           color: Colors.blueGrey, strokeWidth: 3.0),
                     ),
-                    SizedBox(width: 12),
-                    Text(
-                      'لطفا صبر کنید...',
-                      style: TextStyle(
+                    const SizedBox(width: 12),
+                    Text('${languageText?.download_image_loading}',
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
