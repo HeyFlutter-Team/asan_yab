@@ -218,9 +218,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                 return const Padding(
                   padding: EdgeInsets.only(bottom: 30.0),
                   child: Center(
-                    child: CircularProgressIndicator(
-                      // color: Colors.black,
-                    ),
+                    child: CircularProgressIndicator(),
                   ),
                 );
               } else {
