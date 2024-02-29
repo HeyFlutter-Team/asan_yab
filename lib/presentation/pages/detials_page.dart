@@ -3,6 +3,7 @@ import 'package:asan_yab/core/utils/download_image.dart';
 import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/domain/riverpod/data/toggle_favorite.dart';
 import 'package:asan_yab/presentation/pages/doctors_page.dart';
+import 'package:asan_yab/presentation/pages/menu_restaurant_page.dart';
 import 'package:asan_yab/presentation/pages/newitem_shop.dart';
 import 'package:asan_yab/presentation/widgets/comments.dart';
 
@@ -193,8 +194,59 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                     fontSize: 24, fontWeight: FontWeight.bold),
                               ),
                             ),
-                            RatingWidgets(
-                              postId: places.id,
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                RatingWidgets(
+                                  postId: places.id,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 20.0,right: 20),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                Menu_Restaurant(placeId: places.id),
+                                          ));
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          'Show Menu',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500,
+                                            color: Theme.of(context)
+                                                        .brightness ==
+                                                    Brightness.light
+                                                ? Colors
+                                                    .black // Set light theme color
+                                                : Colors.white,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 7,
+                                        ),
+                                        Icon(Icons.menu_open,
+                                            size: 20,
+                                            color: Colors.blue.shade800),
+                                      ],
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 5,
+                                      minimumSize: Size(70, 35),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                             Comments(
                               postId: places.id,
@@ -269,7 +321,8 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                       places.itemImages!.isEmpty)
                                   ? const SizedBox()
                                   : Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Expanded(
                                           child: Text(
@@ -290,12 +343,12 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                               ),
                                             );
                                           },
-                                          icon:Icon(
+                                          icon: Icon(
                                             isRTL
                                                 ? Icons
-                                                .arrow_circle_left_outlined
+                                                    .arrow_circle_left_outlined
                                                 : Icons
-                                                .arrow_circle_right_outlined,
+                                                    .arrow_circle_right_outlined,
                                             size: 30,
                                           ),
                                           // color: Colors.black54,
@@ -476,7 +529,9 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                             ////younis finish////
 
                             ////hojjat////
-                            SizedBox(height: 8,),
+                            SizedBox(
+                              height: 8,
+                            ),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 12),
@@ -484,41 +539,41 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                       places.doctors!.isEmpty)
                                   ? const SizedBox()
                                   : Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          '${languageText?.details_page_7_custom_card}',
-                                          style: const TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.bold,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            '${languageText?.details_page_7_custom_card}',
+                                            style: const TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const Doctors_Page(),
-                                            ),
-                                          );
-                                        },
-                                        icon: Icon(
-                                          isRTL
-                                              ? Icons
-                                                  .arrow_circle_left_outlined
-                                              : Icons
-                                                  .arrow_circle_right_outlined,
-                                          size: 30,
+                                        IconButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const Doctors_Page(),
+                                              ),
+                                            );
+                                          },
+                                          icon: Icon(
+                                            isRTL
+                                                ? Icons
+                                                    .arrow_circle_left_outlined
+                                                : Icons
+                                                    .arrow_circle_right_outlined,
+                                            size: 30,
+                                          ),
+                                          // color: Colors.black54,
                                         ),
-                                        // color: Colors.black54,
-                                      ),
-                                      const SizedBox(height: 12)
-                                    ],
-                                  ),
+                                        const SizedBox(height: 12)
+                                      ],
+                                    ),
                             ),
                             const SizedBox(
                               height: 5,
