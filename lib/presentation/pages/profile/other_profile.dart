@@ -239,9 +239,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                       .whenComplete(() => ref
                           .read(followerProvider.notifier)
                           .followOrUnFollow(uid, followId));
-                  ref
-                      .read(userDetailsProvider.notifier)
-                      .getCurrentUserData(context);
+                  ref.read(userDetailsProvider.notifier).getCurrentUserData();
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 28),

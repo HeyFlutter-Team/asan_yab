@@ -9,6 +9,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/riverpod/data/sign_in_provider.dart';
+import '../../main.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
   final Function()? onClickedSignIn;
@@ -55,6 +56,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     label: languageText!.sign_in_email,
                     controller: emailController,
                     hintText: languageText.sign_in_email_hintText,
+                    keyboardType: TextInputType.emailAddress,
                     validator: (p0) {
                       if (p0!.isEmpty ||
                           p0.length < 10 && !EmailValidator.validate(p0)) {
@@ -74,6 +76,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       icon: const Icon(Icons.remove_red_eye_outlined)),
                   label: languageText.sign_in_password,
                   controller: passwordController,
+                  keyboardType: TextInputType.emailAddress,
                   hintText: languageText.sign_in_password_hintText,
                   validator: (p0) => p0!.length < 6
                       ? languageText.sign_in_password_2_valid
@@ -83,6 +86,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   obscureText: true,
                   label: languageText.sign_up_confirm_p,
                   controller: confirmPasswordController,
+                  keyboardType: TextInputType.emailAddress,
                   hintText: languageText.sign_up_confirm_p_hint_text,
                   validator: (p0) {
                     if (p0!.isEmpty) {
@@ -94,24 +98,18 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     }
                   },
                 ),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: languageText.sign_up_account_text,
-                        style: const TextStyle(color: Colors.grey),
-                      ),
-                      TextSpan(
-                        text: '  ${languageText.sign_up_account_text1}',
-                        style: const TextStyle(color: Colors.blue),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.pop(context);
-                          },
-                      ),
-                    ],
-                  ),
-                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [Text(languageText.sign_up_account_text,style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)
+                ,InkWell(
+                    onTap: () {
+                          Navigator.pop(context);
+                    },
+                  child: Text('  ${languageText.sign_up_account_text1}',
+                      style: const TextStyle(color: Colors.blue,fontSize: 15),),
+                )],),
+
                 const SizedBox(
                   height: 10,
                 ),

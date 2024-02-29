@@ -6,16 +6,13 @@ import 'package:asan_yab/presentation/pages/doctors_page.dart';
 import 'package:asan_yab/presentation/pages/menu_restaurant_page.dart';
 import 'package:asan_yab/presentation/pages/newitem_shop.dart';
 import 'package:asan_yab/presentation/widgets/comments.dart';
-
 import 'package:asan_yab/presentation/widgets/rating.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../core/res/image_res.dart';
 import '../../core/utils/convert_digits_to_farsi.dart';
 import '../../data/repositoris/language_repository.dart';

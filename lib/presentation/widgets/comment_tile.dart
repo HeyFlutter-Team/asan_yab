@@ -1,25 +1,41 @@
+import 'package:asan_yab/domain/riverpod/data/comment_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/comment_model.dart';
-import '../../data/models/users_info.dart';
+import '../../data/models/users.dart';
+import '../../domain/riverpod/data/other_user_data.dart';
 
-class CommentTile extends StatelessWidget {
-  final Comment comment;
-  final UsersInfo? userInfo;
+import '../../domain/riverpod/screen/follow_checker.dart';
+import '../pages/profile/other_profile.dart';
+
+class CommentTile extends ConsumerStatefulWidget {
+  final CommentM comment;
   final VoidCallback onDelete;
 
   const CommentTile({
     Key? key,
     required this.comment,
     required this.onDelete,
-    this.userInfo,
   }) : super(key: key);
+
+  @override
+  ConsumerState<CommentTile> createState() => _CommentTileState();
+}
+
+class _CommentTileState extends ConsumerState<CommentTile> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final currentUser = FirebaseAuth.instance.currentUser;
-    final isOwner = currentUser != null && comment.uid == currentUser.uid;
+    final isOwner =
+        currentUser != null && widget.comment.uid == currentUser.uid;
 
     return Card(
       elevation: 10,
@@ -27,64 +43,123 @@ class CommentTile extends StatelessWidget {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            userInfo != null
-                ? Row(
-                    children: [
-                      userInfo!.imageUrl != ""
-                          ? CircleAvatar(
-                              backgroundImage: NetworkImage(userInfo!.imageUrl),
-                            )
-                          : const CircleAvatar(
-                              backgroundImage: AssetImage('assets/Avatar.png')),
-                      const SizedBox(width: 8.0),
-                      Text(userInfo!.name),
-                    ],
-                  )
-                : const Text('Unknown User'),
+            Row(
+              children: [
+                widget.comment.imageUrl != ""
+                    ? GestureDetector(
+                        onTap: () async {
+                          DocumentSnapshot snapshot = await FirebaseFirestore
+                              .instance
+                              .collection('User')
+                              .doc(widget.comment.uid)
+                              .get();
+                          if (snapshot.exists) {
+                            Users myUser = Users.fromMap(
+                                snapshot.data() as Map<String, dynamic>);
+                            ref
+                                .read(otherUserProvider.notifier)
+                                .setDataUser(myUser);
+                            ref
+                                .read(followerProvider.notifier)
+                                .followOrUnFollow(
+                                    FirebaseAuth.instance.currentUser!.uid,
+                                    widget.comment.uid);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const OtherProfile(),
+                                ));
+                            print('6');
+                          }
+                        },
+                        child: CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(widget.comment.imageUrl),
+                        ),
+                      )
+                    : GestureDetector(
+                        onTap: () async {
+                          print('1');
+                          DocumentSnapshot snapshot = await FirebaseFirestore
+                              .instance
+                              .collection('User')
+                              .doc(widget.comment.uid)
+                              .get();
+                          print('2');
+                          if (snapshot.exists) {
+                            Users myUser = Users.fromMap(
+                                snapshot.data() as Map<String, dynamic>);
+                            print('3');
+                            ref
+                                .read(otherUserProvider.notifier)
+                                .setDataUser(myUser);
+                            print('4');
+                            ref
+                                .read(followerProvider.notifier)
+                                .followOrUnFollow(
+                                    FirebaseAuth.instance.currentUser!.uid,
+                                    widget.comment.uid);
+                            print('5');
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const OtherProfile(),
+                                ));
+                            print('6');
+                          }
+                        },
+                        child: const CircleAvatar(
+                            backgroundImage: AssetImage('assets/Avatar.png')),
+                      ),
+                const SizedBox(width: 8.0),
+                GestureDetector(
+                    onTap: () async {
+                      print('1');
+                      DocumentSnapshot snapshot = await FirebaseFirestore
+                          .instance
+                          .collection('User')
+                          .doc(widget.comment.uid)
+                          .get();
+                      print('2');
+                      if (snapshot.exists) {
+                        Users myUser = Users.fromMap(
+                            snapshot.data() as Map<String, dynamic>);
+                        print('3');
+                        ref
+                            .read(otherUserProvider.notifier)
+                            .setDataUser(myUser);
+                        print('4');
+                        ref.read(followerProvider.notifier).followOrUnFollow(
+                            FirebaseAuth.instance.currentUser!.uid,
+                            widget.comment.uid);
+                        print('5');
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const OtherProfile(),
+                            ));
+                        print('6');
+                      }
+                    },
+                    child: Text(widget.comment.name)),
+              ],
+            ),
             const SizedBox(height: 4.0),
-            Text(comment.text),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Text(widget.comment.text),
+            ),
           ],
         ),
         trailing: IconButton(
           icon: const Icon(Icons.more_vert),
           onPressed: () {
-            _showOptionsBottomSheet(context, isOwner);
+            ref
+                .read(commentProvider.notifier)
+                .showOptionsBottomSheet(context, isOwner, widget.onDelete);
           },
-        ), // Show options icon only for the owner
+        ),
       ),
-    );
-  }
-
-  void _showOptionsBottomSheet(BuildContext context, bool isOwner) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            isOwner
-                ? ListTile(
-                    leading: const Icon(Icons.delete),
-                    title: const Text('Delete'),
-                    onTap: () {
-                      Navigator.pop(context); // Close the bottom sheet
-                      if (isOwner) {
-                        onDelete(); // Perform delete action
-                      }
-                    },
-                  )
-                : const SizedBox(height: 0),
-            ListTile(
-              leading: const Icon(Icons.report),
-              title: const Text('Report'),
-              onTap: () {
-                Navigator.pop(context); // Close the bottom sheet
-                // Implement report action
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

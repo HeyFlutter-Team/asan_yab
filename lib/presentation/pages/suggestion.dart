@@ -1,17 +1,24 @@
+import 'package:asan_yab/data/models/language.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositoris/firebase_modle_helper.dart';
+import '../../data/repositoris/language_repository.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/text_form_field_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class SuggestionPage extends StatefulWidget {
+final isLoading = StateProvider((ref) => false);
+
+class SuggestionPage extends ConsumerStatefulWidget {
   const SuggestionPage({super.key});
 
   @override
-  State<SuggestionPage> createState() => _SuggestionPageState();
+  ConsumerState<SuggestionPage> createState() => _SuggestionPageState();
 }
 
-class _SuggestionPageState extends State<SuggestionPage> {
+class _SuggestionPageState extends ConsumerState<SuggestionPage> {
+  late String note;
   final _key = GlobalKey<FormState>();
 
   final nameController = TextEditingController();
@@ -27,6 +34,32 @@ class _SuggestionPageState extends State<SuggestionPage> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ref.read(isLoading.notifier).state = true;
+      final snapshot = await FirebaseFirestore.instance
+          .collection('Description')
+          .doc('add_new_place')
+          .get();
+
+      if (snapshot.exists) {
+        final isRTL = ref.watch(languageProvider).code == 'fa';
+        if (!isRTL) {
+          note = snapshot.data()?['eNote'];
+        } else {
+          note = snapshot.data()?['pNote'];
+        }
+
+        ref.read(isLoading.notifier).state = false;
+        print("ali $note");
+      }
+    });
+  }
+
+  @override
   void dispose() {
     nameController.dispose();
     addressController.dispose();
@@ -38,97 +71,100 @@ class _SuggestionPageState extends State<SuggestionPage> {
 
   @override
   Widget build(BuildContext context) {
-    final languageText=AppLocalizations.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(
-          languageText!.suggestion_appBar_title,
-        ),
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Form(
-            key: _key,
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 15),
-                  TextFieldWidget(
-                    addController: nameController,
-                    labelName: languageText.suggestion_1_tf_labelName,
-                    validator: (value) => value != null && value.isEmpty
-                        ? languageText.suggestion_1_tf_valid
-                        : null,
-                  ),
-                  const SizedBox(height: 10),
-                  TextFieldWidget(
-                    addController: addressController,
-                    labelName: languageText.suggestion_2_tf_labelName,
-                    validator: (value) => value != null && value.isEmpty
-                        ? languageText.suggestion_2_tf_valid
-                        : null,
-                  ),
-                  const SizedBox(height: 10),
-                  TextFieldWidget(
-                    line: 2,
-                    addController: typeController,
-                    labelName: languageText.suggestion_3_tf_labelName,
-                    validator: (value) => value != null && value.isEmpty
-                        ? languageText.suggestion_3_tf_valid
-                        : null,
-                  ),
-                  const SizedBox(height: 10),
-                  TextFieldWidget(
-                    addController: phoneController,
-                    labelName: languageText.suggestion_4_tf_labelName,
-                    validator: (value) => value != null && value.isEmpty
-                        ? languageText.suggestion_4_tf_valid
-                        : null,
-                  ),
-                  const SizedBox(height: 20),
-                  CustomCard(
-                    title: languageText.suggestion_custom_card_title,
-                    child: Text(
-                      languageText.suggestion_custom_card_text,
+    final languageText = AppLocalizations.of(context);
+    return ref.watch(isLoading)
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text(
+                languageText!.suggestion_appBar_title,
+              ),
+              elevation: 0,
+            ),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Form(
+                  key: _key,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 15),
+                        TextFieldWidget(
+                          addController: nameController,
+                          labelName: languageText.suggestion_1_tf_labelName,
+                          validator: (value) => value != null && value.isEmpty
+                              ? languageText.suggestion_1_tf_valid
+                              : null,
+                        ),
+                        const SizedBox(height: 10),
+                        TextFieldWidget(
+                          addController: addressController,
+                          labelName: languageText.suggestion_2_tf_labelName,
+                          validator: (value) => value != null && value.isEmpty
+                              ? languageText.suggestion_2_tf_valid
+                              : null,
+                        ),
+                        const SizedBox(height: 10),
+                        TextFieldWidget(
+                          line: 2,
+                          addController: typeController,
+                          labelName: languageText.suggestion_3_tf_labelName,
+                          validator: (value) => value != null && value.isEmpty
+                              ? languageText.suggestion_3_tf_valid
+                              : null,
+                        ),
+                        const SizedBox(height: 10),
+                        TextFieldWidget(
+                          addController: phoneController,
+                          labelName: languageText.suggestion_4_tf_labelName,
+                          validator: (value) => value != null && value.isEmpty
+                              ? languageText.suggestion_4_tf_valid
+                              : null,
+                        ),
+                        const SizedBox(height: 20),
+                        CustomCard(
+                          title: languageText.suggestion_custom_card_title,
+                          child: Text(note),
+                        ),
+                        const SizedBox(height: 10),
+                        ButtonWidget(
+                          onClicked: () {
+                            final isValid = _key.currentState!.validate();
+
+                            if (isValid) {
+                              FirebaseSuggestionCreate create =
+                                  FirebaseSuggestionCreate();
+                              create
+                                  .createSuggestion(
+                                      nameController.text,
+                                      addressController.text,
+                                      phoneController.text,
+                                      typeController.text)
+                                  .whenComplete(() => showDialog(
+                                        context: context,
+                                        builder: (context) =>
+                                            const CustomDialog(),
+                                      ));
+                              controllerClear();
+                            }
+                          },
+                          titleName: languageText.suggestion_button,
+                          textColor1: Colors.white,
+                          btnColor: Colors.grey,
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  ButtonWidget(
-                    onClicked: () {
-                      final isValid = _key.currentState!.validate();
-
-                      if (isValid) {
-                        FirebaseSuggestionCreate create =
-                            FirebaseSuggestionCreate();
-                        create
-                            .createSuggestion(
-                                nameController.text,
-                                addressController.text,
-                                phoneController.text,
-                                typeController.text)
-                            .whenComplete(() => showDialog(
-                                  context: context,
-                                  builder: (context) => const CustomDialog(),
-                                ));
-                        controllerClear();
-                      }
-                    },
-                    titleName: languageText.suggestion_button,
-                    textColor1: Colors.white,
-                    btnColor: Colors.grey,
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 }
 
@@ -137,7 +173,7 @@ class CustomDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final languageText=AppLocalizations.of(context);
+    final languageText = AppLocalizations.of(context);
     return AlertDialog(
       title: Text(languageText!.suggestion_customDialog_title),
       content: Text(languageText.suggestion_customDialog_content),

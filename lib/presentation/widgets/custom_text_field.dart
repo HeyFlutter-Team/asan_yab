@@ -12,6 +12,7 @@ class CustomTextField extends ConsumerStatefulWidget {
   final String? Function(String?)? validator;
   final TextEditingController controller;
   final String? label;
+  final String? label2;
   final String? hintText;
   const CustomTextField({
     this.textCapitalization = TextCapitalization.none,
@@ -22,6 +23,7 @@ class CustomTextField extends ConsumerStatefulWidget {
     this.validator,
     required this.controller,
     this.label,
+    this.label2,
     this.hintText,
   }) : super(key: key);
 
@@ -40,12 +42,20 @@ class _CustomTextFieldState extends ConsumerState<CustomTextField> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text(
-            '  ${widget.label}',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w400,
-            ),
+          Row(
+            children: [
+              Text(
+                '  ${widget.label}',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              const SizedBox(width: 5,),
+              widget.label2!=null?
+              Text('${widget.label2}',style: const TextStyle(color: Colors.red,fontSize: 15),)
+                  :const SizedBox()
+            ],
           ),
           const SizedBox(
             height: 5,

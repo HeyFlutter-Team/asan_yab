@@ -21,7 +21,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
   final invitingPersonId = TextEditingController();
   final signUpFormKey = GlobalKey<FormState>();
 
-  @override
+  @override 
   void dispose() {
     nameController.dispose();
     lastNameController.dispose();
@@ -53,7 +53,9 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                   CustomTextField(
                     textCapitalization: TextCapitalization.words,
                     label: languageText!.first_text_field_label,
+                    label2: '*',
                     controller: nameController,
+                    keyboardType: TextInputType.emailAddress,
                     hintText: languageText.first_text_field_hint,
                     validator: (p0) => p0!.isEmpty
                         ? languageText.first_text_field_valid
@@ -62,8 +64,10 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                   CustomTextField(
                     textCapitalization: TextCapitalization.words,
                     label: languageText.second_text_field_label,
+                    label2: '*',
                     controller: lastNameController,
                     hintText: languageText.second_text_field_hint,
+                    keyboardType: TextInputType.emailAddress,
                     validator: (p0) => p0!.isEmpty
                         ? languageText.second_text_field_valid
                         : null,
@@ -73,6 +77,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                     label: languageText.inviter_ID,
                     controller: invitingPersonId,
                     hintText: languageText.third_text_field_hint,
+                    keyboardType: TextInputType.emailAddress,
                   ),
                   const SizedBox(
                     height: 10,
@@ -88,7 +93,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                       if (!isValid) return;
                       ref
                           .read(userRegesterDetailsProvider)
-                          .userDetails(
+                          .addUserDetailsToFirebase(
                               emailController: widget.email,
                               lastNameController: lastNameController.text,
                               nameController: nameController.text)
@@ -96,6 +101,8 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                         await ref
                             .read(userRegesterDetailsProvider)
                             .updateInviterRate(invitingPersonId.text);
+                        signUpFormKey.currentState!.reset();
+
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -108,7 +115,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                     },
                     child: Text(
                       languageText.elevated_text,
-                      style: TextStyle(fontSize: 17, color: Colors.white),
+                      style: const TextStyle(fontSize: 17, color: Colors.white),
                     ),
                   ),
                 ],
