@@ -28,9 +28,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(
-      Duration.zero,
-      () {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
         ref.read(userDetailsProvider.notifier).getCurrentUserData(context);
         ref.read(imageProvider).imageUrl ==
             ref.read(userDetailsProvider)?.imageUrl;

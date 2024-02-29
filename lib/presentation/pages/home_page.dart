@@ -30,7 +30,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-Future.delayed(Duration.zero,()async {
+
   ref.read(nearbyPlace.notifier).getNearestLocations();
   final newVersion = NewVersionPlus(
     androidId: 'com.heyflutter.asanYab',
@@ -38,14 +38,13 @@ Future.delayed(Duration.zero,()async {
   );
 
 
-  await ref.refresh(updateProvider.notifier).update(context, ref);
+  // await ref.refresh(updateProvider.notifier).update(context, ref);
 
 
-  Timer(const Duration(milliseconds: 800), () {
-    checkNewVersion(newVersion, context);
-  }
-  );
-},);
+//   Timer(const Duration(milliseconds: 800), () {
+//     checkNewVersion(newVersion, context);
+//
+// },);
 
    },);
 
