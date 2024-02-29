@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_version_plus/new_version_plus.dart';
 
 import '../../domain/riverpod/data/categories_provider.dart';
+
 import '../../domain/riverpod/data/update_favorite_provider.dart';
 import '../../domain/servers/check_new_version.dart';
 import '../../domain/servers/nearby_places.dart';
@@ -32,6 +33,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
+        await ref.refresh(updateProvider.notifier).update(context, ref);
         if (mounted) {
           // Use ref only if the widget is still mounted
           if (mounted) {
@@ -55,7 +57,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   Future<void> onRefresh() async {
-    await ref.refresh(updateProvider.notifier).update(context, ref);
     await Future.delayed(
       const Duration(milliseconds: 100),
     ).then((value) => ref.watch(nearbyPlace.notifier).refresh());

@@ -11,7 +11,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import '../../domain/riverpod/data/update_favorite_provider.dart';
 import '../../domain/riverpod/config/internet_connectivity_checker.dart';
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
 import 'auth_page.dart';
@@ -31,6 +31,7 @@ class _MainPageState extends ConsumerState<MainPage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
     setStatus(true);
     ref
         .read(internetConnectivityCheckerProvider.notifier)

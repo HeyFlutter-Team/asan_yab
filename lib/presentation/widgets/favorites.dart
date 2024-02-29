@@ -226,39 +226,39 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                       .getAverageRatingForPlace(
                                           favorites[index]['id']),
                                   builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return const CircularProgressIndicator(); // Show loading indicator while fetching rating
-                                    } else if (snapshot.hasError) {
+                                    if (snapshot.hasError) {
                                       return const Text(
                                           'Error fetching rating'); // Show error message if there's an error
                                     } else {
                                       final averageRating = snapshot.data ?? 0;
-                                      return Container(
-                                        height: 35,
-                                        width: 35,
-                                        decoration: BoxDecoration(
-                                          color: Colors.green,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            isRTL
-                                                ? convertDigitsToFarsi(
-                                                    averageRating
-                                                        .toStringAsFixed(1))
-                                                : averageRating
-                                                    .toStringAsFixed(1),
-                                            // Display the average rating with one decimal place
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      );
+                                      return averageRating == 0
+                                          ? const SizedBox()
+                                          : Container(
+                                              height: 35,
+                                              width: 35,
+                                              decoration: BoxDecoration(
+                                                color: Colors.green,
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  isRTL
+                                                      ? convertDigitsToFarsi(
+                                                          averageRating
+                                                              .toStringAsFixed(
+                                                                  1))
+                                                      : averageRating
+                                                          .toStringAsFixed(1),
+                                                  // Display the average rating with one decimal place
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            );
                                     }
                                   },
                                 ),
