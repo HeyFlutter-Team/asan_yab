@@ -31,12 +31,15 @@ class _ListOfFollowingState extends ConsumerState<ListOfFollowing> {
             )
           : ref.watch(loadingFollowers)
               ? Column(
-                children: [
-                  const SizedBox(height: 14,),
-                  ListView.builder(
+                  children: [
+                    const SizedBox(
+                      height: 14,
+                    ),
+                    ListView.builder(
                       itemCount: persons.length,
                       itemBuilder: (context, index) {
-                        debugPrint("is ture ${persons[index]['user'].uid! == uid}");
+                        debugPrint(
+                            "is ture ${persons[index]['user'].uid! == uid}");
                         return ListTile(
                           onTap: () {
                             // todo for visite
@@ -51,7 +54,8 @@ class _ListOfFollowingState extends ConsumerState<ListOfFollowing> {
                             onPressed: () async {
                               await ref
                                   .read(followHttpsProvider.notifier)
-                                  .updateFollowers(uid, persons[index]['user'].uid!)
+                                  .updateFollowers(
+                                      uid, persons[index]['user'].uid!)
                                   .whenComplete(() => ref
                                       .read(followerProvider.notifier)
                                       .followOrUnFollow(
@@ -63,35 +67,40 @@ class _ListOfFollowingState extends ConsumerState<ListOfFollowing> {
                               if (context.mounted) {
                                 ref
                                     .read(userDetailsProvider.notifier)
-                                    .getCurrentUserData(context);
+                                    .getCurrentUserData();
                               }
                             },
-                            child: Text(
-                                persons[index]['follow'] ? 'Follow' : 'Unfollow'),
+                            child: Text(persons[index]['follow']
+                                ? 'Follow'
+                                : 'Unfollow'),
                           ),
                         );
                       },
                     ),
-                ],
-              )
+                  ],
+                )
               : Column(
-                children: [
-                  const SizedBox(height: 14,),
-
-                  Expanded(
-                    child: ListView.builder(
+                  children: [
+                    const SizedBox(
+                      height: 14,
+                    ),
+                    Expanded(
+                      child: ListView.builder(
                         itemCount: persons.length,
                         itemBuilder: (context, index) {
-                          debugPrint("is ture ${persons[index]['user'].uid! == uid}");
+                          debugPrint(
+                              "is ture ${persons[index]['user'].uid! == uid}");
                           return ListTile(
                             onTap: () {
                               ref
                                   .read(followHttpsProvider.notifier)
-                                  .updateFollowers(uid, persons[index]['user'].uid!)
+                                  .updateFollowers(
+                                      uid, persons[index]['user'].uid!)
                                   .whenComplete(() => ref
                                       .read(followerProvider.notifier)
                                       .followOrUnFollow(
-                                          FirebaseAuth.instance.currentUser!.uid,
+                                          FirebaseAuth
+                                              .instance.currentUser!.uid,
                                           persons[index]['user'].uid!));
 
                               // todo for visite
@@ -106,7 +115,8 @@ class _ListOfFollowingState extends ConsumerState<ListOfFollowing> {
                               onPressed: () async {
                                 await ref
                                     .read(followHttpsProvider.notifier)
-                                    .updateFollowers(uid, persons[index]['user'].uid!)
+                                    .updateFollowers(
+                                        uid, persons[index]['user'].uid!)
                                     .whenComplete(() => ref
                                         .read(followerProvider.notifier)
                                         .followOrUnFollow(
@@ -118,18 +128,19 @@ class _ListOfFollowingState extends ConsumerState<ListOfFollowing> {
                                 if (context.mounted) {
                                   ref
                                       .read(userDetailsProvider.notifier)
-                                      .getCurrentUserData(context);
+                                      .getCurrentUserData();
                                 }
                               },
-                              child: Text(
-                                  persons[index]['follow'] ? 'Follow' : 'Unfollow'),
+                              child: Text(persons[index]['follow']
+                                  ? 'Follow'
+                                  : 'Unfollow'),
                             ),
                           );
                         },
                       ),
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
     );
   }
 }

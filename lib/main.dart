@@ -79,10 +79,9 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     final themeModel = ref.watch(themeModelProvider);
     final language = ref.watch(languageProvider);
-    final userName = FirebaseAuth.instance.currentUser?.email;
-    final userData = ref.watch(userDetailsProvider);
-    print('younis userName: ${userName}');
-    print('younis userData ${userData?.name}');
+    // final userName = FirebaseAuth.instance.currentUser?.email;
+    // final userData = ref.watch(userDetailsProvider);
+
     return MaterialApp(
       navigatorKey: navigatorKey,
       themeMode: themeModel.currentThemeMode,
