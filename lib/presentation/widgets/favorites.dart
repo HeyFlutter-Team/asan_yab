@@ -218,7 +218,7 @@ class _FavoritesState extends ConsumerState<Favorites> {
                         ),
                         widget.isConnected
                             ? Positioned(
-                                top: 98.0,
+                                top: 95.0,
                                 left: 10.0,
                                 child: FutureBuilder<double>(
                                   future: ref
@@ -235,14 +235,12 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                     } else {
                                       final averageRating = snapshot.data ?? 0;
                                       return Container(
-                                        height: 40,
-                                        width: 40,
+                                        height: 35,
+                                        width: 35,
                                         decoration: BoxDecoration(
                                           color: Colors.green,
                                           borderRadius:
                                               BorderRadius.circular(20),
-                                          border: Border.all(
-                                              width: 4, color: Colors.white),
                                         ),
                                         child: Center(
                                           child: Text(

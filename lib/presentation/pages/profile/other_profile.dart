@@ -209,14 +209,14 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       )),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.chat_outlined,
                         color: Colors.white,
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       Text(
                         'Chat',
                         style: TextStyle(color: Colors.white, fontSize: 16),
@@ -225,11 +225,13 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                   ),
                 ),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               InkWell(
                 focusColor: Colors.transparent,
                 splashColor: Colors.transparent,
                 onTap: () {
+                  ref.read(loadingFollowers.notifier).state=true;
+
                   //todo for follow
                   final uid = FirebaseAuth.instance.currentUser!.uid;
                   final followId = usersData!.uid!;
@@ -239,9 +241,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                       .whenComplete(() => ref
                           .read(followerProvider.notifier)
                           .followOrUnFollow(uid, followId));
-                  ref
-                      .read(userDetailsProvider.notifier)
-                      .getCurrentUserData(context);
+                  ref.read(userDetailsProvider.notifier).getCurrentUserData();
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -259,7 +259,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                         end: Alignment.bottomRight,
                       )),
                   child: ref.watch(loadingFollowers)
-                      ? Center(
+                      ? const Center(
                           child: CircularProgressIndicator(
                             color: Colors.white70,
                             strokeWidth: 2,
@@ -268,14 +268,14 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                       : Center(
                           child: Text(
                             ref.watch(followerProvider) ? 'Follow' : "Unfollow",
-                            style: TextStyle(fontSize: 20, color: Colors.white),
+                            style: const TextStyle(fontSize: 20, color: Colors.white),
                           ),
                         ),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:asan_yab/data/repositoris/language_repository.dart';
+import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:asan_yab/presentation/pages/verify_email_page.dart';

@@ -24,9 +24,11 @@ class ListOfFollowers extends ConsumerWidget {
             )
           : ref.watch(loadingFollowers)
               ? Column(
-                children: [
-                  const SizedBox(height: 14,),
-                  ListView.builder(
+                  children: [
+                    const SizedBox(
+                      height: 14,
+                    ),
+                    ListView.builder(
                       itemCount: persons.length,
                       itemBuilder: (context, index) {
                         return ListTile(
@@ -51,14 +53,15 @@ class ListOfFollowers extends ConsumerWidget {
                                             uid, persons[index]['user'].uid!))
                                     .whenComplete(() {
                                   ref
-                                          .read(listOfDataFollowersProvider.notifier)
+                                          .read(listOfDataFollowersProvider
+                                              .notifier)
                                           .state[index]['followBack'] =
                                       !persons[index]['followBack'];
                                 });
                                 if (context.mounted) {
                                   ref
                                       .read(userDetailsProvider.notifier)
-                                      .getCurrentUserData(context);
+                                      .getCurrentUserData();
                                 }
                               },
                               child: Text(persons[index]['followBack']
@@ -67,13 +70,15 @@ class ListOfFollowers extends ConsumerWidget {
                         );
                       },
                     ),
-                ],
-              )
+                  ],
+                )
               : Column(
-                children: [
-                  const SizedBox(height: 14,),
-                  Expanded(
-                    child: ListView.builder(
+                  children: [
+                    const SizedBox(
+                      height: 14,
+                    ),
+                    Expanded(
+                      child: ListView.builder(
                         itemCount: persons.length,
                         itemBuilder: (context, index) {
                           return ListTile(
@@ -98,14 +103,15 @@ class ListOfFollowers extends ConsumerWidget {
                                               uid, persons[index]['user'].uid!))
                                       .whenComplete(() {
                                     ref
-                                            .read(listOfDataFollowersProvider.notifier)
+                                            .read(listOfDataFollowersProvider
+                                                .notifier)
                                             .state[index]['followBack'] =
                                         !persons[index]['followBack'];
                                   });
                                   if (context.mounted) {
                                     ref
                                         .read(userDetailsProvider.notifier)
-                                        .getCurrentUserData(context);
+                                        .getCurrentUserData();
                                   }
                                 },
                                 child: Text(persons[index]['followBack']
@@ -114,9 +120,9 @@ class ListOfFollowers extends ConsumerWidget {
                           );
                         },
                       ),
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
     );
   }
 }

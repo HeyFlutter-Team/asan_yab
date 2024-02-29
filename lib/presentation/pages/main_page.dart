@@ -1,9 +1,7 @@
 import 'package:asan_yab/domain/riverpod/config/notification_repo.dart';
 import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
 import 'package:asan_yab/presentation/pages/message_page/message_home.dart';
-import 'package:asan_yab/presentation/pages/personal_information_page.dart';
 import 'package:asan_yab/presentation/pages/profile/profile_page.dart';
-import 'package:asan_yab/presentation/pages/verify_email_page.dart';
 import 'package:asan_yab/presentation/widgets/message/message_check_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -59,7 +57,7 @@ class _MainPageState extends ConsumerState<MainPage>
 
   @override
   Widget build(BuildContext context) {
-    final user=ref.watch(userDetailsProvider);
+    final user = ref.watch(userDetailsProvider);
     final selectedIndex = ref.watch(buttonNavigationProvider);
     FirebaseApi().initInfo();
     FirebaseApi().getToken();
@@ -79,7 +77,7 @@ class _MainPageState extends ConsumerState<MainPage>
               : const MessageHome(),
           FirebaseAuth.instance.currentUser == null
               ? const AuthPage()
-               : const ProfilePage()
+              : const ProfilePage()
         ],
       ),
     );

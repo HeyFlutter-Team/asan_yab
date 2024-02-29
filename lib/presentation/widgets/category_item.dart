@@ -219,7 +219,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                   padding: EdgeInsets.only(bottom: 30.0),
                   child: Center(
                     child: CircularProgressIndicator(
-                      color: Colors.black,
+                      // color: Colors.black,
                     ),
                   ),
                 );

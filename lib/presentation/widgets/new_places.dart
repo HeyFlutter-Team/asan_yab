@@ -31,11 +31,8 @@ class NewPlaces extends ConsumerWidget {
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: places.isEmpty
-          ? const Center(
-              child: CircularProgressIndicator(
-                strokeWidth: 5,
-                color: Colors.blueGrey,
-              ),
+          ? const SizedBox(
+              height: 0,
             )
           : Stack(
               children: [
@@ -44,8 +41,10 @@ class NewPlaces extends ConsumerWidget {
                   itemBuilder: (context, index, realIndex) {
                     final phoneNumberItems = places[index].addresses[0].phone;
                     final items = places[index];
-                    final isRTL = ref.watch(languageProvider).code=='fa';
-                    final phoneNumber =isRTL?convertDigitsToFarsi(phoneNumberItems):phoneNumberItems;
+                    final isRTL = ref.watch(languageProvider).code == 'fa';
+                    final phoneNumber = isRTL
+                        ? convertDigitsToFarsi(phoneNumberItems)
+                        : phoneNumberItems;
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -114,26 +113,25 @@ class NewPlaces extends ConsumerWidget {
                                             await FlutterPhoneDirectCaller
                                                 .callNumber(phoneNumber);
                                           },
-                                          child:isRTL
-                                      ?Row(
-                                            children: [
-                                              Text(phoneNumber),
-                                              const Icon(
-                                                Icons.phone_android,
-                                                color: Colors.green,
-                                              ),
-                                            ],
-                                          )
-                                    :Row(
-                                            children: [
-                                              const Icon(
-                                                Icons.phone_android,
-                                                color: Colors.green,
-                                              ),
-                                              Text(phoneNumber),
-
-                                            ],
-                                          ),
+                                          child: isRTL
+                                              ? Row(
+                                                  children: [
+                                                    Text(phoneNumber),
+                                                    const Icon(
+                                                      Icons.phone_android,
+                                                      color: Colors.green,
+                                                    ),
+                                                  ],
+                                                )
+                                              : Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.phone_android,
+                                                      color: Colors.green,
+                                                    ),
+                                                    Text(phoneNumber),
+                                                  ],
+                                                ),
                                         ),
                                 ],
                               ),

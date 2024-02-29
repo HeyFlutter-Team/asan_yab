@@ -6,8 +6,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../domain/riverpod/data/profile_data_provider.dart';
 
-class ImageWidgets{
-  static  buildProgress({required WidgetRef ref}) {
+class ImageWidgets {
+  static buildProgress({required WidgetRef ref}) {
     return StreamBuilder<TaskSnapshot>(
       stream: ref.watch(imageProvider).uploadTask?.snapshotEvents,
       builder: (context, snapshot) {
@@ -16,7 +16,7 @@ class ImageWidgets{
           double progress = data.bytesTransferred / data.totalBytes;
 
           if (data.state == TaskState.success) {
-            ref.watch(userDetailsProvider.notifier).getCurrentUserData(context);
+            ref.watch(userDetailsProvider.notifier).getCurrentUserData();
             // If upload is complete, return an empty Container
             return Container();
           }
@@ -37,8 +37,9 @@ class ImageWidgets{
     );
   }
 
-  static void showBottomSheets({required BuildContext context,required WidgetRef ref}) {
-    final languageText=AppLocalizations.of(context);
+  static void showBottomSheets(
+      {required BuildContext context, required WidgetRef ref}) {
+    final languageText = AppLocalizations.of(context);
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -60,8 +61,7 @@ class ImageWidgets{
                   children: <Widget>[
                     const Icon(Icons.camera),
                     const SizedBox(height: 8.0),
-                    Text(languageText!
-                        .profile_buttonSheet_camera),
+                    Text(languageText!.profile_buttonSheet_camera),
                   ],
                 ),
               ),
@@ -79,8 +79,7 @@ class ImageWidgets{
                   children: <Widget>[
                     const Icon(Icons.image),
                     const SizedBox(height: 8.0),
-                    Text(languageText
-                        .profile_buttonSheet_gallery),
+                    Text(languageText.profile_buttonSheet_gallery),
                   ],
                 ),
               ),
