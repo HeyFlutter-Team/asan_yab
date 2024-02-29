@@ -13,7 +13,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/riverpod/data/sign_in_provider.dart';
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
-import '../../main.dart';
 
 class LogInPage extends ConsumerStatefulWidget {
   final Function()? onClickedSignUp;
@@ -177,22 +176,24 @@ class _LogInPageState extends ConsumerState<LogInPage>
                       prefs.setString('email', emailCTRL.text);
                       prefs.setString('password', passwordCTRL.text);
                     }
+                    await ref
+                        .read(signInProvider)
+                        .signIn(
+                            context: context,
+                            email: emailCTRL.text,
+                            password: passwordCTRL.text)
+                        .whenComplete(() => ref.watch(userDetailsProvider))
+                        .whenComplete(() {})
+                        .whenComplete(() async {
                       await ref
-                          .read(signInProvider)
-                          .signIn(
-                          context: context,
-                          email: emailCTRL.text,
-                          password: passwordCTRL.text)
-                          .whenComplete(() => ref.watch(userDetailsProvider))
-                          .whenComplete(() {
-                        ref
-                            .read(buttonNavigationProvider.notifier)
-                            .selectedIndex(0);
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MainPage()));
-                      });
+                          .read(buttonNavigationProvider.notifier)
+                          .selectedIndex(0);
+                    }).whenComplete(() {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const MainPage()));
+                    });
                   },
                   child: Text(
                     languageText.sign_in_elbT,

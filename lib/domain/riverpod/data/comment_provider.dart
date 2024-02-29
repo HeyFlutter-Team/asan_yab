@@ -3,9 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../../data/models/comment_model.dart';
-import '../../../data/models/users_info.dart';
+import '../../../data/models/users.dart';
 import '../../../presentation/widgets/comment_sheet.dart';
 
 final commentProvider = ChangeNotifierProvider<VerticalDataNotifier>(
@@ -34,6 +33,7 @@ class VerticalDataNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  @override
   void dispose() {
     _commentController.dispose();
     super.dispose();
@@ -92,54 +92,74 @@ class VerticalDataNotifier extends ChangeNotifier {
 
   void submitComment(String commentText, BuildContext context, WidgetRef ref,
       String postId) async {
-    final user = FirebaseAuth.instance.currentUser;
-    final uid = user?.uid;
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      final uid = user?.uid;
 
-    if (uid != null) {
-      // Check if the comment is not empty
-      if (commentText.trim().isEmpty) {
-        // Show an error message or handle it as needed
-        print('Comment cannot be empty.');
-        return;
-      }
+      if (uid != null) {
+        if (commentText.trim().isEmpty) {
+          print('Comment cannot be empty.');
+          return;
+        }
 
-      // List of restricted words
-      List<String> restrictedWords = ref.watch(restrictedWord);
+        List<String> restrictedWords = ref.watch(restrictedWord);
 
-      // Check if the comment contains any restricted word
-      if (restrictedWords.any((word) => commentText.contains(word))) {
-        // Show a Snackbar
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Please use good words"),
-          ),
+        if (restrictedWords.any((word) => commentText.contains(word))) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Please use appropriate language."),
+            ),
+          );
+          FocusScope.of(context).unfocus();
+          return;
+        }
+
+        final info = await _getUserInfo(uid);
+
+        final newCommentDoc = await FirebaseFirestore.instance
+            .collection('Places')
+            .doc(postId)
+            .collection('postComments')
+            .add({
+          'name': info.name,
+          'imageUrl': info.imageUrl,
+          'text': commentText,
+          'uid': uid,
+          'timestamp': FieldValue.serverTimestamp(),
+        });
+
+        final newComment = CommentM(
+          name: info.name,
+          imageUrl: info.imageUrl,
+          text: commentText,
+          uid: uid,
+          commentId: newCommentDoc.id,
+          timestamp: DateTime.now(),
         );
-        FocusScope.of(context).unfocus();
-        return; // Stop further processing
+
+        setComments([newComment, ...comments]);
       }
-
-      // Add the new comment into Firebase
-      final newCommentDoc = await FirebaseFirestore.instance
-          .collection('Places')
-          .doc(postId)
-          .collection('postComments')
-          .add({
-        'text': commentText,
-        'uid': uid,
-        'timestamp': FieldValue.serverTimestamp(),
-      });
-
-      // Create a new CommentM object for the new comment
-      final newComment = CommentM(
-        text: commentText,
-        uid: uid,
-        commentId: newCommentDoc.id,
-        timestamp: DateTime.now(),
-      );
-
-      setComments([newComment, ...comments]);
+    } catch (e) {
+      print('Error submitting comment: $e');
     }
     notifyListeners();
+  }
+
+  Future<Users> _getUserInfo(String uid) async {
+    final userDoc =
+        await FirebaseFirestore.instance.collection('User').doc(uid).get();
+    return userDoc.exists
+        ? Users.fromMap(userDoc.data() as Map<String, dynamic>)
+        : Users(
+            id: 1,
+            name: 'name',
+            lastName: 'lastName',
+            email: 'email',
+            createdAt: Timestamp.now(),
+            fcmToken: 'fcmToken',
+            isOnline: true,
+            imageUrl: '',
+          );
   }
 
   void deleteComment(CommentM comment, WidgetRef ref, String postId) async {
@@ -205,17 +225,5 @@ class VerticalDataNotifier extends ChangeNotifier {
       },
     );
     notifyListeners();
-  }
-
-  Future<UsersInfo> getUserInfo(String uid) async {
-    // Assuming you have a collection called 'users' with user information
-    final userDoc =
-        await FirebaseFirestore.instance.collection('User').doc(uid).get();
-
-    // Assuming UsersInfo has a constructor that takes the document snapshot
-    notifyListeners();
-    return userDoc.exists
-        ? UsersInfo.fromDocument(userDoc)
-        : UsersInfo(name: "unknown", imageUrl: "", uid: uid);
   }
 }
