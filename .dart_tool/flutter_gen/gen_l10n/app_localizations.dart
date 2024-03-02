@@ -800,6 +800,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please waite...'**
   String get download_image_loading;
+
+  /// No description provided for @you_are_not_logged_in.
+  ///
+  /// In en, this message translates to:
+  /// **'you are not logged in'**
+  String get you_are_not_logged_in;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

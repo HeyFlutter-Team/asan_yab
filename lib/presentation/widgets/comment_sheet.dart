@@ -106,28 +106,30 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                                 builder: (context, ref, child) {
                                   final controllerNotifier =
                                       ref.watch(commentProvider);
-                                  return TextField(
-                                    onTap: () {
-                                      ref
-                                          .read(emojiShowingProvider.notifier)
-                                          .state = false;
-                                    },
-                                    maxLines:
-                                        controllerNotifier.calculateMaxLines(),
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.zero,
-                                      hintStyle: TextStyle(
-                                        color: (themeModel.currentThemeMode ==
-                                                ThemeMode.dark)
-                                            ? Colors.grey[500]
-                                            : Colors.black,
+                                  return SizedBox(
+                                    child: TextField(
+                                      onTap: () {
+                                        ref
+                                            .read(emojiShowingProvider.notifier)
+                                            .state = false;
+                                      },
+                                      maxLines: controllerNotifier
+                                          .calculateMaxLines(),
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.zero,
+                                        hintStyle: TextStyle(
+                                          color: (themeModel.currentThemeMode ==
+                                                  ThemeMode.dark)
+                                              ? Colors.grey[500]
+                                              : Colors.black,
+                                        ),
+                                        hintText:
+                                            '${languageText!.add_a_comment}...',
+                                        border: InputBorder.none,
                                       ),
-                                      hintText:
-                                          '${languageText!.add_a_comment}...',
-                                      border: InputBorder.none,
+                                      controller: controllerNotifier.controller,
+                                      onChanged: controllerNotifier.setText,
                                     ),
-                                    controller: controllerNotifier.controller,
-                                    onChanged: controllerNotifier.setText,
                                   );
                                 },
                               ),

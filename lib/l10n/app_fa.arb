@@ -163,5 +163,6 @@
   "log_in": "وارد شوید",
 
 
-  "download_image_loading": "لطفا صبر کنید..."
+  "download_image_loading": "لطفا صبر کنید...",
+  "you_are_not_logged_in": "شما وارد نشده اید"
 }

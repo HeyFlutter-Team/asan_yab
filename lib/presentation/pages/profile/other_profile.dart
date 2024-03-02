@@ -155,126 +155,112 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                   color: Colors.grey,
                 ),
                 // LanguageIcon(),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AboutUsPage(),
-                        ));
-                  },
-                  child: ListTile(
-                    leading: const Icon(
-                      Icons.info_outline,
-                      color: Colors.red,
-                      size: 30,
-                    ),
-                    title: Text(languageText!.profile_about_us_listTile),
-                  ),
-                ),
-                const Divider(
-                  color: Colors.grey,
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
               ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              InkWell(
-                onTap: () {
-                  //todo for chat
-                  final followId = usersData!.uid!;
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChatDetailPage(uid: followId),
-                      ));
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 28),
-                  height: 55,
-                  width: context.screenWidth * .40,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      gradient: const LinearGradient(
-                        colors: [
-                          Colors.blue,
-                          Colors.blueAccent,
-                          Colors.purpleAccent,
-                        ], // Replace with your gradient colors
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      )),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.chat_outlined,
-                        color: Colors.white,
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        'Chat',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              InkWell(
-                focusColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                onTap: () {
-                  ref.read(loadingFollowers.notifier).state=true;
-
-                  //todo for follow
-                  final uid = FirebaseAuth.instance.currentUser!.uid;
-                  final followId = usersData!.uid!;
-                  ref
-                      .read(followHttpsProvider.notifier)
-                      .updateFollowers(uid, followId)
-                      .whenComplete(() => ref
-                          .read(followerProvider.notifier)
-                          .followOrUnFollow(uid, followId));
-                  ref.read(userDetailsProvider.notifier).getCurrentUserData();
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 28),
-                  height: 55,
-                  width: context.screenWidth * .40,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.red,
-                          Colors.redAccent,
-                          Colors.redAccent.withOpacity(0.5),
-                        ], // Replace with your gradient colors
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      )),
-                  child: ref.watch(loadingFollowers)
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white70,
-                            strokeWidth: 2,
-                          ),
-                        )
-                      : Center(
-                          child: Text(
-                            ref.watch(followerProvider) ? 'Follow' : "Unfollow",
-                            style: const TextStyle(fontSize: 20, color: Colors.white),
-                          ),
+          FirebaseAuth.instance.currentUser!.uid == usersData!.uid
+              ? const SizedBox()
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        //todo for chat
+                        final followId = usersData!.uid!;
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ChatDetailPage(uid: followId),
+                            ));
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 28),
+                        height: 55,
+                        width: context.screenWidth * .40,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            gradient: const LinearGradient(
+                              colors: [
+                                Colors.blue,
+                                Colors.blueAccent,
+                                Colors.purpleAccent,
+                              ], // Replace with your gradient colors
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            )),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.chat_outlined,
+                              color: Colors.white,
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              'Chat',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          ],
                         ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    InkWell(
+                      focusColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      onTap: () {
+                        ref.read(loadingFollowers.notifier).state = true;
+
+                        //todo for follow
+                        final uid = FirebaseAuth.instance.currentUser!.uid;
+                        final followId = usersData!.uid!;
+                        ref
+                            .read(followHttpsProvider.notifier)
+                            .updateFollowers(uid, followId)
+                            .whenComplete(() => ref
+                                .read(followerProvider.notifier)
+                                .followOrUnFollow(uid, followId));
+                        ref
+                            .read(userDetailsProvider.notifier)
+                            .getCurrentUserData();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 28),
+                        height: 55,
+                        width: context.screenWidth * .40,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.red,
+                                Colors.redAccent,
+                                Colors.redAccent.withOpacity(0.5),
+                              ], // Replace with your gradient colors
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            )),
+                        child: ref.watch(loadingFollowers)
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white70,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : Center(
+                                child: Text(
+                                  ref.watch(followerProvider)
+                                      ? 'Follow'
+                                      : "Unfollow",
+                                  style: const TextStyle(
+                                      fontSize: 20, color: Colors.white),
+                                ),
+                              ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
           const SizedBox(height: 24),
         ],
       ),

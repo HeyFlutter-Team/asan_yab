@@ -177,7 +177,8 @@
   "for_add_comment": "for add comment",
   "log_in": "Log in",
 
-  "download_image_loading": "Please waite..."
+  "download_image_loading": "Please waite...",
+  "you_are_not_logged_in": "you are not logged in"
 
 
 
