@@ -42,7 +42,7 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
     final themeModel = ref.watch(themeModelProvider);
     final languageText = AppLocalizations.of(context);
     final isRTL = ref.watch(languageProvider).code == 'fa';
-
+    final themDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.70,
       child: Stack(children: [
@@ -62,126 +62,105 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                 height: 80,
                 child: (FirebaseAuth.instance.currentUser != null)
                     ? Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 13),
-                            child: GestureDetector(
-                              onTap: () {
-                                ref.read(emojiShowingProvider.notifier).state =
-                                    !ref.watch(emojiShowingProvider);
-                                if (ref.watch(emojiShowingProvider)) {
-                                  FocusManager.instance.primaryFocus?.unfocus();
-                                }
-                              },
-                              child: const Text(
-                                "🙂",
-                                style: TextStyle(fontSize: 20),
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    ref
+                                            .read(emojiShowingProvider.notifier)
+                                            .state =
+                                        !ref.watch(emojiShowingProvider);
+                                    if (ref.watch(emojiShowingProvider)) {
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                    }
+                                  },
+                                  child: Icon(
+                                    Icons.emoji_emotions_outlined,
+                                    color: ref.watch(emojiShowingProvider)
+                                        ? Colors.red
+                                        : themDark
+                                            ? Colors.white
+                                            : Colors.black45,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                            child: Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 7),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(40),
+                                color: themDark ? Colors.grey.shade800 : null,
+                              ),
+                              child: Consumer(
+                                builder: (context, ref, child) {
+                                  final controllerNotifier =
+                                      ref.watch(commentProvider);
+                                  return TextField(
+                                    onTap: () {
+                                      ref
+                                          .read(emojiShowingProvider.notifier)
+                                          .state = false;
+                                    },
+                                    maxLines:
+                                        controllerNotifier.calculateMaxLines(),
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.zero,
+                                      hintStyle: TextStyle(
+                                        color: (themeModel.currentThemeMode ==
+                                                ThemeMode.dark)
+                                            ? Colors.grey[500]
+                                            : Colors.black,
+                                      ),
+                                      hintText:
+                                          '${languageText!.add_a_comment}...',
+                                      border: InputBorder.none,
+                                    ),
+                                    controller: controllerNotifier.controller,
+                                    onChanged: controllerNotifier.setText,
+                                  );
+                                },
                               ),
                             ),
                           ),
-                          //comment's textFiled
-                          SizedBox(
-                            height: (40 +
-                                    16 *
-                                        ref
-                                            .read(commentProvider.notifier)
-                                            .calculateMaxLines())
-                                .toDouble(),
-                            width: MediaQuery.of(context).size.width - 100,
-                            child: Consumer(
-                              builder: (context, watch, child) {
-                                final controllerNotifier =
-                                    ref.watch(commentProvider);
-                                final themeModel =
-                                    ref.watch(themeModelProvider);
-
-                                return TextField(
-                                  onTap: () {
-                                    ref
-                                        .read(emojiShowingProvider.notifier)
-                                        .state = false;
-                                  },
-                                  controller: controllerNotifier.controller,
-                                  maxLines:
-                                      controllerNotifier.calculateMaxLines(),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        width: 1,
-                                        color: (themeModel.currentThemeMode ==
-                                                ThemeMode.dark)
-                                            ? Colors.black26
-                                            : Colors.black,
-                                      ),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    hintText:
-                                        '${languageText!.add_a_comment}...',
-                                    hintStyle: TextStyle(
-                                      color: (themeModel.currentThemeMode ==
-                                              ThemeMode.dark)
-                                          ? Colors.grey[500]
-                                          : Colors.black,
-                                    ),
-                                    fillColor: (themeModel.currentThemeMode ==
-                                            ThemeMode.dark)
-                                        ? Colors.grey[900]
-                                        : Colors.grey[300],
-                                    filled: true,
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: (themeModel.currentThemeMode ==
-                                                ThemeMode.dark)
-                                            ? Colors.white10
-                                            : Colors.black,
-                                        width: 2,
-                                      ),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: (themeModel.currentThemeMode ==
-                                                ThemeMode.dark)
-                                            ? Colors.black38
-                                            : Colors.transparent,
-                                        width: 2,
-                                      ),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                  ),
-                                  onChanged: controllerNotifier.setText,
-                                );
-                              },
+                          const SizedBox(width: 15),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    themDark ? Colors.grey.shade800 : null,
+                                elevation: 0,
+                                shape: const CircleBorder(),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 10)),
+                            onPressed: () {
+                              ref.read(commentProvider.notifier).submitComment(
+                                  ref.watch(commentProvider).controller.text,
+                                  context,
+                                  ref,
+                                  widget.postId);
+                              ref
+                                  .read(commentProvider.notifier)
+                                  .controller
+                                  .clear();
+                              ref.read(emojiShowingProvider.notifier).state =
+                                  false;
+                            },
+                            child: Icon(
+                              Icons.send,
+                              color: Colors.blue.shade200,
+                              size: 24,
                             ),
                           ),
-
-                          //done icon
-                          IconButton(
-                              onPressed: () {
-                                ref
-                                    .read(commentProvider.notifier)
-                                    .submitComment(
-                                        ref
-                                            .watch(commentProvider)
-                                            .controller
-                                            .text,
-                                        context,
-                                        ref,
-                                        widget.postId);
-                                ref
-                                    .read(commentProvider.notifier)
-                                    .controller
-                                    .clear();
-                                ref.read(emojiShowingProvider.notifier).state =
-                                    false;
-                              },
-                              icon: Icon(
-                                Icons.send,
-                                color: (themeModel.currentThemeMode ==
-                                        ThemeMode.dark)
-                                    ? Colors.grey
-                                    : Colors.black87,
-                              ))
                         ],
                       )
                     : Row(
