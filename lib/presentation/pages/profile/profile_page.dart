@@ -17,7 +17,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/models/language.dart';
 import '../../../data/repositoris/language_repository.dart';
 import '../../../domain/riverpod/data/profile_data_provider.dart';
-import '../../../main.dart';
 import '../../widgets/language/language_bottom_sheet.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
@@ -31,10 +30,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(
-      Duration.zero,
-      () {
-        ref.read(userDetailsProvider.notifier).getCurrentUserData(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+        ref.read(userDetailsProvider.notifier).getCurrentUserData();
         ref.read(imageProvider).imageUrl ==
             ref.read(userDetailsProvider)?.imageUrl;
       },
@@ -327,7 +324,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     ))
                 .then((value) => ref
                     .read(userDetailsProvider.notifier)
-                    .getCurrentUserData(context));
+                    .getCurrentUserData());
           },
           child: Text(
             languageText.profile_edit_button_text,

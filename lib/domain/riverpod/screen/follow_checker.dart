@@ -11,7 +11,7 @@ class FollowCheckerProvider extends StateNotifier<bool> {
 
   Future<bool> followOrUnFollow(String uid, String followId) async {
     try {
-      ref.read(loadingFollowers.notifier).state = true;
+      // ref.read(loadingFollowers.notifier).state = true;
       final snap = await _fireStore
           .collection('User')
           .doc(uid)

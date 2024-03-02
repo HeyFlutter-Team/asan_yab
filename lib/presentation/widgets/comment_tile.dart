@@ -3,9 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../data/models/comment_model.dart';
-import '../../data/models/users_info.dart';
+import '../../data/models/users.dart';
+import '../../domain/riverpod/data/other_user_data.dart';
+
+import '../../domain/riverpod/screen/follow_checker.dart';
+import '../pages/profile/other_profile.dart';
 
 class CommentTile extends ConsumerStatefulWidget {
   final CommentM comment;
@@ -22,8 +25,12 @@ class CommentTile extends ConsumerStatefulWidget {
 }
 
 class _CommentTileState extends ConsumerState<CommentTile> {
-  late final Future<UsersInfo> _userInfoFuture =
-      ref.read(commentProvider.notifier).getUserInfo(widget.comment.uid);
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentUser = FirebaseAuth.instance.currentUser;
@@ -33,40 +40,116 @@ class _CommentTileState extends ConsumerState<CommentTile> {
     return Card(
       elevation: 10,
       child: ListTile(
-        title: FutureBuilder<UsersInfo>(
-          future: _userInfoFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                  child: SizedBox(height: 0)); // or any other loading indicator
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              final usersInfo = snapshot.data!;
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      usersInfo.imageUrl != ""
-                          ? CircleAvatar(
-                              backgroundImage: NetworkImage(usersInfo.imageUrl),
-                            )
-                          : const CircleAvatar(
-                              backgroundImage: AssetImage('assets/Avatar.png')),
-                      const SizedBox(width: 8.0),
-                      Text(usersInfo.name),
-                    ],
-                  ),
-                  const SizedBox(height: 4.0),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: Text(widget.comment.text),
-                  ),
-                ],
-              );
-            }
-          },
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                widget.comment.imageUrl != ""
+                    ? GestureDetector(
+                        onTap: () async {
+                          DocumentSnapshot snapshot = await FirebaseFirestore
+                              .instance
+                              .collection('User')
+                              .doc(widget.comment.uid)
+                              .get();
+                          if (snapshot.exists) {
+                            Users myUser = Users.fromMap(
+                                snapshot.data() as Map<String, dynamic>);
+                            ref
+                                .read(otherUserProvider.notifier)
+                                .setDataUser(myUser);
+                            ref
+                                .read(followerProvider.notifier)
+                                .followOrUnFollow(
+                                    FirebaseAuth.instance.currentUser!.uid,
+                                    widget.comment.uid);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const OtherProfile(),
+                                ));
+                            print('6');
+                          }
+                        },
+                        child: CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(widget.comment.imageUrl),
+                        ),
+                      )
+                    : GestureDetector(
+                        onTap: () async {
+                          print('1');
+                          DocumentSnapshot snapshot = await FirebaseFirestore
+                              .instance
+                              .collection('User')
+                              .doc(widget.comment.uid)
+                              .get();
+                          print('2');
+                          if (snapshot.exists) {
+                            Users myUser = Users.fromMap(
+                                snapshot.data() as Map<String, dynamic>);
+                            print('3');
+                            ref
+                                .read(otherUserProvider.notifier)
+                                .setDataUser(myUser);
+                            print('4');
+                            ref
+                                .read(followerProvider.notifier)
+                                .followOrUnFollow(
+                                    FirebaseAuth.instance.currentUser!.uid,
+                                    widget.comment.uid);
+                            print('5');
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const OtherProfile(),
+                                ));
+                            print('6');
+                          }
+                        },
+                        child: const CircleAvatar(
+                            backgroundImage: AssetImage('assets/Avatar.png')),
+                      ),
+                const SizedBox(width: 8.0),
+                GestureDetector(
+                    onTap: () async {
+                      print('1');
+                      DocumentSnapshot snapshot = await FirebaseFirestore
+                          .instance
+                          .collection('User')
+                          .doc(widget.comment.uid)
+                          .get();
+                      print('2');
+                      if (snapshot.exists) {
+                        Users myUser = Users.fromMap(
+                            snapshot.data() as Map<String, dynamic>);
+                        print('3');
+                        ref
+                            .read(otherUserProvider.notifier)
+                            .setDataUser(myUser);
+                        print('4');
+                        ref.read(followerProvider.notifier).followOrUnFollow(
+                            FirebaseAuth.instance.currentUser!.uid,
+                            widget.comment.uid);
+                        print('5');
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const OtherProfile(),
+                            ));
+                        print('6');
+                      }
+                    },
+                    child: Text(widget.comment.name)),
+              ],
+            ),
+            const SizedBox(height: 4.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Text(widget.comment.text),
+            ),
+          ],
         ),
         trailing: IconButton(
           icon: const Icon(Icons.more_vert),
@@ -75,7 +158,7 @@ class _CommentTileState extends ConsumerState<CommentTile> {
                 .read(commentProvider.notifier)
                 .showOptionsBottomSheet(context, isOwner, widget.onDelete);
           },
-        ), // Show options icon only for the owner
+        ),
       ),
     );
   }
