@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/res/image_res.dart';
 import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/categories_items_provider.dart';
+import '../../domain/riverpod/data/single_place_provider.dart';
 import '../../domain/riverpod/screen/loading_circularPRI_provider.dart';
 import '../pages/detials_page.dart';
 
@@ -69,13 +70,18 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
             itemBuilder: (context, index) {
               if (index < data.length) {
                 return InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DetailsPage(id: data[index].id),
-                      ),
-                    );
+                  onTap: () async{
+
+                    await ref.read(getSingleProvider.notifier).fetchSinglePlace(data[index].id)
+                    .whenComplete((){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailsPage(id: data[index].id),
+                        ),
+                      );
+                    });
+
                     FirebaseAnalytics.instance.logEvent(
                       name: 'humm_1',
                       parameters: <String, dynamic>{

@@ -36,9 +36,9 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
   @override
   void initState() {
     super.initState();
-    ref.read(getSingleProvider.notifier).fetchSinglePlace(widget.id);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       //Todo: for selected
+   await ref.read(getSingleProvider.notifier).fetchSinglePlace(widget.id);
       ref.read(getInformationProvider).getFavorite();
       final provider = ref.read(favoriteProvider.notifier);
       final toggle = provider.isExist(widget.id);
@@ -86,7 +86,6 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          ref.read(getSingleProvider.notifier).state=null;
                           Navigator.pop(context);
                         },
                         icon: const Icon(Icons.arrow_back),

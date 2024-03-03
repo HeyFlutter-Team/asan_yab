@@ -50,7 +50,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get sign_in_method_2_if => 'رمز شما اشتباه است';
 
   @override
-  String get sign_in_method_3_if => 'برای درخواست اشتباه مکرر اکانت شما بلاک شده است لطفا بعدا امتحان کنید';
+  String get sign_in_method_3_if => 'برای درخواست اشتباه مکرر حساب شما بلاک شده است لطفا بعدا امتحان کنید';
 
   @override
   String get sign_up_confirm_p => 'تایید رمز';
@@ -266,7 +266,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get done_click => 'تایید';
 
   @override
-  String get details_page_snack_bar => 'برای اضافه کردن به مورد دلخواه اول باید وارد اکانت خود شوید ';
+  String get details_page_snack_bar => 'برای اضافه کردن به مورد دلخواه اول باید وارد حساب خود شوید ';
 
   @override
   String get details_page_1_custom_card => 'توضیحات';
@@ -341,7 +341,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get chat_message => 'پیام';
 
   @override
-  String get message_check_user1 => 'برای دسترسی به چت باید\n وارد اکانت خود شوید...';
+  String get message_check_user1 => 'برای دسترسی به چت باید\n وارد حساب خود شوید...';
 
   @override
   String get message_check_user2 => 'وارد شدن به ایمیل';

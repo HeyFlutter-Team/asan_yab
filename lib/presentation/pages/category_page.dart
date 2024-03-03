@@ -17,7 +17,7 @@ class CategoryPage extends ConsumerWidget {
     ref.read(categoriesProvider.notifier).getCategories();
     final category = ref.watch(categoriesProvider);
     return Scaffold(
-      //backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         elevation: 0.0,
         // backgroundColor: Colors.white,

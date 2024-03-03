@@ -2,6 +2,7 @@
 
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/widgets/custom_text_field.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -100,18 +101,29 @@ class _UserDeleteAccountState extends ConsumerState<UserDeleteAccount>
                   onPressed: () async {
                     final isValid = formKey.currentState!.validate();
                     if (!isValid) return;
-                    await ref
-                        .read(deleteAccountProvider.notifier)
-                        .deleteUserDocument(widget.uid)
-                        .whenComplete(() async {
-                      await ref
-                          .read(deleteAccountProvider.notifier)
-                          .deleteAccount(emailCTRL.text, passwordCTRL.text);
-                    }).whenComplete(() => Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MainPage(),
-                            )));
+                   await FirebaseFirestore.instance.collection('Favorite').doc(widget.uid).delete();
+                   await FirebaseFirestore.instance
+                       .collection('ratings')
+                       .where('userId', isEqualTo: widget.uid)
+                       .get()
+                       .then((querySnapshot) {
+                     for (var doc in querySnapshot.docs) {
+                       doc.reference.delete();
+                     }
+                   }).whenComplete(()async{
+                     await ref
+                         .read(deleteAccountProvider.notifier)
+                         .deleteUserDocument(widget.uid)
+                         .whenComplete(() async {
+                       await ref
+                           .read(deleteAccountProvider.notifier)
+                           .deleteAccount(emailCTRL.text, passwordCTRL.text);
+                     }).whenComplete(() => Navigator.pushReplacement(
+                         context,
+                         MaterialPageRoute(
+                           builder: (context) => const MainPage(),
+                         )));
+                   });
                   },
                   child:  Text(languageText.user_delete_account,
                     style: const TextStyle(fontSize: 20, color: Colors.white),
