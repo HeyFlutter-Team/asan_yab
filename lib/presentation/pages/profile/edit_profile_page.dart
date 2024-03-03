@@ -80,7 +80,48 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                         Icons.arrow_back,
                         color: Colors.white,
                       ),
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () {
+                        if (nameController.text ==
+                                ref.read(userDetailsProvider)!.name &&
+                            lastNameController.text ==
+                                ref.read(userDetailsProvider)!.lastName) {
+                          Navigator.pop(context);
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                backgroundColor: Colors.red.shade300,
+                                title: Text('${languageText?.edit_dialog}',style: const TextStyle(color: Colors.white)),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                          '${languageText?.edit_dialog_do_not_save}',style: const TextStyle(color: Colors.white),)),
+                                  TextButton(
+                                      onPressed: () {
+                                        ref
+                                            .read(editProfilePageProvider
+                                                .notifier)
+                                            .editData(nameController,
+                                                lastNameController)
+                                            .whenComplete(() {
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                        });
+                                      },
+                                      child: Text(
+                                          '${languageText?.edit_appBar_leading}',style: const TextStyle(color: Colors.white))),
+
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      },
                     )),
                 Padding(
                   padding: isRTL
@@ -128,8 +169,8 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                           ),
                           Padding(
                             padding: isRTL
-                                ? const EdgeInsets.only(top: 40.0, right: 50)
-                                : const EdgeInsets.only(top: 40.0, left: 55),
+                                ? const EdgeInsets.only(top: 53.0, right: 55)
+                                : const EdgeInsets.only(top: 53.0, left: 55),
                             child: ImageWidgets.buildProgress(ref: ref),
                           ),
                           Positioned(

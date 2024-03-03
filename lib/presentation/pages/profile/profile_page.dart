@@ -8,12 +8,14 @@ import 'package:asan_yab/presentation/pages/profile/edit_profile_page.dart';
 import 'package:asan_yab/presentation/pages/profile/list_of_follow.dart';
 import 'package:asan_yab/presentation/pages/profile/show_profile_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
+import 'package:asan_yab/presentation/pages/user_delete_account.dart';
 import 'package:asan_yab/presentation/widgets/buildProgress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/models/language.dart';
 import '../../../data/repositoris/language_repository.dart';
 import '../../../domain/riverpod/data/profile_data_provider.dart';
@@ -42,6 +44,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   }
 
   final userName = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     final usersData = ref.watch(userDetailsProvider);
@@ -74,7 +77,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 50.0),
+                  padding: const EdgeInsets.only(bottom: 65.0),
                   child: Center(
                     child: Text(
                       '${usersData?.name}',
@@ -109,8 +112,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                             ),
                             Padding(
                               padding: isRTL
-                                  ? const EdgeInsets.only(top: 40.0, right: 50)
-                                  : const EdgeInsets.only(top: 40.0, left: 55),
+                                  ? const EdgeInsets.only(top: 53.0, right: 50)
+                                  : const EdgeInsets.only(top: 53.0, left: 50),
                               child: ImageWidgets.buildProgress(ref: ref),
                             ),
                             Positioned(
@@ -298,6 +301,24 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 leading: const Icon(
                   color: Colors.red,
                   Icons.star_rate_outlined,
+                  size: 30,
+                ),
+              ),
+              const Divider(
+                color: Colors.grey,
+              ),
+               ListTile(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder:
+                  (context) =>  UserDeleteAccount(
+                    uid:'${usersData?.uid}',
+                  ),));
+                },
+                title: const Text(
+                    'Delete account'),
+                leading: const Icon(
+                  color: Colors.red,
+                  Icons.person_remove_alt_1_outlined,
                   size: 30,
                 ),
               ),

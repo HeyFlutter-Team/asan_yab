@@ -31,6 +31,8 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: AppLocalizations.of(context)?.searchById,
+              hintStyle: GoogleFonts.lobster(
+                  fontSize: 18, fontWeight: FontWeight.w500),
             ),
             // onFieldSubmitted: (value) {
             //   print(value);

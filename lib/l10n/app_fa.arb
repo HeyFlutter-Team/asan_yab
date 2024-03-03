@@ -63,7 +63,7 @@
 
 
   "findingFriendById": "ایدی مورد نظر را  بنویسید",
-  "searchById": "گشتن با آیدی ",
+  "searchById": "جستجو با آیدی ",
 
   "suggestion_appBar_title": "درخواست مکان جدید",
   "suggestion_1_tf_labelName": "نام مکان",
@@ -101,6 +101,8 @@
   "edit_appBar_leading": "ذخیره",
   "edit_1_txf_label": "نام",
   "edit_2_txf_label": "تخلص",
+  "edit_dialog": "آیا تغییرات ایجاد شده ذخیره شوند یا خیر؟",
+  "edit_dialog_do_not_save": "خیر",
 
 
 
@@ -163,5 +165,9 @@
   "log_in": "وارد شوید",
 
 
-  "download_image_loading": "لطفا صبر کنید..."
+  "download_image_loading": "لطفا صبر کنید...",
+
+
+  "user_delete_account": "حذف حساب"
+
 }

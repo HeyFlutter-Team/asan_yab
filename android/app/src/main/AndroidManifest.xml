@@ -42,5 +42,9 @@
        <meta-data
            android:name="firebase_analytics_collection_enabled"
            android:value="false" />
+       <activity
+           android:name="com.yalantis.ucrop.UCropActivity"
+           android:screenOrientation="portrait"
+           android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
     </application>
 </manifest>

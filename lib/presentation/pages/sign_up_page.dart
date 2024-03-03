@@ -42,7 +42,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       body: Form(
         key: signUpFormKey,
         child: Padding(
-          padding: const EdgeInsets.only(top: 15.0, left: 20),
+          padding: const EdgeInsets.only(top: 15.0, left: 20,right: 20),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,

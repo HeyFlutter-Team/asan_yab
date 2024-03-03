@@ -99,9 +99,9 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
                 children: [
                   const SizedBox(height: 12),
                   messageNotifier.isEmpty
-                      ? Expanded(
+                      ? const Expanded(
                           child: Center(
-                            child: Image(image: AssetImage(ImageRes.nodata)),
+                            child: Image(image: AssetImage('assets/message_icon.png')),
                           ),
                         )
                       : Expanded(

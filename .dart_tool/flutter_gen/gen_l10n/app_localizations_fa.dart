@@ -128,7 +128,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get findingFriendById => 'ایدی مورد نظر را  بنویسید';
 
   @override
-  String get searchById => 'گشتن با آیدی ';
+  String get searchById => 'جستجو با آیدی ';
 
   @override
   String get suggestion_appBar_title => 'درخواست مکان جدید';
@@ -219,6 +219,12 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get edit_2_txf_label => 'تخلص';
+
+  @override
+  String get edit_dialog => 'آیا تغییرات ایجاد شده ذخیره شوند یا خیر؟';
+
+  @override
+  String get edit_dialog_do_not_save => 'خیر';
 
   @override
   String get container_text => 'جستجوی در';
@@ -357,4 +363,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get download_image_loading => 'لطفا صبر کنید...';
+
+  @override
+  String get user_delete_account => 'حذف حساب';
 }

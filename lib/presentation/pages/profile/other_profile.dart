@@ -53,7 +53,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 50.0),
+                    padding: const EdgeInsets.only(bottom: 65.0),
                     child: Center(
                       child: Text(
                         '${usersData?.name} ${usersData?.lastName}',

@@ -157,10 +157,10 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   children: [
+                                                    Text(phoneNumber),
                                                     const Icon(
                                                         Icons.phone_android,
                                                         color: Colors.green),
-                                                    Text(phoneNumber),
                                                   ],
                                                 )
                                               : Row(
@@ -169,12 +169,12 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   children: [
-                                                    Text(phoneNumber,
-                                                        overflow: TextOverflow
-                                                            .ellipsis),
                                                     const Icon(
                                                         Icons.phone_android,
                                                         color: Colors.green),
+                                                    Text(phoneNumber,
+                                                        overflow: TextOverflow
+                                                            .ellipsis),
                                                   ],
                                                 ),
                                         ),

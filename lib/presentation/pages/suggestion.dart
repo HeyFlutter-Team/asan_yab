@@ -38,24 +38,32 @@ class _SuggestionPageState extends ConsumerState<SuggestionPage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      ref.read(isLoading.notifier).state = true;
-      final snapshot = await FirebaseFirestore.instance
-          .collection('Description')
-          .doc('add_new_place')
-          .get();
+     Future.delayed(Duration.zero,() async{
+       if (mounted) { // Check if the widget is mounted
+         ref.read(isLoading.notifier).state = true;
+         final snapshot = await FirebaseFirestore.instance
+             .collection('Description')
+             .doc('add_new_place')
+             .get();
+         if (mounted) {
+           if (snapshot.exists) {
+             final isRTL = ref.watch(languageProvider).code == 'fa';
+             if (!isRTL) {
+               ref.read(noteProvider.notifier).state = snapshot.data()?['eNote'];
+             } else {
+               ref.read(noteProvider.notifier).state = snapshot.data()?['pNote'];
+             }
 
-      if (snapshot.exists) {
-        final isRTL = ref.watch(languageProvider).code == 'fa';
-        if (!isRTL) {
-          ref.read(noteProvider.notifier).state = snapshot.data()?['eNote'];
-        } else {
-          ref.read(noteProvider.notifier).state = snapshot.data()?['pNote'];
-        }
+             ref.read(isLoading.notifier).state = false;
+           }
+         }
+       }
 
-        ref.read(isLoading.notifier).state = false;
-      }
-    });
+     },);
+
+       });
   }
+
 
   @override
   void dispose() {

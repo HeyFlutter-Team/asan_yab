@@ -31,6 +31,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
+        ref.watch(nearbyPlace.notifier).refresh();
         if (mounted) {
           // Use ref only if the widget is still mounted
           if (mounted) {

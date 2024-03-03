@@ -15,6 +15,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'data/models/language.dart';
+import 'domain/servers/nearby_places.dart';
 import 'firebase_options.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -66,8 +67,11 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   void initState() {
     super.initState();
-    ref.read(themeModelProvider.notifier).initialize().whenComplete(
-        () => ref.read(themeModelProvider.notifier).loadSavedTheme());
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ref.read(themeModelProvider.notifier).initialize().whenComplete(
+          () => ref.read(themeModelProvider.notifier).loadSavedTheme());
+      ref.watch(nearbyPlace.notifier).refresh();
+    });
   }
 
   @override

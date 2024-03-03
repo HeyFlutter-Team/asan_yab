@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../screen/botton_navigation_provider.dart';
+
 //Sign In method
 final signInProvider = Provider((ref) => SignInNotifier(ref));
 
@@ -17,6 +19,7 @@ class SignInNotifier {
     required BuildContext context,
     required String email,
     required String password,
+    required WidgetRef ref,
   }) async {
     try {
       read.read(userDetailsProvider);
@@ -33,6 +36,9 @@ class SignInNotifier {
         email: email.trim(),
         password: password,
       );
+      ref
+          .read(buttonNavigationProvider.notifier)
+          .selectedIndex(0);
     } on FirebaseAuthException catch (e) {
       final languageText = AppLocalizations.of(context);
       if (e.code == 'user-not-found') {

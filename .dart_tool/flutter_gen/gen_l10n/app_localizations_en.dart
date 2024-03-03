@@ -221,6 +221,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get edit_2_txf_label => 'Last Name';
 
   @override
+  String get edit_dialog => 'Will the changes be saved or not?';
+
+  @override
+  String get edit_dialog_do_not_save => 'Don\'t save';
+
+  @override
   String get container_text => 'Search in';
 
   @override
@@ -357,4 +363,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get download_image_loading => 'Please waite...';
+
+  @override
+  String get user_delete_account => 'Delete Account';
 }

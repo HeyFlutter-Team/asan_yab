@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../data/models/users.dart';
@@ -76,14 +77,40 @@ class ImageNotifier extends StateNotifier<ImageState> {
   ImageNotifier() : super(ImageState());
   final ImagePicker _imagePicker = ImagePicker();
 
+  // Future<void> pickImage(ImageSource source) async {
+  //   try {
+  //     final pickedImage = await _imagePicker.pickImage(source: source);
+  //     if (pickedImage == null) return;
+  //
+  //     final imageTemp = File(pickedImage.path);
+  //     state = state.copyWith(image: imageTemp, imageUrl: pickedImage.path);
+  //     uploadFile();
+  //   } catch (e, stackTrace) {
+  //     print('Failed to pick image: $e\n$stackTrace');
+  //   }
+  // }
+
   Future<void> pickImage(ImageSource source) async {
     try {
-      final pickedImage = await _imagePicker.pickImage(source: source);
-      if (pickedImage == null) return;
+      await _imagePicker.pickImage(source: source).then((image)async {
+        if (image == null) {
+          return;
+        }
+        await ImageCropper().cropImage(sourcePath: image.path,
+            cropStyle: CropStyle.circle,
+            aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1))
+            .then((croppedImage){
+          if (croppedImage == null) {
+            return;
+          }
+          final imageTemp = File(croppedImage.path);
+          state = state.copyWith(image: imageTemp, imageUrl: croppedImage.path);
+          uploadFile();
+        } );
+      });
 
-      final imageTemp = File(pickedImage.path);
-      state = state.copyWith(image: imageTemp, imageUrl: pickedImage.path);
-      uploadFile();
+
+
     } catch (e, stackTrace) {
       print('Failed to pick image: $e\n$stackTrace');
     }

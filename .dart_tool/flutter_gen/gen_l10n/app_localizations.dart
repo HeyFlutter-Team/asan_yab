@@ -525,6 +525,18 @@ abstract class AppLocalizations {
   /// **'Last Name'**
   String get edit_2_txf_label;
 
+  /// No description provided for @edit_dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Will the changes be saved or not?'**
+  String get edit_dialog;
+
+  /// No description provided for @edit_dialog_do_not_save.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t save'**
+  String get edit_dialog_do_not_save;
+
   /// No description provided for @container_text.
   ///
   /// In en, this message translates to:
@@ -800,6 +812,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please waite...'**
   String get download_image_loading;
+
+  /// No description provided for @user_delete_account.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get user_delete_account;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

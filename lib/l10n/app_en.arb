@@ -103,6 +103,9 @@
   "edit_appBar_leading": "Save",
   "edit_1_txf_label": "Name",
   "edit_2_txf_label": "Last Name",
+  "edit_dialog": "Will the changes be saved or not?",
+  "edit_dialog_do_not_save": "Don't save",
+
 
 
 
@@ -177,7 +180,10 @@
   "for_add_comment": "for add comment",
   "log_in": "Log in",
 
-  "download_image_loading": "Please waite..."
+  "download_image_loading": "Please waite...",
+
+
+  "user_delete_account": "Delete Account"
 
 
 
