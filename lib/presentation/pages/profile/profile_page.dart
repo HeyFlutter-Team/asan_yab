@@ -37,7 +37,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         // Check if the widget is still mounted before accessing ref
         await ref.read(userDetailsProvider.notifier).getCurrentUserData();
         // Use ref only if the widget is still mounted
-        ref.read(imageProvider).imageUrl == ref.read(userDetailsProvider)?.imageUrl;
+        // ref.read(imageProvider).imageUrl = ref.read(userDetailsProvider)?.imageUrl;
       }
     });
   }
