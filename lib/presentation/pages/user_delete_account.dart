@@ -8,11 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/riverpod/data/delete_account_riv.dart';
+import '../../domain/riverpod/data/profile_data_provider.dart';
 import '../../domain/riverpod/data/sign_in_provider.dart';
 
 class UserDeleteAccount extends ConsumerStatefulWidget {
   final String uid;
-  const UserDeleteAccount({Key? key, required this.uid}) : super(key: key);
+  final String imageUrl;
+  const UserDeleteAccount({Key? key, required this.uid,required this.imageUrl}) : super(key: key);
 
   @override
   ConsumerState<UserDeleteAccount> createState() => _UserDeleteAccountState();
@@ -102,6 +104,7 @@ class _UserDeleteAccountState extends ConsumerState<UserDeleteAccount>
                     final isValid = formKey.currentState!.validate();
                     if (!isValid) return;
                    await FirebaseFirestore.instance.collection('Favorite').doc(widget.uid).delete();
+                   await ref.read(deleteProfile.notifier).deleteImageAndClearUrl(widget.imageUrl);
                    await FirebaseFirestore.instance
                        .collection('ratings')
                        .where('userId', isEqualTo: widget.uid)

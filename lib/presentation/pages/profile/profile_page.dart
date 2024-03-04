@@ -33,12 +33,15 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-        ref.read(userDetailsProvider.notifier).getCurrentUserData();
-        ref.read(imageProvider).imageUrl ==
-            ref.read(userDetailsProvider)?.imageUrl;
-      },
-    );
+      if (mounted) {
+        // Check if the widget is still mounted before accessing ref
+        await ref.read(userDetailsProvider.notifier).getCurrentUserData();
+        // Use ref only if the widget is still mounted
+        ref.read(imageProvider).imageUrl == ref.read(userDetailsProvider)?.imageUrl;
+      }
+    });
   }
+
   Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
   }
@@ -47,6 +50,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final imageState = ref.watch(imageProvider);
     final usersData = ref.watch(userDetailsProvider);
     final themeModel = ref.watch(themeModelProvider);
     final isRTL = ref.watch(languageProvider).code == 'fa';
@@ -311,6 +315,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder:
                   (context) =>  UserDeleteAccount(
+                    imageUrl: '${usersData?.imageUrl}',
                     uid:'${usersData?.uid}',
                   ),));
                 },
@@ -338,13 +343,14 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32))),
           onPressed: () {
+            final userDetailsProviderRef = ref.read(userDetailsProvider.notifier);
             Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const EditProfilePage(),
                     ))
-                .then((value) => ref
-                    .read(userDetailsProvider.notifier)
+                .then((value) =>
+                userDetailsProviderRef
                     .getCurrentUserData());
           },
           child: Text(

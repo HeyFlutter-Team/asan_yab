@@ -30,23 +30,25 @@ class _HomePageState extends ConsumerState<HomePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) async {
+          (timeStamp) async {
         ref.watch(nearbyPlace.notifier).refresh();
         if (mounted) {
           // Use ref only if the widget is still mounted
-          if (mounted) {
-            final newVersion = NewVersionPlus(
-              androidId: 'com.heyflutter.asanYab',
-              iOSId: 'com.heyflutter.asanYab',
-            );
-            Timer(const Duration(seconds: 800), () {
+          final newVersion = NewVersionPlus(
+            androidId: 'com.heyflutter.asanYab',
+            iOSId: 'com.heyflutter.asanYab',
+          );
+          Timer(const Duration(seconds: 800), () {
+            // Check if the widget is still mounted before accessing context
+            if (mounted) {
               checkNewVersion(newVersion, context);
-            });
-          }
+            }
+          });
         }
       },
     );
   }
+
 
   @override
   void dispose() {

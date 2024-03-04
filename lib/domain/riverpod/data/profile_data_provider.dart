@@ -4,6 +4,7 @@ import 'package:clipboard/clipboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -140,8 +141,58 @@ class ImageNotifier extends StateNotifier<ImageState> {
       print('Error uploading image: $e\n$stackTrace');
     }
   }
+  // Future<void> deleteImageAndClearUrl(String imageUrl) async {
+  //   try {
+  //     // Delete the image file from storage
+  //     final imageRef = FirebaseStorage.instance.refFromURL(imageUrl);
+  //     await imageRef.delete();
+  //     print('younis: Image deleted successfully.');
+  //
+  //     // Clear the image URL from the user's profile in the database
+  //     final user = FirebaseAuth.instance.currentUser;
+  //     if (user != null) {
+  //       await FirebaseFirestore.instance.collection('User').doc(user.uid).update({
+  //         'imageUrl': '',
+  //       });
+  //       print('Image URL cleared from database.');
+  //     }
+  //   } catch (error) {
+  //     print('Error deleting image: $error');
+  //   }
+  // }
+
+
 }
 
 final imageProvider = StateNotifierProvider<ImageNotifier, ImageState>(
   (ref) => ImageNotifier(),
 );
+
+
+class DeleteProfile extends ChangeNotifier{
+
+  Future<void> deleteImageAndClearUrl(String imageUrl) async {
+    try {
+      // Delete the image file from storage
+      final imageRef = FirebaseStorage.instance.refFromURL(imageUrl);
+      await imageRef.delete();
+      print('younis: Image deleted successfully.');
+notifyListeners();
+      // Clear the image URL from the user's profile in the database
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await FirebaseFirestore.instance.collection('User').doc(user.uid).update({
+          'imageUrl': '',
+        });
+        notifyListeners();
+        print('Image URL cleared from database.');
+      }
+      notifyListeners();
+
+    } catch (error) {
+      print('Error deleting image: $error');
+    }
+  }
+}
+
+final deleteProfile=ChangeNotifierProvider<DeleteProfile>((ref) => DeleteProfile());

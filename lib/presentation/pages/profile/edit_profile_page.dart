@@ -151,7 +151,8 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                                 ? const SizedBox()
                                 : ShowProfilePage(
                                     imagUrl:
-                                        '${ref.watch(userDetailsProvider)?.imageUrl}'),
+                                        '${ref.watch(userDetailsProvider)?.imageUrl}',
+                            isEditing: true),
                           )),
                       child: Stack(
                         children: [
