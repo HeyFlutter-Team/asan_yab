@@ -29,6 +29,9 @@ class _UserDeleteAccountState extends ConsumerState<UserDeleteAccount>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(deleteIsLoading.notifier).state=false;
+    });
   }
 
   @override
@@ -101,8 +104,11 @@ class _UserDeleteAccountState extends ConsumerState<UserDeleteAccount>
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12))),
                   onPressed: () async {
+                    // await ref.read(deleteAccountProvider.notifier).deleteUserChatsCollection(widget.uid)
+                    // .whenComplete(() => debugPrint('younis jan yaser jan done'));
                     final isValid = formKey.currentState!.validate();
                     if (!isValid) return;
+                    ref.read(deleteIsLoading.notifier).state=true;
                    await FirebaseFirestore.instance.collection('Favorite').doc(widget.uid).delete();
                    await ref.read(deleteProfile.notifier).deleteImageAndClearUrl(widget.imageUrl);
                    await FirebaseFirestore.instance
@@ -115,9 +121,13 @@ class _UserDeleteAccountState extends ConsumerState<UserDeleteAccount>
                      }
                    }).whenComplete(()async{
                      await ref
+                         .read(deleteAccountProvider.notifier).deleteUserComments(widget.uid);
+                     await ref
                          .read(deleteAccountProvider.notifier)
                          .deleteUserDocument(widget.uid)
                          .whenComplete(() async {
+                       await ref
+                           .read(deleteAccountProvider.notifier).deleteChatCollection(widget.uid);
                        await ref
                            .read(deleteAccountProvider.notifier)
                            .deleteAccount(emailCTRL.text, passwordCTRL.text);
@@ -127,8 +137,11 @@ class _UserDeleteAccountState extends ConsumerState<UserDeleteAccount>
                            builder: (context) => const MainPage(),
                          )));
                    });
+                    ref.read(deleteIsLoading.notifier).state=false;
                   },
-                  child:  Text(languageText.user_delete_account,
+                  child: ref.watch(deleteIsLoading)==true?
+                  const CircularProgressIndicator(color: Colors.white,)
+                  :Text(languageText.user_delete_account,
                     style: const TextStyle(fontSize: 20, color: Colors.white),
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:asan_yab/data/models/language.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
       ref.read(commentProvider.notifier).fetchMoreData(widget.postId);
     });
   }
+  final List<String> commentIds=[];
 
   @override
   Widget build(BuildContext context) {
@@ -157,23 +159,32 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
 
                           //done icon
                           IconButton(
-                              onPressed: () {
-                                ref
-                                    .read(commentProvider.notifier)
-                                    .submitComment(
-                                        ref
-                                            .watch(commentProvider)
-                                            .controller
-                                            .text,
-                                        context,
-                                        ref,
-                                        widget.postId);
-                                ref
-                                    .read(commentProvider.notifier)
-                                    .controller
-                                    .clear();
-                                ref.read(emojiShowingProvider.notifier).state =
-                                    false;
+                              onPressed: () async {
+                                final userUid=FirebaseAuth.instance.currentUser?.uid;
+                                  if(!commentIds.contains(widget.postId)){
+                                    commentIds.addAll([widget.postId]);
+                                  }
+                                  print('younis list: $commentIds');
+                                  print(widget.postId);
+                                  ref
+                                      .read(commentProvider.notifier)
+                                      .submitComment(
+                                      ref
+                                          .watch(commentProvider)
+                                          .controller
+                                          .text,
+                                      context,
+                                      ref,
+                                      widget.postId);
+                                   ref.read(commentProvider.notifier)
+                                      .userComments('$userUid', commentIds);
+                                  ref
+                                      .read(commentProvider.notifier)
+                                      .controller
+                                      .clear();
+                                  ref.read(emojiShowingProvider.notifier).state =
+                                  false;
+
                               },
                               icon: Icon(
                                 Icons.send,

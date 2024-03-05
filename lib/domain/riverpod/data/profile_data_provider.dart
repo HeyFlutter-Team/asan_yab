@@ -196,3 +196,5 @@ notifyListeners();
 }
 
 final deleteProfile=ChangeNotifierProvider<DeleteProfile>((ref) => DeleteProfile());
+
+final deleteIsLoading=StateProvider<bool>((ref) => false);
