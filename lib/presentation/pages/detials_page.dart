@@ -20,6 +20,7 @@ import '../../domain/riverpod/data/favorite_provider.dart';
 import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../../domain/riverpod/data/firebase_rating_provider.dart';
 import '../../domain/riverpod/data/single_place_provider.dart';
+import '../../domain/riverpod/menus_bloc/menus_notifier.dart';
 import '../widgets/page_view_item.dart';
 import 'detials_page_offline.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -55,7 +56,6 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
   void dispose() {
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     List<String> phoneData = [];
@@ -202,13 +202,16 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 20.0,right: 20),
-                                  child: ElevatedButton(
+                                  child:(places.menuItemName == null ||
+                                      places.menuItemName!.isEmpty)?
+                                      SizedBox():
+                                  ElevatedButton(
                                     onPressed: () {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                Menu_Restaurant(placeId: places.id),
+                                                MenuRestaurant(placeId: places.id),
                                           ));
                                     },
                                     child: Row(
