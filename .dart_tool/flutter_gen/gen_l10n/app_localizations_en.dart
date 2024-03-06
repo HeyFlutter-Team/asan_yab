@@ -354,4 +354,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get log_in => 'Log in';
+
+  @override
+  String get download_image_loading => 'Please waite...';
 }

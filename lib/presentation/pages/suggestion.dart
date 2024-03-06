@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositoris/firebase_modle_helper.dart';
 import '../../data/repositoris/language_repository.dart';
+import '../../domain/riverpod/screen/suggestion_page_provider.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/text_form_field_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-final isLoading = StateProvider((ref) => false);
+
 
 class SuggestionPage extends ConsumerStatefulWidget {
   const SuggestionPage({super.key});
@@ -18,7 +19,6 @@ class SuggestionPage extends ConsumerStatefulWidget {
 }
 
 class _SuggestionPageState extends ConsumerState<SuggestionPage> {
-  late String note;
   final _key = GlobalKey<FormState>();
 
   final nameController = TextEditingController();
@@ -35,7 +35,6 @@ class _SuggestionPageState extends ConsumerState<SuggestionPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -48,13 +47,12 @@ class _SuggestionPageState extends ConsumerState<SuggestionPage> {
       if (snapshot.exists) {
         final isRTL = ref.watch(languageProvider).code == 'fa';
         if (!isRTL) {
-          note = snapshot.data()?['eNote'];
+          ref.read(noteProvider.notifier).state = snapshot.data()?['eNote'];
         } else {
-          note = snapshot.data()?['pNote'];
+          ref.read(noteProvider.notifier).state = snapshot.data()?['pNote'];
         }
 
         ref.read(isLoading.notifier).state = false;
-        print("ali $note");
       }
     });
   }
@@ -130,7 +128,7 @@ class _SuggestionPageState extends ConsumerState<SuggestionPage> {
                         const SizedBox(height: 20),
                         CustomCard(
                           title: languageText.suggestion_custom_card_title,
-                          child: Text(note),
+                          child: Text(ref.watch(noteProvider)),
                         ),
                         const SizedBox(height: 10),
                         ButtonWidget(

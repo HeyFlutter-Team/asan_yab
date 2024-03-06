@@ -794,6 +794,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Log in'**
   String get log_in;
+
+  /// No description provided for @download_image_loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Please waite...'**
+  String get download_image_loading;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -86,6 +86,7 @@ class _MenuRestaurantState extends State<MenuRestaurant>
                     Container(
                       height: 60,
                       child: TabBar(
+                        labelPadding: EdgeInsets.zero,
                           indicatorPadding: EdgeInsets.zero,
                           onTap: _bloc.onCategorySelected,
                           indicator: const BoxDecoration(),

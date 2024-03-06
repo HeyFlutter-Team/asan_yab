@@ -31,12 +31,12 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      ref.read(userDetailsProvider.notifier).getCurrentUserData();
-      ref.read(imageProvider).imageUrl ==
-          ref.read(userDetailsProvider)?.imageUrl;
-    });
+        ref.read(userDetailsProvider.notifier).getCurrentUserData();
+        ref.read(imageProvider).imageUrl ==
+            ref.read(userDetailsProvider)?.imageUrl;
+      },
+    );
   }
-
   Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
   }

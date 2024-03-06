@@ -105,7 +105,12 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                     },
                     child: Row(
                       children: [
-                        CircleAvatar(
+                        ref.watch(searchProvider)[index].imageUrl==''?
+                        const CircleAvatar(
+                          radius: 30,
+                          backgroundImage: AssetImage('assets/Avatar.png'),
+                        )
+                        :CircleAvatar(
                           radius: 30,
                           backgroundImage: CachedNetworkImageProvider(
                               ref.watch(searchProvider)[index].imageUrl ?? ''),

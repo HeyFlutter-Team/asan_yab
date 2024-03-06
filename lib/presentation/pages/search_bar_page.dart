@@ -160,7 +160,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     return RichText(
       text: TextSpan(
         style: const TextStyle(
-          color: Colors.black,
+          // color: Colors.black,
           fontSize: 20.0,
         ),
         children: [

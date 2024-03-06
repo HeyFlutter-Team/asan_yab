@@ -87,6 +87,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                     children: [
                       IconButton(
                         onPressed: () {
+                          ref.read(getSingleProvider.notifier).state=null;
                           Navigator.pop(context);
                         },
                         icon: const Icon(Icons.arrow_back),
