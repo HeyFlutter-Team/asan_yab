@@ -11,13 +11,14 @@ import '../../../data/models/place.dart';
 import '../../../presentation/pages/menu_restaurant_page.dart';
 
 class RappiBloc with ChangeNotifier {
-  final List<RappiTabCategory> tabs = [];
+  late List<RappiTabCategory> tabs = [];
   late List<RappiItem> items = [];
   List<RappiCategory> rappiCategories = [];
 
   TabController? tabController;
   ScrollController scrollController = ScrollController();
   bool _listen = true;
+
   Future<void> fetchMenu(String placeId, TickerProvider ticker) async {
     rappiCategories.clear(); // Clear previous categories
     items.clear();
@@ -26,10 +27,8 @@ class RappiBloc with ChangeNotifier {
     final List<String> menus = [];
 
     // Fetch menu data
-    DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
-        .collection('Places')
-        .doc(placeId)
-        .get();
+    DocumentSnapshot docSnapshot =
+    await FirebaseFirestore.instance.collection('Places').doc(placeId).get();
     if (docSnapshot.exists) {
       Place restaurantMenu =
       Place.fromJson(docSnapshot.data() as Map<String, dynamic>);
@@ -68,7 +67,7 @@ class RappiBloc with ChangeNotifier {
             rappiProduct.add(RappiProduct(
                 name: restaurantMenu.menus[j].fName,
                 description: restaurantMenu.menus[j].fDescription,
-                price: 3,
+                price: restaurantMenu.menus[j].fPrice,
                 image: restaurantMenu.menus[j].fImage));
           }
           print('sharif${menus}');
@@ -76,9 +75,12 @@ class RappiBloc with ChangeNotifier {
 
         rappiCategories
             .add(RappiCategory(name: menus[i], product: rappiProduct));
-        double offsetFrom = 0.0;
-        double ofssetTo = 0.0;
+      }
 
+      double offsetFrom = 0.0;
+      double ofssetTo = 0.0;
+
+      for (int i = 0; i < rappiCategories.length; i++) {
         final category = rappiCategories[i];
 
         if (i > 0) {
@@ -90,6 +92,7 @@ class RappiBloc with ChangeNotifier {
         } else {
           ofssetTo = double.infinity;
         }
+
         tabs.add(
           RappiTabCategory(
             category: category,
@@ -102,20 +105,26 @@ class RappiBloc with ChangeNotifier {
         items.add(RappiItem(category: category));
         for (int j = 0; j < category.product.length; j++) {
           final product = category.product[j];
-
           items.add(RappiItem(product: product));
         }
-        scrollController.addListener(_onScrollListener);
       }
+
+      tabController!.addListener(() {
+        if (tabController!.indexIsChanging) {
+          _listen = false;
+          scrollController.animateTo(
+            tabs[tabController!.index].offsetFrom,
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+          _listen = true;
+        }
+      });
+
+      scrollController.addListener(_onScrollListener);
+
       notifyListeners();
     }
-  }
-
-  void clearCategories() {
-    rappiCategories.clear();
-    tabs.clear();
-    items.clear();
-    notifyListeners();
   }
 
   void _onScrollListener() {
@@ -126,7 +135,6 @@ class RappiBloc with ChangeNotifier {
             scrollController.offset <= tab.offsetTo &&
             !tab.selected) {
           onCategorySelected(i, animationRequired: false);
-          tabController!.animateTo(i);
           break;
         }
       }
@@ -146,6 +154,13 @@ class RappiBloc with ChangeNotifier {
           duration: Duration(milliseconds: 500), curve: Curves.bounceIn);
       _listen = true;
     }
+  }
+
+  void clearCategories() {
+    rappiCategories.clear();
+    tabs.clear();
+    items.clear();
+    notifyListeners();
   }
 
   @override

@@ -88,12 +88,14 @@ class _MenuRestaurantState extends State<MenuRestaurant>
                       child: TabBar(
                         labelPadding: EdgeInsets.zero,
                           indicatorPadding: EdgeInsets.zero,
-                          onTap: _bloc.onCategorySelected,
+                          onTap:(index){
+                          _bloc.onCategorySelected(index);
+                          },
                           indicator: const BoxDecoration(),
                           controller: _bloc.tabController,
                           isScrollable: true,
                           overlayColor:
-                              const MaterialStatePropertyAll(Colors.transparent),
+                              const MaterialStatePropertyAll(Colors.transparent ),
                           tabs: _bloc.tabs
                               .map((e) => RappiTabWidget(e))
                               .toList()),
@@ -106,9 +108,9 @@ class _MenuRestaurantState extends State<MenuRestaurant>
                         itemBuilder: (context, index) {
                           final item = _bloc.items[index];
                           if (item.isCategory) {
-                            return _RappiCategoryItem(item.category);
+                            return _RappiCategoryItem(item.category!);
                           } else {
-                            return _RappiProductItem(item.product);
+                            return _RappiProductItem(item.product!);
                           }
                         },
                       ),
@@ -222,7 +224,7 @@ class _RappiProductItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        product!.name,
+                        '${product?.name}',
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 17),
                       ),
@@ -245,7 +247,7 @@ class _RappiProductItem extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                        '${product!.price.toString()} AF',
+                        '${product!.price.toString()}',
                         style: TextStyle(
                             color: Theme.of(context).brightness ==
                                     Brightness.light

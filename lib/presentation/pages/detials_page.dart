@@ -215,6 +215,13 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                 MenuRestaurant(placeId: places.id),
                                           ));
                                     },
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 5,
+                                      minimumSize: Size(70, 35),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                    ),
                                     child: Row(
                                       children: [
                                         Text(
@@ -237,13 +244,6 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                             size: 20,
                                             color: Colors.blue.shade800),
                                       ],
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      elevation: 5,
-                                      minimumSize: Size(70, 35),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
                                     ),
                                   ),
                                 ),
