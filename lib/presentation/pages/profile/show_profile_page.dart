@@ -31,10 +31,10 @@ class _ShowProfilePageState extends ConsumerState<ShowProfilePage> {
               await  ref
                     .read(deleteProfile.notifier)
                     .deleteImageAndClearUrl(widget.imagUrl)
-                    .whenComplete((){
-                Navigator.pop(context);
+                    .whenComplete(()async{
+                await ref.watch(userDetailsProvider.notifier).getCurrentUserData();
                       debugPrint('younis image deleted');
-                });
+                }) .whenComplete(() =>Navigator.pop(context));
               },
               icon: const Icon(Icons.delete))
       :const PreferredSize(preferredSize: Size(0, 0), child: SizedBox()),

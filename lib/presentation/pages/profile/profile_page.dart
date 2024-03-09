@@ -15,7 +15,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/models/language.dart';
 import '../../../data/repositoris/language_repository.dart';
 import '../../../domain/riverpod/data/profile_data_provider.dart';
@@ -34,10 +33,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (mounted) {
-        // Check if the widget is still mounted before accessing ref
         await ref.read(userDetailsProvider.notifier).getCurrentUserData();
-        // Use ref only if the widget is still mounted
-        // ref.read(imageProvider).imageUrl = ref.read(userDetailsProvider)?.imageUrl;
       }
     });
   }
@@ -50,11 +46,11 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final imageState = ref.watch(imageProvider);
     final usersData = ref.watch(userDetailsProvider);
     final themeModel = ref.watch(themeModelProvider);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     final languageText = AppLocalizations.of(context);
+    final profileDetails = ref.watch(userDetailsProvider);
     return Scaffold(
         body: Column(
       children: [
@@ -167,13 +163,15 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                             .doc(FirebaseAuth.instance.currentUser!.uid)
                             .update({'isOnline': false, 'fcmToken': "token"});
 
-                        await signOut();
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MainPage(),
-                          ),
-                        );
+                        await signOut().whenComplete((){
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const MainPage(),
+                            ),
+                          );
+                        });
+
                       }
                     },
                     icon: const Icon(
@@ -185,27 +183,66 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           ),
         ),
         Expanded(
-          child: ListView(
+          child:
+          ListView(
             children: [
-              ListTile(
-                onTap: () {
-                  ref.read(listOfDataProvider.notifier).state.clear();
-                  ref.read(listOfDataFollowersProvider.notifier).state.clear();
-                  ref
-                      .read(followingDataProvider.notifier)
-                      .getProfile(FirebaseAuth.instance.currentUser!.uid);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ListOfFollow(),
-                      ));
-                },
-                title: Text(languageText!.profile_followers),
-                leading: const Icon(
-                  color: Colors.red,
-                  Icons.person_2_outlined,
-                  size: 30,
-                ),
+               SizedBox(
+                height: 70,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8.0,left: 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            ref.read(listOfDataProvider.notifier).state.clear();
+                            ref.read(listOfDataFollowersProvider.notifier).state.clear();
+                            ref
+                                .read(followingDataProvider.notifier)
+                                .getProfile(FirebaseAuth.instance.currentUser!.uid)
+                            .whenComplete(() => Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => const ListOfFollow(initialIndex: 0),)));
+                          },
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Text('${profileDetails?.followingCount}',style: const TextStyle(
+                                    fontWeight:  FontWeight.bold,
+                                    fontSize: 25
+                                ),),
+                                const Text('Following')
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const VerticalDivider(),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            ref.read(listOfDataProvider.notifier).state.clear();
+                            ref.read(listOfDataFollowersProvider.notifier).state.clear();
+                            ref
+                                .read(followingDataProvider.notifier)
+                                .getProfile(FirebaseAuth.instance.currentUser!.uid)
+                                .whenComplete(() => Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => const ListOfFollow(initialIndex: 1),)));
+                          },
+                          child: Column(
+                            children: [
+                              Text('${profileDetails?.followerCount}',style: const TextStyle(
+                                fontWeight:  FontWeight.bold,
+                                fontSize: 25
+                              ),),
+                              const Text('Followers')
+
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
               ),
               const Divider(
                 color: Colors.grey,
@@ -224,7 +261,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       .copyToClipboard('${usersData?.id}');
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(languageText.profile_copy_id_snack_bar),
+                      content: Text('${languageText?.profile_copy_id_snack_bar}'),
                       duration: const Duration(seconds: 2),
                     ),
                   );
@@ -261,7 +298,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 color: Colors.grey,
               ),
               ListTile(
-                title: Text(languageText.profile_dark_mode),
+                title: Text('${languageText?.profile_dark_mode}'),
                 leading: const Icon(
                   color: Colors.red,
                   Icons.dark_mode_outlined,
@@ -293,7 +330,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     color: Colors.red,
                     size: 30,
                   ),
-                  title: Text(languageText.profile_about_us_listTile),
+                  title: Text('${languageText?.profile_about_us_listTile}'),
                 ),
               ),
               const Divider(
@@ -301,7 +338,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               ),
               ListTile(
                 title: Text(
-                    '${languageText.profile_rate_score} ${isRTL ? convertDigitsToFarsi('${usersData?.invitationRate}') : usersData?.invitationRate}'),
+                    '${'${languageText?.profile_rate_score}'} ${isRTL ? convertDigitsToFarsi('${usersData?.invitationRate}') : usersData?.invitationRate}'),
                 leading: const Icon(
                   color: Colors.red,
                   Icons.star_rate_outlined,
@@ -311,16 +348,18 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               const Divider(
                 color: Colors.grey,
               ),
-               ListTile(
+              ListTile(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder:
-                  (context) =>  UserDeleteAccount(
-                    imageUrl: '${usersData?.imageUrl}',
-                    uid:'${usersData?.uid}',
-                  ),));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UserDeleteAccount(
+                          imageUrl: '${usersData?.imageUrl}',
+                          uid: '${usersData?.uid}',
+                        ),
+                      ));
                 },
-                title: const Text(
-                    'Delete account'),
+                title: const Text('Delete account'),
                 leading: const Icon(
                   color: Colors.red,
                   Icons.person_remove_alt_1_outlined,
@@ -335,6 +374,26 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               ),
             ],
           ),
+          // ListTile(
+          //   onTap: () {
+          //     ref.read(listOfDataProvider.notifier).state.clear();
+          //     ref.read(listOfDataFollowersProvider.notifier).state.clear();
+          //     ref
+          //         .read(followingDataProvider.notifier)
+          //         .getProfile(FirebaseAuth.instance.currentUser!.uid);
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //           builder: (context) => const ListOfFollow(),
+          //         ));
+          //   },
+          //   title: Text(languageText!.profile_followers),
+          //   leading: const Icon(
+          //     color: Colors.red,
+          //     Icons.person_2_outlined,
+          //     size: 30,
+          //   ),
+          // ),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
@@ -343,18 +402,16 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32))),
           onPressed: () {
-            final userDetailsProviderRef = ref.read(userDetailsProvider.notifier);
+            final userDetailsProviderRef =
+                ref.read(userDetailsProvider.notifier);
             Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const EditProfilePage(),
-                    ))
-                .then((value) =>
-                userDetailsProviderRef
-                    .getCurrentUserData());
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const EditProfilePage(),
+                )).then((value) => userDetailsProviderRef.getCurrentUserData());
           },
           child: Text(
-            languageText.profile_edit_button_text,
+            '${languageText?.profile_edit_button_text}',
             style: const TextStyle(fontSize: 20, color: Colors.white),
           ),
         ),

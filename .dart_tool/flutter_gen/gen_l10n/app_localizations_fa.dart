@@ -89,7 +89,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get verify_tbt_text => 'لغو';
 
   @override
-  String get verify_email_dialog => 'یک حساب آسان یاب به ایمیل داده شده در بالا ساخته شده است اگر (بدون تایید کردن ایمیل خود و پر کردن فورم معرفی نامه در صفحه بعدی) از این صفحه خارج شوید دیگر با این ایمیل وارد آسان یاب شده نمی توانید';
+  String get verify_email_dialog => 'یک حساب آسان یاب به ایمیل داده شده در بالا ساخته شده است اگر ';
+
+  @override
+  String get verify_email_dialog_red => 'بدون تایید کردن ایمیل خود و پر کردن فورم معرفی نامه در صفحه بعدی ';
+
+  @override
+  String get verify_email_dialog_2 => 'از این صفحه خارج شوید دیگر با این ایمیل وارد آسان یاب شده نمی توانید';
 
   @override
   String get verify_email_give_up => 'انصراف';
@@ -125,7 +131,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get favorite_page_title => 'موارد دلخواه';
 
   @override
-  String get findingFriendById => 'ایدی مورد نظر را  بنویسید';
+  String get findingFriendById => 'آیدی مورد نظر را  بنویسید';
 
   @override
   String get searchById => 'جستجو با آیدی ';

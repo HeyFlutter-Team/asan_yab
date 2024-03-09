@@ -37,14 +37,29 @@ class _MainPageState extends ConsumerState<MainPage>
   }
 
   void setStatus(bool status) async {
-    if (FirebaseAuth.instance.currentUser != null) {
-      final token = await FirebaseMessaging.instance.getToken();
-      await FirebaseFirestore.instance
-          .collection('User')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .update({'isOnline': status, 'fcmToken': token});
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      try {
+        final token = await FirebaseMessaging.instance.getToken();
+        if (token != null) {
+          await FirebaseFirestore.instance
+              .collection('User')
+              .doc(currentUser.uid)
+              .update({'isOnline': status, 'fcmToken': token});
+        } else {
+          // Handle case where FCM token is null
+          print('FCM token is null');
+        }
+      } catch (e) {
+        // Handle Firestore update error
+        print('Firestore update error: $e');
+      }
+    } else {
+      // Handle case where user is not authenticated
+      print('User is not authenticated');
     }
   }
+
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

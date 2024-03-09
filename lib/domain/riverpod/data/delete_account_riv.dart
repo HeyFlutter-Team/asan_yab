@@ -17,13 +17,14 @@ class AccountDeletionNotifier extends ChangeNotifier {
         );
         await user.reauthenticateWithCredential(credential);
         await user.delete();
+        notifyListeners();
         print('younis');
         print('user data deleted');
       }
     } catch (e) {
       print('Failed to delete account: $e');
     }
-    notifyListeners();
+
   }
 
   Future<void> deleteUserDocument(String uid) async {
@@ -31,8 +32,6 @@ class AccountDeletionNotifier extends ChangeNotifier {
       final user = FirebaseFirestore.instance.collection('User').doc(uid);
       user.collection('chat');
       await user.delete();
-      print('younis');
-      print('user deleted');
       notifyListeners();
     } catch (e) {
       print('Error deleting user document: $e');
@@ -104,15 +103,32 @@ class AccountDeletionNotifier extends ChangeNotifier {
 
         // Delete the chat document itself
         await chatCollectionRef.doc(chatDoc.id).delete();
+        print('younis chat deleted');
         final docRef = FirebaseFirestore.instance.collection('User').doc(userId);
         QuerySnapshot followSnapshot = await docRef.collection('Follow').get();
 
         for (QueryDocumentSnapshot followDoc in followSnapshot.docs) {
           await followDoc.reference.delete();
+          print('younis Follow deleted');
+
         }
       }
     } catch (e) {
       print('Error deleting collection: $e');
+    }
+  }
+
+  Future<void> deleteFavorites(String uid)async{
+    await FirebaseFirestore.instance.collection('Favorite').doc(uid).delete();
+  }
+  Future<void> deleteRating(String uid)async{
+    final ratingsQuerySnapshot = await FirebaseFirestore.instance
+        .collection('ratings')
+        .where('userId', isEqualTo: uid)
+        .get();
+
+    for (var doc in ratingsQuerySnapshot.docs) {
+      await doc.reference.delete();
     }
   }
 }

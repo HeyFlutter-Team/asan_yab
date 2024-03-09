@@ -89,7 +89,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get verify_tbt_text => 'Cancel';
 
   @override
-  String get verify_email_dialog => 'An Asan Yab account has been \n created to the following email address.\n If you leave this page\n (without confirming your email and filling\n out the introduction form on the next page),\n you will no longer be able to\n enter Asan Yab with this email.';
+  String get verify_email_dialog => 'An Asan Yab account has been \n created to the following email address.\n If you leave this page\n ';
+
+  @override
+  String get verify_email_dialog_red => ' without confirming your email and filling\n out the introduction form on the next page,';
+
+  @override
+  String get verify_email_dialog_2 => 'you will no longer be able to\n enter Asan Yab with this email.';
 
   @override
   String get verify_email_give_up => 'Give Up';
@@ -299,7 +305,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get about_us_page_appbar_title => 'About Us';
 
   @override
-  String get nearby_place_page_title => 'NearBy Places';
+  String get nearby_place_page_title => 'Nearby Places';
 
   @override
   String get nearby_place_page_active_location => 'Activate your location';

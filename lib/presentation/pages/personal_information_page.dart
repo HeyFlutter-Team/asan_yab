@@ -6,6 +6,8 @@ import '../../domain/riverpod/data/sign_up_provider.dart';
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
 import '../widgets/custom_text_field.dart';
 
+final isLoadingInformation = StateProvider<bool>((ref) => false);
+
 class PersonalInformation extends ConsumerStatefulWidget {
   final String? email;
   const PersonalInformation({super.key, this.email});
@@ -20,8 +22,16 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
   final lastNameController = TextEditingController();
   final invitingPersonId = TextEditingController();
   final signUpFormKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ref.read(isLoadingInformation.notifier).state = false;
+    });
+  }
 
-  @override 
+  @override
   void dispose() {
     nameController.dispose();
     lastNameController.dispose();
@@ -91,6 +101,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                     onPressed: () {
                       final isValid = signUpFormKey.currentState!.validate();
                       if (!isValid) return;
+                      ref.read(isLoadingInformation.notifier).state = true;
                       ref
                           .read(userRegesterDetailsProvider)
                           .addUserDetailsToFirebase(
@@ -102,21 +113,29 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                             .read(userRegesterDetailsProvider)
                             .updateInviterRate(invitingPersonId.text);
                         signUpFormKey.currentState!.reset();
-
+                      }).whenComplete(() {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MainPage(),
-                            ));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const MainPage(),
+                                ))
+                            .whenComplete(() => ref
+                                .read(isLoadingInformation.notifier)
+                                .state = false);
                         ref
                             .read(buttonNavigationProvider.notifier)
                             .selectedIndex(0);
                       });
                     },
-                    child: Text(
-                      languageText.elevated_text,
-                      style: const TextStyle(fontSize: 17, color: Colors.white),
-                    ),
+                    child: ref.watch(isLoadingInformation)
+                        ? const CircularProgressIndicator(
+                      color: Colors.white,
+                    )
+                        : Text(
+                            languageText.elevated_text,
+                            style: const TextStyle(
+                                fontSize: 17, color: Colors.white),
+                          ),
                   ),
                 ],
               ),

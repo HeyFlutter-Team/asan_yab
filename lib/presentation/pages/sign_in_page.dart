@@ -3,6 +3,7 @@
 import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/sign_up_page.dart';
+import 'package:asan_yab/presentation/pages/verify_email_page.dart';
 import 'package:asan_yab/presentation/widgets/custom_text_field.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -176,21 +177,43 @@ class _LogInPageState extends ConsumerState<LogInPage>
                       prefs.setString('email', emailCTRL.text);
                       prefs.setString('password', passwordCTRL.text);
                     }
+
+                    final currentContext = context; // Store the current context
+
                     await ref
                         .read(signInProvider)
                         .signIn(
-                            context: context,
-                            email: emailCTRL.text,
-                            password: passwordCTRL.text,
-                      ref: ref
-                    )
-                        .whenComplete(() => ref.watch(userDetailsProvider))
-                        .whenComplete(() {})
-                        .whenComplete((){
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MainPage()));
+                          context: context,
+                          email: emailCTRL.text,
+                          password: passwordCTRL.text,
+                          ref: ref,
+                        )
+                        .then((_) async {
+                      await ref
+                          .watch(userDetailsProvider.notifier)
+                          .getCurrentUserData();
+                      final currentUser = FirebaseAuth.instance.currentUser;
+                      if (currentUser != null) {
+                        if(context.mounted) {
+                          if (currentUser.emailVerified) {
+                            Navigator.pushReplacement(
+                              currentContext, // Use the stored context
+                              MaterialPageRoute(
+                                  builder: (context) => const MainPage()),
+                            );
+                          } else {
+                            Navigator.pushReplacement(
+                              currentContext, // Use the stored context
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    VerifyEmailPage(email: emailCTRL.text),
+                              ),
+                            );
+                          }
+                        }
+                      } else {
+                        print('');
+                      }
                     });
                   },
                   child: Text(

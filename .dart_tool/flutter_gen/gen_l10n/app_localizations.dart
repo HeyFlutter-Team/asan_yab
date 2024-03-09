@@ -264,8 +264,20 @@ abstract class AppLocalizations {
   /// No description provided for @verify_email_dialog.
   ///
   /// In en, this message translates to:
-  /// **'An Asan Yab account has been \n created to the following email address.\n If you leave this page\n (without confirming your email and filling\n out the introduction form on the next page),\n you will no longer be able to\n enter Asan Yab with this email.'**
+  /// **'An Asan Yab account has been \n created to the following email address.\n If you leave this page\n '**
   String get verify_email_dialog;
+
+  /// No description provided for @verify_email_dialog_red.
+  ///
+  /// In en, this message translates to:
+  /// **' without confirming your email and filling\n out the introduction form on the next page,'**
+  String get verify_email_dialog_red;
+
+  /// No description provided for @verify_email_dialog_2.
+  ///
+  /// In en, this message translates to:
+  /// **'you will no longer be able to\n enter Asan Yab with this email.'**
+  String get verify_email_dialog_2;
 
   /// No description provided for @verify_email_give_up.
   ///
@@ -684,7 +696,7 @@ abstract class AppLocalizations {
   /// No description provided for @nearby_place_page_title.
   ///
   /// In en, this message translates to:
-  /// **'NearBy Places'**
+  /// **'Nearby Places'**
   String get nearby_place_page_title;
 
   /// No description provided for @nearby_place_page_active_location.

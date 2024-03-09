@@ -204,12 +204,11 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
                                                   const SizedBox(width: 5),
                                                   const Spacer(),
                                                   Text(
+                                                    textDirection:TextDirection.ltr ,
                                                     messageDetails.isEmpty
                                                         ? ''
                                                         : timeago.format(
-                                                            messageDetails[index]
-                                                                .sentTime
-                                                                .toLocal()),
+                                                        messageDetails[index].sentTime.toLocal()),
                                                     style: const TextStyle(
                                                         fontSize: 10),
                                                   ),
@@ -334,7 +333,7 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
                         children: [
                            Text(languageText.message_description,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 19),
+                            style: const TextStyle(fontSize: 19,color: Colors.white),
                           ),
                           const SizedBox(
                             height: 10,
@@ -363,7 +362,7 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                               Text(languageText.message_your_id),
+                               Text(languageText.message_your_id,style: const TextStyle(color: Colors.white),),
                               const SizedBox(
                                 width: 10,
                               ),
@@ -372,7 +371,8 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
                                 color: Colors.red.shade800.withOpacity(0.5),
                                 child: Center(
                                   child: TextButton(
-                                    child: Text(isRTL?convertDigitsToFarsi('${user.id}'):'${user.id}'),
+                                    child: Text(isRTL?convertDigitsToFarsi('${user.id}'):'${user.id}'
+                                        ,style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
                                     onPressed: () {
                                       ref
                                           .read(userDetailsProvider.notifier)

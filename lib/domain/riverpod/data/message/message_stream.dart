@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../profile_data_provider.dart';
 import 'message_history.dart';
 import 'messages_notifier.dart';
 
@@ -25,6 +26,7 @@ class Suspend {
           ref.watch(messageHistory.notifier).getMessageHistory();
           ref.watch(messageNotifierProvider.notifier).fetchMessage();
           ref.watch(seenMassageProvider.notifier).isNewMassage();
+          ref.watch(userDetailsProvider.notifier).getCurrentUserFollowCounts();
         }
       });
 

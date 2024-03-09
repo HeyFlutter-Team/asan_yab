@@ -104,124 +104,129 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                 )
                         ],
                       ),
-                      Row(
-                        children: <Widget>[
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    ref
-                                            .read(emojiShowingProvider.notifier)
-                                            .state =
-                                        !ref.watch(emojiShowingProvider);
-                                    if (ref.watch(emojiShowingProvider)) {
-                                      FocusManager.instance.primaryFocus
-                                          ?.unfocus();
-                                    }
-                                  },
-                                  child: Icon(
-                                    Icons.emoji_emotions_outlined,
-                                    color: ref.watch(emojiShowingProvider)
-                                        ? Colors.red
-                                        : themDark
-                                            ? Colors.white
-                                            : Colors.black45,
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Row(
+                          children: <Widget>[
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      ref
+                                              .read(emojiShowingProvider.notifier)
+                                              .state =
+                                          !ref.watch(emojiShowingProvider);
+                                      if (ref.watch(emojiShowingProvider)) {
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
+                                      }
+                                    },
+                                    child: Icon(
+                                      Icons.emoji_emotions_outlined,
+                                      size: 32,
+                                      color: ref.watch(emojiShowingProvider)
+                                          ? Colors.red
+                                          : themDark
+                                              ? Colors.white
+                                              : Colors.black45,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
 
-                          ///
-                          ///
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     sendImage();
-                          //   },
-                          //   child: Container(
-                          //     height: 30,
-                          //     width: 30,
-                          //     decoration: BoxDecoration(
-                          //       color: Colors.lightBlue,
-                          //       borderRadius: BorderRadius.circular(30),
-                          //     ),
-                          //     child: const Icon(
-                          //       Icons.add,
-                          //       color: Colors.white,
-                          //       size: 20,
-                          //     ),
-                          //   ),
-                          // ),
-                          // const SizedBox(
-                          //   width: 15,
-                          // ),
+                            ///
+                            ///
+                            // GestureDetector(
+                            //   onTap: () {
+                            //     sendImage();
+                            //   },
+                            //   child: Container(
+                            //     height: 30,
+                            //     width: 30,
+                            //     decoration: BoxDecoration(
+                            //       color: Colors.lightBlue,
+                            //       borderRadius: BorderRadius.circular(30),
+                            //     ),
+                            //     child: const Icon(
+                            //       Icons.add,
+                            //       color: Colors.white,
+                            //       size: 20,
+                            //     ),
+                            //   ),
+                            // ),
+                            // const SizedBox(
+                            //   width: 15,
+                            // ),
 
-                          Expanded(
-                            child: Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 7),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.grey,
-                                  width: 1.0,
+                            Expanded(
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 7),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(40),
+                                  color: themDark ? Colors.grey.shade800 : null,
                                 ),
-                                borderRadius: BorderRadius.circular(40),
-                                color: themDark ? Colors.grey.shade800 : null,
-                              ),
-                              child: TextField(
-                                onTap: () {
-                                  ref
-                                      .read(emojiShowingProvider.notifier)
-                                      .state = false;
-                                },
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.zero,
-                                  hintText: languageText?.chat_message,
-                                  border: InputBorder.none,
+                                child: TextField(
+                                  onTap: () {
+                                    ref
+                                        .read(emojiShowingProvider.notifier)
+                                        .state = false;
+                                  },
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.zero,
+                                    hintText: languageText?.chat_message,
+                                    border: InputBorder.none,
+                                  ),
+                                  controller: ref
+                                      .watch(messageProfileProvider.notifier)
+                                      .textController,
                                 ),
-                                controller: ref
-                                    .watch(messageProfileProvider.notifier)
-                                    .textController,
                               ),
                             ),
-                          ),
 
-                          const SizedBox(width: 15),
+                            const SizedBox(width: 15),
 
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    themDark ? Colors.grey.shade800 : null,
-                                elevation: 0,
-                                shape: const CircleBorder(),
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 10)),
-                            onPressed: () {
-                              ref
-                                  .read(messageProfileProvider.notifier)
-                                  .sendText(
-                                      receiverId: newProfileUser.uid!,
-                                      context: context,
-                                      replayMessage: ref.watch(replayProvider));
-                              ref.read(replayProvider.notifier).state = '';
-                              ref
-                                  .read(messageProfileProvider.notifier)
-                                  .textController
-                                  .clear();
-                            },
-                            child: Icon(
-                              Icons.send,
-                              color: Colors.blue.shade200,
-                              size: 24,
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      themDark ? Colors.grey.shade800 : null,
+                                  elevation: 0,
+                                  shape: const CircleBorder(),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 10)),
+                              onPressed: () {
+                                ref
+                                    .read(messageProfileProvider.notifier)
+                                    .sendText(
+                                        receiverId: newProfileUser.uid!,
+                                        context: context,
+                                        replayMessage: ref.watch(replayProvider));
+                                ref.read(replayProvider.notifier).state = '';
+                                ref
+                                    .read(messageProfileProvider.notifier)
+                                    .textController
+                                    .clear();
+                              },
+                              child: Icon(
+                                Icons.send,
+                                color: Colors.blue.shade200,
+                                size: 24,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       Expanded(
                         child: Column(
                           children: [
+                            const SizedBox(height: 9,),
                             // Flexible(
                             //   child: Row(
                             //     mainAxisAlignment:
@@ -254,7 +259,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                             Offstage(
                               offstage: !ref.watch(emojiShowingProvider),
                               child: SizedBox(
-                                height: 250,
+                                height: 240,
                                 child: EmojiPicker(
                                   textEditingController: ref
                                       .watch(messageProfileProvider.notifier)

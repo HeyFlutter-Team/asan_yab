@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/res/image_res.dart';
+import '../../domain/riverpod/data/single_place_provider.dart';
 import 'detials_page.dart';
 
 final searchLoadingProvider = StateProvider<bool>((ref) => false);
@@ -103,15 +104,18 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                       const SizedBox(height: 8),
                   itemBuilder: (context, index) {
                     return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DetailsPage(
-                              id: postList[index].id,
+                      onTap: () async{
+                        await ref.read(getSingleProvider.notifier).fetchSinglePlace(postList[index].id)
+                        .whenComplete((){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailsPage(
+                                id: postList[index].id,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        });
                       },
                       child: Row(
                         children: [

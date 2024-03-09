@@ -31,7 +31,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: AppLocalizations.of(context)?.searchById,
-              hintStyle: GoogleFonts.lobster(
+              hintStyle: const TextStyle(
                   fontSize: 18, fontWeight: FontWeight.w500),
             ),
             // onFieldSubmitted: (value) {
@@ -81,7 +81,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             ? Center(
                 child: Text(
                 AppLocalizations.of(context)!.findingFriendById,
-                style: GoogleFonts.lobster(
+                style: const TextStyle(
                     fontSize: 18, fontWeight: FontWeight.w500),
               ))
             : ListView.separated(

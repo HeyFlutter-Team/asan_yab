@@ -13,6 +13,7 @@ import '../../core/utils/convert_digits_to_farsi.dart';
 import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
 import '../../domain/riverpod/data/firbase_favorite_provider.dart';
+import '../../domain/riverpod/data/single_place_provider.dart';
 import '../pages/detials_page.dart';
 import '../pages/detials_page_offline.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -86,16 +87,19 @@ class _FavoritesState extends ConsumerState<Favorites> {
                       children: [
                         Card(
                           child: GestureDetector(
-                            onTap: () {
+                            onTap: ()async {
                               debugPrint(
                                   'Ramin check connectivity: ${widget.isConnected}');
                               widget.isConnected
-                                  ? Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => DetailsPage(
-                                            id: favorites[index]['id']),
-                                      ))
+                                  ?  await ref.read(getSingleProvider.notifier).fetchSinglePlace(favorites[index]['id'])
+                              .whenComplete((){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DetailsPage(
+                                          id: favorites[index]['id']),
+                                    ));
+                              })
                                   : Navigator.push(
                                       context,
                                       MaterialPageRoute(

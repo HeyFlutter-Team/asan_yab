@@ -82,108 +82,106 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
               ),
               margin: const EdgeInsets.only(top: 10, right: 8, left: 8),
               padding: const EdgeInsets.all(8),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: widget.isMe
-                    ? CrossAxisAlignment.start
-                    : CrossAxisAlignment.end,
-                children: [
-                  widget.isImage
-                      ? Column(
+              child: InkWell(
+                onTapDown: getPosition,
+                onLongPress: () => showMenu(
+                    context: context,
+                    position: relRectSize,
+                    items: [
+                      PopupMenuItem(
+                        onTap: () {
+                          if (widget.isMe) {
+                            ref
+                                .read(deleteMessagesProvider.notifier)
+                                .deleteSingleMessage(
+                                FirebaseAuth
+                                    .instance.currentUser!.uid,
+                                widget.message.receiverId,
+                                widget.message.content);
+                          }
+                        },
+                        child: const Row(
                           children: [
-                            Container(
-                              height: 200,
-                              width: 200,
-                              alignment: Alignment.bottomCenter,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                image: DecorationImage(
-                                    image: CachedNetworkImageProvider(widget
-                                        .message.content
-                                        .split(' ')
-                                        .first),
-                                    fit: BoxFit.fill),
-                              ),
-                            ),
+                            Text(
+                              'Deleted',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14),
+                            )
                           ],
-                        )
-                      : InkWell(
-                          onTapDown: getPosition,
-                          onLongPress: () => showMenu(
-                              context: context,
-                              position: relRectSize,
-                              items: [
-                                PopupMenuItem(
-                                  onTap: () {
-                                    if (widget.isMe) {
-                                      ref
-                                          .read(deleteMessagesProvider.notifier)
-                                          .deleteSingleMessage(
-                                              FirebaseAuth
-                                                  .instance.currentUser!.uid,
-                                              widget.message.receiverId,
-                                              widget.message.content);
-                                    }
-                                  },
-                                  child: const Row(
-                                    children: [
-                                      Text(
-                                        'Deleted',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                PopupMenuItem(
-                                  onTap: () {
-                                    ref.read(replayProvider.notifier).state =
-                                        widget.message.content;
-                                  },
-                                  child: const Row(
-                                    children: [
-                                      Text(
-                                        'Replay',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ]),
-                          child: Column(
-                            children: [
-                              widget.replayMessage == ''
-                                  ? const SizedBox()
-                                  : Text(
-                                      "replay to: ${widget.message.replayMessage}",
-                                      style: TextStyle(
-                                          color: widget.isMe
-                                              ? Colors.black
-                                              : Colors.black),
-                                    ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(widget.message.content,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: widget.isMe
-                                        ? Colors.black
-                                        : Colors.black,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  maxLines: 50),
-                            ],
-                          ),
                         ),
-                  // const SizedBox(height: 5),
-                  // Text(timeago.format(message.sentTime.toLocal()))
-                ],
+                      ),
+                      PopupMenuItem(
+                        onTap: () {
+                          ref.read(replayProvider.notifier).state =
+                              widget.message.content;
+                        },
+                        child: const Row(
+                          children: [
+                            Text(
+                              'Replay',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14),
+                            )
+                          ],
+                        ),
+                      ),
+                    ]),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: widget.isMe
+                      ? CrossAxisAlignment.start
+                      : CrossAxisAlignment.end,
+                  children: [
+                    widget.isImage
+                        ? Column(
+                            children: [
+                              Container(
+                                height: 200,
+                                width: 200,
+                                alignment: Alignment.bottomCenter,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  image: DecorationImage(
+                                      image: CachedNetworkImageProvider(widget
+                                          .message.content
+                                          .split(' ')
+                                          .first),
+                                      fit: BoxFit.fill),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Column(
+                          children: [
+                            widget.replayMessage == ''
+                                ? const SizedBox()
+                                : Text(
+                                    "replay to: ${widget.message.replayMessage}",
+                                    style: TextStyle(
+                                        color: widget.isMe
+                                            ? Colors.black
+                                            : Colors.black),
+                                  ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(widget.message.content,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: widget.isMe
+                                      ? Colors.black
+                                      : Colors.black,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                maxLines: 50),
+                          ],
+                        ),
+                    // const SizedBox(height: 5),
+                    // Text(timeago.format(message.sentTime.toLocal()))
+                  ],
+                ),
               ),
             ),
           ),

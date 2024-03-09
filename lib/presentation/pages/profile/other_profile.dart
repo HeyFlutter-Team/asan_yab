@@ -229,19 +229,19 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
               InkWell(
                 focusColor: Colors.transparent,
                 splashColor: Colors.transparent,
-                onTap: () {
+                onTap: () async {
                   ref.read(loadingFollowers.notifier).state=true;
 
                   //todo for follow
                   final uid = FirebaseAuth.instance.currentUser!.uid;
                   final followId = usersData!.uid!;
-                  ref
+                 await ref
                       .read(followHttpsProvider.notifier)
                       .updateFollowers(uid, followId)
-                      .whenComplete(() => ref
+                      .whenComplete(() async => await ref
                           .read(followerProvider.notifier)
                           .followOrUnFollow(uid, followId));
-                  ref.read(userDetailsProvider.notifier).getCurrentUserData();
+                 await ref.read(userDetailsProvider.notifier).getCurrentUserData();
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 28),

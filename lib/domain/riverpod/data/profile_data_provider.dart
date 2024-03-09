@@ -44,6 +44,37 @@ class ReadUserDetails extends StateNotifier<Users?> {
   void disposeUserData() {
     state = null;
   }
+  Future<Map<String, int>> getCurrentUserFollowCounts() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        final userSnapshot = await FirebaseFirestore.instance
+            .collection('User')
+            .doc(user.uid)
+            .get();
+
+        if (userSnapshot.exists) {
+          final userData = Users.fromMap(userSnapshot.data()!);
+          return {
+            'followerCount': userData.followerCount,
+            'followingCount': userData.followingCount,
+          };
+        } else {
+          print('User data not found for user ID: ${user.uid}');
+        }
+      } else {
+        print('Current user is null');
+      }
+    } catch (e, stackTrace) {
+      print('Error getting current user data: $e\n$stackTrace');
+    }
+
+    return {
+      'followerCount': 0,
+      'followingCount': 0,
+    };
+  }
 
   void copyToClipboard(String text) {
     FlutterClipboard.copy(text);

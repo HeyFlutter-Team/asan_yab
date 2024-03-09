@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/place.dart';
 import '../../data/repositoris/language_repository.dart';
+import '../../domain/riverpod/data/single_place_provider.dart';
 import '../../domain/servers/nearby_places.dart';
 import '../pages/detials_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -64,13 +65,16 @@ class NearbyPlaceWidget extends ConsumerWidget {
                     itemBuilder: (context, index) => SizedBox(
                           width: screenWidth * 0.5,
                           child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        DetailsPage(id: place[index].id),
-                                  ));
+                            onTap: () async{
+                              await ref.read(getSingleProvider.notifier).fetchSinglePlace(place[index].id)
+                              .whenComplete((){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          DetailsPage(id: place[index].id),
+                                    ));
+                              });
                             },
                             child: Card(
                               shape: RoundedRectangleBorder(

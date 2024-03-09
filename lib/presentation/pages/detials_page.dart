@@ -739,22 +739,17 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                               .phone,
                                                         );
                                                       },
-                                                      child: Row(
+                                                      child:isRTL? Row(
                                                         mainAxisAlignment:
                                                             MainAxisAlignment
                                                                 .end,
                                                         children: [
                                                           Text(
-                                                            isRTL
-                                                                ? convertDigitsToFarsi(
+                                                            convertDigitsToFarsi(
                                                                     places
                                                                         .addresses[
                                                                             index]
-                                                                        .phone)
-                                                                : places
-                                                                    .addresses[
-                                                                        index]
-                                                                    .phone,
+                                                                        .phone),
                                                             style: TextStyle(
                                                               fontSize: 16,
                                                               color: Theme.of(context)
@@ -773,6 +768,44 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                                 .phone_android_sharp,
                                                             color: Colors.green,
                                                           ),
+                                                        ],
+                                                      )
+                                                      :Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                        children: [
+                                                          const Icon(
+                                                            Icons
+                                                                .phone_android_sharp,
+                                                            color: Colors.green,
+                                                          ),
+                                                          const SizedBox(
+                                                              width: 8),
+                                                          Text(
+                                                            isRTL
+                                                                ? convertDigitsToFarsi(
+                                                                places
+                                                                    .addresses[
+                                                                index]
+                                                                    .phone)
+                                                                : places
+                                                                .addresses[
+                                                            index]
+                                                                .phone,
+                                                            style: TextStyle(
+                                                              fontSize: 16,
+                                                              color: Theme.of(context)
+                                                                  .brightness ==
+                                                                  Brightness
+                                                                      .dark
+                                                                  ? Colors.white
+                                                                  : Colors
+                                                                  .black,
+                                                            ),
+                                                          ),
+
+
                                                         ],
                                                       ),
                                                     ),
