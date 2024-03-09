@@ -1,23 +1,26 @@
+import 'package:asan_yab/data/models/language.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/menus_restaurant/rappi_category.dart';
 import '../../data/models/menus_restaurant/rappi_product.dart';
 import '../../data/models/menus_restaurant/rappi_tab_category.dart';
+import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/menus_bloc/menus_notifier.dart';
 
 const categoryHeight = 55.0;
 const productHeight = 130.0;
 
-class MenuRestaurant extends StatefulWidget {
+class MenuRestaurant extends ConsumerStatefulWidget {
   final String placeId;
 
   const MenuRestaurant({super.key, required this.placeId});
 
   @override
-  State<MenuRestaurant> createState() => _MenuRestaurantState();
+  ConsumerState<MenuRestaurant> createState() => _MenuRestaurantState();
 }
 
-class _MenuRestaurantState extends State<MenuRestaurant>
+class _MenuRestaurantState extends ConsumerState<MenuRestaurant>
     with SingleTickerProviderStateMixin {
   final _bloc = RappiBloc();
   var isLoading = true;
@@ -83,11 +86,11 @@ class _MenuRestaurantState extends State<MenuRestaurant>
                         ),
                       ),
                     ),
-                    Container(
+                    SizedBox(
                       height: 60,
                       child: TabBar(
-                        labelPadding: EdgeInsets.zero,
-                          indicatorPadding: EdgeInsets.zero,
+                          tabAlignment: TabAlignment.start,
+                          labelPadding: const EdgeInsets.only(left: 7,right: 7),
                           onTap:(index){
                           _bloc.onCategorySelected(index);
                           },
@@ -134,10 +137,9 @@ class RappiTabWidget extends StatelessWidget {
     return Opacity(
       opacity: selected ? 1 : 0.5,
       child: SizedBox(
-        width: 90,
         height: 45,
         child: Card(
-          elevation: tabcategory.selected ? 6 : 0,
+          elevation: tabcategory.selected ? 6 : 1,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Center(
@@ -167,7 +169,7 @@ class _RappiCategoryItem extends StatelessWidget {
     return Container(
       height: categoryHeight,
       child: Padding(
-        padding: const EdgeInsets.all(18.0),
+        padding: const EdgeInsets.all(10.0),
         child: Text(
           category!.name,
           style: const TextStyle(

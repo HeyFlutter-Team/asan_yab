@@ -135,6 +135,7 @@ class RappiBloc with ChangeNotifier {
             scrollController.offset <= tab.offsetTo &&
             !tab.selected) {
           onCategorySelected(i, animationRequired: false);
+          tabController?.animateTo(i);
           break;
         }
       }
@@ -151,7 +152,7 @@ class RappiBloc with ChangeNotifier {
     if (animationRequired) {
       _listen = false;
       await scrollController.animateTo(selected.offsetFrom,
-          duration: Duration(milliseconds: 500), curve: Curves.bounceIn);
+          duration: Duration(milliseconds: 500), curve: Curves.linear);
       _listen = true;
     }
   }
