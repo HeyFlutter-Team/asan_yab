@@ -143,7 +143,7 @@
 
   "nearby_place_page_title": "مکان های نزدیک",
   "nearby_place_page_active_location": "لوکشن خود را فعال کنید",
-"nearby_place_page_distances": "فاصله مورد نظر خود را انتخاب کنید",
+"nearby_place_page_distances": "فاصله مورد نظر",
   "nearby_place_page_meter": "متر",
   "nearby_place_page_km": "کیلومتر",
   "nearby_place_page_meter_away": " متر تا مقصد",
@@ -164,11 +164,13 @@
   "message_your_id": "آیدی شما..>",
   "for_add_comment": "برای افزودن نظر",
   "log_in": "وارد شوید",
+  "emoji_recent": "هیچ ایموجی اخیری وجود ندارد",
 
 
   "download_image_loading": "لطفا صبر کنید...",
 
 
-  "user_delete_account": "حذف حساب"
-
+  "user_delete_account": "حذف حساب",
+  "wrong_email": "ایمیل شما اشتباه است",
+  "wrong_password": "رمز شما اشتباه است"
 }

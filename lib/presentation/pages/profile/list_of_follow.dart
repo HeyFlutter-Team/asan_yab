@@ -58,7 +58,7 @@ class ListOfFollow extends ConsumerWidget {
             centerTitle: true,
             leading: IconButton(
               icon: const Icon(
-                Icons.arrow_back_ios_new_outlined,
+                Icons.arrow_back,
               ),
               onPressed: () {
                 ref.read(listOfDataProvider.notifier).state.clear();

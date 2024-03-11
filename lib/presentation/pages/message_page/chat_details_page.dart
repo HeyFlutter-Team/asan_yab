@@ -108,33 +108,33 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                         padding: const EdgeInsets.only(right: 8.0),
                         child: Row(
                           children: <Widget>[
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      ref
-                                              .read(emojiShowingProvider.notifier)
-                                              .state =
-                                          !ref.watch(emojiShowingProvider);
-                                      if (ref.watch(emojiShowingProvider)) {
-                                        FocusManager.instance.primaryFocus
-                                            ?.unfocus();
-                                      }
-                                    },
-                                    child: Icon(
-                                      Icons.emoji_emotions_outlined,
-                                      size: 32,
-                                      color: ref.watch(emojiShowingProvider)
-                                          ? Colors.red
-                                          : themDark
-                                              ? Colors.white
-                                              : Colors.black45,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                  themDark ? Colors.grey.shade800 : null,
+                                  elevation: 0,
+                                  shape: const CircleBorder(),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 10)),
+                              onPressed: () {
+                                ref
+                                    .read(emojiShowingProvider.notifier)
+                                    .state =
+                                !ref.watch(emojiShowingProvider);
+                                if (ref.watch(emojiShowingProvider)) {
+                                  FocusManager.instance.primaryFocus
+                                      ?.unfocus();
+                                }
+                              },
+                              child: Icon(
+                                Icons.emoji_emotions_outlined,
+                                size: 24,
+                                color: ref.watch(emojiShowingProvider)
+                                    ? Colors.blue.shade200
+                                    : themDark
+                                    ? Colors.white
+                                    : Colors.black45,
+                              ),
                             ),
 
                             ///
@@ -160,6 +160,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                             // const SizedBox(
                             //   width: 15,
                             // ),
+                            const SizedBox(width: 10),
 
                             Expanded(
                               child: Container(
@@ -181,7 +182,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                   },
                                   decoration: InputDecoration(
                                     contentPadding: EdgeInsets.zero,
-                                    hintText: languageText?.chat_message,
+                                    hintText: '   ${languageText?.chat_message}',
                                     border: InputBorder.none,
                                   ),
                                   controller: ref
@@ -191,7 +192,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                               ),
                             ),
 
-                            const SizedBox(width: 15),
+                            const SizedBox(width: 10),
 
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
@@ -259,7 +260,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                             Offstage(
                               offstage: !ref.watch(emojiShowingProvider),
                               child: SizedBox(
-                                height: 240,
+                                height: 277,
                                 child: EmojiPicker(
                                   textEditingController: ref
                                       .watch(messageProfileProvider.notifier)
@@ -290,9 +291,8 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                     recentTabBehavior: RecentTabBehavior.RECENT,
                                     recentsLimit: 28,
                                     replaceEmojiOnLimitExceed: false,
-                                    noRecents: const Text(
-                                      'لا توجد رموز تعبيرية حديثة',
-                                      style: TextStyle(
+                                    noRecents:  Text('${languageText?.emoji_recent}',
+                                      style: const TextStyle(
                                           fontSize: 20, color: Colors.black26),
                                       textAlign: TextAlign.center,
                                     ),

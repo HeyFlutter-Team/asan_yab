@@ -80,7 +80,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get verify_appBar_title => 'Email confirmation';
 
   @override
-  String get verify_body_text => 'A confirmation link has been sent to your email!\n   Please click on it to confirm your email.\n If you press the link,\n press send again!';
+  String get verify_body_text => 'A confirmation link has been sent to your email!\nPlease click on it to confirm your email.\n If you press the link,\n press send again!';
 
   @override
   String get verify_elb_text => 'Resend';
@@ -122,7 +122,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get category_title => 'Categories';
 
   @override
-  String get nearbyPlaces_title => 'Nearby places';
+  String get nearbyPlaces_title => 'Nearby Places';
 
   @override
   String get nearbyPlaces_meter_title => 'meters away';
@@ -311,7 +311,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nearby_place_page_active_location => 'Activate your location';
 
   @override
-  String get nearby_place_page_distances => 'Choose the distance you want';
+  String get nearby_place_page_distances => 'Desired distance';
 
   @override
   String get nearby_place_page_meter => 'Meter';
@@ -368,8 +368,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get log_in => 'Log in';
 
   @override
+  String get emoji_recent => 'There are no recent emojis';
+
+  @override
   String get download_image_loading => 'Please waite...';
 
   @override
   String get user_delete_account => 'Delete Account';
+
+  @override
+  String get wrong_email => 'Your Email is wrong';
+
+  @override
+  String get wrong_password => 'Your Password is wrong';
 }

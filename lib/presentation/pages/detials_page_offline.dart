@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:asan_yab/data/models/language.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +10,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/utils/convert_digits_to_farsi.dart';
 import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../widgets/phone_widget.dart';
 
 class DetailPageOffline extends ConsumerWidget {
   final Map<String, dynamic> favItem;
@@ -17,6 +21,7 @@ class DetailPageOffline extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final isRTL = ref.watch(languageProvider).code == 'fa';
+    final languageText = AppLocalizations.of(context);
     List<String> phoneData = List<String>.from(jsonDecode(favItem['phone']));
     List<String> addressData =
         List<String>.from(jsonDecode(favItem['address']));
@@ -100,11 +105,11 @@ class DetailPageOffline extends ConsumerWidget {
                       ),
                       const SizedBox(height: 12),
                       CustomCard(
-                        title: 'توضیحات',
+                        title: '${languageText?.details_page_1_custom_card}',
                         child: Text(favItem['dec']),
                       ),
                       CustomCard(
-                        title: 'مشخصات',
+                        title: '${languageText?.details_page_3_custom_card}',
                         child: ListView.builder(
                           padding: EdgeInsets.zero,
                           itemCount: phoneData.length,
@@ -128,46 +133,18 @@ class DetailPageOffline extends ConsumerWidget {
                                           child: Text(addressData[index],
                                               maxLines: 4,
                                               overflow: TextOverflow.fade,
-                                              style: const TextStyle(
+                                              style:  TextStyle(
                                                   fontSize: 14,
-                                                  color: Colors.black54)),
+                                                color: Colors.grey.withOpacity(0.5),
+                                              )),
                                         ),
                                       ],
                                     )),
-                                ConstrainedBox(
-                                  constraints:
-                                      const BoxConstraints(minWidth: 120),
-                                  child: OutlinedButton(
-                                    style: OutlinedButton.styleFrom(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8)),
-                                    onPressed: () async {
-                                      await FlutterPhoneDirectCaller.callNumber(
-                                        phoneData[index],
-                                      );
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          isRTL
-                                              ? convertDigitsToFarsi(
-                                                  phoneData[index])
-                                              : phoneData[index],
-                                          style: const TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.black54),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        const Icon(
-                                          Icons.phone_android_sharp,
-                                          color: Colors.green,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
+                                Directionality(
+
+                                    textDirection:isRTL? TextDirection.rtl:TextDirection.ltr,
+                                    child: buildPhoneNumberWidget(context: context, isRTL: isRTL, phone:phoneData[index] )
+                                ),                              ],
                             );
                           },
                         ),
@@ -239,9 +216,13 @@ class CustomCard extends StatelessWidget {
                       color: Colors.grey,
                     ),
                     const SizedBox(height: 4),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: child,
+                    Directionality(
+
+                      textDirection: TextDirection.rtl,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: child,
+                      ),
                     ),
                   ],
                 ),

@@ -1,5 +1,6 @@
 import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/domain/riverpod/screen/active_index.dart';
+import 'package:asan_yab/presentation/widgets/phone_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -47,15 +48,17 @@ class NewPlaces extends ConsumerWidget {
                         ? convertDigitsToFarsi(phoneNumberItems)
                         : phoneNumberItems;
                     return GestureDetector(
-                      onTap: ()async {
-                        await ref.read(getSingleProvider.notifier).fetchSinglePlace(places[index].id)
-                        .whenComplete(() =>Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                DetailsPage(id: places[index].id),
-                          ),
-                        ));
+                      onTap: () async {
+                        await ref
+                            .read(getSingleProvider.notifier)
+                            .fetchSinglePlace(places[index].id)
+                            .whenComplete(() => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        DetailsPage(id: places[index].id),
+                                  ),
+                                ));
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 12),
@@ -104,37 +107,16 @@ class NewPlaces extends ConsumerWidget {
                                   const SizedBox(height: 24),
                                   phoneNumber.isEmpty
                                       ? const SizedBox()
-                                      : OutlinedButton(
-                                          style: OutlinedButton.styleFrom(
-                                            foregroundColor: Colors.white,
-                                            backgroundColor:
-                                                Colors.black.withOpacity(0.3),
-                                            elevation: 4,
-                                          ),
-                                          onPressed: () async {
-                                            await FlutterPhoneDirectCaller
-                                                .callNumber(phoneNumber);
-                                          },
-                                          child: isRTL
-                                              ? Row(
-                                                  children: [
-                                                    Text(phoneNumber),
-                                                    const Icon(
-                                                      Icons.phone_android,
-                                                      color: Colors.green,
-                                                    ),
-                                                  ],
-                                                )
-                                              : Row(
-                                                  children: [
-                                                    const Icon(
-                                                      Icons.phone_android,
-                                                      color: Colors.green,
-                                                    ),
-                                                    Text(phoneNumber),
-                                                  ],
-                                                ),
-                                        ),
+                                      : Directionality(
+                                          textDirection: isRTL
+                                              ? TextDirection.rtl
+                                              : TextDirection.ltr,
+                                          child: buildPhoneNumberWidget(
+                                              context: context,
+                                              isRTL: isRTL,
+                                              phone: phoneNumber,
+                                              colorActive: true),
+                                  ),
                                 ],
                               ),
                             ),

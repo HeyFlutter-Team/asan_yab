@@ -30,7 +30,7 @@
 
 
   "verify_appBar_title": "Email confirmation",
-  "verify_body_text": "A confirmation link has been sent to your email!\n   Please click on it to confirm your email.\n If you press the link,\n press send again!",
+  "verify_body_text": "A confirmation link has been sent to your email!\nPlease click on it to confirm your email.\n If you press the link,\n press send again!",
   "verify_elb_text": "Resend",
   "verify_tbt_text": "Cancel",
   "verify_email_dialog": "An Asan Yab account has been \n created to the following email address.\n If you leave this page\n ",
@@ -52,7 +52,7 @@
 
 
 
-  "nearbyPlaces_title": "Nearby places",
+  "nearbyPlaces_title": "Nearby Places",
   "nearbyPlaces_meter_title": "meters away",
 
 
@@ -158,7 +158,7 @@
 
   "nearby_place_page_title": "Nearby Places",
   "nearby_place_page_active_location": "Activate your location",
-  "nearby_place_page_distances": "Choose the distance you want",
+  "nearby_place_page_distances": "Desired distance",
   "nearby_place_page_meter": "Meter",
   "nearby_place_page_km": "km",
   "nearby_place_page_meter_away": "Meters away",
@@ -181,12 +181,15 @@
   "message_your_id": "Your Id...>",
   "for_add_comment": "for add comment",
   "log_in": "Log in",
+  "emoji_recent": "There are no recent emojis",
+
 
   "download_image_loading": "Please waite...",
 
 
-  "user_delete_account": "Delete Account"
-
+  "user_delete_account": "Delete Account",
+  "wrong_email": "Your Email is wrong",
+  "wrong_password": "Your Password is wrong"
 
 
 }

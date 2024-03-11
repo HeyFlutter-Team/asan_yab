@@ -2,10 +2,14 @@ import 'package:asan_yab/domain/riverpod/data/follow_https.dart';
 import 'package:asan_yab/domain/riverpod/data/following_data.dart';
 import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
 import 'package:asan_yab/domain/riverpod/screen/follow_checker.dart';
+import 'package:asan_yab/presentation/pages/profile/other_profile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../domain/riverpod/data/other_user_data.dart';
+import '../../../domain/riverpod/data/search_id.dart';
 
 class ListOfFollowing extends ConsumerStatefulWidget {
   const ListOfFollowing({super.key});
@@ -104,20 +108,21 @@ class _ListOfFollowingState extends ConsumerState<ListOfFollowing> {
                           debugPrint(
                               "is ture ${persons[index]['user'].uid! == uid}");
                           return ListTile(
-                            onTap: () {
+                            onTap: () async{
                               ref
-                                  .read(followHttpsProvider.notifier)
-                                  .updateFollowers(
-                                      uid, persons[index]['user'].uid!)
-                                  .whenComplete(() => ref
-                                      .read(followerProvider.notifier)
-                                      .followOrUnFollow(
-                                          FirebaseAuth
-                                              .instance.currentUser!.uid,
-                                          persons[index]['user'].uid!));
+                                  .read(otherUserProvider.notifier)
+                                  .setDataUser(persons[index]['user']);
+                             await ref.read(followerProvider.notifier).followOrUnFollow(
+                                  FirebaseAuth.instance.currentUser!.uid,
+                                  persons[index]['user'].uid).whenComplete(() =>
+                                 Navigator.push(
+                                     context,
+                                     MaterialPageRoute(
+                                       builder: (context) => const OtherProfile(),
+                                     )));
 
-                              // todo for visite
                             },
+
                             title: Text(persons[index]['user'].name!),
                             leading: persons[index]['user'].imageUrl == ''
                                 ? const CircleAvatar(

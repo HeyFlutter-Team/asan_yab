@@ -84,6 +84,14 @@ class AccountDeletionNotifier extends ChangeNotifier {
 
   Future<void> deleteChatCollection(String userId) async {
     try {
+      final docRef = FirebaseFirestore.instance.collection('User').doc(userId);
+      QuerySnapshot followSnapshot = await docRef.collection('Follow').get();
+
+      for (QueryDocumentSnapshot followDoc in followSnapshot.docs) {
+        await followDoc.reference.delete();
+        print('younis Follow deleted');
+
+      }
       final chatCollectionRef = FirebaseFirestore.instance
           .collection('User')
           .doc(userId)
@@ -104,14 +112,6 @@ class AccountDeletionNotifier extends ChangeNotifier {
         // Delete the chat document itself
         await chatCollectionRef.doc(chatDoc.id).delete();
         print('younis chat deleted');
-        final docRef = FirebaseFirestore.instance.collection('User').doc(userId);
-        QuerySnapshot followSnapshot = await docRef.collection('Follow').get();
-
-        for (QueryDocumentSnapshot followDoc in followSnapshot.docs) {
-          await followDoc.reference.delete();
-          print('younis Follow deleted');
-
-        }
       }
     } catch (e) {
       print('Error deleting collection: $e');

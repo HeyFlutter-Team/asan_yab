@@ -359,7 +359,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         ),
                       ));
                 },
-                title: const Text('Delete account'),
+                title: Text('${languageText?.user_delete_account}'),
                 leading: const Icon(
                   color: Colors.red,
                   Icons.person_remove_alt_1_outlined,
@@ -374,26 +374,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               ),
             ],
           ),
-          // ListTile(
-          //   onTap: () {
-          //     ref.read(listOfDataProvider.notifier).state.clear();
-          //     ref.read(listOfDataFollowersProvider.notifier).state.clear();
-          //     ref
-          //         .read(followingDataProvider.notifier)
-          //         .getProfile(FirebaseAuth.instance.currentUser!.uid);
-          //     Navigator.push(
-          //         context,
-          //         MaterialPageRoute(
-          //           builder: (context) => const ListOfFollow(),
-          //         ));
-          //   },
-          //   title: Text(languageText!.profile_followers),
-          //   leading: const Icon(
-          //     color: Colors.red,
-          //     Icons.person_2_outlined,
-          //     size: 30,
-          //   ),
-          // ),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(

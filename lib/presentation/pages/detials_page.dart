@@ -20,6 +20,7 @@ import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../../domain/riverpod/data/firebase_rating_provider.dart';
 import '../../domain/riverpod/data/single_place_provider.dart';
 import '../widgets/page_view_item.dart';
+import '../widgets/phone_widget.dart';
 import 'detials_page_offline.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -38,7 +39,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       //Todo: for selected
-   await ref.read(getSingleProvider.notifier).fetchSinglePlace(widget.id);
+      await ref.read(getSingleProvider.notifier).fetchSinglePlace(widget.id);
       ref.read(getInformationProvider).getFavorite();
       final provider = ref.read(favoriteProvider.notifier);
       final toggle = provider.isExist(widget.id);
@@ -204,7 +205,9 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                 : CustomCard(
                                     title:
                                         '${languageText?.details_page_1_custom_card}',
-                                    child: Text(places.description),
+                                    child: Text(places.description,
+                                    textDirection: TextDirection.rtl,
+                                    ),
                                   ),
                             Padding(
                               padding:
@@ -719,97 +722,11 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                             (places.addresses[index].phone
                                                     .isEmpty)
                                                 ? const SizedBox(height: 0)
-                                                : ConstrainedBox(
-                                                    constraints:
-                                                        const BoxConstraints(
-                                                            minWidth: 120),
-                                                    child: OutlinedButton(
-                                                      style: OutlinedButton
-                                                          .styleFrom(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .symmetric(
-                                                                      horizontal:
-                                                                          8)),
-                                                      onPressed: () async {
-                                                        await FlutterPhoneDirectCaller
-                                                            .callNumber(
-                                                          places
-                                                              .addresses[index]
-                                                              .phone,
-                                                        );
-                                                      },
-                                                      child:isRTL? Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .end,
-                                                        children: [
-                                                          Text(
-                                                            convertDigitsToFarsi(
-                                                                    places
-                                                                        .addresses[
-                                                                            index]
-                                                                        .phone),
-                                                            style: TextStyle(
-                                                              fontSize: 16,
-                                                              color: Theme.of(context)
-                                                                          .brightness ==
-                                                                      Brightness
-                                                                          .dark
-                                                                  ? Colors.white
-                                                                  : Colors
-                                                                      .black,
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 8),
-                                                          const Icon(
-                                                            Icons
-                                                                .phone_android_sharp,
-                                                            color: Colors.green,
-                                                          ),
-                                                        ],
-                                                      )
-                                                      :Row(
-                                                        mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                        children: [
-                                                          const Icon(
-                                                            Icons
-                                                                .phone_android_sharp,
-                                                            color: Colors.green,
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 8),
-                                                          Text(
-                                                            isRTL
-                                                                ? convertDigitsToFarsi(
-                                                                places
-                                                                    .addresses[
-                                                                index]
-                                                                    .phone)
-                                                                : places
-                                                                .addresses[
-                                                            index]
-                                                                .phone,
-                                                            style: TextStyle(
-                                                              fontSize: 16,
-                                                              color: Theme.of(context)
-                                                                  .brightness ==
-                                                                  Brightness
-                                                                      .dark
-                                                                  ? Colors.white
-                                                                  : Colors
-                                                                  .black,
-                                                            ),
-                                                          ),
+                                                : Directionality(
 
-
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
+                                              textDirection:isRTL? TextDirection.rtl:TextDirection.ltr,
+                                                  child: buildPhoneNumberWidget(context: context, isRTL: isRTL, phone:places.addresses[index].phone )
+                                                ),
                                           ],
                                         );
                                       },

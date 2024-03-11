@@ -311,7 +311,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get nearby_place_page_active_location => 'لوکشن خود را فعال کنید';
 
   @override
-  String get nearby_place_page_distances => 'فاصله مورد نظر خود را انتخاب کنید';
+  String get nearby_place_page_distances => 'فاصله مورد نظر';
 
   @override
   String get nearby_place_page_meter => 'متر';
@@ -368,8 +368,17 @@ class AppLocalizationsFa extends AppLocalizations {
   String get log_in => 'وارد شوید';
 
   @override
+  String get emoji_recent => 'هیچ ایموجی اخیری وجود ندارد';
+
+  @override
   String get download_image_loading => 'لطفا صبر کنید...';
 
   @override
   String get user_delete_account => 'حذف حساب';
+
+  @override
+  String get wrong_email => 'ایمیل شما اشتباه است';
+
+  @override
+  String get wrong_password => 'رمز شما اشتباه است';
 }

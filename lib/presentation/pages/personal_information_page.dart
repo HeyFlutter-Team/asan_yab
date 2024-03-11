@@ -10,7 +10,8 @@ final isLoadingInformation = StateProvider<bool>((ref) => false);
 
 class PersonalInformation extends ConsumerStatefulWidget {
   final String? email;
-  const PersonalInformation({super.key, this.email});
+  final String? password;
+  const PersonalInformation({super.key, this.email, this.password});
 
   @override
   ConsumerState<PersonalInformation> createState() =>
@@ -95,7 +96,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red.shade800,
-                        minimumSize: const Size(340, 55),
+                        minimumSize:  Size(MediaQuery.of(context).size.width * 0.9, 55),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12))),
                     onPressed: () {
@@ -107,7 +108,8 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                           .addUserDetailsToFirebase(
                               emailController: widget.email,
                               lastNameController: lastNameController.text,
-                              nameController: nameController.text)
+                              nameController: nameController.text,
+                              passwordController: widget.password)
                           .whenComplete(() async {
                         await ref
                             .read(userRegesterDetailsProvider)
@@ -129,8 +131,8 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                     },
                     child: ref.watch(isLoadingInformation)
                         ? const CircularProgressIndicator(
-                      color: Colors.white,
-                    )
+                            color: Colors.white,
+                          )
                         : Text(
                             languageText.elevated_text,
                             style: const TextStyle(

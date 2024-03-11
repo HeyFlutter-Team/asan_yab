@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../presentation/pages/sign_in_page.dart';
 import '../screen/botton_navigation_provider.dart';
 
 //Sign In method
@@ -23,15 +24,15 @@ class SignInNotifier {
   }) async {
     try {
       read.read(userDetailsProvider);
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return const Center(child: CircularProgressIndicator(
-            color: Colors.red,
-          )); // Use the custom dialog widget
-        },
-      );
+      // showDialog(
+      //   context: context,
+      //   barrierDismissible: false,
+      //   builder: (BuildContext context) {
+      //     return const Center(child: CircularProgressIndicator(
+      //       color: Colors.red,
+      //     )); // Use the custom dialog widget
+      //   },
+      // );
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.trim(),
         password: password,
@@ -57,7 +58,7 @@ class SignInNotifier {
     } catch (e) {
       print('younis general errors $e');
     }finally{
-      Navigator.pop(context);
+      ref.read(isSignInningProvider.notifier).state = false;
     }
   }
   Future<void> isMyEmailVerified(BuildContext context)async {

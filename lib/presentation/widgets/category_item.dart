@@ -32,8 +32,9 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
   void initState() {
     super.initState();
 
-    Future.delayed(Duration.zero, () async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       debugPrint('id for cat ${widget.id}');
+
       ref.read(idProvider.notifier).state = widget.id;
       Future.delayed(
         const Duration(milliseconds: 100),
@@ -43,7 +44,10 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
           });
         },
       );
-      await ref.read(categoriesItemsProvider.notifier).getInitPlaces(widget.id);
+      if(mounted) {
+        await ref.read(categoriesItemsProvider.notifier).getInitPlaces(
+            widget.id);
+      }
       ref.read(loadingProvider.notifier).state = !ref.watch(loadingProvider);
     });
   }

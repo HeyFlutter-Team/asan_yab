@@ -15,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../domain/riverpod/data/sign_in_provider.dart';
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
 
+final isSignInningProvider = StateProvider<bool>((ref) => false);
 class LogInPage extends ConsumerStatefulWidget {
   final Function()? onClickedSignUp;
   const LogInPage({Key? key, this.onClickedSignUp}) : super(key: key);
@@ -44,6 +45,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
     ).animate(_controller);
     _controller.forward();
     _initializeValues();
+    ref.read(isSignInningProvider.notifier).state = false;
   }
 
   void _initializeValues() async {
@@ -164,12 +166,13 @@ class _LogInPageState extends ConsumerState<LogInPage>
                 builder: (context, sref, child) => ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red.shade800,
-                      minimumSize: const Size(340, 55),
+                      minimumSize:  Size(MediaQuery.of(context).size.width * 0.9, 55),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12))),
                   onPressed: () async {
                     final isValid = formKey.currentState!.validate();
                     if (!isValid) return;
+                    ref.read(isSignInningProvider.notifier).state = true;
                     final isCheckboxChecked = ref.read(isCheckProvider);
                     if (isCheckboxChecked) {
                       SharedPreferences prefs =
@@ -215,8 +218,11 @@ class _LogInPageState extends ConsumerState<LogInPage>
                         print('');
                       }
                     });
+
                   },
-                  child: Text(
+                  child:ref.watch(isSignInningProvider)
+                      ?const CircularProgressIndicator(color: Colors.white,)
+                      :Text(
                     languageText.sign_in_elbT,
                     style: const TextStyle(fontSize: 20, color: Colors.white),
                   ),
@@ -238,7 +244,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    minimumSize: const Size(340, 55),
+                    minimumSize:  Size(MediaQuery.of(context).size.width * 0.9, 55),
                     shape: RoundedRectangleBorder(
                         side: BorderSide(color: Colors.black.withOpacity(0.44)),
                         borderRadius: BorderRadius.circular(12))),

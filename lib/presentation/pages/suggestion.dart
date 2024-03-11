@@ -39,7 +39,7 @@ class _SuggestionPageState extends ConsumerState<SuggestionPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
      Future.delayed(Duration.zero,() async{
-       if (mounted) { // Check if the widget is mounted
+       if (mounted) {
          ref.read(isLoading.notifier).state = true;
          final snapshot = await FirebaseFirestore.instance
              .collection('Description')

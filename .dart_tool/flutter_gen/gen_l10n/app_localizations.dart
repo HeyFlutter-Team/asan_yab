@@ -246,7 +246,7 @@ abstract class AppLocalizations {
   /// No description provided for @verify_body_text.
   ///
   /// In en, this message translates to:
-  /// **'A confirmation link has been sent to your email!\n   Please click on it to confirm your email.\n If you press the link,\n press send again!'**
+  /// **'A confirmation link has been sent to your email!\nPlease click on it to confirm your email.\n If you press the link,\n press send again!'**
   String get verify_body_text;
 
   /// No description provided for @verify_elb_text.
@@ -330,7 +330,7 @@ abstract class AppLocalizations {
   /// No description provided for @nearbyPlaces_title.
   ///
   /// In en, this message translates to:
-  /// **'Nearby places'**
+  /// **'Nearby Places'**
   String get nearbyPlaces_title;
 
   /// No description provided for @nearbyPlaces_meter_title.
@@ -708,7 +708,7 @@ abstract class AppLocalizations {
   /// No description provided for @nearby_place_page_distances.
   ///
   /// In en, this message translates to:
-  /// **'Choose the distance you want'**
+  /// **'Desired distance'**
   String get nearby_place_page_distances;
 
   /// No description provided for @nearby_place_page_meter.
@@ -819,6 +819,12 @@ abstract class AppLocalizations {
   /// **'Log in'**
   String get log_in;
 
+  /// No description provided for @emoji_recent.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no recent emojis'**
+  String get emoji_recent;
+
   /// No description provided for @download_image_loading.
   ///
   /// In en, this message translates to:
@@ -830,6 +836,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete Account'**
   String get user_delete_account;
+
+  /// No description provided for @wrong_email.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Email is wrong'**
+  String get wrong_email;
+
+  /// No description provided for @wrong_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Password is wrong'**
+  String get wrong_password;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

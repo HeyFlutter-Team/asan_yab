@@ -111,7 +111,7 @@ class _MyAppState extends ConsumerState<MyApp> {
               child: Text('خطا در اتصال'),
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return const ProfilePage();
+            return const MainPage();
           } else if (snapshot.hasData && snapshot.data != null) {
             final user = snapshot.data!;
             if (user.emailVerified) {

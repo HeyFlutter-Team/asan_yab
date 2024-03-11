@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/domain/riverpod/data/firebase_rating_provider.dart';
+import 'package:asan_yab/presentation/widgets/phone_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -151,36 +152,10 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                               // color: Colors.black,
                                               ),
                                         ),
-                                        OutlinedButton(
-                                          onPressed: () async {
-                                            await FlutterPhoneDirectCaller
-                                                .callNumber(phoneNumber);
-                                          },
-                                          child: isRTL
-                                              ? Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(phoneNumber),
-                                                    const Icon(
-                                                        Icons.phone_android,
-                                                        color: Colors.green),
-                                                  ],
-                                                )
-                                              : Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    const Icon(
-                                                        Icons.phone_android,
-                                                        color: Colors.green),
-                                                    Text(phoneNumber,
-                                                        overflow: TextOverflow
-                                                            .ellipsis),
-                                                  ],
-                                                ),
+                                        Directionality(
+
+                                            textDirection:isRTL? TextDirection.rtl:TextDirection.ltr,
+                                            child: buildPhoneNumberWidget(context: context, isRTL: isRTL, phone:phoneNumber )
                                         ),
                                       ],
                                     ),
