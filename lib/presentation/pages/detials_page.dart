@@ -225,7 +225,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                     child: Row(
                                       children: [
                                         Text(
-                                          'Show Menu',
+                                          '${languageText?.menus_restaurant}',
                                           style: TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.w500,

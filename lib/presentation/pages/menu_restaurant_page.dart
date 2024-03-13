@@ -1,11 +1,9 @@
-import 'package:asan_yab/data/models/language.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../data/models/menus_restaurant/rappi_category.dart';
 import '../../data/models/menus_restaurant/rappi_product.dart';
 import '../../data/models/menus_restaurant/rappi_tab_category.dart';
-import '../../data/repositoris/language_repository.dart';
+import '../../domain/riverpod/data/single_place_provider.dart';
 import '../../domain/riverpod/menus_bloc/menus_notifier.dart';
 
 const categoryHeight = 55.0;
@@ -54,6 +52,7 @@ class _MenuRestaurantState extends ConsumerState<MenuRestaurant>
 
   @override
   Widget build(BuildContext context) {
+    final places = ref.watch(getSingleProvider);
     return Scaffold(
       body: isLoading
           ? const Center(
@@ -65,57 +64,67 @@ class _MenuRestaurantState extends ConsumerState<MenuRestaurant>
                 builder: (_, __) => Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Container(
-                      height: 70,
-                      child: Padding(
-                        padding: const EdgeInsets.all(18.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'Restaurant',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            IconButton(
-                                icon: const Icon(Icons.arrow_forward),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                }),
-                          ],
+                    Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: Container(
+                        height: 70,
+                        child: Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                               Text(
+                                 '${places?.name}',
+                                style: const TextStyle(
+                                  overflow: TextOverflow.ellipsis,
+                                    fontSize: 17, fontWeight: FontWeight.bold),
+                              ),
+                              IconButton(
+                                  icon: const Icon(Icons.arrow_forward),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  }),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                     SizedBox(
                       height: 60,
-                      child: TabBar(
-                          tabAlignment: TabAlignment.start,
-                          labelPadding: const EdgeInsets.only(left: 7,right: 7),
-                          onTap:(index){
-                          _bloc.onCategorySelected(index);
-                          },
-                          indicator: const BoxDecoration(),
-                          controller: _bloc.tabController,
-                          isScrollable: true,
-                          overlayColor:
-                              const MaterialStatePropertyAll(Colors.transparent ),
-                          tabs: _bloc.tabs
-                              .map((e) => RappiTabWidget(e))
-                              .toList()),
+                      child: Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: TabBar(
+                            tabAlignment: TabAlignment.start,
+                            labelPadding: const EdgeInsets.only(left: 7,right: 7),
+                            onTap:(index){
+                            _bloc.onCategorySelected(index);
+                            },
+                            indicator: const BoxDecoration(),
+                            controller: _bloc.tabController,
+                            isScrollable: true,
+                            overlayColor:
+                                const MaterialStatePropertyAll(Colors.transparent ),
+                            tabs: _bloc.tabs
+                                .map((e) => RappiTabWidget(e))
+                                .toList()),
+                      ),
                     ),
                     Expanded(
-                      child: ListView.builder(
-                        controller: _bloc.scrollController,
-                        itemCount: _bloc.items.length,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        itemBuilder: (context, index) {
-                          final item = _bloc.items[index];
-                          if (item.isCategory) {
-                            return _RappiCategoryItem(item.category!);
-                          } else {
-                            return _RappiProductItem(item.product!);
-                          }
-                        },
+                      child: Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: ListView.builder(
+                          controller: _bloc.scrollController,
+                          itemCount: _bloc.items.length,
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          itemBuilder: (context, index) {
+                            final item = _bloc.items[index];
+                            if (item.isCategory) {
+                              return _RappiCategoryItem(item.category!);
+                            } else {
+                              return _RappiProductItem(item.product!);
+                            }
+                          },
+                        ),
                       ),
                     ),
                   ],
@@ -213,8 +222,8 @@ class _RappiProductItem extends StatelessWidget {
                       child: Image.network(
                         product!.image,
                         fit: BoxFit.cover,
-                        height: 60,
-                        width: 60,
+                        height: 70,
+                        width: 70,
                       )),
                 ),
                 const SizedBox(
@@ -249,7 +258,7 @@ class _RappiProductItem extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                        '${product!.price.toString()}',
+                        '${product!.price.toString()} AF',
                         style: TextStyle(
                             color: Theme.of(context).brightness ==
                                     Brightness.light

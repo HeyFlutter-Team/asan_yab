@@ -115,7 +115,7 @@ class RappiBloc with ChangeNotifier {
           scrollController.animateTo(
             tabs[tabController!.index].offsetFrom,
             duration: Duration(milliseconds: 500),
-            curve: Curves.easeInOut,
+            curve: Curves.linear,
           );
           _listen = true;
         }
@@ -135,7 +135,6 @@ class RappiBloc with ChangeNotifier {
             scrollController.offset <= tab.offsetTo &&
             !tab.selected) {
           onCategorySelected(i, animationRequired: false);
-          tabController?.animateTo(i);
           break;
         }
       }

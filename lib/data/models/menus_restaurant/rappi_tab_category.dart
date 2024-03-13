@@ -13,7 +13,7 @@ class RappiTabCategory {
       offsetFrom: offsetFrom,
       offsetTo: offsetTo);
   final RappiCategory category;
-  final bool selected;
+   final bool selected;
   final double offsetFrom;
   final double offsetTo;
 }
