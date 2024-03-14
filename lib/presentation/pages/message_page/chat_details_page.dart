@@ -111,7 +111,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   backgroundColor:
-                                  themDark ? Colors.grey.shade800 : null,
+                                  themDark ? Colors.grey.shade800 : Colors.grey.shade300,
                                   elevation: 0,
                                   shape: const CircleBorder(),
                                   padding: const EdgeInsets.symmetric(
@@ -172,7 +172,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                     width: 1.0,
                                   ),
                                   borderRadius: BorderRadius.circular(40),
-                                  color: themDark ? Colors.grey.shade800 : null,
+                                  color: themDark ? Colors.grey.shade800 : Colors.grey.shade300,
                                 ),
                                 child: TextField(
                                   onTap: () {
