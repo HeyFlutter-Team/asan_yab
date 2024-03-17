@@ -113,7 +113,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   children: [Text(languageText.sign_up_account_text,style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)
                 ,InkWell(
                     onTap: () {
-                          Navigator.pop(context);
+                      FocusScope.of(context).unfocus();
+                      Navigator.pop(context);
                     },
                   child: Text('  ${languageText.sign_up_account_text1}',
                       style: const TextStyle(color: Colors.blue,fontSize: 15),),
@@ -132,6 +133,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     final isValid = signUpFormKey.currentState!.validate();
                     if (!isValid) return;
                     ref.read(isSignUppingProvider.notifier).state=true;
+                    FocusScope.of(context).unfocus();
                     ref.read(signUpNotifierProvider).signUp(
                           context: context,
                           email: emailController.text,

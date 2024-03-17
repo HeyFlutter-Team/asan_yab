@@ -8,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../core/utils/convert_digits_to_farsi.dart';
 import '../../data/models/place.dart';
 import '../../data/repositoris/language_repository.dart';
+import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../../domain/riverpod/data/single_place_provider.dart';
 import '../../domain/riverpod/screen/drop_Down_Buton.dart';
 import '../../domain/servers/nearby_places.dart';
@@ -15,11 +16,24 @@ import '../pages/detials_page.dart';
 
 final isConnectedLocation = StateProvider<bool>((ref) => false);
 
-class NearbyPlacePage extends ConsumerWidget {
+final isExpand = StateProvider<bool>((ref) => false);
+
+class NearbyPlacePage extends ConsumerStatefulWidget {
   const NearbyPlacePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<NearbyPlacePage> createState() => _NearbyPlacePageState();
+}
+
+class _NearbyPlacePageState extends ConsumerState<NearbyPlacePage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final languageText = AppLocalizations.of(context);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     final List<Place> place;
@@ -82,88 +96,118 @@ class NearbyPlacePage extends ConsumerWidget {
                           const SizedBox(
                             width: 10,
                           ),
-                          DropdownButton(
-                              iconSize: 24,
-                              value: ref.watch(valueOfDropButtonProvider),
-                              items: ref
+                          DropdownButton<double>(
+                            iconSize: 34,
+                            selectedItemBuilder: (context) => List.generate(
+                              ref
                                   .read(valueOfDropButtonProvider.notifier)
                                   .distance
-                                  .map((e) {
-                                return DropdownMenuItem(
-                                    onTap: () async {
-                                      ref
-                                          .refresh(nearbyPlace.notifier)
-                                          .refresh();
-                                      ref
-                                              .read(isConnectedLocation.notifier)
-                                              .state =
-                                          await Geolocator
-                                              .isLocationServiceEnabled();
-                                      await Future.delayed(
-                                          const Duration(seconds: 1));
-                                    },
-                                    value: e,
-                                    child: isRTL
-                                        ? Row(
-                                            children: [
-                                              Radio<double>(
-                                                activeColor: Colors.green,
-                                                value: e,
-                                                groupValue: ref.watch(
-                                                    valueOfDropButtonProvider),
-                                                onChanged: (value) {
-                                                  ref
-                                                      .read(
-                                                          valueOfDropButtonProvider
-                                                              .notifier)
-                                                      .choiceDistacne(value!);
-                                                },
-                                      fillColor: MaterialStateProperty.resolveWith<Color>(
-                                            (Set<MaterialState> states) {
-                                          if (states.contains(MaterialState.selected)) {
-                                            return Colors.green; // selected color
-                                          }
-                                          return Colors.white; // unselected color
-                                        },
-                                              ),
-                                              ),
-                                              Text(
-                                                  "  ${convertDigitsToFarsi((e < 1 ? (e * 1000).toInt().toString() : e.toInt().toString()))} ${e < 1 ? languageText.nearby_place_page_meter : languageText.nearby_place_page_km}"),
-                                            ],
-                                          )
-                                        : Row(
-                                            children: [
-                                              Radio<double>(
-                                                activeColor: Colors.green,
-                                                value: e,
-                                                groupValue: ref.watch(
-                                                    valueOfDropButtonProvider),
-                                                onChanged: (value) {
-                                                  ref
-                                                      .read(
-                                                          valueOfDropButtonProvider
-                                                              .notifier)
-                                                      .choiceDistacne(value!);
-                                                },
-                                      fillColor: MaterialStateProperty.resolveWith<Color>(
-                                            (Set<MaterialState> states) {
-                                          if (states.contains(MaterialState.selected)) {
-                                            return Colors.green; // selected color
-                                          }
-                                          return Colors.white; // unselected color
-                                        },
+                                  .length,
+                              (index) => SizedBox(
+                                width: 120,
+                                child: isRTL
+                                    ? Padding(
+                                        padding: const EdgeInsets.all(13.0),
+                                        child: Text(
+                                          "  ${convertDigitsToFarsi((ref.read(valueOfDropButtonProvider.notifier).distance[index] < 1 ? (ref.read(valueOfDropButtonProvider.notifier).distance[index] * 1000).toInt().toString() : ref.read(valueOfDropButtonProvider.notifier).distance[index].toInt().toString()))} ${ref.read(valueOfDropButtonProvider.notifier).distance[index] < 1 ? languageText.nearby_place_page_meter : languageText.nearby_place_page_km}",
+                                          style: const TextStyle(fontSize: 18),
+                                        ),
+                                      )
+                                    : Padding(
+                                        padding: const EdgeInsets.all(13.0),
+                                        child: Text(
+                                          "  ${(ref.read(valueOfDropButtonProvider.notifier).distance[index] < 1 ? (ref.read(valueOfDropButtonProvider.notifier).distance[index] * 1000).toInt().toString() : ref.read(valueOfDropButtonProvider.notifier).distance[index].toInt().toString())} ${ref.read(valueOfDropButtonProvider.notifier).distance[index] < 1 ? languageText.nearby_place_page_meter : languageText.nearby_place_page_km}",
+                                          style: const TextStyle(fontSize: 18),
+                                        ),
                                       ),
-                                              ),
-                                              Text(
-                                                  "  ${(e < 1 ? (e * 1000).toInt().toString() : e.toInt().toString())} ${e < 1 ? languageText.nearby_place_page_meter : languageText.nearby_place_page_km}"),
-                                            ],
-                                          ));
-                              }).toList(),
-                              onChanged: (value) {
-                                ref
-                                    .read(valueOfDropButtonProvider.notifier)
-                                    .choiceDistacne(value!);
-                              }),
+                              ),
+                            ),
+                            value: ref.watch(valueOfDropButtonProvider),
+                            items: ref
+                                .read(valueOfDropButtonProvider.notifier)
+                                .distance
+                                .map((e) {
+                              return DropdownMenuItem<double>(
+                                value: e, // Provide value for each item
+                                onTap: () async {
+                                  ref.refresh(nearbyPlace.notifier).refresh();
+                                  ref.read(isConnectedLocation.notifier).state =
+                                      await Geolocator
+                                          .isLocationServiceEnabled();
+                                  await Future.delayed(
+                                      const Duration(seconds: 1));
+                                },
+                                child: isRTL
+                                    ? Row(
+                                        children: [
+                                          Radio<double>(
+                                            activeColor: Colors.green,
+                                            value: e,
+                                            groupValue: ref.watch(
+                                                valueOfDropButtonProvider),
+                                            onChanged: (value) {
+                                              ref
+                                                  .read(
+                                                      valueOfDropButtonProvider
+                                                          .notifier)
+                                                  .choiceDistacne(value!);
+                                            },
+                                            fillColor: MaterialStateProperty
+                                                .resolveWith<Color>(
+                                              (Set<MaterialState> states) {
+                                                if (states.contains(
+                                                    MaterialState.selected)) {
+                                                  return Colors.green;
+                                                }
+                                                return Colors.grey;
+                                              },
+                                            ),
+                                          ),
+                                          Text(
+                                            "  ${convertDigitsToFarsi((e < 1 ? (e * 1000).toInt().toString() : e.toInt().toString()))} ${e < 1 ? languageText.nearby_place_page_meter : languageText.nearby_place_page_km}",
+                                          ),
+                                        ],
+                                      )
+                                    : Row(
+                                        children: [
+                                          Radio<double>(
+                                            activeColor: Colors.green,
+                                            value: e,
+                                            groupValue: ref.watch(
+                                                valueOfDropButtonProvider),
+                                            onChanged: (value) {
+                                              ref
+                                                  .read(
+                                                      valueOfDropButtonProvider
+                                                          .notifier)
+                                                  .choiceDistacne(value!);
+                                            },
+                                            fillColor: MaterialStateProperty
+                                                .resolveWith<Color>(
+                                              (Set<MaterialState> states) {
+                                                if (states.contains(
+                                                    MaterialState.selected)) {
+                                                  return Colors
+                                                      .green; // selected color
+                                                }
+                                                return Colors
+                                                    .white; // unselected color
+                                              },
+                                            ),
+                                          ),
+                                          Text(
+                                            "  ${(e < 1 ? (e * 1000).toInt().toString() : e.toInt().toString())} ${e < 1 ? languageText.nearby_place_page_meter : languageText.nearby_place_page_km}",
+                                          ),
+                                        ],
+                                      ),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              ref
+                                  .read(valueOfDropButtonProvider.notifier)
+                                  .choiceDistacne(value!);
+                            },
+                          )
                         ],
                       ),
                     ),
@@ -179,16 +223,13 @@ class NearbyPlacePage extends ConsumerWidget {
                                   crossAxisSpacing: 10,
                                   mainAxisSpacing: 10),
                           itemBuilder: (context, index) => InkWell(
-                                onTap: () async{
-                                  await ref.read(getSingleProvider.notifier).fetchSinglePlace(place[index].id)
-                                  .whenComplete(() =>   Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            DetailsPage(id: place[index].id),
-                                      ))
-                                  );
-
+                                onTap: () async {
+                                  Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => DetailsPage(
+                                                id: place[index].id),
+                                          ));
                                 },
                                 child: Card(
                                   shape: RoundedRectangleBorder(

@@ -1,6 +1,5 @@
 import 'package:asan_yab/data/repositoris/language_repository.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
-import 'package:asan_yab/presentation/pages/profile/profile_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:asan_yab/presentation/pages/verify_email_page.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';

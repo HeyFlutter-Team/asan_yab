@@ -264,13 +264,13 @@ abstract class AppLocalizations {
   /// No description provided for @verify_email_dialog.
   ///
   /// In en, this message translates to:
-  /// **'An Asan Yab account has been \n created to the following email address.\n If you leave this page\n '**
+  /// **'An Asan Yab account has been \n created to the following email address.\n If you leave this page\n'**
   String get verify_email_dialog;
 
   /// No description provided for @verify_email_dialog_red.
   ///
   /// In en, this message translates to:
-  /// **' without confirming your email and filling\n out the introduction form on the next page,'**
+  /// **'without confirming your email and filling\n out the introduction form on the next page,'**
   String get verify_email_dialog_red;
 
   /// No description provided for @verify_email_dialog_2.
@@ -282,7 +282,7 @@ abstract class AppLocalizations {
   /// No description provided for @verify_email_give_up.
   ///
   /// In en, this message translates to:
-  /// **'Give Up'**
+  /// **'Cancel'**
   String get verify_email_give_up;
 
   /// No description provided for @verify_email_continue.
@@ -504,7 +504,7 @@ abstract class AppLocalizations {
   /// No description provided for @profile_rate_score.
   ///
   /// In en, this message translates to:
-  /// **'ُScore'**
+  /// **'Score'**
   String get profile_rate_score;
 
   /// No description provided for @profile_followers.
@@ -804,7 +804,7 @@ abstract class AppLocalizations {
   /// No description provided for @message_your_id.
   ///
   /// In en, this message translates to:
-  /// **'Your Id...>'**
+  /// **'Your Id ='**
   String get message_your_id;
 
   /// No description provided for @for_add_comment.
@@ -840,7 +840,7 @@ abstract class AppLocalizations {
   /// No description provided for @wrong_email.
   ///
   /// In en, this message translates to:
-  /// **'Your Email is wrong'**
+  /// **'Your email or password is wrong, please check first and then try again'**
   String get wrong_email;
 
   /// No description provided for @wrong_password.

@@ -9,6 +9,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../domain/riverpod/data/message/message.dart';
+
 class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
   const AppBarChatDetails({
     required this.urlImage,
@@ -45,24 +47,35 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
                   children: <Widget>[
                     IconButton(
                       onPressed: () {
+                        FocusScope.of(context).unfocus();
+                        if(ref.watch(emojiShowingProvider)){
+                          ref.read(emojiShowingProvider.notifier).state=false;
+                        }
+                        print('younis 1');
                         ref.read(messageProvider.notifier).clearState();
-                        ref
+                        print('younis 2');
+
+                         ref
                             .read(messageNotifierProvider.notifier)
                             .fetchMessage();
-                        ref.read(messageHistory.notifier).getMessageHistory();
-                        ref
+                        print('younis 3');
+                          ref.read(messageHistory.notifier).getMessageHistory();
+                        print('younis 4');
+                          ref
                             .read(seenMassageProvider.notifier)
                             .messageIsSeen(
                                 userId, FirebaseAuth.instance.currentUser!.uid)
-                            .whenComplete(() {
-                          if (context.mounted) {
-                            ref
+                            .whenComplete(() async{
+                            print('younis 5');
+                          await  ref
                                 .read(seenMassageProvider.notifier)
                                 .isNewMassage();
-                          }
-                        });
 
-                        Navigator.pop(context);
+                          print('younis 6');
+                        })
+                        .whenComplete(() =>Navigator.pop(context));
+
+                        print('younis 7');
                       },
                       icon: const Icon(
                         Icons.arrow_back_ios_outlined,

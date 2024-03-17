@@ -359,7 +359,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get message_description => 'برای امتیاز گرفتن \nشما باید آسان یاب را\n به دو نفر از دوستان تان معرفی کنید \nو آنها باید آیدی شخصی شمارا در\n قسمت ذکر شده در پایین در هنگام ثبت نام وارد کنند...>';
 
   @override
-  String get message_your_id => 'آیدی شما..>';
+  String get message_your_id => 'آیدی شما =';
 
   @override
   String get for_add_comment => 'برای افزودن نظر';
@@ -377,7 +377,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get user_delete_account => 'حذف حساب';
 
   @override
-  String get wrong_email => 'ایمیل شما اشتباه است';
+  String get wrong_email => 'ایمیل یا رمز شما اشتباه است لطفا اول چک کنید بعد امتحان کنید';
 
   @override
   String get wrong_password => 'رمز شما اشتباه است';

@@ -173,6 +173,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
                     final isValid = formKey.currentState!.validate();
                     if (!isValid) return;
                     ref.read(isSignInningProvider.notifier).state = true;
+                    FocusScope.of(context).unfocus();
                     final isCheckboxChecked = ref.read(isCheckProvider);
                     if (isCheckboxChecked) {
                       SharedPreferences prefs =
@@ -249,6 +250,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
                         side: BorderSide(color: Colors.black.withOpacity(0.44)),
                         borderRadius: BorderRadius.circular(12))),
                 onPressed: () {
+                  FocusScope.of(context).unfocus();
                   Navigator.push(
                       context,
                       MaterialPageRoute(

@@ -74,11 +74,9 @@ class VerifyEmailNotifier extends StateNotifier<VerifyEmailState> {
 //my class
 class VerifyEmailPage extends ConsumerStatefulWidget {
   final String email;
-  final String? password;
 
   const VerifyEmailPage({
     required this.email,
-    this.password,
     Key? key,
   }) : super(key: key);
 
@@ -110,7 +108,6 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
       return currentUser
           ? PersonalInformation(
               email: widget.email,
-              password: widget.password,
             )
           : Scaffold(
               appBar: AppBar(

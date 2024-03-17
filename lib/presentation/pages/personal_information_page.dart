@@ -10,8 +10,7 @@ final isLoadingInformation = StateProvider<bool>((ref) => false);
 
 class PersonalInformation extends ConsumerStatefulWidget {
   final String? email;
-  final String? password;
-  const PersonalInformation({super.key, this.email, this.password});
+  const PersonalInformation({super.key, this.email});
 
   @override
   ConsumerState<PersonalInformation> createState() =>
@@ -103,13 +102,14 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                       final isValid = signUpFormKey.currentState!.validate();
                       if (!isValid) return;
                       ref.read(isLoadingInformation.notifier).state = true;
+                      FocusScope.of(context).unfocus();
                       ref
                           .read(userRegesterDetailsProvider)
                           .addUserDetailsToFirebase(
                               emailController: widget.email,
                               lastNameController: lastNameController.text,
                               nameController: nameController.text,
-                              passwordController: widget.password)
+                      )
                           .whenComplete(() async {
                         await ref
                             .read(userRegesterDetailsProvider)

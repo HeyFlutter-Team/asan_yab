@@ -16,7 +16,6 @@ class Users {
   final int followingCount;
   final String fcmToken;
   final bool isOnline;
-  final String? password;
 
   Users({
     this.owner = const [],
@@ -34,7 +33,6 @@ class Users {
     required this.fcmToken,
     required this.isOnline,
     this.invitationRate = 0,
-    this.password = ''
   });
 
   Map<String, dynamic> toJson() => {
@@ -53,7 +51,6 @@ class Users {
         'fcmToken': fcmToken,
         'isOnline': isOnline,
         'invitationRate':invitationRate,
-        'password':password
       };
 
   factory Users.fromMap(Map<String, dynamic> json) {
@@ -75,7 +72,6 @@ class Users {
         fcmToken: json['fcmToken'],
         isOnline: json['isOnline'] ?? false,
         invitationRate: json['invitationRate'],
-        password:json['password']??''
     );
 
   }
@@ -113,7 +109,6 @@ class Users {
         fcmToken: fcmToken ?? this.fcmToken,
         isOnline: isOnline ?? this.isOnline,
         invitationRate: invitationRate??this.invitationRate,
-      password: password?? this.password
     );
   }
 }

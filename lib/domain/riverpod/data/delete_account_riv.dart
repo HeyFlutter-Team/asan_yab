@@ -3,6 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/utils/download_image.dart';
+import '../../../data/models/place.dart';
+import 'favorite_provider.dart';
+import 'firbase_favorite_provider.dart';
+
 final deleteAccountProvider =
     ChangeNotifierProvider.autoDispose((ref) => AccountDeletionNotifier());
 
@@ -24,7 +29,6 @@ class AccountDeletionNotifier extends ChangeNotifier {
     } catch (e) {
       print('Failed to delete account: $e');
     }
-
   }
 
   Future<void> deleteUserDocument(String uid) async {
@@ -90,7 +94,6 @@ class AccountDeletionNotifier extends ChangeNotifier {
       for (QueryDocumentSnapshot followDoc in followSnapshot.docs) {
         await followDoc.reference.delete();
         print('younis Follow deleted');
-
       }
       final chatCollectionRef = FirebaseFirestore.instance
           .collection('User')
@@ -118,10 +121,11 @@ class AccountDeletionNotifier extends ChangeNotifier {
     }
   }
 
-  Future<void> deleteFavorites(String uid)async{
+  Future<void> deleteFavorites(String uid) async {
     await FirebaseFirestore.instance.collection('Favorite').doc(uid).delete();
   }
-  Future<void> deleteRating(String uid)async{
+
+  Future<void> deleteRating(String uid) async {
     final ratingsQuerySnapshot = await FirebaseFirestore.instance
         .collection('ratings')
         .where('userId', isEqualTo: uid)
@@ -130,5 +134,35 @@ class AccountDeletionNotifier extends ChangeNotifier {
     for (var doc in ratingsQuerySnapshot.docs) {
       await doc.reference.delete();
     }
+  }
+
+  Future<void> deleteLocalFavorite(WidgetRef ref) async {
+    List<String> firebaseId = ref.watch(getInformationProvider).favoriteList;
+    for (int i = 0; i < firebaseId.length; i++) {
+      final provider = ref.read(favoriteProvider.notifier);
+      final places = Place(
+        categoryId: '',
+        category: '',
+        addresses: [],
+        id: firebaseId[i],
+        logo: '',
+        coverImage: '',
+        name: '',
+        description: '',
+        gallery: [],
+        createdAt: DateTime.now(),
+        order: 1,
+      );
+
+      provider.toggleFavorite(
+        firebaseId[i],
+        places,
+        [],
+        [],
+        DownloadImage.logo,
+        DownloadImage.coverImage,
+      );
+    }
+    notifyListeners();
   }
 }

@@ -14,6 +14,7 @@ import '../../core/utils/convert_digits_to_farsi.dart';
 import '../../data/models/place.dart';
 
 import '../../data/repositoris/language_repository.dart';
+import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../../domain/riverpod/data/places_provider.dart';
 import '../../domain/riverpod/data/single_place_provider.dart';
 import '../pages/detials_page.dart';
@@ -49,16 +50,13 @@ class NewPlaces extends ConsumerWidget {
                         : phoneNumberItems;
                     return GestureDetector(
                       onTap: () async {
-                        await ref
-                            .read(getSingleProvider.notifier)
-                            .fetchSinglePlace(places[index].id)
-                            .whenComplete(() => Navigator.push(
+                             Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
                                         DetailsPage(id: places[index].id),
-                                  ),
-                                ));
+                                  ));
+
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 12),

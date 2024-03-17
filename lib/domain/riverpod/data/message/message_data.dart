@@ -10,8 +10,8 @@ final messageProvider =
 
 class MessageProvider extends StateNotifier<List<MessageModel>> {
   final Ref ref;
-  MessageProvider(super.state, this.ref);
   ScrollController scrollController = ScrollController();
+  MessageProvider(super.state, this.ref);
   List<MessageModel> getMessages(String receiverId) {
     try {
       ref.read(messageLoadingProvider.notifier).state = true;
@@ -39,11 +39,23 @@ class MessageProvider extends StateNotifier<List<MessageModel>> {
 
   void clearState() => state.clear();
 
-  void scrollDown() => WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (scrollController.hasClients) {
-          scrollController.jumpTo(scrollController.position.maxScrollExtent);
-        }
-      });
+  void scrollDown() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (scrollController.hasClients) {
+        final maxScroll = scrollController.position.maxScrollExtent;
+        scrollController.animateTo(
+          maxScroll,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+
+
+
+
 }
 
 final messageLoadingProvider = StateProvider((ref) => false);

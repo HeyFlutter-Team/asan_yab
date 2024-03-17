@@ -50,7 +50,7 @@ class _MessagePageState extends ConsumerState<MessagePage> {
       ),
       body: Stack(
         children: [
-          const ChatMessages(receiverId: '', urlImage: ''),
+          const ChatMessages(receiverId: '', urlImage: '', friendName: '',),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(

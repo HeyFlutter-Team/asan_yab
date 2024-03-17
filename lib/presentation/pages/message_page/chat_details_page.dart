@@ -10,6 +10,7 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -24,8 +25,6 @@ class ChatDetailPage extends ConsumerStatefulWidget {
 class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
   @override
   void initState() {
-    // TODO: implement initState
-    // ref.read(messageProfileProvider.notifier)..getUserById(widget.uid);
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(messageProvider.notifier).getMessages(widget.uid!);
@@ -34,7 +33,6 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -44,19 +42,21 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
     final themDark = Theme.of(context).brightness == Brightness.dark;
     final languageText = AppLocalizations.of(context);
 
-    return WillPopScope(
-        onWillPop: () async {
-          ref.read(messageProvider.notifier).clearState();
-          ref.read(messageNotifierProvider.notifier).fetchMessage();
-          ref.read(messageHistory.notifier).getMessageHistory();
-          ref
-              .read(seenMassageProvider.notifier)
-              .messageIsSeen(
-                  newProfileUser.uid!, FirebaseAuth.instance.currentUser!.uid)
-              .whenComplete(
-                  () => ref.read(seenMassageProvider.notifier).isNewMassage());
+    return PopScope(
+        onPopInvoked: (didPop) {
+          if (!mounted) {
+            ref.read(messageProvider.notifier).clearState();
+            ref.read(messageNotifierProvider.notifier).fetchMessage();
+            ref.read(messageHistory.notifier).getMessageHistory();
+            ref
+                .read(seenMassageProvider.notifier)
+                .messageIsSeen(
+                    newProfileUser.uid!, FirebaseAuth.instance.currentUser!.uid)
+                .whenComplete(() =>
+                    ref.read(seenMassageProvider.notifier).isNewMassage());
 
-          return true;
+            // return true;
+          }
         },
         child: Scaffold(
           appBar: AppBarChatDetails(
@@ -65,65 +65,90 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
               name: newProfileUser.name,
               isOnline: newProfileUser.isOnline,
               urlImage: newProfileUser.imageUrl),
-          body: Stack(
-            fit: StackFit.expand,
+          body: Column(
             children: [
               ref.watch(messageLoadingProvider)
                   ? const SizedBox()
-                  : ChatMessages(
-                      receiverId: newProfileUser.uid!,
-                      urlImage: newProfileUser.imageUrl),
+                  : Expanded(
+                      child: ChatMessages(
+                        receiverId: newProfileUser.uid!,
+                        urlImage: newProfileUser.imageUrl,
+                        friendName: newProfileUser.name,
+                      ),
+                    ),
               Align(
-                alignment: Alignment.bottomLeft,
+                alignment: Alignment.bottomCenter,
                 child: Container(
-                  padding: const EdgeInsets.only(left: 4, bottom: 10, top: 4),
-                  height: !ref.watch(emojiShowingProvider)
-                      ? (ref.watch(replayProvider) == '' ? 64 : 100)
-                      : 350,
+                  padding: const EdgeInsets.only(top: 10),
                   width: double.infinity,
                   child: Column(
                     children: [
-                      Row(
-                        children: [
-                          ref.watch(replayProvider) == ''
-                              ? const SizedBox()
-                              : Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 18.0),
-                                      child: Text(
-                                        'Replay: ${ref.watch(replayProvider)}',
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w300,
-                                        ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 17.0, right: 12),
+                        child: ref.watch(replayProvider) == ''
+                            ? const SizedBox()
+                            : Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 18.0),
+                                    child: Text(
+                                      textDirection: TextDirection.ltr,
+                                      ref.watch(replayProvider).isNotEmpty
+                                          ? ref.watch(replayProvider).substring(
+                                              0,
+                                              ref.watch(replayProvider).length >
+                                                      20
+                                                  ? 19
+                                                  : ref
+                                                      .watch(replayProvider)
+                                                      .length)
+                                          : '',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w300,
                                       ),
                                     ),
-                                  ],
-                                )
-                        ],
+                                  ),
+                                  InkWell(
+                                      onTap: () {
+                                        ref
+                                            .read(replayProvider.notifier)
+                                            .state = '';
+                                        SystemChannels.textInput.invokeMethod('TextInput.hide');
+                                      },
+                                      child: const Icon(
+                                        Icons.clear,
+                                        size: 18,
+                                      ))
+                                ],
+                              ),
                       ),
+                      (ref.watch(replayProvider) == ''
+                          ? const SizedBox()
+                          : const SizedBox(
+                              height: 10,
+                            )),
                       Padding(
                         padding: const EdgeInsets.only(right: 8.0),
                         child: Row(
                           children: <Widget>[
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                  themDark ? Colors.grey.shade800 : Colors.grey.shade300,
+                                  backgroundColor: themDark
+                                      ? Colors.grey.shade800
+                                      : Colors.grey.shade300,
                                   elevation: 0,
                                   shape: const CircleBorder(),
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10, horizontal: 10)),
                               onPressed: () {
-                                ref
-                                    .read(emojiShowingProvider.notifier)
-                                    .state =
-                                !ref.watch(emojiShowingProvider);
+                                ref.read(emojiShowingProvider.notifier).state =
+                                    !ref.watch(emojiShowingProvider);
                                 if (ref.watch(emojiShowingProvider)) {
-                                  FocusManager.instance.primaryFocus
-                                      ?.unfocus();
+                                  FocusManager.instance.primaryFocus?.unfocus();
                                 }
                               },
                               child: Icon(
@@ -132,8 +157,8 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                 color: ref.watch(emojiShowingProvider)
                                     ? Colors.blue.shade200
                                     : themDark
-                                    ? Colors.white
-                                    : Colors.black45,
+                                        ? Colors.white
+                                        : Colors.black45,
                               ),
                             ),
 
@@ -172,17 +197,23 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                     width: 1.0,
                                   ),
                                   borderRadius: BorderRadius.circular(40),
-                                  color: themDark ? Colors.grey.shade800 : Colors.grey.shade300,
+                                  color: themDark
+                                      ? Colors.grey.shade800
+                                      : Colors.grey.shade300,
                                 ),
                                 child: TextField(
+                                  minLines: 1,
+                                  maxLines: 5,
                                   onTap: () {
                                     ref
                                         .read(emojiShowingProvider.notifier)
                                         .state = false;
                                   },
                                   decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.zero,
-                                    hintText: '   ${languageText?.chat_message}',
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 13.0, horizontal: 15.0),
+                                    hintText:
+                                        '   ${languageText?.chat_message}',
                                     border: InputBorder.none,
                                   ),
                                   controller: ref
@@ -196,8 +227,9 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
 
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      themDark ? Colors.grey.shade800 : null,
+                                  backgroundColor: themDark
+                                      ? Colors.grey.shade800
+                                      : Colors.grey.shade300,
                                   elevation: 0,
                                   shape: const CircleBorder(),
                                   padding: const EdgeInsets.symmetric(
@@ -208,7 +240,8 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                     .sendText(
                                         receiverId: newProfileUser.uid!,
                                         context: context,
-                                        replayMessage: ref.watch(replayProvider));
+                                        replayMessage:
+                                            ref.watch(replayProvider));
                                 ref.read(replayProvider.notifier).state = '';
                                 ref
                                     .read(messageProfileProvider.notifier)
@@ -224,10 +257,13 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                           ],
                         ),
                       ),
-                      Expanded(
+                      Container(
+                        height: !ref.watch(emojiShowingProvider) ? 20 : 350,
                         child: Column(
                           children: [
-                            const SizedBox(height: 9,),
+                            const SizedBox(
+                              height: 9,
+                            ),
                             // Flexible(
                             //   child: Row(
                             //     mainAxisAlignment:
@@ -257,10 +293,9 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                             //     ],
                             //   ),
                             // ),
-                            Offstage(
-                              offstage: !ref.watch(emojiShowingProvider),
-                              child: SizedBox(
-                                height: 277,
+                            Expanded(
+                              child: Offstage(
+                                offstage: !ref.watch(emojiShowingProvider),
                                 child: EmojiPicker(
                                   textEditingController: ref
                                       .watch(messageProfileProvider.notifier)
@@ -291,7 +326,8 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                     recentTabBehavior: RecentTabBehavior.RECENT,
                                     recentsLimit: 28,
                                     replaceEmojiOnLimitExceed: false,
-                                    noRecents:  Text('${languageText?.emoji_recent}',
+                                    noRecents: Text(
+                                      '${languageText?.emoji_recent}',
                                       style: const TextStyle(
                                           fontSize: 20, color: Colors.black26),
                                       textAlign: TextAlign.center,
@@ -315,6 +351,8 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
               ),
             ],
           ),
-        ));
+        )
+    );
   }
+
 }

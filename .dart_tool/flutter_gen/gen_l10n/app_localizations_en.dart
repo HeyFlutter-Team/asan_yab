@@ -89,16 +89,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get verify_tbt_text => 'Cancel';
 
   @override
-  String get verify_email_dialog => 'An Asan Yab account has been \n created to the following email address.\n If you leave this page\n ';
+  String get verify_email_dialog => 'An Asan Yab account has been \n created to the following email address.\n If you leave this page\n';
 
   @override
-  String get verify_email_dialog_red => ' without confirming your email and filling\n out the introduction form on the next page,';
+  String get verify_email_dialog_red => 'without confirming your email and filling\n out the introduction form on the next page,';
 
   @override
   String get verify_email_dialog_2 => 'you will no longer be able to\n enter Asan Yab with this email.';
 
   @override
-  String get verify_email_give_up => 'Give Up';
+  String get verify_email_give_up => 'Cancel';
 
   @override
   String get verify_email_continue => 'Continue';
@@ -209,7 +209,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profile_dark_mode => 'Dark Mode';
 
   @override
-  String get profile_rate_score => 'ُScore';
+  String get profile_rate_score => 'Score';
 
   @override
   String get profile_followers => 'Followers';
@@ -359,7 +359,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get message_description => 'To get points, \n you must introduce Asan Yab \n to two of your friends \n and they must enter your personal ID in the field \n mentioned below during registration...>';
 
   @override
-  String get message_your_id => 'Your Id...>';
+  String get message_your_id => 'Your Id =';
 
   @override
   String get for_add_comment => 'for add comment';
@@ -377,7 +377,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get user_delete_account => 'Delete Account';
 
   @override
-  String get wrong_email => 'Your Email is wrong';
+  String get wrong_email => 'Your email or password is wrong, please check first and then try again';
 
   @override
   String get wrong_password => 'Your Password is wrong';

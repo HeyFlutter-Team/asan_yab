@@ -119,56 +119,53 @@ class _UserDeleteAccountState extends ConsumerState<UserDeleteAccount>
                       onPressed: () async {
                         final isValid = formKey.currentState!.validate();
                         if (!isValid) return;
-                        if (emailCTRL.text == usersData?.email &&
-                            passwordCTRL.text == usersData?.password) {
-                          final deleteIsLoadings =
-                              ref.read(deleteIsLoading.notifier);
-                          final deleteProfiles =
-                              ref.read(deleteProfile.notifier);
-                          final deleteAccountProviders =
-                              ref.read(deleteAccountProvider.notifier);
 
-                          deleteIsLoadings.state = true;
+                        final deleteIsLoadings = ref.read(deleteIsLoading.notifier);
+                        final deleteProfiles = ref.read(deleteProfile.notifier);
+                        final deleteAccountProviders = ref.read(deleteAccountProvider.notifier);
+                        FocusScope.of(context).unfocus();
 
-                          try {
-                            await deleteAccountProviders
-                                .deleteFavorites(widget.uid);
-                            await deleteProfiles
-                                .deleteImageAndClearUrl(widget.imageUrl);
-                            await deleteAccountProviders
-                                .deleteRating(widget.uid);
-                            await deleteAccountProviders
-                                .deleteUserComments(widget.uid);
-                            await deleteAccountProviders
-                                .deleteUserDocument(widget.uid);
-                            await deleteAccountProviders.deleteAccount(
-                                emailCTRL.text, passwordCTRL.text);
-                            await deleteAccountProviders
-                                .deleteChatCollection(widget.uid);
+                        deleteIsLoadings.state = true;
 
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const MainPage(),
-                              ),
-                            );
-                          } catch (error) {
-                            print('Error: $error');
-                          } finally {
-                            deleteIsLoadings.state = false;
-                          }
-                        } else {
-                          if (emailCTRL.text != usersData?.email) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content:Text(languageText.wrong_email), )
-                            );
-                          } else if (passwordCTRL.text != usersData?.password) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content:Text(languageText.wrong_password), )
-                            );
-                          }
+                        try {
+                          await FirebaseAuth.instance.signInWithEmailAndPassword(
+                            email: emailCTRL.text,
+                            password: passwordCTRL.text,
+                          );
+                          await deleteAccountProviders.deleteLocalFavorite(ref);
+                          await deleteAccountProviders.deleteFavorites(widget.uid);
+                          await deleteProfiles.deleteImageAndClearUrl(widget.imageUrl);
+                          await deleteAccountProviders.deleteRating(widget.uid);
+                          await deleteAccountProviders.deleteUserComments(widget.uid);
+                          await deleteAccountProviders.deleteUserDocument(widget.uid);
+                          await deleteAccountProviders.deleteAccount(
+                            emailCTRL.text,
+                            passwordCTRL.text,
+                          );
+                          await deleteAccountProviders.deleteChatCollection(widget.uid);
+
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const MainPage(),
+                            ),
+                          );
+                        } on FirebaseAuthException catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(languageText.wrong_email,style: const TextStyle(
+                                color: Colors.white
+                              ),),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        } catch (error) {
+                          print('Error: $error');
+                        } finally {
+                          deleteIsLoadings.state = false;
                         }
                       },
+
                       child: ref.watch(deleteIsLoading) == true
                           ? const CircularProgressIndicator(
                               color: Colors.white,

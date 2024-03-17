@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/place.dart';
 import '../../data/repositoris/language_repository.dart';
+import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../../domain/riverpod/data/single_place_provider.dart';
 import '../../domain/servers/nearby_places.dart';
 import '../pages/detials_page.dart';
@@ -67,15 +68,12 @@ class NearbyPlaceWidget extends ConsumerWidget {
                           width: screenWidth * 0.5,
                           child: InkWell(
                             onTap: () async{
-                              await ref.read(getSingleProvider.notifier).fetchSinglePlace(place[index].id)
-                              .whenComplete((){
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
                                           DetailsPage(id: place[index].id),
                                     ));
-                              });
                             },
                             child: Card(
                               shape: RoundedRectangleBorder(
@@ -105,7 +103,7 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                         ),
                                         child: CachedNetworkImage(
                                           imageUrl: place[index]
-                                              .coverImage, // Use the placeholder image URL if the cover image is null
+                                              .logo, // Use the placeholder image URL if the cover image is null
                                           placeholder: (context, url) =>
                                               Image.asset(
                                                   'assets/asan_yab.png'), // Use the placeholder image while loading

@@ -88,19 +88,16 @@ class _FavoritesState extends ConsumerState<Favorites> {
                       children: [
                         Card(
                           child: GestureDetector(
-                            onTap: ()async {
+                            onTap: () async {
                               debugPrint(
                                   'Ramin check connectivity: ${widget.isConnected}');
                               widget.isConnected
-                                  ?  await ref.read(getSingleProvider.notifier).fetchSinglePlace(favorites[index]['id'])
-                              .whenComplete((){
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => DetailsPage(
-                                          id: favorites[index]['id']),
-                                    ));
-                              })
+                                  ? Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DetailsPage(
+                                            id: favorites[index]['id']),
+                                      ))
                                   : Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -153,10 +150,13 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                               ),
                                         ),
                                         Directionality(
-
-                                            textDirection:isRTL? TextDirection.rtl:TextDirection.ltr,
-                                            child: buildPhoneNumberWidget(context: context, isRTL: isRTL, phone:phoneNumber )
-                                        ),
+                                            textDirection: isRTL
+                                                ? TextDirection.rtl
+                                                : TextDirection.ltr,
+                                            child: buildPhoneNumberWidget(
+                                                context: context,
+                                                isRTL: isRTL,
+                                                phone: phoneNumber)),
                                       ],
                                     ),
                                   ),

@@ -92,10 +92,6 @@ class FirebaseApi {
 
       _handleNotificationClick(message);
     });
-
-    // Get the token
-    String? token = await _firebaseMessaging.getToken();
-    print("FCM Token: $token");
   }
 
   void _handleNotificationClick(RemoteMessage message) {

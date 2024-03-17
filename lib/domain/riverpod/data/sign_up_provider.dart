@@ -29,7 +29,6 @@ class SignUpNotifier {
           MaterialPageRoute(
               builder: (context) => VerifyEmailPage(
                     email: email,
-                    password: password,
                   )));
     } on FirebaseAuthException catch (e) {
       final languageText = AppLocalizations.of(context);
@@ -54,8 +53,7 @@ class CreateUserDetails {
   Future<void> addUserDetailsToFirebase(
       {String? emailController,
       String? lastNameController,
-      String? nameController,
-      String? passwordController}) async {
+      String? nameController}) async {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     final id = DateTime.now().millisecondsSinceEpoch;
 
@@ -72,7 +70,7 @@ class CreateUserDetails {
         followingCount: 0,
         fcmToken: fcmToken!,
         isOnline: true,
-        password: passwordController);
+    );
     final json = user.toJson();
     await userRef.set(json).whenComplete(() async {
       final userFollow = FollowModel(followers: [], following: []);

@@ -33,10 +33,10 @@
   "verify_body_text": "A confirmation link has been sent to your email!\nPlease click on it to confirm your email.\n If you press the link,\n press send again!",
   "verify_elb_text": "Resend",
   "verify_tbt_text": "Cancel",
-  "verify_email_dialog": "An Asan Yab account has been \n created to the following email address.\n If you leave this page\n ",
-  "verify_email_dialog_red": " without confirming your email and filling\n out the introduction form on the next page,",
+  "verify_email_dialog": "An Asan Yab account has been \n created to the following email address.\n If you leave this page\n",
+  "verify_email_dialog_red": "without confirming your email and filling\n out the introduction form on the next page,",
   "verify_email_dialog_2": "you will no longer be able to\n enter Asan Yab with this email.",
-  "verify_email_give_up": "Give Up",
+  "verify_email_give_up": "Cancel",
   "verify_email_continue": "Continue",
 
 
@@ -93,7 +93,7 @@
   "profile_language_listTile": "Change Language",
   "profile_snackBar_catch": "Your internet is down",
   "profile_dark_mode": "Dark Mode",
-  "profile_rate_score": "ُScore",
+  "profile_rate_score": "Score",
   "profile_followers": "Followers",
   "profile_following": "Following",
 
@@ -178,7 +178,7 @@
   "message_check_user2": "Enter to Email",
   "message_personal_score": "current score",
   "message_description": "To get points, \n you must introduce Asan Yab \n to two of your friends \n and they must enter your personal ID in the field \n mentioned below during registration...>",
-  "message_your_id": "Your Id...>",
+  "message_your_id": "Your Id =",
   "for_add_comment": "for add comment",
   "log_in": "Log in",
   "emoji_recent": "There are no recent emojis",
@@ -188,7 +188,7 @@
 
 
   "user_delete_account": "Delete Account",
-  "wrong_email": "Your Email is wrong",
+  "wrong_email": "Your email or password is wrong, please check first and then try again",
   "wrong_password": "Your Password is wrong"
 
 

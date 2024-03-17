@@ -41,20 +41,20 @@ class SignInNotifier {
           .read(buttonNavigationProvider.notifier)
           .selectedIndex(0);
     } on FirebaseAuthException catch (e) {
-      final languageText = AppLocalizations.of(context);
-      if (e.code == 'user-not-found') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(languageText!.sign_in_method_1_if)),
-        );
-      } else if (e.code == 'wrong-password') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(languageText!.sign_in_method_2_if)),
-        );
-      } else if (e.code == 'too-many-requests') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(languageText!.sign_in_method_3_if)),
-        );
-      }
+        final languageText = AppLocalizations.of(context);
+        if (e.code == 'user-not-found') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(languageText!.sign_in_method_1_if)),
+          );
+        } else if (e.code == 'wrong-password') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(languageText!.sign_in_method_2_if)),
+          );
+        } else if (e.code == 'too-many-requests') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(languageText!.sign_in_method_3_if)),
+          );
+        }
     } catch (e) {
       print('younis general errors $e');
     }finally{
