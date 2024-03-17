@@ -37,7 +37,7 @@ class _SuggestionPageState extends ConsumerState<SuggestionPage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // ref.read(noteProvider.notifier).getNote(ref);
+      ref.read(noteProvider.notifier).getNote(ref);
     });
   }
 

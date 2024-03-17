@@ -9,24 +9,22 @@ final noteProvider = ChangeNotifierProvider<Note>((ref) => Note());
 
 class Note extends ChangeNotifier {
   String note = '';
-  final bool _isLoading = true;
-  bool get isLoading => _isLoading;
-
-  // Future<void> getNote(WidgetRef ref) async {
-  //   final snapshot = await FirebaseFirestore.instance
-  //       .collection('Description')
-  //       .doc('add_new_place')
-  //       .get();
-  //
-  //   if (snapshot.exists) {
-  //     final isRTL = ref.watch(languageProvider).code == 'fa';
-  //     if (!isRTL) {
-  //       note = snapshot.data()?['eNote'];
-  //     } else {
-  //       note = snapshot.data()?['pNote'];
-  //     }
-  //   }
-  //
-  //   notifyListeners();
-  // }
+  bool isLoading = false;
+  Future<void> getNote(WidgetRef ref) async {
+    isLoading = true;
+    final snapshot = await FirebaseFirestore.instance
+        .collection('Description')
+        .doc('add_new_place')
+        .get();
+    if (snapshot.exists) {
+      final isRTL = ref.watch(languageProvider).code == 'fa';
+      if (!isRTL) {
+        note = snapshot.data()?['eNote'];
+      } else {
+        note = snapshot.data()?['pNote'];
+      }
+    }
+    isLoading = false;
+    notifyListeners();
+  }
 }
