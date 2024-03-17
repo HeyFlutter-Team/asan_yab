@@ -24,8 +24,9 @@ class VerticalDataNotifier extends ChangeNotifier {
     if (text.isEmpty) {
       return 1; // Default to 1 line when text is empty
     }
-    int totalLines = (text.length / 30).ceil();
-    return totalLines > 2 ? 2 : totalLines;
+    int totalLines = (text.length / 24).ceil();
+
+    return totalLines > 3 ? 3 : totalLines;
   }
 
   void setText(String text) {

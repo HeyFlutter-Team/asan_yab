@@ -49,6 +49,7 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
         Column(
           children: [
             Container(
+                padding: EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
                   color: (themeModel.currentThemeMode == ThemeMode.dark)
                       ? Colors.black38
@@ -59,7 +60,6 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                       topRight: Radius.circular(28),
                       topLeft: Radius.circular(28)),
                 ),
-                height: 80,
                 child: (FirebaseAuth.instance.currentUser != null)
                     ? Row(
                         children: <Widget>[
@@ -99,7 +99,7 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                                   color: Colors.grey,
                                   width: 1.0,
                                 ),
-                                borderRadius: BorderRadius.circular(40),
+                                borderRadius: BorderRadius.circular(20),
                                 color: themDark ? Colors.grey.shade800 : null,
                               ),
                               child: Consumer(
@@ -108,15 +108,17 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                                       ref.watch(commentProvider);
                                   return SizedBox(
                                     child: TextField(
+                                      cursorHeight: 20,
                                       onTap: () {
                                         ref
                                             .read(emojiShowingProvider.notifier)
                                             .state = false;
                                       },
-                                      maxLines: controllerNotifier
+                                      maxLines: ref
+                                          .watch(commentProvider)
                                           .calculateMaxLines(),
                                       decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.zero,
+                                        contentPadding: const EdgeInsets.all(6),
                                         hintStyle: TextStyle(
                                           color: (themeModel.currentThemeMode ==
                                                   ThemeMode.dark)

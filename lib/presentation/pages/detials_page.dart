@@ -86,7 +86,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          ref.read(getSingleProvider.notifier).state=null;
+                          ref.read(getSingleProvider.notifier).state = null;
                           Navigator.pop(context);
                         },
                         icon: const Icon(Icons.arrow_back),
@@ -124,6 +124,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                   DownloadImage.logo,
                                   DownloadImage.coverImage);
                             }
+                            print("hello${places.id}");
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(
