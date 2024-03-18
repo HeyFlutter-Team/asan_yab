@@ -78,28 +78,25 @@ class ListOfFollow extends ConsumerWidget {
               indicatorColor: Colors.white,
               unselectedLabelStyle:const TextStyle(color: Colors.white,fontSize: 14),
               tabs: [
-                Column(
-                  children: [
-                     Text('${profileDetails.followingCount}',style: const TextStyle(
-                       fontSize: 20
-                     ),),
-                     const Tab(
-                      child: Text('Following'),
-                    ),
-                  ],
+                Tab(
+                  child: Column(
+                    children: [
+                      Text('${profileDetails.followingCount}',style: const TextStyle(fontSize: 20)),
+                      Text('Following'),
+                    ],
+                  ),
                 ),
-                Column(
-                  children: [
-                     Text('${profileDetails.followerCount}',style: const TextStyle(
-                         fontSize: 20
-                     ),),
-                    const Tab(
-                      child: Text('Followers'),
-                    ),
-                  ],
+                Tab(
+                  child: Column(
+                    children: [
+                      Text('${profileDetails.followerCount}',style: const TextStyle(fontSize: 20)),
+                      Text('Followers'),
+                    ],
+                  ),
                 ),
               ],
             ),
+
           ),
           body: const TabBarView(
             children: [

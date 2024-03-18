@@ -1,3 +1,4 @@
+
 import 'package:asan_yab/domain/riverpod/data/message/message.dart';
 import 'package:asan_yab/domain/riverpod/data/message/message_data.dart';
 import 'package:asan_yab/domain/riverpod/data/message/message_history.dart';
@@ -44,20 +45,18 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
 
     return PopScope(
         onPopInvoked: (didPop) {
-          if (!mounted) {
-            ref.read(messageProvider.notifier).clearState();
+
             ref.read(messageNotifierProvider.notifier).fetchMessage();
             ref.read(messageHistory.notifier).getMessageHistory();
+            ref.read(messageProvider.notifier).clearState();
             ref
                 .read(seenMassageProvider.notifier)
                 .messageIsSeen(
-                    newProfileUser.uid!, FirebaseAuth.instance.currentUser!.uid)
-                .whenComplete(() =>
-                    ref.read(seenMassageProvider.notifier).isNewMassage());
+                    newProfileUser.uid!, FirebaseAuth.instance.currentUser!.uid);
 
             // return true;
-          }
         },
+        canPop: true,
         child: Scaffold(
           appBar: AppBarChatDetails(
               userId: newProfileUser!.uid!,
@@ -145,6 +144,8 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10, horizontal: 10)),
                               onPressed: () {
+                                FocusScope.of(context).unfocus();
+
                                 ref.read(emojiShowingProvider.notifier).state =
                                     !ref.watch(emojiShowingProvider);
                                 if (ref.watch(emojiShowingProvider)) {
@@ -257,7 +258,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                           ],
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         height: !ref.watch(emojiShowingProvider) ? 20 : 350,
                         child: Column(
                           children: [

@@ -39,18 +39,24 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             //
             // },
             onChanged: (value) {
-              final id = int.parse(value);
-              ref.read(searchProvider.notifier).getProfile(id);
-              // ref.read(searchTypeSenseProvider.notifier).search(value);
-              if (value.isEmpty) {
-                ref.refresh(searchProvider.notifier).clearSearch();
-              }
-              if (value.isNotEmpty) {
-                ref.refresh(searchLoadingProvider.notifier).state = true;
-              } else {
-                ref.refresh(searchLoadingProvider.notifier).state = false;
+              try {
+                final id = int.parse(value);
+                ref.read(searchProvider.notifier).getProfile(id);
+
+                if (value.isEmpty) {
+                  ref.refresh(searchProvider.notifier).clearSearch();
+                }
+                if (value.isNotEmpty) {
+                  ref.refresh(searchLoadingProvider.notifier).state = true;
+                } else {
+                  ref.refresh(searchLoadingProvider.notifier).state = false;
+                }
+              } catch (e) {
+                print('Error parsing input: $e');
+                // Handle the error here, such as displaying a message to the user
               }
             },
+
           ),
           actions: [
             Padding(
@@ -71,6 +77,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
           ],
           leading: IconButton(
             onPressed: () {
+              FocusScope.of(context).unfocus();
               Navigator.pop(context);
               ref.refresh(searchProvider.notifier).clearSearch();
             },

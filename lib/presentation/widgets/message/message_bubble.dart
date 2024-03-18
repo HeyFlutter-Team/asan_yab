@@ -9,7 +9,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../domain/riverpod/data/message/message_data.dart';
-// import 'package:timeago/timeago.dart' as timeago;
 
 class MessageBubble extends ConsumerStatefulWidget {
   const MessageBubble(
@@ -37,6 +36,30 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
   late Offset tapXY;
   late RenderBox overlay;
   final GlobalKey _replayContainerKey = GlobalKey();
+  bool isEmoji(String text) {
+    final RegExp regexEmoji = RegExp(
+      r'(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])',
+    );
+
+    return text.runes
+        .every((rune) => regexEmoji.hasMatch(String.fromCharCode(rune)));
+  }
+
+  bool _shouldHideDecoration() {
+    return isEmoji(widget.message.content);
+  }
+
+  double _calculateFontSize(String message) {
+    final thresholds = [2, 4, 6, 8, 10, 12];
+    final fontSizes = [60.0, 50.0, 40.0, 30.0, 25.0, 20.0];
+
+    for (int i = 0; i < thresholds.length; i++) {
+      if (message.length <= thresholds[i] && isEmoji(message)) {
+        return fontSizes[i];
+      }
+    }
+    return 16;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,12 +95,13 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
                 maxWidth: MediaQuery.of(context).size.width * 0.66,
               ),
               decoration: BoxDecoration(
-                color: widget.isMe
-                    ? themDark
-                        ? Colors.white70
-                        : Colors.black12
-                    : Colors.brown.shade300,
-                // color: widget.isMe ? Colors.purple : Colors.black,
+                color: _shouldHideDecoration() && widget.replayMessage == ''
+                    ? Colors.transparent
+                    : widget.isMe
+                        ? themDark
+                            ? Colors.white70
+                            : Colors.black12
+                        : Colors.brown.shade300,
                 borderRadius: widget.isMe
                     ? const BorderRadius.only(
                         topRight: Radius.circular(22),
@@ -116,16 +140,17 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
                     ),
                   PopupMenuItem(
                     onTap: () {
+                      ref.read(emojiShowingProvider.notifier).state =false;
                       ref.read(replayProvider.notifier).state =
                           widget.message.content;
-                      ref.read(emojiShowingProvider.notifier).state =
-                      !ref.watch(emojiShowingProvider);
+
                       if (ref.watch(emojiShowingProvider)) {
                         FocusManager.instance.primaryFocus?.unfocus();
                       }
-                      SystemChannels.textInput.invokeMethod('TextInput.show')
-                      .whenComplete(() => ref.read(messageProvider.notifier).scrollDown());
-
+                      SystemChannels.textInput
+                          .invokeMethod('TextInput.show')
+                          .whenComplete(() =>
+                              ref.read(messageProvider.notifier).scrollDown());
                     },
                     child: const Text(
                       'Replay',
@@ -249,15 +274,17 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              Text(widget.message.content,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: widget.isMe
-                                        ? Colors.black
-                                        : Colors.black,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  maxLines: 50),
+                              Text(
+                                widget.message.content,
+                                style: TextStyle(
+                                  fontSize: _calculateFontSize(
+                                      widget.message.content),
+                                  color:
+                                      widget.isMe ? Colors.black : Colors.black,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                maxLines: 50,
+                              ),
                             ],
                           ),
                     // const SizedBox(height: 5),

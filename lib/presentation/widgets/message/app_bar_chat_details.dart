@@ -52,7 +52,6 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
                           ref.read(emojiShowingProvider.notifier).state=false;
                         }
                         print('younis 1');
-                        ref.read(messageProvider.notifier).clearState();
                         print('younis 2');
 
                          ref
@@ -70,6 +69,7 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
                           await  ref
                                 .read(seenMassageProvider.notifier)
                                 .isNewMassage();
+                            ref.read(messageProvider.notifier).clearState();
 
                           print('younis 6');
                         })
