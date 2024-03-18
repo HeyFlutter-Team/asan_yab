@@ -169,7 +169,9 @@ class _LogInPageState extends ConsumerState<LogInPage>
                       minimumSize:  Size(MediaQuery.of(context).size.width * 0.9, 55),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12))),
-                  onPressed: () async {
+                  onPressed:ref.watch(isSignInningProvider)
+                  ?null
+                  :() async {
                     final isValid = formKey.currentState!.validate();
                     if (!isValid) return;
                     ref.read(isSignInningProvider.notifier).state = true;

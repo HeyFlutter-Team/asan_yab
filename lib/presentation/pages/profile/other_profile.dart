@@ -229,7 +229,9 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
               InkWell(
                 focusColor: Colors.transparent,
                 splashColor: Colors.transparent,
-                onTap:ref.read(loadingFollowers.notifier).state==true?null:() async {
+                onTap:ref.watch(loadingFollowers)
+                    ?null
+                    :() async {
                   ref.read(loadingFollowers.notifier).state=true;
 
                   //todo for follow

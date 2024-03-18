@@ -15,6 +15,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+final canPopProvider = StateProvider((ref) => false);
+
 class ChatDetailPage extends ConsumerStatefulWidget {
   const ChatDetailPage({super.key, this.uid});
   final String? uid;
@@ -27,8 +29,13 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
       ref.read(messageProvider.notifier).getMessages(widget.uid!);
+ref.read(canPopProvider.notifier).state=true;
+      await Future.delayed(const Duration(seconds: 2),);
+      ref.read(canPopProvider.notifier).state=false;
+
+
     });
   }
 
@@ -45,18 +52,20 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
 
     return PopScope(
         onPopInvoked: (didPop) {
-
-            ref.read(messageNotifierProvider.notifier).fetchMessage();
-            ref.read(messageHistory.notifier).getMessageHistory();
-            ref.read(messageProvider.notifier).clearState();
-            ref
-                .read(seenMassageProvider.notifier)
-                .messageIsSeen(
-                    newProfileUser.uid!, FirebaseAuth.instance.currentUser!.uid);
-
+if(ref.watch(canPopProvider)){
+  return;
+}else {
+  ref.read(messageNotifierProvider.notifier).fetchMessage();
+  ref.read(messageHistory.notifier).getMessageHistory();
+  ref.read(messageProvider.notifier).clearState();
+  ref
+      .read(seenMassageProvider.notifier)
+      .messageIsSeen(
+      newProfileUser.uid!, FirebaseAuth.instance.currentUser!.uid);
+}
             // return true;
         },
-        canPop: true,
+        canPop: ref.watch(canPopProvider)? false : true,
         child: Scaffold(
           appBar: AppBarChatDetails(
               userId: newProfileUser!.uid!,

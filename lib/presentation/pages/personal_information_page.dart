@@ -98,7 +98,9 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                         minimumSize:  Size(MediaQuery.of(context).size.width * 0.9, 55),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12))),
-                    onPressed: () {
+                    onPressed:ref.watch(isLoadingInformation)
+                        ?null
+                        :() {
                       final isValid = signUpFormKey.currentState!.validate();
                       if (!isValid) return;
                       ref.read(isLoadingInformation.notifier).state = true;

@@ -129,7 +129,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       minimumSize:  Size(MediaQuery.of(context).size.width * 0.9, 55),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12))),
-                  onPressed: () {
+                  onPressed:ref.watch(isSignUppingProvider)
+                      ?null
+                      :(){
                     final isValid = signUpFormKey.currentState!.validate();
                     if (!isValid) return;
                     ref.read(isSignUppingProvider.notifier).state=true;

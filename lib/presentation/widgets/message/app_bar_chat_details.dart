@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../domain/riverpod/data/message/message.dart';
+import '../../pages/message_page/chat_details_page.dart';
 
 class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
   const AppBarChatDetails({
@@ -47,36 +48,32 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
                   children: <Widget>[
                     IconButton(
                       onPressed: () {
-                        FocusScope.of(context).unfocus();
-                        if(ref.watch(emojiShowingProvider)){
-                          ref.read(emojiShowingProvider.notifier).state=false;
-                        }
-                        print('younis 1');
-                        print('younis 2');
-
-                         ref
-                            .read(messageNotifierProvider.notifier)
-                            .fetchMessage();
-                        print('younis 3');
-                          ref.read(messageHistory.notifier).getMessageHistory();
-                        print('younis 4');
+                        if(ref.watch(canPopProvider)){
+                          return;
+                        }else {
+                          FocusScope.of(context).unfocus();
+                          if (ref.watch(emojiShowingProvider)) {
+                            ref
+                                .read(emojiShowingProvider.notifier)
+                                .state = false;
+                          }
                           ref
-                            .read(seenMassageProvider.notifier)
-                            .messageIsSeen(
-                                userId, FirebaseAuth.instance.currentUser!.uid)
-                            .whenComplete(() async{
-                            print('younis 5');
-                          await  ref
+                              .read(messageNotifierProvider.notifier)
+                              .fetchMessage();
+                          ref.read(messageHistory.notifier).getMessageHistory();
+                          ref
+                              .read(seenMassageProvider.notifier)
+                              .messageIsSeen(
+                              userId, FirebaseAuth.instance.currentUser!.uid)
+                              .whenComplete(() async {
+                            await ref
                                 .read(seenMassageProvider.notifier)
                                 .isNewMassage();
                             ref.read(messageProvider.notifier).clearState();
-
-                          print('younis 6');
-                        })
-                        .whenComplete(() =>Navigator.pop(context));
-
-                        print('younis 7');
-                      },
+                          })
+                              .whenComplete(() => Navigator.pop(context));
+                        }
+                          },
                       icon: const Icon(
                         Icons.arrow_back_ios_outlined,
                       ),
