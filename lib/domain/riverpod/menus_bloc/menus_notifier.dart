@@ -14,19 +14,48 @@ class RappiBloc with ChangeNotifier {
   late List<RappiTabCategory> tabs = [];
   late List<RappiItem> items = [];
   List<RappiCategory> rappiCategories = [];
-
   TabController? tabController;
   ScrollController scrollController = ScrollController();
   bool _listen = true;
 
+
+  void _onScrollListener() {
+    if (_listen && !tabController!.indexIsChanging) {
+      double scrollPosition = scrollController.offset;
+
+      int selectedTabIndex = 0;
+      for (int i = 0; i < tabs.length - 1; i++) {
+        final tab = tabs[i];
+        final nextTab = tabs[i + 1];
+        onCategorySelected(i, animationRequired: false);
+        if (scrollPosition >= tab.offsetFrom && scrollPosition < nextTab.offsetFrom) {
+          selectedTabIndex = i;
+          break;
+        }
+      }
+      if (scrollPosition >= tabs.last.offsetFrom) {
+        selectedTabIndex = tabs.length - 1;
+      }
+      if (tabController!.index != selectedTabIndex) {
+        tabController!.index = selectedTabIndex;
+      }
+      for (int i = 0; i < tabs.length; i++) {
+        final isSelected = i == selectedTabIndex;
+        tabs[i] = tabs[i].copyWith(isSelected);
+      }
+      notifyListeners();
+    }
+  }
+
+
+
   Future<void> fetchMenu(String placeId, TickerProvider ticker) async {
-    rappiCategories.clear(); // Clear previous categories
+    rappiCategories.clear();
     items.clear();
     tabs.clear();
 
     final List<String> menus = [];
 
-    // Fetch menu data
     DocumentSnapshot docSnapshot =
     await FirebaseFirestore.instance.collection('Places').doc(placeId).get();
     if (docSnapshot.exists) {
@@ -48,6 +77,9 @@ class RappiBloc with ChangeNotifier {
           .get();
 
       tabController = TabController(length: menus2.docs.length, vsync: ticker);
+
+      double offsetFrom = 0.0;
+      double ofssetTo = 0.0;
 
       for (int i = 0; i < menus2.docs.length; i++) {
         List<RappiProduct> rappiProduct = [];
@@ -75,38 +107,25 @@ class RappiBloc with ChangeNotifier {
 
         rappiCategories
             .add(RappiCategory(name: menus[i], product: rappiProduct));
-      }
 
-      double offsetFrom = 0.0;
-      double ofssetTo = 0.0;
-
-      for (int i = 0; i < rappiCategories.length; i++) {
-        final category = rappiCategories[i];
-
-        if (i > 0) {
-          offsetFrom += rappiCategories[i - 1].product.length * productHeight;
-        }
-        if (i < rappiCategories.length - 1) {
-          ofssetTo = offsetFrom +
-              rappiCategories[i + 1].product.length * productHeight;
-        } else {
-          ofssetTo = double.infinity;
-        }
+        ofssetTo = offsetFrom + rappiProduct.length * productHeight;
 
         tabs.add(
           RappiTabCategory(
-            category: category,
+            category: rappiCategories[i],
             selected: (i == 0),
             offsetFrom: categoryHeight * i + offsetFrom,
             offsetTo: ofssetTo,
           ),
         );
 
-        items.add(RappiItem(category: category));
-        for (int j = 0; j < category.product.length; j++) {
-          final product = category.product[j];
+        items.add(RappiItem(category: rappiCategories[i]));
+        for (int j = 0; j < rappiCategories[i].product.length; j++) {
+          final product = rappiCategories[i].product[j];
           items.add(RappiItem(product: product));
         }
+
+        offsetFrom = ofssetTo; // Update offsetFrom for the next category
       }
 
       tabController!.addListener(() {
@@ -124,20 +143,6 @@ class RappiBloc with ChangeNotifier {
       scrollController.addListener(_onScrollListener);
 
       notifyListeners();
-    }
-  }
-
-  void _onScrollListener() {
-    if (_listen) {
-      for (int i = 0; i < tabs.length; i++) {
-        final tab = tabs[i];
-        if (scrollController.offset >= tab.offsetFrom &&
-            scrollController.offset <= tab.offsetTo &&
-            !tab.selected) {
-          onCategorySelected(i, animationRequired: false);
-          break;
-        }
-      }
     }
   }
 

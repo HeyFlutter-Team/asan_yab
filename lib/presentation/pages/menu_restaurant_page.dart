@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/menus_restaurant/rappi_category.dart';
@@ -54,6 +55,18 @@ class _MenuRestaurantState extends ConsumerState<MenuRestaurant>
   Widget build(BuildContext context) {
     final places = ref.watch(getSingleProvider);
     return Scaffold(
+      appBar: AppBar(
+        scrolledUnderElevation: 0,
+        title:Directionality(
+          textDirection: TextDirection.rtl,
+          child: Text(
+            '${places?.name}',
+            style: const TextStyle(
+                overflow: TextOverflow.ellipsis,
+                fontSize: 17, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
       body: isLoading
           ? const Center(
               child: CircularProgressIndicator(),
@@ -64,31 +77,6 @@ class _MenuRestaurantState extends ConsumerState<MenuRestaurant>
                 builder: (_, __) => Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Directionality(
-                      textDirection: TextDirection.rtl,
-                      child: Container(
-                        height: 70,
-                        child: Padding(
-                          padding: const EdgeInsets.all(18.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                               Text(
-                                 '${places?.name}',
-                                style: const TextStyle(
-                                  overflow: TextOverflow.ellipsis,
-                                    fontSize: 17, fontWeight: FontWeight.bold),
-                              ),
-                              IconButton(
-                                  icon: const Icon(Icons.arrow_forward),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  }),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
                     SizedBox(
                       height: 60,
                       child: Directionality(
@@ -218,13 +206,16 @@ class _RappiProductItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: Image.network(
-                        product!.image,
-                        fit: BoxFit.cover,
-                        height: 70,
-                        width: 70,
-                      )),
+                    borderRadius: BorderRadius.circular(50),
+                    child: CachedNetworkImage(
+                      errorWidget: (context, url, error) => Image.asset('assets/asan_yab.jpg'),
+                      imageUrl: product!.image,
+                      placeholder: (context, url) => Image.asset('assets/asan_yab.jpg'),
+                      fit: BoxFit.cover,
+                      height: 70,
+                      width: 70,
+                    ),
+                  ),
                 ),
                 const SizedBox(
                   width: 10,

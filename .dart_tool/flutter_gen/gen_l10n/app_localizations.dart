@@ -804,7 +804,7 @@ abstract class AppLocalizations {
   /// No description provided for @menus_restaurant.
   ///
   /// In en, this message translates to:
-  /// **'Restaurant Menu'**
+  /// **'Menu'**
   String get menus_restaurant;
 }
 
