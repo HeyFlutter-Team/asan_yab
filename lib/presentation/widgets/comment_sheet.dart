@@ -30,6 +30,7 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(commentProvider.notifier).unSent(widget.postId);
       ref.read(commentProvider.notifier).setComments([]);
       ref.read(commentProvider.notifier).fetchMoreData(widget.postId);
     });
@@ -49,7 +50,7 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
         Column(
           children: [
             Container(
-                padding: EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
                   color: (themeModel.currentThemeMode == ThemeMode.dark)
                       ? Colors.black38

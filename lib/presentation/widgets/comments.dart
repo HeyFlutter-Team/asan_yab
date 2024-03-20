@@ -22,7 +22,7 @@ class _CommentsState extends ConsumerState<Comments> {
       onTap: () {
         ref
             .read(commentProvider.notifier)
-            .showCommentSheet(context, widget.postId);
+            .showCommentSheet(context, widget.postId, ref);
       },
       child: Padding(
         padding: const EdgeInsets.only(top: 10, left: 12, right: 12),

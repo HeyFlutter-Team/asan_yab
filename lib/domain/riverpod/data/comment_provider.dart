@@ -4,8 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/models/comment_model.dart';
+import '../../../data/models/unSent_Comment.dart';
 import '../../../data/models/users.dart';
 import '../../../presentation/widgets/comment_sheet.dart';
+import 'message/message.dart';
 
 final commentProvider = ChangeNotifierProvider<VerticalDataNotifier>(
     (ref) => VerticalDataNotifier());
@@ -13,6 +15,7 @@ final commentProvider = ChangeNotifierProvider<VerticalDataNotifier>(
 class VerticalDataNotifier extends ChangeNotifier {
   bool _isLoading = false;
   List<CommentM> _comments = [];
+  List<UnsentComment> texts = [];
 
   List<CommentM> get comments => _comments;
   final TextEditingController _commentController = TextEditingController();
@@ -181,7 +184,7 @@ class VerticalDataNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void showCommentSheet(BuildContext context, String postId) {
+  void showCommentSheet(BuildContext context, String postId, WidgetRef ref) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -189,8 +192,51 @@ class VerticalDataNotifier extends ChangeNotifier {
           postId: postId,
         );
       },
-    );
-    notifyListeners();
+    ).then((value) {
+      ref.read(emojiShowingProvider.notifier).state = false;
+
+      if (_commentController.text.isNotEmpty) {
+        bool found = false;
+        for (int i = 0; i < texts.length; i++) {
+          if (texts[i].postId == postId) {
+            texts[i].comment = _commentController.text;
+            found = true;
+            break; // Exit the loop since the comment has been updated
+          }
+        }
+
+        // If no existing UnsentComment with matching postId is found, add a new one
+        if (!found) {
+          texts.add(
+            UnsentComment(comment: _commentController.text, postId: postId),
+          );
+        }
+      }
+      print("aliHadid");
+      print(texts.length);
+      print("aliHadid");
+      print(texts.length);
+      // Clear the comment controller after processing the comment
+      _commentController.clear();
+
+      // Notify listeners after the comment has been processed
+
+      notifyListeners();
+    });
+  }
+
+  void unSent(String postId) {
+    List<UnsentComment> copyTexts = List.from(texts);
+
+    for (int i = 0; i < copyTexts.length; i++) {
+      if (copyTexts[i].postId == postId) {
+        _commentController.text = copyTexts[i].comment;
+        texts.remove(copyTexts[i]);
+        break;
+      }
+    }
+
+    notifyListeners(); // Notify listeners after the modification
   }
 
   void showOptionsBottomSheet(
