@@ -12,15 +12,13 @@ final searchTypeSenseProvider =
 class MyPlaceList extends StateNotifier<List<SearchModel>> {
   MyPlaceList(super.state);
   final searchController = TextEditingController();
-  void clear() {
-    state.clear();
-  }
+  void clear() => state.clear();
 
   Future<List<SearchModel>> search(String query) async {
     final search = SearchInstance();
-    search.searchForData(query.toString().trim()).then((value) {
-      state = value;
-    });
+    search
+        .searchForData(query.toString().trim())
+        .then((value) => state = value);
     return state;
   }
 }

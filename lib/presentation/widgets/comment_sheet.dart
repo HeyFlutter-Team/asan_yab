@@ -56,8 +56,9 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                           ? Colors.white70
                           : Colors.brown[700],
                   borderRadius: const BorderRadius.only(
-                      topRight: Radius.circular(28),
-                      topLeft: Radius.circular(28)),
+                    topRight: Radius.circular(28),
+                    topLeft: Radius.circular(28),
+                  ),
                 ),
                 height: 80,
                 child: (FirebaseAuth.instance.currentUser != null)
@@ -79,7 +80,6 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                               ),
                             ),
                           ),
-                          //comment's textFiled
                           SizedBox(
                             height: (40 +
                                     16 *
@@ -154,34 +154,28 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                               },
                             ),
                           ),
-
-                          //done icon
                           IconButton(
-                              onPressed: () {
-                                ref
-                                    .read(commentProvider.notifier)
-                                    .submitComment(
-                                        ref
-                                            .watch(commentProvider)
-                                            .controller
-                                            .text,
-                                        context,
-                                        ref,
-                                        widget.postId);
-                                ref
-                                    .read(commentProvider.notifier)
-                                    .controller
-                                    .clear();
-                                ref.read(emojiShowingProvider.notifier).state =
-                                    false;
-                              },
-                              icon: Icon(
-                                Icons.send,
-                                color: (themeModel.currentThemeMode ==
-                                        ThemeMode.dark)
-                                    ? Colors.grey
-                                    : Colors.black87,
-                              ))
+                            onPressed: () {
+                              ref.read(commentProvider.notifier).submitComment(
+                                  ref.watch(commentProvider).controller.text,
+                                  context,
+                                  ref,
+                                  widget.postId);
+                              ref
+                                  .read(commentProvider.notifier)
+                                  .controller
+                                  .clear();
+                              ref.read(emojiShowingProvider.notifier).state =
+                                  false;
+                            },
+                            icon: Icon(
+                              Icons.send,
+                              color: (themeModel.currentThemeMode ==
+                                      ThemeMode.dark)
+                                  ? Colors.grey
+                                  : Colors.black87,
+                            ),
+                          )
                         ],
                       )
                     : Row(
@@ -218,7 +212,9 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                               : Text(
                                   languageText.for_add_comment,
                                   style: const TextStyle(
-                                      color: Colors.white, fontSize: 20),
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                  ),
                                 )
                         ],
                       )),

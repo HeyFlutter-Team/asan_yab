@@ -27,26 +27,18 @@ class _SearchPageState extends ConsumerState<SearchPage> {
           title: TextFormField(
             keyboardType: TextInputType.number,
             controller: searchController,
-            // autofocus: true,
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: AppLocalizations.of(context)?.searchById,
             ),
-            // onFieldSubmitted: (value) {
-            //   print(value);
-            //
-            // },
             onChanged: (value) {
               final id = int.parse(value);
               ref.read(searchProvider.notifier).getProfile(id);
-              // ref.read(searchTypeSenseProvider.notifier).search(value);
               if (value.isEmpty) {
                 ref.refresh(searchProvider.notifier).clearSearch();
-              }
-              if (value.isNotEmpty) {
-                ref.refresh(searchLoadingProvider.notifier).state = true;
-              } else {
                 ref.refresh(searchLoadingProvider.notifier).state = false;
+              } else {
+                ref.refresh(searchLoadingProvider.notifier).state = true;
               }
             },
           ),
@@ -78,19 +70,20 @@ class _SearchPageState extends ConsumerState<SearchPage> {
         body: ref.watch(searchProvider).isEmpty
             ? Center(
                 child: Text(
-                AppLocalizations.of(context)!.findingFriendById,
-                style: GoogleFonts.lobster(
-                    fontSize: 18, fontWeight: FontWeight.w500),
-              ))
+                  AppLocalizations.of(context)!.findingFriendById,
+                  style: GoogleFonts.lobster(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              )
             : ListView.separated(
                 padding: const EdgeInsets.all(12),
                 itemCount: ref.watch(searchProvider).length,
                 separatorBuilder: (context, index) => const SizedBox(height: 8),
                 itemBuilder: (context, index) {
-                  // final items = ref.watch(searchTypeSenseProvider);
                   return InkWell(
                     onTap: () {
-                      // todo for visite
                       ref
                           .read(otherUserProvider.notifier)
                           .setDataUser(ref.watch(searchProvider)[index]);
@@ -98,23 +91,26 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                           FirebaseAuth.instance.currentUser!.uid,
                           ref.watch(searchProvider)[index].uid!);
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const OtherProfile(),
-                          ));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const OtherProfile(),
+                        ),
+                      );
                     },
                     child: Row(
                       children: [
-                        ref.watch(searchProvider)[index].imageUrl==''?
-                        const CircleAvatar(
-                          radius: 30,
-                          backgroundImage: AssetImage('assets/Avatar.png'),
-                        )
-                        :CircleAvatar(
-                          radius: 30,
-                          backgroundImage: CachedNetworkImageProvider(
-                              ref.watch(searchProvider)[index].imageUrl ?? ''),
-                        ),
+                        ref.watch(searchProvider)[index].imageUrl == ''
+                            ? const CircleAvatar(
+                                radius: 30,
+                                backgroundImage:
+                                    AssetImage('assets/Avatar.png'),
+                              )
+                            : CircleAvatar(
+                                radius: 30,
+                                backgroundImage: CachedNetworkImageProvider(
+                                    ref.watch(searchProvider)[index].imageUrl ??
+                                        ''),
+                              ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(

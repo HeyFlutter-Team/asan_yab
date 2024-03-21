@@ -3,15 +3,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class NotificationUpdate {
+  NotificationUpdate();
+  final firebaseAuth = FirebaseAuth.instance.currentUser;
+  final firestore = FirebaseFirestore.instance;
   void saveToken(String? token) async {
-    debugPrint('tokken  Fcm $token');
-    if (FirebaseAuth.instance.currentUser != null) {
-      await FirebaseFirestore.instance
+    debugPrint('tokKen  Fcm $token');
+    if (firebaseAuth != null) {
+      await firestore
           .collection('UserToken')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .set({
-        "Token": token,
-      });
+          .doc(firebaseAuth!.uid)
+          .set({"Token": token});
     }
   }
 }

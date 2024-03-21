@@ -8,13 +8,14 @@ class CommentM {
   final String name;
   final String imageUrl;
 
-  CommentM(
-      {required this.text,
-      required this.uid,
-      required this.commentId,
-      required this.timestamp,
-      required this.name,
-      required this.imageUrl});
+  const CommentM({
+    required this.text,
+    required this.uid,
+    required this.commentId,
+    required this.timestamp,
+    required this.name,
+    required this.imageUrl,
+  });
 
   factory CommentM.fromDocument(DocumentSnapshot doc) {
     final timestamp = doc['timestamp'];

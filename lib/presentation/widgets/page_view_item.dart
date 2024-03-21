@@ -23,16 +23,15 @@ class PageViewItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ImageView(
-                selectedIndex: selectedIndex,
-                gallery: gallery,
-              ),
-            ));
-      },
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ImageView(
+            selectedIndex: selectedIndex,
+            gallery: gallery,
+          ),
+        ),
+      ),
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
@@ -80,7 +79,7 @@ class _ImageViewState extends ConsumerState<ImageView> {
 
   @override
   Widget build(BuildContext context) {
-    final isRTL = ref.watch(languageProvider).code=='fa';
+    final isRTL = ref.watch(languageProvider).code == 'fa';
     return Material(
       child: Stack(
         alignment: Alignment.bottomCenter,
@@ -139,13 +138,11 @@ class _ImageViewState extends ConsumerState<ImageView> {
             child: Align(
               alignment: Alignment.topRight,
               child: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon:  Icon(
-                    isRTL?
-                    Icons.arrow_back_ios_sharp
-                    :Icons.arrow_forward_ios_sharp,
+                  onPressed: () => Navigator.pop(context),
+                  icon: Icon(
+                    isRTL
+                        ? Icons.arrow_back_ios_sharp
+                        : Icons.arrow_forward_ios_sharp,
                     color: Colors.white,
                   )),
             ),

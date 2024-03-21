@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DownloadImage {
-  DownloadImage._();
+  const DownloadImage._();
   static Int8List logo = Int8List(0);
   static Int8List coverImage = Int8List(0);
 
@@ -17,7 +17,10 @@ class DownloadImage {
   }
 
   static Future<void> getImage(
-      String urlLogo, String coverImage1, BuildContext context) async {
+    String urlLogo,
+    String coverImage1,
+    BuildContext context,
+  ) async {
     showDialogBox(context);
     logo = await downloadFile(urlLogo);
     coverImage = await downloadFile(coverImage1);
@@ -26,35 +29,35 @@ class DownloadImage {
   static void showDialogBox(BuildContext context) {
     final languageText = AppLocalizations.of(context);
     showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) => SizedBox(
-              height: 100,
-              child: AlertDialog(
-                elevation: 4,
-                content:  Row(
-                  children: [
-                    const SizedBox(
-                      height: 30,
-                      width: 30,
-                      child: CircularProgressIndicator(
-                          color: Colors.blueGrey, strokeWidth: 3.0),
-                    ),
-                    const SizedBox(width: 12),
-                    Text('${languageText?.download_image_loading}',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusDirectional.circular(12)),
-                // title: const Text('لطفا صبر کنید!'),
-                // content: const Text('لطفآ به انترنیت وصل شوید؟'),
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => SizedBox(
+        height: 100,
+        child: AlertDialog(
+          elevation: 4,
+          content: Row(
+            children: [
+              const SizedBox(
+                height: 30,
+                width: 30,
+                child: CircularProgressIndicator(
+                    color: Colors.blueGrey, strokeWidth: 3.0),
               ),
-            ));
+              const SizedBox(width: 12),
+              Text(
+                '${languageText?.download_image_loading}',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusDirectional.circular(12),
+          ),
+        ),
+      ),
+    );
   }
 }

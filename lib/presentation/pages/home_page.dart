@@ -32,25 +32,17 @@ class _HomePageState extends ConsumerState<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
         if (mounted) {
-          // Use ref only if the widget is still mounted
           if (mounted) {
             final newVersion = NewVersionPlus(
               androidId: 'com.heyflutter.asanYab',
               iOSId: 'com.heyflutter.asanYab',
             );
-            Timer(const Duration(seconds: 800), () {
-              checkNewVersion(newVersion, context);
-            });
+            Timer(const Duration(seconds: 800),
+                () => checkNewVersion(newVersion, context));
           }
         }
       },
     );
-  }
-
-  @override
-  void dispose() {
-    // Cancel subscription to authentication changes
-    super.dispose();
   }
 
   Future<void> onRefresh() async {

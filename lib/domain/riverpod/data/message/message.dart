@@ -40,10 +40,11 @@ class MessageProvider extends StateNotifier<Users?> {
     }
   }
 
-  Future<void> sendText(
-      {required String receiverId,
-      required BuildContext context,
-      required replayMessage}) async {
+  Future<void> sendText({
+    required String receiverId,
+    required BuildContext context,
+    required replayMessage,
+  }) async {
     try {
       if (textController.text.isNotEmpty) {
         await messageRepo.addTextMessage(
@@ -54,7 +55,7 @@ class MessageProvider extends StateNotifier<Users?> {
         // FocusScope.of(context).unfocus();
       }
     } catch (e) {
-      return print(e.toString());
+      return debugPrint(e.toString());
     } finally {
       if (mounted) {
         // FocusScope.of(context).unfocus();

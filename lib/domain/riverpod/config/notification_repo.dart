@@ -8,10 +8,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 // }
 
 class FirebaseApi {
+  FirebaseApi();
   final _firebaseMessaging = FirebaseMessaging.instance;
-
-  // late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  //     FlutterLocalNotificationsPlugin();
   String? token = '';
   Future<void> initNotification() async {
     await _firebaseMessaging.requestPermission(
@@ -23,15 +21,13 @@ class FirebaseApi {
       provisional: false,
       sound: true,
     );
-
-    // debugPrint('tokken  token $token');
   }
 
   void getToken() async {
     final fcmToken = await _firebaseMessaging.getToken();
     token = fcmToken;
     NotificationUpdate().saveToken(token);
-    debugPrint('tokken  token $token');
+    debugPrint('tokKen  token $token');
   }
 
   void initInfo() {
@@ -52,7 +48,9 @@ class FirebaseApi {
                   DetailsPage(id: details.payload!.toString()),
             ));
           }
-        } catch (e) {}
+        } catch (e) {
+          debugPrint(e.toString());
+        }
       },
     );
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
@@ -80,30 +78,23 @@ class FirebaseApi {
   }
 
   Future<void> initialize(BuildContext context) async {
-    // Request permission for receiving messages (for iOS)
-    NotificationSettings settings =
-        await _firebaseMessaging.requestPermission();
-    print("User granted permission: ${settings.authorizationStatus}");
+    final settings = await _firebaseMessaging.requestPermission();
+    debugPrint("User granted permission: ${settings.authorizationStatus}");
 
-    // Handle messages when the app is in the background and opened by the user
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print("Background Message: ${message.notification?.title}");
-      // Handle the message when the app is in the background
+      debugPrint("Background Message: ${message.notification?.title}");
 
       _handleNotificationClick(message);
     });
 
-    // Get the token
     String? token = await _firebaseMessaging.getToken();
-    print("FCM Token: $token");
+    debugPrint("FCM Token: $token");
   }
 
   void _handleNotificationClick(RemoteMessage message) {
-    // Extract information from the message, e.g., route to navigate
     String? screenToNavigate = message.data['id'];
 
     if (screenToNavigate != null) {
-      // Navigate to the desired screen
       navigatorKey.currentState?.push(MaterialPageRoute(
         builder: (context) => DetailsPage(id: screenToNavigate),
       ));

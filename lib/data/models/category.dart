@@ -5,22 +5,20 @@ class Category {
   final String color;
   final String? enCategoryName;
 
-  Category({
-    required this.id,
-    required this.categoryName,
-    required this.iconCode,
-    required this.color,
-    this.enCategoryName
-  });
+  const Category(
+      {required this.id,
+      required this.categoryName,
+      required this.iconCode,
+      required this.color,
+      this.enCategoryName});
 
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
-      id: json['id'],
-      categoryName: json['categoryName'],
-      iconCode: json['iconCode'],
-      color: json['color'],
-      enCategoryName: json['enCategoryName']??''
-    );
+        id: json['id'],
+        categoryName: json['categoryName'],
+        iconCode: json['iconCode'],
+        color: json['color'],
+        enCategoryName: json['enCategoryName'] ?? '');
   }
 
   Map<String, dynamic> toJson() {
@@ -29,7 +27,7 @@ class Category {
       'categoryName': categoryName,
       'iconCode': iconCode,
       'color': color,
-      'enCategoryName':enCategoryName
+      'enCategoryName': enCategoryName
     };
   }
 }

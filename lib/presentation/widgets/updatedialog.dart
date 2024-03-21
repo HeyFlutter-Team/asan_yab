@@ -12,13 +12,13 @@ class UpdateDialog extends ConsumerStatefulWidget {
   final String appLink;
   final bool allowDismissal;
 
-  const UpdateDialog(
-      {Key? key,
-      this.version = " ",
-      required this.description,
-      required this.appLink,
-      required this.allowDismissal})
-      : super(key: key);
+  const UpdateDialog({
+    Key? key,
+    this.version = " ",
+    required this.description,
+    required this.appLink,
+    required this.allowDismissal,
+  }) : super(key: key);
 
   @override
   ConsumerState<UpdateDialog> createState() => _UpdateDialogState();
@@ -49,7 +49,7 @@ class _UpdateDialogState extends ConsumerState<UpdateDialog> {
 
   Widget content(BuildContext context) {
     final isRTL = ref.watch(languageProvider).code == 'fa';
-    final languageText=AppLocalizations.of(context);
+    final languageText = AppLocalizations.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -101,19 +101,20 @@ class _UpdateDialogState extends ConsumerState<UpdateDialog> {
                           flex: 1,
                           child: Stack(
                             children: [
-                               Align(
+                              Align(
                                 alignment: Alignment.centerRight,
                                 child: Text(
                                   languageText!.update_dialog_page_new_version,
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   isRTL
-                                  ?convertDigitsToFarsi(widget.version)
-                                  :widget.version,
+                                      ? convertDigitsToFarsi(widget.version)
+                                      : widget.version,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -170,9 +171,7 @@ class _UpdateDialogState extends ConsumerState<UpdateDialog> {
                                 ),
                               )
                             : const SizedBox(),
-                        SizedBox(
-                          width: widget.allowDismissal ? 16 : 0,
-                        ),
+                        SizedBox(width: widget.allowDismissal ? 16 : 0),
                         Expanded(
                           child: GestureDetector(
                             onTap: () async {

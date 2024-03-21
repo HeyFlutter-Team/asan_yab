@@ -12,18 +12,15 @@ class AboutUsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    final languageText=AppLocalizations.of(context);
+    final languageText = AppLocalizations.of(context);
     return Scaffold(
-      // backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        title:  Text(
-          languageText!.about_us_page_appbar_title,
-          // style: TextStyle(color: Colors.black),
-        ),
+        title: Text(languageText!.about_us_page_appbar_title),
         elevation: 0,
         leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.arrow_back)),
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.arrow_back),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -124,12 +121,12 @@ class AboutUsPage extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 12),
-                      _BuildLinkWidget(
+                      const _BuildLinkWidget(
                         url: 'https://heyflutter.com',
                         image: ImageRes.worldWideWeb,
                         name: '12-WEEK Flutter Training',
                       ),
-                      _BuildLinkWidget(
+                      const _BuildLinkWidget(
                         url: 'https://www.youtube.com/@HeyFlutter',
                         image: ImageRes.youtube,
                         name: 'Follow YouTube',
@@ -144,7 +141,7 @@ class AboutUsPage extends StatelessWidget {
                           ),
                           child: RichText(
                             text: TextSpan(
-                              style: TextStyle(color: Colors.black54),
+                              style: const TextStyle(color: Colors.black54),
                               text: 'This app organized by ',
                               children: [
                                 TextSpan(

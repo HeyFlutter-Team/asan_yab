@@ -79,7 +79,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                     FirebaseAnalytics.instance.logEvent(
                       name: 'humm_1',
                       parameters: <String, dynamic>{
-                        'clicked_on': "${data[index].name}",
+                        'clicked_on': data[index].name,
                       },
                     );
                   },
@@ -123,7 +123,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  data[index].name!,
+                                  data[index].name,
                                   overflow: TextOverflow.fade,
                                   maxLines: 2,
                                   style: const TextStyle(fontSize: 18.0),
@@ -142,12 +142,11 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                                                   BorderRadius.circular(8.0),
                                             ),
                                           ),
-                                          onPressed: () async {
-                                            await FlutterPhoneDirectCaller
-                                                .callNumber(data[index]
-                                                    .addresses[0]
-                                                    .phone);
-                                          },
+                                          onPressed: () async =>
+                                              await FlutterPhoneDirectCaller
+                                                  .callNumber(data[index]
+                                                      .addresses[0]
+                                                      .phone),
                                           child: isRTL
                                               ? Row(
                                                   mainAxisAlignment:
@@ -214,13 +213,10 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                   ),
                 );
               } else if (index == data.length) {
-                // debugPrint('Ui is load : ${ref.watch(hasMore)} ');
                 return const Padding(
                   padding: EdgeInsets.only(bottom: 30.0),
                   child: Center(
-                    child: CircularProgressIndicator(
-                      // color: Colors.black,
-                    ),
+                    child: CircularProgressIndicator(),
                   ),
                 );
               } else {

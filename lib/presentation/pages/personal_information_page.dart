@@ -21,7 +21,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
   final invitingPersonId = TextEditingController();
   final signUpFormKey = GlobalKey<FormState>();
 
-  @override 
+  @override
   void dispose() {
     nameController.dispose();
     lastNameController.dispose();
@@ -31,8 +31,8 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
   @override
   Widget build(BuildContext context) {
     final languageText = AppLocalizations.of(context);
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         body: Form(
           key: signUpFormKey,
@@ -47,9 +47,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                     height: 200,
                     width: 200,
                   ),
-                  const SizedBox(
-                    height: 2,
-                  ),
+                  const SizedBox(height: 2),
                   CustomTextField(
                     textCapitalization: TextCapitalization.words,
                     label: languageText!.first_text_field_label,
@@ -79,9 +77,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                     hintText: languageText.third_text_field_hint,
                     keyboardType: TextInputType.emailAddress,
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red.shade800,
@@ -92,14 +88,14 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                       final isValid = signUpFormKey.currentState!.validate();
                       if (!isValid) return;
                       ref
-                          .read(userRegesterDetailsProvider)
+                          .read(userRegisterDetailsProvider)
                           .addUserDetailsToFirebase(
                               emailController: widget.email,
                               lastNameController: lastNameController.text,
                               nameController: nameController.text)
                           .whenComplete(() async {
                         await ref
-                            .read(userRegesterDetailsProvider)
+                            .read(userRegisterDetailsProvider)
                             .updateInviterRate(invitingPersonId.text);
                         signUpFormKey.currentState!.reset();
 
@@ -115,7 +111,10 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                     },
                     child: Text(
                       languageText.elevated_text,
-                      style: const TextStyle(fontSize: 17, color: Colors.white),
+                      style: const TextStyle(
+                        fontSize: 17,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ],

@@ -74,9 +74,9 @@ class InternetConnectivityChecker extends StateNotifier<bool> {
       ..showSnackBar(snackBar);
   }
 
-  void startStremaing(BuildContext context) {
-    subscription = Connectivity().onConnectivityChanged.listen((event) {
-      checkInternet(context);
-    });
+  void startStreaming(BuildContext context) {
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((event) => checkInternet(context));
   }
 }

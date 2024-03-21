@@ -23,29 +23,20 @@ class _SearchPageState extends ConsumerState<SearchPage> {
   final searchController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     searchController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final _data = ref.watch(userDataProvider);
+    final data = ref.watch(userDataProvider);
     final languageText = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
-        //shadowColor: Colors.blue,
-        //backgroundColor: Theme.of(context).primaryColor,
         title: TextFormField(
           controller: searchController,
-          // autofocus: true,
           decoration: InputDecoration(
             border: InputBorder.none,
             hintText: languageText!.search_bar_hint_text,
@@ -57,11 +48,9 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             ref.read(userDataProvider);
             if (value.isEmpty) {
               ref.read(searchNotifierProvider.notifier).clear;
-            }
-            if (value.isNotEmpty) {
-              ref.refresh(searchLoadingProvider.notifier).state = true;
-            } else {
               ref.refresh(searchLoadingProvider.notifier).state = false;
+            } else {
+              ref.refresh(searchLoadingProvider.notifier).state = true;
             }
           },
         ),
@@ -77,7 +66,6 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                     icon: const Icon(
                       Icons.close,
                       size: 25.0,
-                      // color: Colors.black,
                     ),
                   )
                 : null,
@@ -92,50 +80,48 @@ class _SearchPageState extends ConsumerState<SearchPage> {
         ),
       ),
       body: ref.watch(searchNotifierProvider) == ''
-          ? SizedBox()
-          : _data.when(
-              data: (_data) {
-                List<Place> postList = _data.map((e) => e).toList();
+          ? const SizedBox()
+          : data.when(
+              data: (data) {
+                List<Place> postList = data.map((e) => e).toList();
                 return ListView.separated(
                   padding: const EdgeInsets.all(12),
                   itemCount: postList.length,
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 8),
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DetailsPage(
-                              id: postList[index].id,
-                            ),
+                  itemBuilder: (context, index) => InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailsPage(
+                            id: postList[index].id,
                           ),
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(60),
-                            child: CachedNetworkImage(
-                              imageUrl: postList[index].logo,
-                              fit: BoxFit.cover,
-                              height: 60,
-                              width: 60,
-                              placeholder: (context, url) =>
-                                  Image.asset(ImageRes.asanYab),
-                            ),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(60),
+                          child: CachedNetworkImage(
+                            imageUrl: postList[index].logo,
+                            fit: BoxFit.cover,
+                            height: 60,
+                            width: 60,
+                            placeholder: (context, url) =>
+                                Image.asset(ImageRes.asanYab),
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: buildSearchResultText(
-                              postList[index].name.toString(),
-                            ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: buildSearchResultText(
+                            postList[index].name.toString(),
                           ),
-                        ],
-                      ),
-                    );
-                  },
+                        ),
+                      ],
+                    ),
+                  ),
                 );
               },
               error: (error, stackTrace) => Text(' hello: ${error.toString()}'),
@@ -159,10 +145,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
 
     return RichText(
       text: TextSpan(
-        style: const TextStyle(
-          // color: Colors.black,
-          fontSize: 20.0,
-        ),
+        style: const TextStyle(fontSize: 20.0),
         children: [
           TextSpan(text: beforeMatch),
           TextSpan(

@@ -6,9 +6,12 @@ final deleteMessagesProvider =
 
 class DeleteMessages extends StateNotifier {
   DeleteMessages(super.state);
-  final deleteMessageRepo = DeleteMessage();
+  final deleteMessageRepo = const DeleteMessage();
   Future<void> deleteSingleMessage(
-      String uid, String receiverId, String messageContent) async {
+    String uid,
+    String receiverId,
+    String messageContent,
+  ) async {
     deleteMessageRepo.deleteMessage(uid, receiverId, messageContent);
   }
 }

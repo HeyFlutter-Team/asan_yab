@@ -3,12 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class PlacesRepository {
-  final firebase = FirebaseFirestore.instance;
+ PlacesRepository();
+  final firestore = FirebaseFirestore.instance;
   final _path = 'Places';
 
   Future<List<Place>> fetchPlaces() async {
     try {
-      final data = await firebase
+      final data = await firestore
           .collection(_path)
           .orderBy('order', descending: false)
           .get();

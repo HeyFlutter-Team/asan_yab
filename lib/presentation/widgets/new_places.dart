@@ -31,9 +31,7 @@ class NewPlaces extends ConsumerWidget {
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: places.isEmpty
-          ? const SizedBox(
-              height: 0,
-            )
+          ? const SizedBox(height: 0)
           : Stack(
               children: [
                 CarouselSlider.builder(
@@ -46,15 +44,13 @@ class NewPlaces extends ConsumerWidget {
                         ? convertDigitsToFarsi(phoneNumberItems)
                         : phoneNumberItems;
                     return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                DetailsPage(id: places[index].id),
-                          ),
-                        );
-                      },
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              DetailsPage(id: places[index].id),
+                        ),
+                      ),
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 12),
                         decoration: BoxDecoration(
@@ -89,7 +85,7 @@ class NewPlaces extends ConsumerWidget {
                                     width:
                                         MediaQuery.of(context).size.width * 0.7,
                                     child: Text(
-                                      items.name!,
+                                      items.name,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
@@ -109,10 +105,9 @@ class NewPlaces extends ConsumerWidget {
                                                 Colors.black.withOpacity(0.3),
                                             elevation: 4,
                                           ),
-                                          onPressed: () async {
-                                            await FlutterPhoneDirectCaller
-                                                .callNumber(phoneNumber);
-                                          },
+                                          onPressed: () async =>
+                                              await FlutterPhoneDirectCaller
+                                                  .callNumber(phoneNumber),
                                           child: isRTL
                                               ? Row(
                                                   children: [
@@ -160,18 +155,19 @@ class NewPlaces extends ConsumerWidget {
                   ),
                 ),
                 Positioned(
-                    bottom: 30,
-                    left: 35,
-                    child: AnimatedSmoothIndicator(
-                      count: places.length >= 5 ? 5 : places.length,
-                      activeIndex: ref.watch(activeIndexNotifier),
-                      effect: const ExpandingDotsEffect(
-                        dotHeight: 12,
-                        dotWidth: 12,
-                        activeDotColor: Colors.white,
-                        dotColor: Colors.white30,
-                      ),
-                    )),
+                  bottom: 30,
+                  left: 35,
+                  child: AnimatedSmoothIndicator(
+                    count: places.length >= 5 ? 5 : places.length,
+                    activeIndex: ref.watch(activeIndexNotifier),
+                    effect: const ExpandingDotsEffect(
+                      dotHeight: 12,
+                      dotWidth: 12,
+                      activeDotColor: Colors.white,
+                      dotColor: Colors.white30,
+                    ),
+                  ),
+                ),
               ],
             ),
     );

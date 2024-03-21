@@ -14,16 +14,12 @@ class ListCategoryItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    debugPrint('is exist ${catId}');
-    return WillPopScope(
-      onWillPop: () async => false,
+    debugPrint('is exist $catId');
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         appBar: AppBar(
-          // backgroundColor: Colors.grey.shade700,
-          title: Text(
-            categoryName,
-            // style: const TextStyle(color: Colors.black),
-          ),
+          title: Text(categoryName),
           elevation: 0.0,
           actions: [
             IconButton(
@@ -35,7 +31,6 @@ class ListCategoryItem extends ConsumerWidget {
                 },
                 icon: const Icon(
                   Icons.search,
-                  // color: Colors.black,
                   size: 25,
                 ))
           ],

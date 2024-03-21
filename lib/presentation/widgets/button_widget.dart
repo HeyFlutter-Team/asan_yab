@@ -8,14 +8,15 @@ class ButtonWidget extends StatelessWidget {
   late Color btnColor;
   final double? elevation;
   bool? border;
-  ButtonWidget(
-      {super.key,
-      required this.onClicked,
-      required this.titleName,
-      required this.textColor1,
-      required this.btnColor,
-      this.elevation = 1,
-      this.border = false});
+  ButtonWidget({
+    super.key,
+    required this.onClicked,
+    required this.titleName,
+    required this.textColor1,
+    required this.btnColor,
+    this.elevation = 1,
+    this.border = false,
+  });
 
   @override
   Widget build(BuildContext context) {

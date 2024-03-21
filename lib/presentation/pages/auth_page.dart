@@ -11,9 +11,7 @@ class AuthPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLogin = ref.watch(authPageStateProvider);
-
-    return isLogin
+    return ref.watch(authPageStateProvider)
         ? const LogInPage()
         : const SignUpPage();
   }

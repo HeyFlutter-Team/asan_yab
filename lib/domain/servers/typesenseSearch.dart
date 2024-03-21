@@ -1,4 +1,5 @@
 import 'package:asan_yab/data/models/typesenses_models.dart';
+import 'package:flutter/material.dart';
 import 'package:typesense/typesense.dart';
 
 class SearchInstance {
@@ -45,7 +46,7 @@ class SearchInstance {
       }
       return placesList;
     } catch (e) {
-      print("ERROR while SEARCH=$e");
+      debugPrint("ERROR while SEARCH=$e");
       return placesList;
     }
   }

@@ -26,12 +26,6 @@ class CommentTile extends ConsumerStatefulWidget {
 
 class _CommentTileState extends ConsumerState<CommentTile> {
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final currentUser = FirebaseAuth.instance.currentUser;
     final isOwner =
@@ -79,69 +73,68 @@ class _CommentTileState extends ConsumerState<CommentTile> {
                       )
                     : GestureDetector(
                         onTap: () async {
-                          print('1');
-                          DocumentSnapshot snapshot = await FirebaseFirestore
-                              .instance
+                          debugPrint('1');
+                          final snapshot = await FirebaseFirestore.instance
                               .collection('User')
                               .doc(widget.comment.uid)
                               .get();
-                          print('2');
+                          debugPrint('2');
                           if (snapshot.exists) {
-                            Users myUser = Users.fromMap(
+                            final myUser = Users.fromMap(
                                 snapshot.data() as Map<String, dynamic>);
-                            print('3');
+                            debugPrint('3');
                             ref
                                 .read(otherUserProvider.notifier)
                                 .setDataUser(myUser);
-                            print('4');
+                            debugPrint('4');
                             ref
                                 .read(followerProvider.notifier)
                                 .followOrUnFollow(
                                     FirebaseAuth.instance.currentUser!.uid,
                                     widget.comment.uid);
-                            print('5');
+                            debugPrint('5');
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const OtherProfile(),
-                                ));
-                            print('6');
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const OtherProfile(),
+                              ),
+                            );
+                            debugPrint('7');
                           }
                         },
                         child: const CircleAvatar(
-                            backgroundImage: AssetImage('assets/Avatar.png')),
+                          backgroundImage: AssetImage('assets/Avatar.png'),
+                        ),
                       ),
                 const SizedBox(width: 8.0),
                 GestureDetector(
-                    onTap: () async {
-                      print('1');
-                      DocumentSnapshot snapshot = await FirebaseFirestore
-                          .instance
-                          .collection('User')
-                          .doc(widget.comment.uid)
-                          .get();
-                      print('2');
-                      if (snapshot.exists) {
-                        Users myUser = Users.fromMap(
-                            snapshot.data() as Map<String, dynamic>);
-                        print('3');
-                        ref
-                            .read(otherUserProvider.notifier)
-                            .setDataUser(myUser);
-                        print('4');
-                        ref.read(followerProvider.notifier).followOrUnFollow(
-                            FirebaseAuth.instance.currentUser!.uid,
-                            widget.comment.uid);
-                        print('5');
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const OtherProfile(),
-                            ));
-                        print('6');
-                      }
-                    },
-                    child: Text(widget.comment.name)),
+                  onTap: () async {
+                    debugPrint('1');
+                    final snapshot = await FirebaseFirestore.instance
+                        .collection('User')
+                        .doc(widget.comment.uid)
+                        .get();
+                    debugPrint('2');
+                    if (snapshot.exists) {
+                      final myUser = Users.fromMap(
+                          snapshot.data() as Map<String, dynamic>);
+                      debugPrint('3');
+                      ref.read(otherUserProvider.notifier).setDataUser(myUser);
+                      debugPrint('4');
+                      ref.read(followerProvider.notifier).followOrUnFollow(
+                          FirebaseAuth.instance.currentUser!.uid,
+                          widget.comment.uid);
+                      debugPrint('5');
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const OtherProfile(),
+                          ));
+                      debugPrint('6');
+                    }
+                  },
+                  child: Text(widget.comment.name),
+                ),
               ],
             ),
             const SizedBox(height: 4.0),

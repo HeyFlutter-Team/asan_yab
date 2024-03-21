@@ -27,17 +27,6 @@ class Favorites extends ConsumerStatefulWidget {
 
 class _FavoritesState extends ConsumerState<Favorites> {
   @override
-  void initState() {
-    super.initState();
-    ref.read(favoriteProvider.notifier).fetchUser();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final favoriteState = ref.watch(favoriteProvider);
@@ -143,15 +132,12 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                           favorites[index]['name'],
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                              // color: Colors.black,
-                                              ),
+                                          style: const TextStyle(),
                                         ),
                                         OutlinedButton(
-                                          onPressed: () async {
-                                            await FlutterPhoneDirectCaller
-                                                .callNumber(phoneNumber);
-                                          },
+                                          onPressed: () async =>
+                                              await FlutterPhoneDirectCaller
+                                                  .callNumber(phoneNumber),
                                           child: isRTL
                                               ? Row(
                                                   mainAxisAlignment:
@@ -250,7 +236,6 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                                         .toStringAsFixed(1))
                                                 : averageRating
                                                     .toStringAsFixed(1),
-                                            // Display the average rating with one decimal place
                                             style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 20,
@@ -263,9 +248,7 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                   },
                                 ),
                               )
-                            : const SizedBox(
-                                height: 0,
-                              )
+                            : const SizedBox(height: 0)
                       ],
                     );
                   },

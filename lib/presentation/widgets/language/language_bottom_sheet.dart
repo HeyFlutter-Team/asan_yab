@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/data/repositoris/language_repository.dart';
+
 class LanguageBottomSheet extends ConsumerStatefulWidget {
   const LanguageBottomSheet({Key? key}) : super(key: key);
 
@@ -21,45 +22,45 @@ class _LanguagePopUpState extends ConsumerState<LanguageBottomSheet> {
         showModalBottomSheet(
           backgroundColor: Colors.black,
           context: context,
-          builder: (BuildContext context) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: Language.values.map((value) {
-                return ListTile(
-                  onTap: () {
-                    ref.read(selectedLanguageProvider.notifier).state = value;
-                    languageRepository.setLanguage(value);
-                    Navigator.pop(context);
-                  },
-                  title: Row(
-                    children: [
-                      Text(value.flag),
-                      const SizedBox(width: 3),
-                      Text(
-                        value.name,
-                        style: const TextStyle(
-                          color: Colors.blue,
-                        ),
+          builder: (BuildContext context) => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: Language.values
+                .map((value) => ListTile(
+                      onTap: () {
+                        ref.read(selectedLanguageProvider.notifier).state =
+                            value;
+                        languageRepository.setLanguage(value);
+                        Navigator.pop(context);
+                      },
+                      title: Row(
+                        children: [
+                          Text(value.flag),
+                          const SizedBox(width: 3),
+                          Text(
+                            value.name,
+                            style: const TextStyle(
+                              color: Colors.blue,
+                            ),
+                          ),
+                          if (selectedLanguage.state == value)
+                            const Icon(Icons.done, color: Colors.green),
+                        ],
                       ),
-                      if (selectedLanguage.state == value)
-                        const Icon(Icons.done, color: Colors.green),
-                    ],
-                  ),
-                );
-              }).toList(),
-            );
-          },
+                    ))
+                .toList(),
+          ),
         );
       },
       title: selectedLanguage.state != null
           ? Text(
-        '${AppLocalizations.of(context)!.profile_language_listTile} ${selectedLanguage.state!.flag}',
-      )
+              '${AppLocalizations.of(context)!.profile_language_listTile} ${selectedLanguage.state!.flag}')
           : Text(
-           '${AppLocalizations.of(context)!.profile_language_listTile} 🇦🇫', // Replace with your default language flag text
-
-                    ),
-      leading: const Icon(Icons.language, color: Colors.red, size: 30),
+              '${AppLocalizations.of(context)!.profile_language_listTile} 🇦🇫'),
+      leading: const Icon(
+        Icons.language,
+        color: Colors.red,
+        size: 30,
+      ),
     );
   }
 }

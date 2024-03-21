@@ -9,6 +9,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final loadingIconChat = StateProvider((ref) => true);
+
 class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
   const AppBarChatDetails({
     required this.urlImage,
@@ -27,7 +29,6 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Check if the widget is still mounted before using ref
     if (!context.mounted) {
       return const SizedBox.shrink();
     }
@@ -42,7 +43,7 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
             child: Row(
               children: [
                 Row(
-                  children: <Widget>[
+                  children: [
                     IconButton(
                       onPressed: () {
                         ref.read(messageProvider.notifier).clearState();
@@ -64,14 +65,10 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
 
                         Navigator.pop(context);
                       },
-                      icon: const Icon(
-                        Icons.arrow_back_ios_outlined,
-                      ),
+                      icon: const Icon(Icons.arrow_back_ios_outlined),
                     ),
-
                   ],
                 ),
-
                 const Spacer(),
                 Padding(
                   padding: const EdgeInsets.only(left: 5),
@@ -158,5 +155,3 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(70);
 }
-
-final loadingIconChat = StateProvider((ref) => true);

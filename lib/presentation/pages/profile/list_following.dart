@@ -25,16 +25,12 @@ class _ListOfFollowingState extends ConsumerState<ListOfFollowing> {
     return Scaffold(
       body: ref.watch(loadingFollowingDataProvider)
           ? const Center(
-              child: CircularProgressIndicator(
-                color: Colors.pinkAccent,
-              ),
+              child: CircularProgressIndicator(color: Colors.pinkAccent),
             )
           : ref.watch(loadingFollowers)
               ? Column(
                   children: [
-                    const SizedBox(
-                      height: 14,
-                    ),
+                    const SizedBox(height: 14),
                     ListView.builder(
                       itemCount: persons.length,
                       itemBuilder: (context, index) {
@@ -48,7 +44,8 @@ class _ListOfFollowingState extends ConsumerState<ListOfFollowing> {
                           leading: CircleAvatar(
                             radius: 33,
                             backgroundImage: CachedNetworkImageProvider(
-                                persons[index]['user'].imageUrl!),
+                              persons[index]['user'].imageUrl!,
+                            ),
                           ),
                           trailing: ElevatedButton(
                             onPressed: () async {
@@ -70,9 +67,9 @@ class _ListOfFollowingState extends ConsumerState<ListOfFollowing> {
                                     .getCurrentUserData();
                               }
                             },
-                            child: Text(persons[index]['follow']
-                                ? 'Follow'
-                                : 'Unfollow'),
+                            child: Text(
+                              persons[index]['follow'] ? 'Follow' : 'Unfollow',
+                            ),
                           ),
                         );
                       },
@@ -81,9 +78,7 @@ class _ListOfFollowingState extends ConsumerState<ListOfFollowing> {
                 )
               : Column(
                   children: [
-                    const SizedBox(
-                      height: 14,
-                    ),
+                    const SizedBox(height: 14),
                     Expanded(
                       child: ListView.builder(
                         itemCount: persons.length,
@@ -131,9 +126,11 @@ class _ListOfFollowingState extends ConsumerState<ListOfFollowing> {
                                       .getCurrentUserData();
                                 }
                               },
-                              child: Text(persons[index]['follow']
-                                  ? 'Follow'
-                                  : 'Unfollow'),
+                              child: Text(
+                                persons[index]['follow']
+                                    ? 'Follow'
+                                    : 'Unfollow',
+                              ),
                             ),
                           );
                         },

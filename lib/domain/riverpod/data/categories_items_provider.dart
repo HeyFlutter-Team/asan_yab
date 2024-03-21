@@ -18,16 +18,18 @@ class CategoriesItemsProvider extends StateNotifier<List<Place>> {
   DocumentSnapshot? lastItem;
 
   Future<void> getPlaces(String id) async {
-    final placesReponse =
-        await placeRepository.fetchPlaces(lastItem: lastItem, id: id);
+    final placesResponse = await placeRepository.fetchPlaces(
+      lastItem: lastItem,
+      id: id,
+    );
 
     try {
       ref.read(loadingDataProvider.notifier).state = true;
-      if (placesReponse != null) {
-        state.addAll(placesReponse.docs);
-        lastItem = placesReponse.lastItem;
+      if (placesResponse != null) {
+        state.addAll(placesResponse.docs);
+        lastItem = placesResponse.lastItem;
 
-        if (placesReponse.totalItem <= state.length) {
+        if (placesResponse.totalItem <= state.length) {
           ref.read(hasMore.notifier).state = false;
         }
       }
@@ -42,16 +44,9 @@ class CategoriesItemsProvider extends StateNotifier<List<Place>> {
     lastItem = null;
     ref.read(hasMore.notifier).state = true;
     state.clear();
-    // _isLoading = false;
-    // places();
-    // notifyListeners();
     await getPlaces(id);
   }
 }
 
-final hasMore = StateProvider<bool>((ref) {
-  return true;
-});
-final loadingDataProvider = StateProvider<bool>((ref) {
-  return false;
-});
+final hasMore = StateProvider<bool>((ref) => true);
+final loadingDataProvider = StateProvider<bool>((ref) => false);

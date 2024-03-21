@@ -37,9 +37,9 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
 
   @override
   Widget build(BuildContext context) {
-    final themDark=Theme.of(context).brightness == Brightness.dark;
+    final themDark = Theme.of(context).brightness == Brightness.dark;
 
-  overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
     final profileDetails = ref.watch(userDetailsProvider);
     return Align(
       alignment: widget.isMe ? Alignment.topRight : Alignment.topLeft,
@@ -66,7 +66,11 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
             child: Container(
               width: 120,
               decoration: BoxDecoration(
-                color: widget.isMe ?themDark? Colors.white70:Colors.black12: Colors.brown.shade300,
+                color: widget.isMe
+                    ? themDark
+                        ? Colors.white70
+                        : Colors.black12
+                    : Colors.brown.shade300,
                 // color: widget.isMe ? Colors.purple : Colors.black,
                 borderRadius: widget.isMe
                     ? const BorderRadius.only(
@@ -138,10 +142,9 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
                                   ),
                                 ),
                                 PopupMenuItem(
-                                  onTap: () {
-                                    ref.read(replayProvider.notifier).state =
-                                        widget.message.content;
-                                  },
+                                  onTap: () => ref
+                                      .read(replayProvider.notifier)
+                                      .state = widget.message.content,
                                   child: const Row(
                                     children: [
                                       Text(
@@ -181,8 +184,6 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
                             ],
                           ),
                         ),
-                  // const SizedBox(height: 5),
-                  // Text(timeago.format(message.sentTime.toLocal()))
                 ],
               ),
             ),
@@ -211,7 +212,5 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
       RelativeRect.fromSize(tapXY & const Size(40, 40), overlay.size);
 
   // ↓ get the tap position Offset
-  void getPosition(TapDownDetails detail) {
-    tapXY = detail.globalPosition;
-  }
+  void getPosition(TapDownDetails detail) => tapXY = detail.globalPosition;
 }

@@ -18,8 +18,8 @@ class Categories extends ConsumerWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     ref.read(categoriesProvider.notifier).getCategories();
     List<Category> category = ref.watch(categoriesProvider);
-    final isRTL = ref.watch(languageProvider).code=='fa';
-    final languageText=AppLocalizations.of(context);
+    final isRTL = ref.watch(languageProvider).code == 'fa';
+    final languageText = AppLocalizations.of(context);
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: category.isEmpty
@@ -36,9 +36,10 @@ class Categories extends ConsumerWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                       Text(
-                         languageText!.category_title,
-                        style:const TextStyle(color: Colors.grey, fontSize: 20.0),
+                      Text(
+                        languageText!.category_title,
+                        style:
+                            const TextStyle(color: Colors.grey, fontSize: 20.0),
                       ),
                       IconButton(
                         onPressed: () => Navigator.push(
@@ -46,7 +47,10 @@ class Categories extends ConsumerWidget {
                           MaterialPageRoute(
                               builder: (context) => const CategoryPage()),
                         ),
-                        icon: Icon(isRTL?Icons.arrow_circle_left_outlined:Icons.arrow_circle_right_outlined,
+                        icon: Icon(
+                          isRTL
+                              ? Icons.arrow_circle_left_outlined
+                              : Icons.arrow_circle_right_outlined,
                           size: 32.0,
                           color: Colors.grey,
                         ),
@@ -64,19 +68,16 @@ class Categories extends ConsumerWidget {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ListCategoryItem(
-                                    catId: category[index].id,
-                                    categoryName:
-                                    isRTL ?
-                                    category[index].categoryName
-                                        :category[index].enCategoryName!,
-                                  ),
-                                ));
-                          },
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ListCategoryItem(
+                                  catId: category[index].id,
+                                  categoryName: isRTL
+                                      ? category[index].categoryName
+                                      : category[index].enCategoryName!,
+                                ),
+                              )),
                           child: Container(
                             height: screenHeight * 0.2,
                             width: screenWidth * 0.4,
@@ -98,14 +99,15 @@ class Categories extends ConsumerWidget {
                                     size: 45.0),
                                 const SizedBox(height: 4),
                                 Text(
-                                    isRTL?
-                                    category[index].categoryName
-                                    :category[index].enCategoryName!,
-                                    maxLines: 1,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      overflow: TextOverflow.ellipsis,
-                                    )),
+                                  isRTL
+                                      ? category[index].categoryName
+                                      : category[index].enCategoryName!,
+                                  maxLines: 1,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
                               ],
                             ),
                           ),

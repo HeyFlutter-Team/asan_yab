@@ -2,9 +2,12 @@ import 'package:asan_yab/data/models/message/message.dart';
 import 'package:asan_yab/data/models/users.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class HistoryMessage {
+  HistoryMessage();
   final fireStore = FirebaseFirestore.instance;
+  final firebaseAuth = FirebaseAuth.instance.currentUser;
   List<String> usersId = [];
   List<bool> isNewMessage = [];
   Future<List<String>> getOtherUserId() async {
@@ -12,7 +15,7 @@ class HistoryMessage {
     try {
       final data = await fireStore
           .collection('User')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .doc(firebaseAuth!.uid)
           .get()
           .then((value) async => await value.reference
               .collection('chat')
@@ -36,7 +39,7 @@ class HistoryMessage {
       List<Users> data = [];
       for (final uid in uidList) {
         final userDataSnapshot =
-        await fireStore.collection('User').doc(uid).get();
+            await fireStore.collection('User').doc(uid).get();
 
         if (userDataSnapshot.exists) {
           final userData = Users.fromMap(userDataSnapshot.data()!);
@@ -45,19 +48,19 @@ class HistoryMessage {
       }
       return data;
     } catch (e) {
-      print('history message ${e.toString()}');
+      debugPrint('history message ${e.toString()}');
       rethrow;
     }
   }
 
   Future<List<MessageModel>> getLastMessage(List<String> uidList) async {
+    List<MessageModel> data = [];
     try {
-      List<MessageModel> data = [];
       for (final uid in uidList) {
-        if (FirebaseAuth.instance.currentUser != null) {
+        if (firebaseAuth != null) {
           final userDataSnapshot = await fireStore
               .collection('User')
-              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .doc(firebaseAuth!.uid)
               .collection('chat')
               .doc(uid)
               .collection('messages')
@@ -71,7 +74,7 @@ class HistoryMessage {
       }
       return data;
     } catch (e) {
-      print('history message ${e.toString()}');
+      debugPrint('history message ${e.toString()}');
       rethrow;
     }
   }

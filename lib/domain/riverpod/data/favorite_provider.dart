@@ -15,27 +15,34 @@ class FavoriteProvider extends StateNotifier<List<Map<String, dynamic>>> {
   FavoriteProvider(super.state, this.ref);
 
   Future<void> toggleFavorite(
-      String data,
-      Place places,
-      List<String> addressDataList,
-      List<String> phoneDataList,
-      Int8List logo,
-      Int8List coverImage) async {
+    String data,
+    Place places,
+    List<String> addressDataList,
+    List<String> phoneDataList,
+    Int8List logo,
+    Int8List coverImage,
+  ) async {
     final forToggle = isExist(data);
     if (forToggle) {
       delete(places.id);
       ref.read(toggleProvider.notifier).toggle(false);
     } else {
       _saveData(
-          places, addressDataList, phoneDataList, !forToggle, logo, coverImage);
+        places,
+        addressDataList,
+        phoneDataList,
+        !forToggle,
+        logo,
+        coverImage,
+      );
       ref.read(toggleProvider.notifier).toggle(true);
     }
     fetchUser();
   }
 
   bool isExist(String data) {
-    for (Map<String, dynamic> i in state) {
-      bool toggle = i.values.contains(data);
+    for (final i in state) {
+      final toggle = i.values.contains(data);
       if (toggle) {
         return toggle;
       }
@@ -45,25 +52,31 @@ class FavoriteProvider extends StateNotifier<List<Map<String, dynamic>>> {
   }
 
   void _saveData(
-      Place databaseModel,
-      List<String> addressDataList,
-      List<String> phoneDataList,
-      bool toggle,
-      Int8List logo,
-      Int8List coverImage) async {
-    await DatabaseHelper.insertUser(databaseModel, addressDataList,
-        phoneDataList, toggle, logo, coverImage);
+    Place databaseModel,
+    List<String> addressDataList,
+    List<String> phoneDataList,
+    bool toggle,
+    Int8List logo,
+    Int8List coverImage,
+  ) async {
+    await DatabaseHelper.insertUser(
+      databaseModel,
+      addressDataList,
+      phoneDataList,
+      toggle,
+      logo,
+      coverImage,
+    );
   }
 
   void delete(String docId) async {
     await DatabaseHelper.deleteData(docId);
-    List<Map<String, dynamic>> updatedData = await DatabaseHelper.getData();
-
+    final updatedData = await DatabaseHelper.getData();
     state = updatedData;
   }
 
   Future<void> fetchUser() async {
-    List<Map<String, dynamic>> userList = await DatabaseHelper.getData();
+    final userList = await DatabaseHelper.getData();
     state = userList;
   }
 }

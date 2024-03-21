@@ -50,7 +50,7 @@ class _MessagePageState extends ConsumerState<MessagePage> {
       ),
       body: Stack(
         children: [
-          ChatMessages(receiverId: '', urlImage: ''),
+          const ChatMessages(receiverId: '', urlImage: ''),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -61,30 +61,7 @@ class _MessagePageState extends ConsumerState<MessagePage> {
               child: Column(
                 children: [
                   Row(
-                    children: <Widget>[
-                      ///
-                      ///
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     sendImage();
-                      //   },
-                      //   child: Container(
-                      //     height: 30,
-                      //     width: 30,
-                      //     decoration: BoxDecoration(
-                      //       color: Colors.lightBlue,
-                      //       borderRadius: BorderRadius.circular(30),
-                      //     ),
-                      //     child: const Icon(
-                      //       Icons.add,
-                      //       color: Colors.white,
-                      //       size: 20,
-                      //     ),
-                      //   ),
-                      // ),
-                      // const SizedBox(
-                      //   width: 15,
-                      // ),
+                    children: [
                       Expanded(
                         child: TextField(
                           onTap: () {},
@@ -105,15 +82,10 @@ class _MessagePageState extends ConsumerState<MessagePage> {
                             shape: const CircleBorder(),
                             padding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 10)),
-                        onPressed: () {
-                          // ref.read(messageProfileProvider.notifier).sendText(
-                          //     receiverId: newProfileUser.uid!,
-                          //     context: context);
-                          ref
-                              .read(messageProfileProvider.notifier)
-                              .textController
-                              .clear();
-                        },
+                        onPressed: () => ref
+                            .read(messageProfileProvider.notifier)
+                            .textController
+                            .clear(),
                         child: const Icon(
                           Icons.send,
                           color: Colors.white,

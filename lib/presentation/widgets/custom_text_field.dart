@@ -51,24 +51,25 @@ class _CustomTextFieldState extends ConsumerState<CustomTextField> {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              const SizedBox(width: 5,),
-              widget.label2!=null?
-              Text('${widget.label2}',style: const TextStyle(color: Colors.red,fontSize: 15),)
-                  :const SizedBox()
+              const SizedBox(
+                width: 5,
+              ),
+              widget.label2 != null
+                  ? Text(
+                      '${widget.label2}',
+                      style: const TextStyle(color: Colors.red, fontSize: 15),
+                    )
+                  : const SizedBox()
             ],
           ),
-          const SizedBox(
-            height: 5,
-          ),
+          const SizedBox(height: 5),
           TextFormField(
               textCapitalization: widget.textCapitalization,
               obscureText: widget.obscureText,
               controller: widget.controller,
               decoration: InputDecoration(
                 suffixIcon: widget.suffixIcon,
-                border: const OutlineInputBorder(
-                  borderSide: BorderSide()
-                ),
+                border: const OutlineInputBorder(borderSide: BorderSide()),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(
@@ -78,9 +79,10 @@ class _CustomTextFieldState extends ConsumerState<CustomTextField> {
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide:  BorderSide(
-                    color:themeModel.currentThemeMode == ThemeMode.dark?Colors.white
-                      :Colors.black,
+                  borderSide: BorderSide(
+                      color: themeModel.currentThemeMode == ThemeMode.dark
+                          ? Colors.white
+                          : Colors.black,
                       width: 1),
                 ),
                 errorBorder: OutlineInputBorder(

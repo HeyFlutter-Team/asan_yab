@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ShowProfilePage extends StatefulWidget {
-  final String imagUrl;
-  const ShowProfilePage({super.key,required this.imagUrl});
+  final String imageUrl;
+  const ShowProfilePage({super.key, required this.imageUrl});
 
   @override
   State<ShowProfilePage> createState() => _ShowProfilePageState();
@@ -14,10 +14,8 @@ class _ShowProfilePageState extends State<ShowProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Hero(
-             tag: 'avatarHeroTag',
-            child:Image.network(widget.imagUrl)
-        ),
+        child:
+            Hero(tag: 'avatarHeroTag', child: Image.network(widget.imageUrl)),
       ),
     );
   }

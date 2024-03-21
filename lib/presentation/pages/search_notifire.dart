@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final searchNotifierProvider = StateNotifierProvider<SearchNotifier, String>(
-        (ref) => SearchNotifier(''));
+final searchNotifierProvider =
+    StateNotifierProvider<SearchNotifier, String>((ref) => SearchNotifier(''));
 
 class SearchNotifier extends StateNotifier<String> {
   SearchNotifier(super.state);
@@ -10,7 +10,5 @@ class SearchNotifier extends StateNotifier<String> {
     return state;
   }
 
-  void clear() {
-    state = '';
-  }
+  void clear() => state = '';
 }

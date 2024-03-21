@@ -79,9 +79,7 @@ class _CommentsState extends ConsumerState<Comments> {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 5,
-                  )
+                  const SizedBox(height: 5)
                 ],
               ),
             ),

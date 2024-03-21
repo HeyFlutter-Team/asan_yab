@@ -14,13 +14,10 @@ class ImageWidgets {
         if (snapshot.hasData) {
           final data = snapshot.data!;
           double progress = data.bytesTransferred / data.totalBytes;
-
           if (data.state == TaskState.success) {
             ref.watch(userDetailsProvider.notifier).getCurrentUserData();
-            // If upload is complete, return an empty Container
             return Container();
           }
-
           return SizedBox(
             height: 50,
             width: 50,
@@ -37,8 +34,10 @@ class ImageWidgets {
     );
   }
 
-  static void showBottomSheets(
-      {required BuildContext context, required WidgetRef ref}) {
+  static void showBottomSheets({
+    required BuildContext context,
+    required WidgetRef ref,
+  }) {
     final languageText = AppLocalizations.of(context);
     showModalBottomSheet(
       context: context,
@@ -67,16 +66,14 @@ class ImageWidgets {
               ),
               InkWell(
                 onTap: () {
-                  // Handle Gallery option
                   ref
                       .read(imageProvider.notifier)
                       .pickImage(ImageSource.gallery);
-                  Navigator.pop(
-                      context); // Call a function to handle Gallery action
+                  Navigator.pop(context);
                 },
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
+                  children: [
                     const Icon(Icons.image),
                     const SizedBox(height: 8.0),
                     Text(languageText.profile_buttonSheet_gallery),

@@ -1,11 +1,11 @@
 class SuggestionFirebase {
-  String id;
-  String name;
-  String address;
-  String phone;
-  String type;
+  final String id;
+  final String name;
+  final String address;
+  final String phone;
+  final String type;
 
-  SuggestionFirebase({
+  const SuggestionFirebase({
     required this.id,
     required this.name,
     required this.address,
@@ -13,15 +13,14 @@ class SuggestionFirebase {
     required this.type,
   });
 
-  factory SuggestionFirebase.fromJson(Map<String, dynamic> json) {
-    return SuggestionFirebase(
-      id: json['id'],
-      name: json['name'],
-      address: json['address'],
-      phone: json['phone'],
-      type: json['type'],
-    );
-  }
+  factory SuggestionFirebase.fromJson(Map<String, dynamic> json) =>
+      SuggestionFirebase(
+        id: json['id'],
+        name: json['name'],
+        address: json['address'],
+        phone: json['phone'],
+        type: json['type'],
+      );
 
   Map<String, dynamic> toJson() {
     return {

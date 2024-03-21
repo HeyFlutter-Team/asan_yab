@@ -25,6 +25,9 @@ class MainPage extends ConsumerStatefulWidget {
 
 class _MainPageState extends ConsumerState<MainPage>
     with WidgetsBindingObserver {
+  final firebaseAuth = FirebaseAuth.instance.currentUser;
+  final firestore = FirebaseFirestore.instance;
+
   @override
   void initState() {
     super.initState();
@@ -32,17 +35,17 @@ class _MainPageState extends ConsumerState<MainPage>
     setStatus(true);
     ref
         .read(internetConnectivityCheckerProvider.notifier)
-        .startStremaing(context);
-    FirebaseAuth.instance.currentUser;
+        .startStreaming(context);
+    firebaseAuth;
   }
 
   void setStatus(bool status) async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (firebaseAuth != null) {
       final token = await FirebaseMessaging.instance.getToken();
-      await FirebaseFirestore.instance
-          .collection('User')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .update({'isOnline': status, 'fcmToken': token});
+      await firestore.collection('User').doc(firebaseAuth!.uid).update({
+        'isOnline': status,
+        'fcmToken': token,
+      });
     }
   }
 

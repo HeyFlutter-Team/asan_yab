@@ -7,9 +7,12 @@ final followHttpsProvider =
 class FollowHttps extends StateNotifier {
   final Ref ref;
   FollowHttps(super.state, this.ref);
-  final followerRepo = FollowRepo();
+  final followerRepo = const FollowRepo();
 
-  Future<void> updateFollowers(String uid, String followId) async {
+  Future<void> updateFollowers(
+    String uid,
+    String followId,
+  ) async {
     try {
       ref.read(loadingFollowerProvider.notifier).state = true;
       await followerRepo.updateFollowers(uid, followId);

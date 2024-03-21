@@ -2,13 +2,22 @@
 import 'package:flutter/material.dart';
 
 String convertDigitsToFarsi(String input) {
-  const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-  const farsi = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+  const digitsMap = {
+    '0': '۰',
+    '1': '۱',
+    '2': '۲',
+    '3': '۳',
+    '4': '۴',
+    '5': '۵',
+    '6': '۶',
+    '7': '۷',
+    '8': '۸',
+    '9': '۹',
+  };
 
-  for (int i = 0; i < english.length; i++) {
-    input = input.replaceAll(english[i], farsi[i]);
-  }
-  return input.replaceAll(' ', '');
+  return input.replaceAllMapped(RegExp(r'\d'), (match) {
+    return digitsMap[match.group(0)]!;
+  }).replaceAll(' ', '');
 }
 
 extension MediaQueryExtension on BuildContext {

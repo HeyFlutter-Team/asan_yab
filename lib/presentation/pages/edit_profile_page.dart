@@ -105,12 +105,13 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                       const EdgeInsets.only(top: 118.0, left: 116, right: 116),
                   child: InkWell(
                     onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ShowProfilePage(
-                              imagUrl:
-                                  '${ref.watch(userDetailsProvider)?.imageUrl}'),
-                        )),
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ShowProfilePage(
+                            imageUrl:
+                                '${ref.watch(userDetailsProvider)?.imageUrl}'),
+                      ),
+                    ),
                     child: usersData?.imageUrl == ''
                         ? Stack(
                             children: [
@@ -175,10 +176,9 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                                     shape: BoxShape.circle,
                                   ),
                                   child: IconButton(
-                                    onPressed: () {
-                                      ImageWidgets.showBottomSheets(
-                                          context: context, ref: ref);
-                                    },
+                                    onPressed: () =>
+                                        ImageWidgets.showBottomSheets(
+                                            context: context, ref: ref),
                                     icon: const Icon(
                                       Icons.camera_alt,
                                       size: 32,

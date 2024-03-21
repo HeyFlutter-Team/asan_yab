@@ -3,12 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesRepository {
-  final firebase = FirebaseFirestore.instance;
+  CategoriesRepository();
+  final firestore = FirebaseFirestore.instance;
   final _path = 'Categories';
 
   Future<List<Category>> fetchCategories() async {
     try {
-      final data = await firebase.collection(_path).get();
+      final data = await firestore.collection(_path).get();
       final categories =
           data.docs.map((doc) => Category.fromJson(doc.data())).toList();
       return categories;

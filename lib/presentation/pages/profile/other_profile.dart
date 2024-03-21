@@ -73,7 +73,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ShowProfilePage(
-                                  imagUrl:
+                                  imageUrl:
                                       '${ref.watch(otherUserProvider)?.imageUrl}'),
                             )),
                     child: usersData?.imageUrl == ''
@@ -84,7 +84,8 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                                 child: CircleAvatar(
                                   radius: 80,
                                   backgroundImage: AssetImage(
-                                      'assets/Avatar.png'), // Your image URL
+                                    'assets/Avatar.png',
+                                  ),
                                 ),
                               ),
                             ],
@@ -106,9 +107,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                     padding:
                         const EdgeInsets.only(top: 50.0, right: 10, left: 10),
                     child: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+                      onPressed: () => Navigator.pop(context),
                       icon: const Icon(
                         Icons.arrow_back,
                         color: Colors.white,
@@ -140,9 +139,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                     );
                   },
                 ),
-                const Divider(
-                  color: Colors.grey,
-                ),
+                const Divider(color: Colors.grey),
                 ListTile(
                   title: Text('${usersData?.name} ${usersData?.lastName}'),
                   leading: const Icon(
@@ -151,18 +148,14 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                     size: 30,
                   ),
                 ),
-                const Divider(
-                  color: Colors.grey,
-                ),
-                // LanguageIcon(),
+                const Divider(color: Colors.grey),
                 InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AboutUsPage(),
-                        ));
-                  },
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AboutUsPage(),
+                    ),
+                  ),
                   child: ListTile(
                     leading: const Icon(
                       Icons.info_outline,
@@ -172,12 +165,8 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                     title: Text(languageText!.profile_about_us_listTile),
                   ),
                 ),
-                const Divider(
-                  color: Colors.grey,
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
+                const Divider(color: Colors.grey),
+                const SizedBox(height: 5),
               ],
             ),
           ),
@@ -189,10 +178,11 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                   //todo for chat
                   final followId = usersData!.uid!;
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChatDetailPage(uid: followId),
-                      ));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChatDetailPage(uid: followId),
+                    ),
+                  );
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -205,7 +195,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                           Colors.blue,
                           Colors.blueAccent,
                           Colors.purpleAccent,
-                        ], // Replace with your gradient colors
+                        ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       )),
@@ -219,7 +209,10 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                       SizedBox(width: 8),
                       Text(
                         'Chat',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
                       ),
                     ],
                   ),
@@ -230,9 +223,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                 focusColor: Colors.transparent,
                 splashColor: Colors.transparent,
                 onTap: () {
-                  ref.read(loadingFollowers.notifier).state=true;
-
-                  //todo for follow
+                  ref.read(loadingFollowers.notifier).state = true;
                   final uid = FirebaseAuth.instance.currentUser!.uid;
                   final followId = usersData!.uid!;
                   ref
@@ -254,7 +245,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                           Colors.red,
                           Colors.redAccent,
                           Colors.redAccent.withOpacity(0.5),
-                        ], // Replace with your gradient colors
+                        ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       )),
@@ -268,7 +259,10 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                       : Center(
                           child: Text(
                             ref.watch(followerProvider) ? 'Follow' : "Unfollow",
-                            style: const TextStyle(fontSize: 20, color: Colors.white),
+                            style: const TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                 ),

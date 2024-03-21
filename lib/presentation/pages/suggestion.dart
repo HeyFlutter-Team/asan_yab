@@ -9,8 +9,6 @@ import '../widgets/button_widget.dart';
 import '../widgets/text_form_field_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
-
 class SuggestionPage extends ConsumerStatefulWidget {
   const SuggestionPage({super.key});
 
@@ -137,7 +135,7 @@ class _SuggestionPageState extends ConsumerState<SuggestionPage> {
 
                             if (isValid) {
                               FirebaseSuggestionCreate create =
-                                  FirebaseSuggestionCreate();
+                                  const FirebaseSuggestionCreate();
                               create
                                   .createSuggestion(
                                       nameController.text,
@@ -225,10 +223,7 @@ class CustomCard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 12.0),
                     child: Row(
                       children: [
-                        const Icon(
-                          Icons.info_outline,
-                          // color: Colors.black54,
-                        ),
+                        const Icon(Icons.info_outline),
                         const SizedBox(width: 12),
                         Text(
                           title,

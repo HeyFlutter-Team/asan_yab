@@ -24,9 +24,9 @@ class SignInNotifier {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return const Center(child: CircularProgressIndicator(
-            color: Colors.red,
-          )); // Use the custom dialog widget
+          return const Center(
+            child: CircularProgressIndicator(color: Colors.red),
+          );
         },
       );
       await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -49,39 +49,34 @@ class SignInNotifier {
         );
       }
     } catch (e) {
-      print('younis general errors $e');
-    }finally{
+      debugPrint('younis general errors $e');
+    } finally {
       Navigator.pop(context);
     }
   }
-  Future<void> isMyEmailVerified(BuildContext context)async {
-    final user=FirebaseAuth.instance.currentUser;
-    try{
-      if(!user!.emailVerified){
-          ScaffoldMessenger.of(context).showSnackBar(
-           const SnackBar(content: Text('حساب شما تایید نشده است و فیک میباشد')),
-         );
-      }
 
-    }on FirebaseAuthException catch (e){
+  Future<void> isMyEmailVerified(BuildContext context) async {
+    final user = FirebaseAuth.instance.currentUser;
+    try {
+      if (!user!.emailVerified) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('حساب شما تایید نشده است و فیک میباشد')),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
       print(e);
     }
   }
 }
 
-
 class LoadingNotifier extends StateNotifier<bool> {
   LoadingNotifier() : super(false);
 
-  void setLoading(bool isLoading) {
-    state = isLoading;
-  }
+  void setLoading(bool isLoading) => state = isLoading;
 }
 
-final loadingProvider = StateNotifierProvider<LoadingNotifier, bool>((ref) {
-  return LoadingNotifier();
-});
-
+final loadingProvider =
+    StateNotifierProvider<LoadingNotifier, bool>((ref) => LoadingNotifier());
 
 class AuthNotifier extends StateNotifier<User?> {
   AuthNotifier() : super(FirebaseAuth.instance.currentUser);
@@ -89,40 +84,29 @@ class AuthNotifier extends StateNotifier<User?> {
   Future<void> signOut() async {
     try {
       await FirebaseAuth.instance.signOut();
-      state = null; // Clear the current user upon successful sign-out
+      state = null;
     } catch (e) {
-      // Handle sign-out failure, if needed
-      print('younis$e');
+      debugPrint('younis$e');
     }
   }
 }
 
-final authProvider = StateNotifierProvider<AuthNotifier, User?>((ref) {
-  return AuthNotifier();
-});
+final authProvider =
+    StateNotifierProvider<AuthNotifier, User?>((ref) => AuthNotifier());
 
-
-//Cheak box method
 class IsCheckNotifier extends StateNotifier<bool> {
   IsCheckNotifier() : super(false);
 
-   setIsCheck(bool value) {
-    state = value;
-  }
+  setIsCheck(bool value) => state = value;
 }
 
-final isCheckProvider = StateNotifierProvider<IsCheckNotifier, bool>((ref) {
-  return IsCheckNotifier();
-});
-
-
+final isCheckProvider =
+    StateNotifierProvider<IsCheckNotifier, bool>((ref) => IsCheckNotifier());
 
 class ObscureBool extends StateNotifier<bool> {
   ObscureBool() : super(true);
 
-  void isObscure() {
-    state = !state;
-  }
+  void isObscure() => state = !state;
 }
 
 final isObscureProvider =

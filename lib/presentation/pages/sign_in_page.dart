@@ -50,9 +50,9 @@ class _LogInPageState extends ConsumerState<LogInPage>
   }
 
   Future<void> retrieveSavedValues() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final savedEmail = prefs.getString('email');
-    final savedPassword = prefs.getString('password');
+    final preFs = await SharedPreferences.getInstance();
+    final savedEmail = preFs.getString('email');
+    final savedPassword = preFs.getString('password');
 
     final isCheckboxChecked = ref.watch(isCheckProvider);
     if (isCheckboxChecked) {
@@ -127,9 +127,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
                     return null;
                   }),
               Padding(
-                padding: const EdgeInsets.only(
-                  left: 15,
-                ),
+                padding: const EdgeInsets.only(left: 15),
                 child: Row(
                   children: [
                     Transform.scale(
@@ -151,14 +149,14 @@ class _LogInPageState extends ConsumerState<LogInPage>
                     Text(
                       languageText.sign_in_checkBox,
                       style: const TextStyle(
-                          fontSize: 17, fontWeight: FontWeight.w400),
+                        fontSize: 17,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Consumer(
                 builder: (context, sref, child) => ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -171,10 +169,9 @@ class _LogInPageState extends ConsumerState<LogInPage>
                     if (!isValid) return;
                     final isCheckboxChecked = ref.read(isCheckProvider);
                     if (isCheckboxChecked) {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      prefs.setString('email', emailCTRL.text);
-                      prefs.setString('password', passwordCTRL.text);
+                      final preFs = await SharedPreferences.getInstance();
+                      preFs.setString('email', emailCTRL.text);
+                      preFs.setString('password', passwordCTRL.text);
                     }
                     await ref
                         .read(signInProvider)
@@ -185,15 +182,17 @@ class _LogInPageState extends ConsumerState<LogInPage>
                         .whenComplete(() => ref.watch(userDetailsProvider))
                         .whenComplete(() {})
                         .whenComplete(() async {
-                      await ref
+                      ref
                           .read(buttonNavigationProvider.notifier)
                           .selectedIndex(0);
-                    }).whenComplete(() {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MainPage()));
-                    });
+                    }).whenComplete(
+                      () => Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MainPage(),
+                        ),
+                      ),
+                    );
                   },
                   child: Text(
                     languageText.sign_in_elbT,
@@ -201,9 +200,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 100,
-              ),
+              const SizedBox(height: 100),
               Text(
                 languageText.sig_in_account_text,
                 style: const TextStyle(
@@ -211,9 +208,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
@@ -221,26 +216,20 @@ class _LogInPageState extends ConsumerState<LogInPage>
                     shape: RoundedRectangleBorder(
                         side: BorderSide(color: Colors.black.withOpacity(0.44)),
                         borderRadius: BorderRadius.circular(12))),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SignUpPage()));
-                },
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SignUpPage())),
                 child: Text(
                   languageText.sign_in_2_elbT,
                   style: TextStyle(
                       color: Colors.black.withOpacity(0.44), fontSize: 20),
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               Center(
                 child: loadingState
-                    ? const CircularProgressIndicator(
-                        color: Colors.red,
-                      )
+                    ? const CircularProgressIndicator(color: Colors.red)
                     : const SizedBox(),
               )
             ],

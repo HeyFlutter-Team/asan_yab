@@ -4,6 +4,7 @@ import 'package:clipboard/clipboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -17,35 +18,29 @@ class ReadUserDetails extends StateNotifier<Users?> {
   ReadUserDetails({Users? user}) : super(user);
 
   Future<void> getCurrentUserData() async {
+    final firebaseAuth = FirebaseAuth.instance.currentUser;
+    final firestore = FirebaseFirestore.instance;
     try {
-      final user = FirebaseAuth.instance.currentUser;
-
-      if (user != null) {
-        final userSnapshot = await FirebaseFirestore.instance
-            .collection('User')
-            .doc(user.uid)
-            .get();
+      if (firebaseAuth != null) {
+        final userSnapshot =
+            await firestore.collection('User').doc(firebaseAuth.uid).get();
 
         if (userSnapshot.exists) {
           state = Users.fromMap(userSnapshot.data()!);
         } else {
-          print('User data not found for user ID: ${user.uid}');
+          debugPrint('User data not found for user ID: ${firebaseAuth.uid}');
         }
       } else {
-        print('Current user is null');
+        debugPrint('Current user is null');
       }
     } catch (e, stackTrace) {
-      print('Error getting current user data: $e\n$stackTrace');
+      debugPrint('Error getting current user data: $e\n$stackTrace');
     }
   }
 
-  void disposeUserData() {
-    state = null;
-  }
+  void disposeUserData() => state = null;
 
-  void copyToClipboard(String text) {
-    FlutterClipboard.copy(text);
-  }
+  void copyToClipboard(String text) => FlutterClipboard.copy(text);
 }
 
 class ImageState {
@@ -74,7 +69,7 @@ class ImageState {
 
 class ImageNotifier extends StateNotifier<ImageState> {
   ImageNotifier() : super(ImageState());
-  final ImagePicker _imagePicker = ImagePicker();
+  final _imagePicker = ImagePicker();
 
   Future<void> pickImage(ImageSource source) async {
     try {
@@ -85,7 +80,7 @@ class ImageNotifier extends StateNotifier<ImageState> {
       state = state.copyWith(image: imageTemp, imageUrl: pickedImage.path);
       uploadFile();
     } catch (e, stackTrace) {
-      print('Failed to pick image: $e\n$stackTrace');
+      debugPrint('Failed to pick image: $e\n$stackTrace');
     }
   }
 
@@ -104,13 +99,14 @@ class ImageNotifier extends StateNotifier<ImageState> {
       final snapshot = await uploadTask.whenComplete(() {});
       final uploadedImageUrl = await snapshot.ref.getDownloadURL();
 
-      await FirebaseFirestore.instance.collection('User').doc(user.uid).update({
-        'imageUrl': uploadedImageUrl,
-      });
+      await FirebaseFirestore.instance
+          .collection('User')
+          .doc(user.uid)
+          .update({'imageUrl': uploadedImageUrl});
 
       state = state.copyWith(imageUrl: uploadedImageUrl);
     } catch (e, stackTrace) {
-      print('Error uploading image: $e\n$stackTrace');
+      debugPrint('Error uploading image: $e\n$stackTrace');
     }
   }
 }

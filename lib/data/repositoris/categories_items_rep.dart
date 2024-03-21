@@ -5,18 +5,21 @@ import '../models/place.dart';
 import '../models/place_response.dart';
 
 class CategoriesItemsRepository {
-  final firebase = FirebaseFirestore.instance;
+  CategoriesItemsRepository();
+  final firestore = FirebaseFirestore.instance;
   final _path = 'Places';
   final pageSize = 8;
-  Future<PlaceReponse?> fetchPlaces(
-      {DocumentSnapshot? lastItem, String? id}) async {
+  Future<PlaceResponse?> fetchPlaces({
+    DocumentSnapshot? lastItem,
+    String? id,
+  }) async {
     try {
-      final countItem = await firebase
+      final countItem = await firestore
           .collection(_path)
           .where('categoryId', isEqualTo: id)
           .count()
           .get();
-      var query = firebase
+      var query = firestore
           .collection(_path)
           .where('categoryId', isEqualTo: id)
           .limit(pageSize);
@@ -27,7 +30,7 @@ class CategoriesItemsRepository {
       final data = await query.get();
       final places =
           data.docs.map((doc) => Place.fromJson(doc.data())).toList();
-      return PlaceReponse(
+      return PlaceResponse(
         docs: places,
         lastItem: data.docs.last,
         totalItem: countItem.count!,

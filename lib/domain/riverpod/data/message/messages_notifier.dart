@@ -24,19 +24,6 @@ class MessagesNotifier extends StateNotifier<List<MessageModel>> {
     } finally {
       ref.read(loadingMessagesNotifier.notifier).state = false;
     }
-
-    // String messageDateFormat(DateTime dateTime) {
-    //   DateTime now = DateTime.now();
-    //   DateTime today = DateTime(now.year, now.month, now.day);
-    //   DateTime yesterday = DateTime(now.year, now.month, now.day - 1);
-    //   if (dateTime.compareTo(today) >= 0) {
-    //     return DateFormat('h:mm:a').format(dateTime);
-    //   } else if (dateTime.compareTo(yesterday) >= 0) {
-    //     return 'Yesterday';
-    //   } else {
-    //     return DateFormat('MM/dd/yy').format(dateTime);
-    //   }
-    // }
   }
 }
 

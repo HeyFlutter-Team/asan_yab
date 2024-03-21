@@ -44,7 +44,7 @@ class VerifyEmailNotifier extends StateNotifier<VerifyEmailState> {
       await Future.delayed(const Duration(seconds: 20));
       state = VerifyEmailState(false, true);
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -132,39 +132,40 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
                     child: Text(languageText.verify_body_text),
                   ),
                   Text(widget.email),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red.shade800,
-                          minimumSize: const Size(340, 55),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12))),
-                      onPressed: verifyEmailState.canResendEmail
-                          ? () => ref
-                              .read(verifyEmailProvider.notifier)
-                              ._sendVerificationEmail()
-                          : null,
-                      icon: const Icon(
-                        Icons.mail,
-                        color: Colors.white,
-                      ),
-                      label: Text(
-                        languageText.verify_elb_text,
-                        style:
-                            const TextStyle(fontSize: 16, color: Colors.white),
-                      )),
-                  const SizedBox(
-                    height: 8,
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red.shade800,
+                        minimumSize: const Size(340, 55),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12))),
+                    onPressed: verifyEmailState.canResendEmail
+                        ? () => ref
+                            .read(verifyEmailProvider.notifier)
+                            ._sendVerificationEmail()
+                        : null,
+                    icon: const Icon(
+                      Icons.mail,
+                      color: Colors.white,
+                    ),
+                    label: Text(
+                      languageText.verify_elb_text,
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
+                    ),
                   ),
+                  const SizedBox(height: 8),
                   TextButton(
                     onPressed: () {
                       showDialog(
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: Text(widget.email,textAlign: TextAlign.center,style: const TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
+                            title: Text(
+                              widget.email,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.bold),
+                            ),
                             content: Text(languageText.verify_email_dialog,
                                 textAlign: TextAlign.center),
                             actions: [
@@ -172,7 +173,7 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child:  Text(languageText.verify_email_give_up),
+                                child: Text(languageText.verify_email_give_up),
                               ),
                               TextButton(
                                 onPressed: () async {
@@ -180,33 +181,27 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
                                       .signOut()
                                       .whenComplete(
                                         () => Navigator.pop(context),
-                                  )
+                                      )
                                       .whenComplete(
                                         () => Navigator.pop(context),
-                                  )
+                                      )
                                       .whenComplete(
                                         () => Navigator.pop(context),
-                                  );
+                                      );
                                 },
-                                child:  Text(languageText.verify_email_continue),
+                                child: Text(languageText.verify_email_continue),
                               ),
-
                             ],
                           );
                         },
                       );
-                      // FirebaseAuth.instance.signOut().whenComplete(
-                      //       () => Navigator.push(
-                      //         context,
-                      //         MaterialPageRoute(
-                      //           builder: (context) => const MainPage(),
-                      //         ),
-                      //       ),
-                      //     );
                     },
                     child: Text(
-                      '${languageText.verify_tbt_text}',
-                      style: TextStyle(color: Colors.red.shade800,fontSize: 19),
+                      languageText.verify_tbt_text,
+                      style: TextStyle(
+                        color: Colors.red.shade800,
+                        fontSize: 19,
+                      ),
                     ),
                   ),
                 ],
@@ -214,7 +209,6 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
             ),
           );
   }
-
 }
 //
 // import 'dart:async';

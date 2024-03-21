@@ -7,13 +7,13 @@ import 'package:http/http.dart';
 
 class HttpGetPost {
   final Ref ref;
-  HttpGetPost(this.ref);
+  const HttpGetPost(this.ref);
 
   Future<List<Place>> getUser() async {
     final data = ref.watch(searchNotifierProvider);
-    String endPoint =
+    final endPoint =
         'https://us-central1-asan-yab.cloudfunctions.net/SearchPlace?pivot=$data';
-    Response response = await get(Uri.parse(endPoint));
+    final response = await get(Uri.parse(endPoint));
     if (response.statusCode == 200) {
       var result = json.decode(response.body);
       var rest = result["filteredList"] as List;

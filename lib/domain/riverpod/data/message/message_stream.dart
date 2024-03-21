@@ -20,7 +20,6 @@ class Suspend {
     if (context.mounted) {
       _streamController = StreamController<int>();
       _streamSubscription = _streamController.stream.listen((_) async {
-        // Your code to be executed periodically
         if (context.mounted && FirebaseAuth.instance.currentUser != null) {
           ref.watch(messageHistory.notifier).getMessageHistory();
           ref.watch(messageNotifierProvider.notifier).fetchMessage();
@@ -28,7 +27,7 @@ class Suspend {
         }
       });
 
-      Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      Timer.periodic(const Duration(seconds: 1), (_) {
         if (_streamController.isClosed == false) {
           _streamController.add(1);
         }

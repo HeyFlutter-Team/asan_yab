@@ -38,7 +38,6 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
     super.initState();
     ref.read(getSingleProvider.notifier).fetchSinglePlace(widget.id);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      //Todo: for selected
       ref.read(getInformationProvider).getFavorite();
       final provider = ref.read(favoriteProvider.notifier);
       final toggle = provider.isExist(widget.id);
@@ -48,11 +47,6 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
           .read(firebaseRatingProvider.notifier)
           .getAverageRating(postId: widget.id);
     });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
@@ -67,7 +61,6 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
     final places = ref.watch(getSingleProvider);
     final languageText = AppLocalizations.of(context);
     return Scaffold(
-      //backgroundColor: Theme.of(context).primaryColor,
       body: places == null
           ? const Center(
               child: CircularProgressIndicator(
@@ -86,7 +79,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          ref.read(getSingleProvider.notifier).state=null;
+                          ref.read(getSingleProvider.notifier).state = null;
                           Navigator.pop(context);
                         },
                         icon: const Icon(Icons.arrow_back),
@@ -125,9 +118,12 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                   DownloadImage.coverImage);
                             }
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
                                 content: Text(
-                                    '${languageText?.details_page_snack_bar}')));
+                                    '${languageText?.details_page_snack_bar}'),
+                              ),
+                            );
                           }
                         },
                         icon: ref.watch(toggleProvider)
@@ -191,14 +187,9 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                     fontSize: 24, fontWeight: FontWeight.bold),
                               ),
                             ),
-                            RatingWidgets(
-                              postId: places.id,
-                            ),
-                            Comments(
-                              postId: places.id,
-                            ),
+                            RatingWidgets(postId: places.id),
+                            Comments(postId: places.id),
                             const SizedBox(height: 12),
-
                             (places.description == '' ||
                                     places.description.isEmpty)
                                 ? const SizedBox()
@@ -214,10 +205,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                   ? const SizedBox()
                                   : Row(
                                       children: [
-                                        const Icon(
-                                          Icons.library_books,
-                                          // color: Colors.black54,
-                                        ),
+                                        const Icon(Icons.library_books),
                                         const SizedBox(width: 8),
                                         Text(
                                           '${languageText?.details_page_2_custom_card}',
@@ -258,8 +246,6 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                             },
                                           ),
                                   ),
-
-                            ////younis////
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 12),
@@ -297,16 +283,13 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                     .arrow_circle_right_outlined,
                                             size: 30,
                                           ),
-                                          // color: Colors.black54,
                                         ),
                                         const SizedBox(width: 8),
                                         const SizedBox(height: 12)
                                       ],
                                     ),
                             ),
-                            const SizedBox(
-                              height: 5,
-                            ),
+                            const SizedBox(height: 5),
                             places.itemImages == null ||
                                     places.itemImages!.isEmpty
                                 ? const SizedBox(height: 0)
@@ -314,9 +297,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                     height: size.height * 0.25,
                                     child: ListView.separated(
                                       separatorBuilder: (context, index) =>
-                                          const SizedBox(
-                                        width: 20,
-                                      ),
+                                          const SizedBox(width: 20),
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 12),
                                       scrollDirection: Axis.horizontal,
@@ -326,10 +307,11 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                       itemBuilder: (context, index) {
                                         return Padding(
                                           padding: const EdgeInsets.only(
-                                              top: 6,
-                                              left: 2,
-                                              right: 2,
-                                              bottom: 18),
+                                            top: 6,
+                                            left: 2,
+                                            right: 2,
+                                            bottom: 18,
+                                          ),
                                           child: GestureDetector(
                                             onTap: () {
                                               Navigator.push(
@@ -417,51 +399,59 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                               text:
                                                                   '${convertDigitsToFarsi(places.itemImages![index].price)} ',
                                                               style: TextStyle(
-                                                                  fontSize: 15,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  color: Colors
-                                                                      .green
-                                                                      .shade500),
+                                                                fontSize: 15,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Colors
+                                                                    .green
+                                                                    .shade500,
+                                                              ),
                                                             ),
                                                             TextSpan(
                                                               text: 'افغانی',
                                                               style: TextStyle(
-                                                                  fontSize: 15,
-                                                                  color: Colors
-                                                                      .green
-                                                                      .shade500,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
+                                                                fontSize: 15,
+                                                                color: Colors
+                                                                    .green
+                                                                    .shade500,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
                                                             )
                                                           ])
-                                                        : TextSpan(children: [
-                                                            TextSpan(
-                                                              text:
-                                                                  '${places.itemImages![index].price} ',
-                                                              style: TextStyle(
+                                                        : TextSpan(
+                                                            children: [
+                                                              TextSpan(
+                                                                text:
+                                                                    '${places.itemImages![index].price} ',
+                                                                style:
+                                                                    TextStyle(
                                                                   fontSize: 15,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
                                                                   color: Colors
                                                                       .green
-                                                                      .shade500),
-                                                            ),
-                                                            TextSpan(
-                                                              text: 'AF',
-                                                              style: TextStyle(
+                                                                      .shade500,
+                                                                ),
+                                                              ),
+                                                              TextSpan(
+                                                                text: 'AF',
+                                                                style:
+                                                                    TextStyle(
                                                                   fontSize: 15,
                                                                   color: Colors
                                                                       .green
                                                                       .shade500,
                                                                   fontWeight:
                                                                       FontWeight
-                                                                          .bold),
-                                                            ),
-                                                          ]),
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
                                                   ),
                                                 ],
                                               ),
@@ -471,13 +461,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                       },
                                     ),
                                   ),
-
-                            ////younis finish////
-
-                            ////hojjat////
-                            SizedBox(
-                              height: 8,
-                            ),
+                            const SizedBox(height: 8),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 12),
@@ -521,18 +505,14 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                       ],
                                     ),
                             ),
-                            const SizedBox(
-                              height: 5,
-                            ),
+                            const SizedBox(height: 5),
                             places.doctors == null || places.doctors!.isEmpty
                                 ? const SizedBox(height: 0)
                                 : SizedBox(
                                     height: size.height * 0.28,
                                     child: ListView.separated(
                                       separatorBuilder: (context, index) =>
-                                          const SizedBox(
-                                        width: 20,
-                                      ),
+                                          const SizedBox(width: 20),
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 12),
                                       scrollDirection: Axis.horizontal,
@@ -553,8 +533,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                               color: Theme.of(context)
                                                           .brightness ==
                                                       Brightness.light
-                                                  ? Colors.grey
-                                                      .shade100 // Set light theme color
+                                                  ? Colors.grey.shade100
                                                   : Colors.black12,
                                               borderRadius:
                                                   BorderRadius.circular(22),
@@ -620,11 +599,11 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                   overflow: TextOverflow.fade,
                                                   '${languageText?.details_page_9_custom_card}: ${isRTL ? convertDigitsToFarsi(places.doctors![index].time) : places.doctors![index].time}',
                                                   style: TextStyle(
-                                                      fontSize: 15,
-                                                      color:
-                                                          Colors.green.shade500,
-                                                      fontWeight:
-                                                          FontWeight.w500),
+                                                    fontSize: 15,
+                                                    color:
+                                                        Colors.green.shade500,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -633,9 +612,6 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                       },
                                     ),
                                   ),
-
-                            ////hojjat finish////
-
                             (places.addresses.isEmpty)
                                 ? const SizedBox()
                                 : CustomCard(
@@ -707,10 +683,8 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                                       .ellipsis,
                                                               style:
                                                                   const TextStyle(
-                                                                fontSize: 14,
-                                                                // color: Colors
-                                                                //     .black54
-                                                              ),
+                                                                      fontSize:
+                                                                          14),
                                                             ),
                                                           ),
                                                         ],

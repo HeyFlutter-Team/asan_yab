@@ -12,18 +12,14 @@ class CategoryPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isRTL = ref.watch(languageProvider).code=='fa';
-    final languageText=AppLocalizations.of(context);
+    final isRTL = ref.watch(languageProvider).code == 'fa';
+    final languageText = AppLocalizations.of(context);
     ref.read(categoriesProvider.notifier).getCategories();
     final category = ref.watch(categoriesProvider);
     return Scaffold(
-      //backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         elevation: 0.0,
-        // backgroundColor: Colors.white,
-        title: Text(
-          languageText!.category_title,
-        ),
+        title: Text(languageText!.category_title),
         leading: IconButton(
           onPressed: () {
             FocusScope.of(context).unfocus();
@@ -55,52 +51,51 @@ class CategoryPage extends ConsumerWidget {
                       mainAxisExtent: 200.0,
                     ),
                     itemCount: category.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          debugPrint('the id is : ${category[index].id}');
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ListCategoryItem(
-                                catId: category[index].id,
-                                categoryName:
-                                isRTL?
-                                category[index].categoryName
-                                :category[index].enCategoryName!,
+                    itemBuilder: (context, index) => GestureDetector(
+                      onTap: () {
+                        debugPrint('the id is : ${category[index].id}');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ListCategoryItem(
+                              catId: category[index].id,
+                              categoryName: isRTL
+                                  ? category[index].categoryName
+                                  : category[index].enCategoryName!,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: tempName(tempColor: category[index].color),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              IconData(
+                                int.parse(category[index].iconCode),
+                                fontFamily: 'MaterialIcons',
+                              ),
+                              size: 40.0,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(height: 16.0),
+                            Text(
+                              isRTL
+                                  ? category[index].categoryName
+                                  : category[index].enCategoryName!,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
                               ),
                             ),
-                          );
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: tempName(tempColor: category[index].color),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                IconData(
-                                  int.parse(category[index].iconCode),
-                                  fontFamily: 'MaterialIcons',
-                                ),
-                                size: 40.0,
-                                color: Colors.white,
-                              ),
-                              const SizedBox(height: 16.0),
-                              Text(
-                                isRTL?
-                                category[index].categoryName
-                                :category[index].enCategoryName!,
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 16.0),
-                              ),
-                            ],
-                          ),
+                          ],
                         ),
-                      );
-                    },
+                      ),
+                    ),
                   ),
                 )
               ],

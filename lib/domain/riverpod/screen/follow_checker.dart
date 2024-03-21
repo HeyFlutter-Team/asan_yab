@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final followerProvider = StateNotifierProvider<FollowCheckerProvider, bool>(
@@ -9,9 +10,11 @@ class FollowCheckerProvider extends StateNotifier<bool> {
   FollowCheckerProvider(super.state, this.ref);
   final _fireStore = FirebaseFirestore.instance;
 
-  Future<bool> followOrUnFollow(String uid, String followId) async {
+  Future<bool> followOrUnFollow(
+    String uid,
+    String followId,
+  ) async {
     try {
-      // ref.read(loadingFollowers.notifier).state = true;
       final snap = await _fireStore
           .collection('User')
           .doc(uid)
@@ -19,13 +22,9 @@ class FollowCheckerProvider extends StateNotifier<bool> {
           .doc(uid)
           .get();
       final following = (snap.data()! as dynamic)['following'];
-      if (following.contains(followId)) {
-        state = false;
-      } else {
-        state = true;
-      }
+      following.contains(followId) ? state = false : state = true;
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     } finally {
       ref.read(loadingFollowers.notifier).state = false;
     }

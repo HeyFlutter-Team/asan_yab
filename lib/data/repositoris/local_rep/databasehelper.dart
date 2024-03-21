@@ -5,10 +5,15 @@ import 'package:path/path.dart';
 import '../../models/place.dart';
 
 class DatabaseHelper {
+  const DatabaseHelper();
   static Future<Database> _openDatabase() async {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, 'my-database.db');
-    return openDatabase(path, version: 12, onCreate: _createDatabase);
+    return openDatabase(
+      path,
+      version: 12,
+      onCreate: _createDatabase,
+    );
   }
 
   static Future<void> _createDatabase(Database db, int version) async {
@@ -31,10 +36,9 @@ class DatabaseHelper {
       List<String> phoneDataList,
       bool toggle,
       Int8List logo,
-      Int8List coverImage)
-  async {
-    String dataAddress = jsonEncode(addressDataList);
-    String dataPhone = jsonEncode(phoneDataList);
+      Int8List coverImage) async {
+    final dataAddress = jsonEncode(addressDataList);
+    final dataPhone = jsonEncode(phoneDataList);
     final db = await _openDatabase();
     final data = {
       'id': databaseModel.id,
@@ -56,7 +60,11 @@ class DatabaseHelper {
 
   static Future<int> deleteData(String id) async {
     final db = await _openDatabase();
-    return await db.delete('users', where: 'id = ? ', whereArgs: [id]);
+    return await db.delete(
+      'users',
+      where: 'id = ? ',
+      whereArgs: [id],
+    );
   }
 
   static Future<Map<String, dynamic>?> getSingleData(String id) async {
@@ -72,6 +80,11 @@ class DatabaseHelper {
 
   static Future<int> updateData(String id, Map<String, dynamic> data) async {
     final db = await _openDatabase();
-    return await db.update('users', data, where: 'id = ?', whereArgs: [id]);
+    return await db.update(
+      'users',
+      data,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 }

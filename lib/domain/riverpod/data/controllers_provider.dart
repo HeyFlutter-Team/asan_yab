@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MyControllers extends StateNotifier{
+class MyControllers extends StateNotifier {
   MyControllers(super.state);
 
   final nameController = TextEditingController();
@@ -11,4 +11,4 @@ class MyControllers extends StateNotifier{
   final confirmPasswordController = TextEditingController();
 }
 
-final controllersProvider=StateNotifierProvider((ref) => MyControllers(ref));
+final controllersProvider = StateNotifierProvider((ref) => MyControllers(ref));

@@ -105,9 +105,8 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                             horizontal: 12)
                                         .copyWith(top: 10),
                                     child: Text(
-                                      ref.watch(nearbyPlace)[index].category!,
+                                      ref.watch(nearbyPlace)[index].category,
                                       style: const TextStyle(
-                                          // color: Colors.black,
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -117,11 +116,9 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 12),
                                     child: Text(
-                                      ref.watch(nearbyPlace)[index].name!,
+                                      ref.watch(nearbyPlace)[index].name,
                                       overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          //color: Colors.indigo.withOpacity(0.6),
-                                          ),
+                                      style: const TextStyle(),
                                     ),
                                   ),
                                   const SizedBox(height: 10),
@@ -139,9 +136,10 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                               .address,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w300),
+                                            color: Colors.grey,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w300,
+                                          ),
                                         ),
                                       ),
                                     ],

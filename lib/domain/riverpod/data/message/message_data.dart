@@ -11,7 +11,7 @@ final messageProvider =
 class MessageProvider extends StateNotifier<List<MessageModel>> {
   final Ref ref;
   MessageProvider(super.state, this.ref);
-  ScrollController scrollController = ScrollController();
+  final scrollController = ScrollController();
   List<MessageModel> getMessages(String receiverId) {
     try {
       ref.read(messageLoadingProvider.notifier).state = true;

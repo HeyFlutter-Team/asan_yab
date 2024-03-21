@@ -105,7 +105,7 @@ class Address {
   final String branch;
   final String lat;
 
-  Address({
+  const Address({
     required this.address,
     required this.phone,
     required this.lang,
@@ -128,10 +128,18 @@ class NewItems {
   final String? imageUrl;
   final String? itemName;
   final String? itemPrice;
-  NewItems({this.imageUrl, this.itemName, this.itemPrice});
+  const NewItems({
+    this.imageUrl,
+    this.itemName,
+    this.itemPrice,
+  });
 
   Map<String, dynamic> toJson() {
-    return {'imageUrl': imageUrl, 'itemName': itemName, 'itemPrice': itemPrice};
+    return {
+      'imageUrl': imageUrl,
+      'itemName': itemName,
+      'itemPrice': itemPrice,
+    };
   }
 
   factory NewItems.fromJson(Map<String, dynamic> json) {
@@ -147,19 +155,17 @@ class NewItemsYounis {
   final String? itemYounisName;
   final String? itemYounisPrice;
 
-  NewItemsYounis({
+  const NewItemsYounis({
     this.newItemYounisImage,
     this.itemYounisName,
     this.itemYounisPrice,
   });
 
-  factory NewItemsYounis.fromJson(Map<String, dynamic> json) {
-    return NewItemsYounis(
-      newItemYounisImage: json['newItemYounis'],
-      itemYounisName: json['itemYounisName'],
-      itemYounisPrice: json['itemYounisPrice'],
-    );
-  }
+  factory NewItemsYounis.fromJson(Map<String, dynamic> json) => NewItemsYounis(
+        newItemYounisImage: json['newItemYounis'],
+        itemYounisName: json['itemYounisName'],
+        itemYounisPrice: json['itemYounisPrice'],
+      );
 
   Map<String, dynamic> toJson() {
     return {
@@ -175,7 +181,7 @@ class ItemImage {
   final String price;
   final String imageUrl;
 
-  ItemImage({
+  const ItemImage({
     required this.name,
     required this.price,
     required this.imageUrl,
@@ -204,21 +210,25 @@ class Doctors {
   final String time;
   final String imageUrl;
 
-  Doctors(
-      {required this.name,
-      required this.title,
-      required this.imageUrl,
-      required this.time});
+  const Doctors({
+    required this.name,
+    required this.title,
+    required this.imageUrl,
+    required this.time,
+  });
 
   Map<String, dynamic> toJson() {
-    return {'name': name, 'title': title, 'imageUrl': imageUrl, "time": time};
+    return {
+      'name': name,
+      'title': title,
+      'imageUrl': imageUrl,
+      "time": time,
+    };
   }
 
-  factory Doctors.fromJson(Map<String, dynamic> json) {
-    return Doctors(
-        name: json['name'],
-        title: json['title'],
-        imageUrl: json['imageUrl'],
-        time: json['time']);
-  }
+  factory Doctors.fromJson(Map<String, dynamic> json) => Doctors(
+      name: json['name'],
+      title: json['title'],
+      imageUrl: json['imageUrl'],
+      time: json['time']);
 }

@@ -101,18 +101,25 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [Text(languageText.sign_up_account_text,style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)
-                ,InkWell(
-                    onTap: () {
-                          Navigator.pop(context);
-                    },
-                  child: Text('  ${languageText.sign_up_account_text1}',
-                      style: const TextStyle(color: Colors.blue,fontSize: 15),),
-                )],),
-
-                const SizedBox(
-                  height: 10,
+                  children: [
+                    Text(
+                      languageText.sign_up_account_text,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 15),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        '  ${languageText.sign_up_account_text1}',
+                        style:
+                            const TextStyle(color: Colors.blue, fontSize: 15),
+                      ),
+                    )
+                  ],
                 ),
+                const SizedBox(height: 10),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red.shade800,
@@ -134,9 +141,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     style: const TextStyle(fontSize: 20, color: Colors.white),
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
               ],
             ),
           ),

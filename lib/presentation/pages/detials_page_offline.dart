@@ -33,9 +33,7 @@ class DetailPageOffline extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                  onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.arrow_back),
                   iconSize: 25,
                 ),
@@ -115,25 +113,26 @@ class DetailPageOffline extends ConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
-                                    flex: 1,
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Icon(Icons.location_on_outlined),
-                                        const SizedBox(
-                                          width: 3,
-                                        ),
-                                        Flexible(
-                                          child: Text(addressData[index],
-                                              maxLines: 4,
-                                              overflow: TextOverflow.fade,
-                                              style: const TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black54)),
-                                        ),
-                                      ],
-                                    )),
+                                  flex: 1,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Icon(Icons.location_on_outlined),
+                                      const SizedBox(
+                                        width: 3,
+                                      ),
+                                      Flexible(
+                                        child: Text(addressData[index],
+                                            maxLines: 4,
+                                            overflow: TextOverflow.fade,
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black54)),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                                 ConstrainedBox(
                                   constraints:
                                       const BoxConstraints(minWidth: 120),
@@ -141,11 +140,11 @@ class DetailPageOffline extends ConsumerWidget {
                                     style: OutlinedButton.styleFrom(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 8)),
-                                    onPressed: () async {
-                                      await FlutterPhoneDirectCaller.callNumber(
-                                        phoneData[index],
-                                      );
-                                    },
+                                    onPressed: () async =>
+                                        await FlutterPhoneDirectCaller
+                                            .callNumber(
+                                      phoneData[index],
+                                    ),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
@@ -220,9 +219,7 @@ class CustomCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: Row(
                         children: [
-                          const Icon(
-                            Icons.library_books,
-                          ),
+                          const Icon(Icons.library_books),
                           const SizedBox(width: 12),
                           Text(
                             title,

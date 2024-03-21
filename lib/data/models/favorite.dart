@@ -1,7 +1,7 @@
 class Favorite {
   final List<String> items;
 
-  Favorite({required this.items});
+  const Favorite({required this.items});
 
   factory Favorite.fromJson(Map<String, dynamic> json) {
     final List<dynamic> jsonItems = json['items'] ?? [];
@@ -11,9 +11,7 @@ class Favorite {
     return Favorite(items: items);
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'items': items,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        'items': items,
+      };
 }

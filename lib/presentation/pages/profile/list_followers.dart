@@ -18,16 +18,12 @@ class ListOfFollowers extends ConsumerWidget {
     return Scaffold(
       body: ref.watch(loadingFollowingDataProvider)
           ? const Center(
-              child: CircularProgressIndicator(
-                color: Colors.pinkAccent,
-              ),
+              child: CircularProgressIndicator(color: Colors.pinkAccent),
             )
           : ref.watch(loadingFollowers)
               ? Column(
                   children: [
-                    const SizedBox(
-                      height: 14,
-                    ),
+                    const SizedBox(height: 14),
                     ListView.builder(
                       itemCount: persons.length,
                       itemBuilder: (context, index) {
@@ -42,6 +38,57 @@ class ListOfFollowers extends ConsumerWidget {
                                 persons[index]['user'].imageUrl!),
                           ),
                           trailing: ElevatedButton(
+                            onPressed: () async {
+                              await ref
+                                  .read(followHttpsProvider.notifier)
+                                  .updateFollowers(
+                                      uid, persons[index]['user'].uid!)
+                                  .whenComplete(() => ref
+                                      .read(followerProvider.notifier)
+                                      .followOrUnFollow(
+                                          uid, persons[index]['user'].uid!))
+                                  .whenComplete(() {
+                                ref
+                                        .read(listOfDataFollowersProvider.notifier)
+                                        .state[index]['followBack'] =
+                                    !persons[index]['followBack'];
+                              });
+                              if (context.mounted) {
+                                ref
+                                    .read(userDetailsProvider.notifier)
+                                    .getCurrentUserData();
+                              }
+                            },
+                            child: Text(
+                              persons[index]['followBack']
+                                  ? 'Follow Back'
+                                  : 'Unfollow',
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                )
+              : Column(
+                  children: [
+                    const SizedBox(height: 14),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: persons.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            onTap: () {
+                              // todo for visite
+                            },
+                            title: Text(persons[index]['user'].name!),
+                            leading: CircleAvatar(
+                              radius: 33,
+                              backgroundImage: CachedNetworkImageProvider(
+                                persons[index]['user'].imageUrl!,
+                              ),
+                            ),
+                            trailing: ElevatedButton(
                               onPressed: () async {
                                 await ref
                                     .read(followHttpsProvider.notifier)
@@ -64,59 +111,12 @@ class ListOfFollowers extends ConsumerWidget {
                                       .getCurrentUserData();
                                 }
                               },
-                              child: Text(persons[index]['followBack']
-                                  ? 'Follow Back'
-                                  : 'Unfollow')),
-                        );
-                      },
-                    ),
-                  ],
-                )
-              : Column(
-                  children: [
-                    const SizedBox(
-                      height: 14,
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: persons.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            onTap: () {
-                              // todo for visite
-                            },
-                            title: Text(persons[index]['user'].name!),
-                            leading: CircleAvatar(
-                              radius: 33,
-                              backgroundImage: CachedNetworkImageProvider(
-                                  persons[index]['user'].imageUrl!),
-                            ),
-                            trailing: ElevatedButton(
-                                onPressed: () async {
-                                  await ref
-                                      .read(followHttpsProvider.notifier)
-                                      .updateFollowers(
-                                          uid, persons[index]['user'].uid!)
-                                      .whenComplete(() => ref
-                                          .read(followerProvider.notifier)
-                                          .followOrUnFollow(
-                                              uid, persons[index]['user'].uid!))
-                                      .whenComplete(() {
-                                    ref
-                                            .read(listOfDataFollowersProvider
-                                                .notifier)
-                                            .state[index]['followBack'] =
-                                        !persons[index]['followBack'];
-                                  });
-                                  if (context.mounted) {
-                                    ref
-                                        .read(userDetailsProvider.notifier)
-                                        .getCurrentUserData();
-                                  }
-                                },
-                                child: Text(persons[index]['followBack']
+                              child: Text(
+                                persons[index]['followBack']
                                     ? 'Follow Back'
-                                    : 'Unfollow')),
+                                    : 'Unfollow',
+                              ),
+                            ),
                           );
                         },
                       ),

@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DeleteMessage {
+  const DeleteMessage();
   Future<void> deleteMessage(
-      String uid, String receiverId, String messageContent) async {
+    String uid,
+    String receiverId,
+    String messageContent,
+  ) async {
     FirebaseFirestore.instance
         .collection('User')
         .doc(uid)

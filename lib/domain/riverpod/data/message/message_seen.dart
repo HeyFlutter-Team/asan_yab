@@ -12,7 +12,10 @@ class SeenMassage extends StateNotifier<List<bool>> {
     state = await lastMessageRepo.newMessage();
   }
 
-  Future<void> messageIsSeen(String receiverId, String uid) async {
+  Future<void> messageIsSeen(
+    String receiverId,
+    String uid,
+  ) async {
     await lastMessageRepo.updateSeenMessage(receiverId, uid);
   }
 }

@@ -9,5 +9,5 @@ class ValueOfDropButtonProvider extends StateNotifier<double> {
 
   List<double> distance = [0.8, 1, 2, 3, 4, 5];
 
-  void choiceDistacne(double d) => state = d;
+  void choiceDistance(double d) => state = d;
 }

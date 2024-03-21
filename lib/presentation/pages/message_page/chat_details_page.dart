@@ -1,3 +1,4 @@
+import 'package:asan_yab/data/models/users.dart';
 import 'package:asan_yab/domain/riverpod/data/message/message.dart';
 import 'package:asan_yab/domain/riverpod/data/message/message_data.dart';
 import 'package:asan_yab/domain/riverpod/data/message/message_history.dart';
@@ -24,18 +25,21 @@ class ChatDetailPage extends ConsumerStatefulWidget {
 class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
   @override
   void initState() {
-    // TODO: implement initState
-    // ref.read(messageProfileProvider.notifier)..getUserById(widget.uid);
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(messageProvider.notifier).getMessages(widget.uid!);
-    });
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => ref.read(messageProvider.notifier).getMessages(widget.uid!));
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
+  Future<void> _onWillPop(Users newProfileUser) async {
+    ref.read(messageProvider.notifier).clearState();
+    ref.read(messageNotifierProvider.notifier).fetchMessage();
+    ref.read(messageHistory.notifier).getMessageHistory();
+    ref
+        .read(seenMassageProvider.notifier)
+        .messageIsSeen(
+            newProfileUser.uid!, FirebaseAuth.instance.currentUser!.uid)
+        .whenComplete(
+            () => ref.read(seenMassageProvider.notifier).isNewMassage());
   }
 
   @override
@@ -43,49 +47,42 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
     final newProfileUser = ref.watch(otherUserProvider);
     final themDark = Theme.of(context).brightness == Brightness.dark;
     final languageText = AppLocalizations.of(context);
-
+    final isMessageLoading = ref.watch(messageLoadingProvider);
+    final isEmojiShowing = ref.watch(emojiShowingProvider);
+    final replay = ref.watch(replayProvider);
     return WillPopScope(
         onWillPop: () async {
-          ref.read(messageProvider.notifier).clearState();
-          ref.read(messageNotifierProvider.notifier).fetchMessage();
-          ref.read(messageHistory.notifier).getMessageHistory();
-          ref
-              .read(seenMassageProvider.notifier)
-              .messageIsSeen(
-                  newProfileUser.uid!, FirebaseAuth.instance.currentUser!.uid)
-              .whenComplete(
-                  () => ref.read(seenMassageProvider.notifier).isNewMassage());
-
+          await _onWillPop(newProfileUser);
           return true;
         },
         child: Scaffold(
           appBar: AppBarChatDetails(
-              userId: newProfileUser!.uid!,
-              employee: newProfileUser.userType,
-              name: newProfileUser.name,
-              isOnline: newProfileUser.isOnline,
-              urlImage: newProfileUser.imageUrl),
+            userId: newProfileUser!.uid!,
+            employee: newProfileUser.userType,
+            name: newProfileUser.name,
+            isOnline: newProfileUser.isOnline,
+            urlImage: newProfileUser.imageUrl,
+          ),
           body: Stack(
             fit: StackFit.expand,
             children: [
-              ref.watch(messageLoadingProvider)
+              isMessageLoading
                   ? const SizedBox()
                   : ChatMessages(
                       receiverId: newProfileUser.uid!,
-                      urlImage: newProfileUser.imageUrl),
+                      urlImage: newProfileUser.imageUrl,
+                    ),
               Align(
                 alignment: Alignment.bottomLeft,
                 child: Container(
                   padding: const EdgeInsets.only(left: 4, bottom: 10, top: 4),
-                  height: !ref.watch(emojiShowingProvider)
-                      ? (ref.watch(replayProvider) == '' ? 64 : 100)
-                      : 350,
+                  height: !isEmojiShowing ? (replay == '' ? 64 : 100) : 350,
                   width: double.infinity,
                   child: Column(
                     children: [
                       Row(
                         children: [
-                          ref.watch(replayProvider) == ''
+                          replay == ''
                               ? const SizedBox()
                               : Column(
                                   children: [
@@ -93,7 +90,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 18.0),
                                       child: Text(
-                                        'Replay: ${ref.watch(replayProvider)}',
+                                        'Replay: $replay',
                                         style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w300,
@@ -133,31 +130,6 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                               ),
                             ],
                           ),
-
-                          ///
-                          ///
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     sendImage();
-                          //   },
-                          //   child: Container(
-                          //     height: 30,
-                          //     width: 30,
-                          //     decoration: BoxDecoration(
-                          //       color: Colors.lightBlue,
-                          //       borderRadius: BorderRadius.circular(30),
-                          //     ),
-                          //     child: const Icon(
-                          //       Icons.add,
-                          //       color: Colors.white,
-                          //       size: 20,
-                          //     ),
-                          //   ),
-                          // ),
-                          // const SizedBox(
-                          //   width: 15,
-                          // ),
-
                           Expanded(
                             child: Container(
                               padding:
@@ -171,11 +143,9 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                 color: themDark ? Colors.grey.shade800 : null,
                               ),
                               child: TextField(
-                                onTap: () {
-                                  ref
-                                      .read(emojiShowingProvider.notifier)
-                                      .state = false;
-                                },
+                                onTap: () => ref
+                                    .read(emojiShowingProvider.notifier)
+                                    .state = false,
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.zero,
                                   hintText: languageText?.chat_message,
@@ -187,9 +157,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                               ),
                             ),
                           ),
-
                           const SizedBox(width: 15),
-
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 backgroundColor:
@@ -222,35 +190,6 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                       Expanded(
                         child: Column(
                           children: [
-                            // Flexible(
-                            //   child: Row(
-                            //     mainAxisAlignment:
-                            //         MainAxisAlignment.spaceAround,
-                            //     children: [
-                            //       const Stickers(),
-                            //       GestureDetector(
-                            //         onTap: () {
-                            //           ref
-                            //                   .read(emojiShowingProvider.notifier)
-                            //                   .state =
-                            //               !ref.watch(emojiShowingProvider);
-                            //           if (ref.watch(emojiShowingProvider)) {
-                            //             FocusManager.instance.primaryFocus
-                            //                 ?.unfocus();
-                            //           }
-                            //
-                            //           print('TAPPED ON EMOJI');
-                            //         },
-                            //         child: Icon(
-                            //           Icons.emoji_emotions_outlined,
-                            //           color: ref.watch(emojiShowingProvider)
-                            //               ? Colors.red
-                            //               : Colors.black45,
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
                             Offstage(
                               offstage: !ref.watch(emojiShowingProvider),
                               child: SizedBox(
@@ -264,7 +203,6 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                       .onBackspacePressed(),
                                   config: Config(
                                     columns: 7,
-                                    // Issue: https://github.com/flutter/flutter/issues/28894
                                     emojiSizeMax: 32 *
                                         (foundation.defaultTargetPlatform ==
                                                 TargetPlatform.iOS
