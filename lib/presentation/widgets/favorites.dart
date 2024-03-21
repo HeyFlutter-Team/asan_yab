@@ -253,7 +253,7 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                                   // Display the average rating with one decimal place
                                                   style: const TextStyle(
                                                     color: Colors.white,
-                                                    fontSize: 20,
+                                                    fontSize: 15,
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),

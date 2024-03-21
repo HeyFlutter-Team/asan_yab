@@ -227,6 +227,7 @@ class FirebaseRating extends ChangeNotifier {
                           await thisProvider.checkIfUserRated(
                               context, postId, ref);
                           rate = 0;
+
                           await thisProvider.getAverageRating(postId: postId);
                         } else {
                           // Handle unauthenticated user
