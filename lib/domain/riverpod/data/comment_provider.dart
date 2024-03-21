@@ -194,7 +194,6 @@ class VerticalDataNotifier extends ChangeNotifier {
       },
     ).then((value) {
       ref.read(emojiShowingProvider.notifier).state = false;
-
       if (_commentController.text.isNotEmpty) {
         bool found = false;
         for (int i = 0; i < texts.length; i++) {
@@ -212,15 +211,7 @@ class VerticalDataNotifier extends ChangeNotifier {
           );
         }
       }
-      print("aliHadid");
-      print(texts.length);
-      print("aliHadid");
-      print(texts.length);
-      // Clear the comment controller after processing the comment
       _commentController.clear();
-
-      // Notify listeners after the comment has been processed
-
       notifyListeners();
     });
   }

@@ -10,14 +10,13 @@ final noteProvider = ChangeNotifierProvider<Note>((ref) => Note());
 class Note extends ChangeNotifier {
   String note = '';
   bool isLoading = false;
-  Future<void> getNote(WidgetRef ref) async {
+  Future<void> getNote(WidgetRef ref, bool isRTL) async {
     isLoading = true;
     final snapshot = await FirebaseFirestore.instance
         .collection('Description')
         .doc('add_new_place')
         .get();
     if (snapshot.exists) {
-      final isRTL = ref.watch(languageProvider).code == 'fa';
       if (!isRTL) {
         note = snapshot.data()?['eNote'];
       } else {

@@ -39,6 +39,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
     ref.read(getSingleProvider.notifier).fetchSinglePlace(widget.id);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       //Todo: for selected
+
       ref.read(getInformationProvider).getFavorite();
       final provider = ref.read(favoriteProvider.notifier);
       final toggle = provider.isExist(widget.id);
