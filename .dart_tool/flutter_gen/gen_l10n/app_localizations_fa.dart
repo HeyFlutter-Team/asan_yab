@@ -357,4 +357,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get download_image_loading => 'لطفا صبر کنید...';
+
+  @override
+  String get menus_restaurant => 'منوی';
 }

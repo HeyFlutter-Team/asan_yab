@@ -81,13 +81,17 @@ class _MyAppState extends ConsumerState<MyApp> {
     final language = ref.watch(languageProvider);
     return MaterialApp(
       navigatorKey: navigatorKey,
-      themeMode: themeModel.currentThemeMode,
+
+      themeMode:  themeModel.currentThemeMode!= ThemeMode.system
+          ? themeModel.currentThemeMode
+          : ThemeMode.light,
       darkTheme: ThemeData.dark().copyWith(
         textTheme: ThemeData.dark().textTheme.apply(
               bodyColor: Colors.white,
             ),
       ),
       theme: ThemeData.light().copyWith(
+
         textTheme: ThemeData.light().textTheme.apply(
               bodyColor: Colors.black,
             ),
@@ -129,6 +133,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       builder: (context, child) {
         return Theme(
           data: ThemeData(
+
             useMaterial3: true,
             brightness: Theme.of(context).brightness,
             fontFamily: 'Shabnam',

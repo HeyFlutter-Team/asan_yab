@@ -800,6 +800,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please waite...'**
   String get download_image_loading;
+
+  /// No description provided for @menus_restaurant.
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get menus_restaurant;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
