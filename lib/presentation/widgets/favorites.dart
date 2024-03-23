@@ -219,7 +219,7 @@ class _FavoritesState extends ConsumerState<Favorites> {
                         widget.isConnected
                             ? Positioned(
                                 top: 95.0,
-                                left: 10.0,
+                                left: 15.0,
                                 child: FutureBuilder<double>(
                                   future: ref
                                       .read(firebaseRatingProvider)
