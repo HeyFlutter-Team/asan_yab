@@ -54,56 +54,54 @@ class _MenuRestaurantState extends ConsumerState<MenuRestaurant>
   @override
   Widget build(BuildContext context) {
     final places = ref.watch(getSingleProvider);
-    return Scaffold(
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        title:Directionality(
-          textDirection: TextDirection.rtl,
-          child: Text(
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: true,
+          scrolledUnderElevation: 0,
+          title: Text(
             '${places?.name}',
             style: const TextStyle(
                 overflow: TextOverflow.ellipsis,
-                fontSize: 17, fontWeight: FontWeight.bold),
+                fontSize: 17,
+                fontWeight: FontWeight.bold),
           ),
         ),
-      ),
-      body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : SafeArea(
-              child: AnimatedBuilder(
-                animation: _bloc,
-                builder: (_, __) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(
-                      height: 60,
-                      child: Directionality(
-                        textDirection: TextDirection.rtl,
+        body: isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : SafeArea(
+                child: AnimatedBuilder(
+                  animation: _bloc,
+                  builder: (_, __) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(
+                        height: 60,
                         child: TabBar(
                             tabAlignment: TabAlignment.start,
-                            labelPadding: const EdgeInsets.only(left: 7,right: 7),
-                            onTap:(index){
-                            _bloc.onCategorySelected(index);
+                            labelPadding:
+                                const EdgeInsets.only(left: 7, right: 7),
+                            onTap: (index) {
+                              _bloc.onCategorySelected(index);
                             },
                             indicator: const BoxDecoration(),
                             controller: _bloc.tabController,
                             isScrollable: true,
-                            overlayColor:
-                                const MaterialStatePropertyAll(Colors.transparent ),
+                            overlayColor: const MaterialStatePropertyAll(
+                                Colors.transparent),
                             tabs: _bloc.tabs
                                 .map((e) => RappiTabWidget(e))
                                 .toList()),
                       ),
-                    ),
-                    Expanded(
-                      child: Directionality(
-                        textDirection: TextDirection.rtl,
+                      Expanded(
                         child: ListView.builder(
                           controller: _bloc.scrollController,
                           itemCount: _bloc.items.length,
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, bottom: 350),
                           itemBuilder: (context, index) {
                             final item = _bloc.items[index];
                             if (item.isCategory) {
@@ -114,11 +112,11 @@ class _MenuRestaurantState extends ConsumerState<MenuRestaurant>
                           },
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
+      ),
     );
   }
 }
@@ -208,9 +206,11 @@ class _RappiProductItem extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(50),
                     child: CachedNetworkImage(
-                      errorWidget: (context, url, error) => Image.asset('assets/asan_yab.jpg'),
+                      errorWidget: (context, url, error) =>
+                          Image.asset('assets/asan_yab.jpg'),
                       imageUrl: product!.image,
-                      placeholder: (context, url) => Image.asset('assets/asan_yab.jpg'),
+                      placeholder: (context, url) =>
+                          Image.asset('assets/asan_yab.jpg'),
                       fit: BoxFit.cover,
                       height: 70,
                       width: 70,
@@ -249,6 +249,7 @@ class _RappiProductItem extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
+                        textDirection: TextDirection.ltr,
                         '${product!.price.toString()} AF',
                         style: TextStyle(
                             color: Theme.of(context).brightness ==
@@ -270,11 +271,3 @@ class _RappiProductItem extends StatelessWidget {
 //
 
 //
-
-
-
-
-
-
-
-
