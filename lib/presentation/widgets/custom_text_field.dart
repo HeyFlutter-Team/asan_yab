@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../pages/themeProvider.dart';
@@ -61,6 +62,9 @@ class _CustomTextFieldState extends ConsumerState<CustomTextField> {
             height: 5,
           ),
           TextFormField(
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(15),
+              ],
               textCapitalization: widget.textCapitalization,
               obscureText: widget.obscureText,
               controller: widget.controller,

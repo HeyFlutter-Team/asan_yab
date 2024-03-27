@@ -24,7 +24,6 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
   final signUpFormKey = GlobalKey<FormState>();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       ref.read(isLoadingInformation.notifier).state = false;
@@ -95,42 +94,45 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red.shade800,
-                        minimumSize:  Size(MediaQuery.of(context).size.width * 0.9, 55),
+                        minimumSize:
+                            Size(MediaQuery.of(context).size.width * 0.9, 55),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12))),
-                    onPressed:ref.watch(isLoadingInformation)
-                        ?null
-                        :() {
-                      final isValid = signUpFormKey.currentState!.validate();
-                      if (!isValid) return;
-                      ref.read(isLoadingInformation.notifier).state = true;
-                      FocusScope.of(context).unfocus();
-                      ref
-                          .read(userRegesterDetailsProvider)
-                          .addUserDetailsToFirebase(
-                              emailController: widget.email,
-                              lastNameController: lastNameController.text,
-                              nameController: nameController.text,
-                      )
-                          .whenComplete(() async {
-                        await ref
-                            .read(userRegesterDetailsProvider)
-                            .updateInviterRate(invitingPersonId.text);
-                        signUpFormKey.currentState!.reset();
-                      }).whenComplete(() {
-                        Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const MainPage(),
-                                ))
-                            .whenComplete(() => ref
-                                .read(isLoadingInformation.notifier)
-                                .state = false);
-                        ref
-                            .read(buttonNavigationProvider.notifier)
-                            .selectedIndex(0);
-                      });
-                    },
+                    onPressed: ref.watch(isLoadingInformation)
+                        ? null
+                        : () {
+                            final isValid =
+                                signUpFormKey.currentState!.validate();
+                            if (!isValid) return;
+                            ref.read(isLoadingInformation.notifier).state =
+                                true;
+                            FocusScope.of(context).unfocus();
+                            ref
+                                .read(userRegesterDetailsProvider)
+                                .addUserDetailsToFirebase(
+                                  emailController: widget.email,
+                                  lastNameController: lastNameController.text,
+                                  nameController: nameController.text,
+                                )
+                                .whenComplete(() async {
+                              await ref
+                                  .read(userRegesterDetailsProvider)
+                                  .updateInviterRate(invitingPersonId.text);
+                              signUpFormKey.currentState!.reset();
+                            }).whenComplete(() {
+                              Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const MainPage(),
+                                      ))
+                                  .whenComplete(() => ref
+                                      .read(isLoadingInformation.notifier)
+                                      .state = false);
+                              ref
+                                  .read(buttonNavigationProvider.notifier)
+                                  .selectedIndex(0);
+                            });
+                          },
                     child: ref.watch(isLoadingInformation)
                         ? const CircularProgressIndicator(
                             color: Colors.white,

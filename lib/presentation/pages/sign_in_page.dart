@@ -16,6 +16,7 @@ import '../../domain/riverpod/data/sign_in_provider.dart';
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
 
 final isSignInningProvider = StateProvider<bool>((ref) => false);
+
 class LogInPage extends ConsumerStatefulWidget {
   final Function()? onClickedSignUp;
   const LogInPage({Key? key, this.onClickedSignUp}) : super(key: key);
@@ -166,69 +167,74 @@ class _LogInPageState extends ConsumerState<LogInPage>
                 builder: (context, sref, child) => ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red.shade800,
-                      minimumSize:  Size(MediaQuery.of(context).size.width * 0.9, 55),
+                      minimumSize:
+                          Size(MediaQuery.of(context).size.width * 0.9, 55),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12))),
-                  onPressed:ref.watch(isSignInningProvider)
-                  ?null
-                  :() async {
-                    final isValid = formKey.currentState!.validate();
-                    if (!isValid) return;
-                    ref.read(isSignInningProvider.notifier).state = true;
-                    FocusScope.of(context).unfocus();
-                    final isCheckboxChecked = ref.read(isCheckProvider);
-                    if (isCheckboxChecked) {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      prefs.setString('email', emailCTRL.text);
-                      prefs.setString('password', passwordCTRL.text);
-                    }
-
-                    final currentContext = context; // Store the current context
-
-                    await ref
-                        .read(signInProvider)
-                        .signIn(
-                          context: context,
-                          email: emailCTRL.text,
-                          password: passwordCTRL.text,
-                          ref: ref,
-                        )
-                        .then((_) async {
-                      await ref
-                          .watch(userDetailsProvider.notifier)
-                          .getCurrentUserData();
-                      final currentUser = FirebaseAuth.instance.currentUser;
-                      if (currentUser != null) {
-                        if(context.mounted) {
-                          if (currentUser.emailVerified) {
-                            Navigator.pushReplacement(
-                              currentContext, // Use the stored context
-                              MaterialPageRoute(
-                                  builder: (context) => const MainPage()),
-                            );
-                          } else {
-                            Navigator.pushReplacement(
-                              currentContext, // Use the stored context
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    VerifyEmailPage(email: emailCTRL.text),
-                              ),
-                            );
+                  onPressed: ref.watch(isSignInningProvider)
+                      ? null
+                      : () async {
+                          final isValid = formKey.currentState!.validate();
+                          if (!isValid) return;
+                          ref.read(isSignInningProvider.notifier).state = true;
+                          FocusScope.of(context).unfocus();
+                          final isCheckboxChecked = ref.read(isCheckProvider);
+                          if (isCheckboxChecked) {
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.setString('email', emailCTRL.text);
+                            prefs.setString('password', passwordCTRL.text);
                           }
-                        }
-                      } else {
-                        print('');
-                      }
-                    });
 
-                  },
-                  child:ref.watch(isSignInningProvider)
-                      ?const CircularProgressIndicator(color: Colors.white,)
-                      :Text(
-                    languageText.sign_in_elbT,
-                    style: const TextStyle(fontSize: 20, color: Colors.white),
-                  ),
+                          final currentContext =
+                              context; // Store the current context
+
+                          await ref
+                              .read(signInProvider)
+                              .signIn(
+                                context: context,
+                                email: emailCTRL.text,
+                                password: passwordCTRL.text,
+                                ref: ref,
+                              )
+                              .then((_) async {
+                            await ref
+                                .watch(userDetailsProvider.notifier)
+                                .getCurrentUserData();
+                            final currentUser =
+                                FirebaseAuth.instance.currentUser;
+                            if (currentUser != null) {
+                              if (context.mounted) {
+                                if (currentUser.emailVerified) {
+                                  Navigator.pushReplacement(
+                                    currentContext, // Use the stored context
+                                    MaterialPageRoute(
+                                        builder: (context) => const MainPage()),
+                                  );
+                                } else {
+                                  Navigator.pushReplacement(
+                                    currentContext, // Use the stored context
+                                    MaterialPageRoute(
+                                      builder: (context) => VerifyEmailPage(
+                                          email: emailCTRL.text),
+                                    ),
+                                  );
+                                }
+                              }
+                            } else {
+                              print('');
+                            }
+                          });
+                        },
+                  child: ref.watch(isSignInningProvider)
+                      ? const CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                      : Text(
+                          languageText.sign_in_elbT,
+                          style: const TextStyle(
+                              fontSize: 20, color: Colors.white),
+                        ),
                 ),
               ),
               const SizedBox(
@@ -247,7 +253,8 @@ class _LogInPageState extends ConsumerState<LogInPage>
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    minimumSize:  Size(MediaQuery.of(context).size.width * 0.9, 55),
+                    minimumSize:
+                        Size(MediaQuery.of(context).size.width * 0.9, 55),
                     shape: RoundedRectangleBorder(
                         side: BorderSide(color: Colors.black.withOpacity(0.44)),
                         borderRadius: BorderRadius.circular(12))),

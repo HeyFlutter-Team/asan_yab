@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/domain/riverpod/config/internet_connectivity_checker.dart';
 import 'package:asan_yab/domain/riverpod/data/firebase_rating_provider.dart';
 import 'package:asan_yab/presentation/widgets/phone_widget.dart';
 import 'package:flutter/material.dart';
@@ -89,9 +90,8 @@ class _FavoritesState extends ConsumerState<Favorites> {
                         Card(
                           child: GestureDetector(
                             onTap: () async {
-                              debugPrint(
-                                  'Ramin check connectivity: ${widget.isConnected}');
-                              widget.isConnected
+                              ref.read(getSingleProvider.notifier).state = null;
+                              ref.watch(internetConnectivityCheckerProvider.notifier).isConnected
                                   ? Navigator.push(
                                       context,
                                       MaterialPageRoute(

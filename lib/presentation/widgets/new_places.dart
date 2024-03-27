@@ -14,7 +14,6 @@ import '../../core/utils/convert_digits_to_farsi.dart';
 import '../../data/models/place.dart';
 
 import '../../data/repositoris/language_repository.dart';
-import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../../domain/riverpod/data/places_provider.dart';
 import '../../domain/riverpod/data/single_place_provider.dart';
 import '../pages/detials_page.dart';
@@ -28,7 +27,7 @@ class NewPlaces extends ConsumerWidget {
   //
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.read(placeProvider.notifier).getPlaces();
+    ref.watch(placeProvider.notifier).getPlaces();
     final screenHeight = MediaQuery.of(context).size.height;
     List<Place> places = ref.watch(placeProvider);
     return RefreshIndicator(
@@ -50,13 +49,14 @@ class NewPlaces extends ConsumerWidget {
                         : phoneNumberItems;
                     return GestureDetector(
                       onTap: () async {
-                             Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        DetailsPage(id: places[index].id),
-                                  ));
+                        ref.read(getSingleProvider.notifier).state = null;
 
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  DetailsPage(id: places[index].id),
+                            ));
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 12),
@@ -92,7 +92,7 @@ class NewPlaces extends ConsumerWidget {
                                     width:
                                         MediaQuery.of(context).size.width * 0.7,
                                     child: Text(
-                                      items.name!,
+                                      items.name,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
@@ -114,7 +114,7 @@ class NewPlaces extends ConsumerWidget {
                                               isRTL: isRTL,
                                               phone: phoneNumber,
                                               colorActive: true),
-                                  ),
+                                        ),
                                 ],
                               ),
                             ),

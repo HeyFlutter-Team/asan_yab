@@ -109,19 +109,6 @@ class ImageNotifier extends StateNotifier<ImageState> {
   ImageNotifier() : super(ImageState());
   final ImagePicker _imagePicker = ImagePicker();
 
-  // Future<void> pickImage(ImageSource source) async {
-  //   try {
-  //     final pickedImage = await _imagePicker.pickImage(source: source);
-  //     if (pickedImage == null) return;
-  //
-  //     final imageTemp = File(pickedImage.path);
-  //     state = state.copyWith(image: imageTemp, imageUrl: pickedImage.path);
-  //     uploadFile();
-  //   } catch (e, stackTrace) {
-  //     print('Failed to pick image: $e\n$stackTrace');
-  //   }
-  // }
-
   Future<void> pickImage(ImageSource source) async {
     try {
       await _imagePicker.pickImage(source: source).then((image)async {
@@ -172,27 +159,6 @@ class ImageNotifier extends StateNotifier<ImageState> {
       print('Error uploading image: $e\n$stackTrace');
     }
   }
-  // Future<void> deleteImageAndClearUrl(String imageUrl) async {
-  //   try {
-  //     // Delete the image file from storage
-  //     final imageRef = FirebaseStorage.instance.refFromURL(imageUrl);
-  //     await imageRef.delete();
-  //     print('younis: Image deleted successfully.');
-  //
-  //     // Clear the image URL from the user's profile in the database
-  //     final user = FirebaseAuth.instance.currentUser;
-  //     if (user != null) {
-  //       await FirebaseFirestore.instance.collection('User').doc(user.uid).update({
-  //         'imageUrl': '',
-  //       });
-  //       print('Image URL cleared from database.');
-  //     }
-  //   } catch (error) {
-  //     print('Error deleting image: $error');
-  //   }
-  // }
-
-
 }
 
 final imageProvider = StateNotifierProvider<ImageNotifier, ImageState>(
@@ -229,3 +195,5 @@ notifyListeners();
 final deleteProfile=ChangeNotifierProvider<DeleteProfile>((ref) => DeleteProfile());
 
 final deleteIsLoading=StateProvider<bool>((ref) => false);
+
+final isSigningOut = StateProvider<bool>((ref) => false);

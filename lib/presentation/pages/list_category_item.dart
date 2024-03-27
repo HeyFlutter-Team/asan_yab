@@ -1,8 +1,7 @@
+import 'package:asan_yab/domain/riverpod/config/internet_connectivity_checker.dart';
 import 'package:asan_yab/presentation/pages/search_bar_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../domain/riverpod/screen/loading_circularPRI_provider.dart';
 import '../widgets/category_item.dart';
 
 class ListCategoryItem extends ConsumerWidget {
@@ -14,15 +13,15 @@ class ListCategoryItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    debugPrint('is exist ${catId}');
-    return WillPopScope(
-      onWillPop: () async => false,
+    debugPrint('is exist $catId');
+    print('younis net ${ref.watch(internetConnectivityCheckerProvider)}');
+    return PopScope(
+      onPopInvoked: (didPop) {},
+      canPop: true,
       child: Scaffold(
         appBar: AppBar(
-          // backgroundColor: Colors.grey.shade700,
           title: Text(
             categoryName,
-            // style: const TextStyle(color: Colors.black),
           ),
           elevation: 0.0,
           actions: [
@@ -42,13 +41,17 @@ class ListCategoryItem extends ConsumerWidget {
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
-              ref.read(loadingProvider.notifier).state =
-                  !ref.watch(loadingProvider);
             },
             icon: const Icon(Icons.arrow_back, size: 25.0),
           ),
         ),
-        body: CategoryItem(id: catId),
+        body: ref.watch(internetConnectivityCheckerProvider.notifier).isConnected
+            ? CategoryItem(id: catId)
+        :const Center(
+          child: CircularProgressIndicator(
+            color: Colors.red,
+          ),
+        ),
       ),
     );
   }

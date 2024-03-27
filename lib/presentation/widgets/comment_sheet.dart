@@ -34,7 +34,8 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
       ref.read(commentProvider.notifier).fetchMoreData(widget.postId);
     });
   }
-  final List<String> commentIds=[];
+
+  final List<String> commentIds = [];
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +72,7 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                                 ref.read(emojiShowingProvider.notifier).state =
                                     !ref.watch(emojiShowingProvider);
                                 if (ref.watch(emojiShowingProvider)) {
-                                  FocusManager.instance.primaryFocus?.unfocus();
+                                  FocusScope.of(context).unfocus();
                                 }
                               },
                               child: const Text(
@@ -159,31 +160,32 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                           //done icon
                           IconButton(
                               onPressed: () async {
-                                final userUid=FirebaseAuth.instance.currentUser?.uid;
-                                  if(!commentIds.contains(widget.postId)){
-                                    commentIds.addAll([widget.postId]);
-                                  }
-                                  print('younis list: $commentIds');
-                                  print(widget.postId);
-                                  ref
-                                      .read(commentProvider.notifier)
-                                      .submitComment(
-                                      ref
-                                          .watch(commentProvider)
-                                          .controller
-                                          .text,
-                                      context,
-                                      ref,
-                                      widget.postId);
-                                   ref.read(commentProvider.notifier)
-                                      .userComments('$userUid', commentIds);
-                                  ref
-                                      .read(commentProvider.notifier)
-                                      .controller
-                                      .clear();
-                                  ref.read(emojiShowingProvider.notifier).state =
-                                  false;
-
+                                final userUid =
+                                    FirebaseAuth.instance.currentUser?.uid;
+                                if (!commentIds.contains(widget.postId)) {
+                                  commentIds.addAll([widget.postId]);
+                                }
+                                print('younis list: $commentIds');
+                                print(widget.postId);
+                                ref
+                                    .read(commentProvider.notifier)
+                                    .submitComment(
+                                        ref
+                                            .watch(commentProvider)
+                                            .controller
+                                            .text,
+                                        context,
+                                        ref,
+                                        widget.postId);
+                                ref
+                                    .read(commentProvider.notifier)
+                                    .userComments('$userUid', commentIds);
+                                ref
+                                    .read(commentProvider.notifier)
+                                    .controller
+                                    .clear();
+                                ref.read(emojiShowingProvider.notifier).state =
+                                    false;
                               },
                               icon: Icon(
                                 Icons.send,

@@ -11,6 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/riverpod/config/internet_connectivity_checker.dart';
+import '../../domain/riverpod/data/message/message_stream.dart';
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
 import 'auth_page.dart';
 import 'home_page.dart';
@@ -30,6 +31,7 @@ class _MainPageState extends ConsumerState<MainPage>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     setStatus(true);
+
     ref
         .read(internetConnectivityCheckerProvider.notifier)
         .startStremaing(context);
@@ -60,7 +62,6 @@ class _MainPageState extends ConsumerState<MainPage>
     }
   }
 
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
@@ -68,6 +69,11 @@ class _MainPageState extends ConsumerState<MainPage>
     } else {
       setStatus(false);
     }
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override

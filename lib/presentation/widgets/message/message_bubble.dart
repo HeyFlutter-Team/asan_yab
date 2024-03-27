@@ -10,6 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../domain/riverpod/data/message/message_data.dart';
 
+
+
 class MessageBubble extends ConsumerStatefulWidget {
   const MessageBubble(
       {super.key,
@@ -79,9 +81,18 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
               margin: const EdgeInsets.only(top: 10, right: 8, left: 8),
               child: widget.urlImage != ''
                   ? CircleAvatar(
-                      backgroundImage:
-                          CachedNetworkImageProvider(widget.urlImage),
                       maxRadius: 20,
+                      child: ClipRRect(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(30)),
+                        child: CachedNetworkImage(
+                          imageUrl: widget.urlImage,
+                          errorListener: (value) =>  Image.asset(
+                              'assets/Avatar.png'),
+                          placeholder: (context, url) =>  Image.asset(
+                              'assets/Avatar.png'),
+                        ),
+                      ),
                     )
                   : const CircleAvatar(
                       backgroundImage: AssetImage('assets/avatar.jpg'),
@@ -116,180 +127,186 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
               ),
               margin: const EdgeInsets.only(top: 10, right: 8, left: 8),
               padding: const EdgeInsets.all(8),
-              child: InkWell(
-                onTapDown: getPosition,
-                onLongPress: () =>
-                    showMenu(context: context, position: relRectSize, items: [
-                  if (widget.isMe)
+              child: GestureDetector(
+                onHorizontalDragEnd: (DragEndDetails details) {
+                  if (details.primaryVelocity! < 20) {
+                    ref.read(emojiShowingProvider.notifier).state = false;
+                    ref.read(replayProvider.notifier).state =
+                        widget.message.content;
+
+                    if (ref.watch(emojiShowingProvider)) {
+                      FocusScope.of(context).unfocus();
+                    }
+                    SystemChannels.textInput
+                        .invokeMethod('TextInput.show')
+                        .whenComplete(() =>
+                        ref.read(messageProvider.notifier).scrollDown());                  }},
+                child: InkWell(
+                  onTapDown: getPosition,
+                  onLongPress: () =>
+                      showMenu(context: context, position: relRectSize, items: [
+                    if (widget.isMe)
+                      PopupMenuItem(
+                        onTap: () {
+                          if (widget.isMe) {
+                            ref
+                                .read(deleteMessagesProvider.notifier)
+                                .deleteSingleMessage(
+                                    FirebaseAuth.instance.currentUser!.uid,
+                                    widget.message.receiverId,
+                                    widget.message.content);
+                          }
+                        },
+                        child: const Text(
+                          'Deleted',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400, fontSize: 14),
+                        ),
+                      ),
                     PopupMenuItem(
                       onTap: () {
-                        if (widget.isMe) {
-                          ref
-                              .read(deleteMessagesProvider.notifier)
-                              .deleteSingleMessage(
-                                  FirebaseAuth.instance.currentUser!.uid,
-                                  widget.message.receiverId,
-                                  widget.message.content);
+                        ref.read(emojiShowingProvider.notifier).state = false;
+                        ref.read(replayProvider.notifier).state =
+                            widget.message.content;
+
+                        if (ref.watch(emojiShowingProvider)) {
+                          FocusScope.of(context).unfocus();
                         }
+                        SystemChannels.textInput
+                            .invokeMethod('TextInput.show')
+                            .whenComplete(() =>
+                                ref.read(messageProvider.notifier).scrollDown());
+                        ref.read(replayPositionProvider.notifier).saveScrollPosition(ref);
                       },
                       child: const Text(
-                        'Deleted',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 14),
+                        'Replay',
+                        style:
+                            TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
                       ),
                     ),
-                  PopupMenuItem(
-                    onTap: () {
-                      ref.read(emojiShowingProvider.notifier).state =false;
-                      ref.read(replayProvider.notifier).state =
-                          widget.message.content;
-
-                      if (ref.watch(emojiShowingProvider)) {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                      }
-                      SystemChannels.textInput
-                          .invokeMethod('TextInput.show')
-                          .whenComplete(() =>
-                              ref.read(messageProvider.notifier).scrollDown());
-                    },
-                    child: const Text(
-                      'Replay',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
-                    ),
-                  ),
-                ]),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: widget.isMe
-                      ? CrossAxisAlignment.start
-                      : CrossAxisAlignment.end,
-                  children: [
-                    widget.isImage
-                        ? Column(
-                            children: [
-                              Container(
-                                height: 200,
-                                width: 200,
-                                alignment: Alignment.bottomCenter,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  image: DecorationImage(
-                                      image: CachedNetworkImageProvider(widget
-                                          .message.content
-                                          .split(' ')
-                                          .first),
-                                      fit: BoxFit.fill),
+                  ]),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: widget.isMe
+                        ? CrossAxisAlignment.start
+                        : CrossAxisAlignment.end,
+                    children: [
+                      widget.isImage
+                          ? Column(
+                              children: [
+                                Container(
+                                  height: 200,
+                                  width: 200,
+                                  alignment: Alignment.bottomCenter,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(30)),
+                                    child: CachedNetworkImage(
+                                      imageUrl: widget.urlImage,
+                                      placeholder: (context, url) =>  Image.asset(
+                                          'assets/Avatar.png'),
+                                      errorListener: (value) =>  Image.asset(
+                                          'assets/Avatar.png'),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          )
-                        : Column(
-                            children: [
-                              widget.replayMessage == ''
-                                  ? const SizedBox()
-                                  : KeyedSubtree(
-                                      key: _replayContainerKey,
-                                      child: InkWell(
-                                        onTap: () {
-                                          RenderBox renderBox =
-                                              _replayContainerKey
-                                                      .currentContext!
-                                                      .findRenderObject()
-                                                  as RenderBox;
-                                          double offset = renderBox
-                                              .localToGlobal(Offset.zero)
-                                              .dy;
+                              ],
+                            )
+                          : Column(
+                              children: [
+                                widget.replayMessage == ''
+                                    ? const SizedBox()
+                                    : KeyedSubtree(
+                                        key: _replayContainerKey,
+                                        child: InkWell(
+                                          onTap: () {
 
-                                          ref
-                                              .read(messageProvider.notifier)
-                                              .scrollController
-                                              .animateTo(
-                                                offset,
-                                                duration: const Duration(
-                                                    milliseconds: 500),
-                                                curve: Curves.easeInOut,
-                                              );
-                                        },
-                                        child: Container(
-                                          margin: const EdgeInsets.only(
-                                              bottom: 8, right: 10, left: 10),
-                                          padding: const EdgeInsets.only(
-                                              right: 5, left: 5, bottom: 5),
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(12)),
-                                            color: Colors.grey.withOpacity(0.5),
-                                          ),
-                                          child: SizedBox(
-                                            height: 60,
-                                            child: ListTile(
-                                              title: Text(
-                                                textDirection: widget.isMe
-                                                    ? TextDirection.rtl
-                                                    : TextDirection.ltr,
-                                                widget.isMe
-                                                    ? widget.friendName
-                                                    : '${profileDetails?.name}',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 17,
+
+                                            ref.read(replayPositionProvider.notifier).setSavedScrollPosition(ref);;
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.only(
+                                                bottom: 8, right: 10, left: 10),
+                                            padding: const EdgeInsets.only(
+                                                right: 5, left: 5, bottom: 5),
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(12)),
+                                              color: Colors.grey.withOpacity(0.5),
+                                            ),
+                                            child: SizedBox(
+                                              height: 60,
+                                              child: ListTile(
+                                                title: Text(
+                                                  textDirection: widget.isMe
+                                                      ? TextDirection.rtl
+                                                      : TextDirection.ltr,
+                                                  widget.isMe
+                                                      ? widget.friendName
+                                                      : '${profileDetails?.name}',
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 17,
+                                                      color: Colors.black
+                                                          .withOpacity(0.7)),
+                                                ),
+                                                subtitle: Text(
+                                                  textDirection: widget.isMe
+                                                      ? TextDirection.rtl
+                                                      : TextDirection.ltr,
+                                                  widget.message.replayMessage
+                                                          .isNotEmpty
+                                                      ? widget
+                                                          .message.replayMessage
+                                                          .substring(
+                                                              0,
+                                                              widget
+                                                                          .message
+                                                                          .replayMessage
+                                                                          .length >
+                                                                      20
+                                                                  ? 19
+                                                                  : widget
+                                                                      .message
+                                                                      .replayMessage
+                                                                      .length)
+                                                      : '',
+                                                  style: TextStyle(
+                                                    fontSize: 15,
                                                     color: Colors.black
-                                                        .withOpacity(0.7)),
-                                              ),
-                                              subtitle: Text(
-                                                textDirection: widget.isMe
-                                                    ? TextDirection.rtl
-                                                    : TextDirection.ltr,
-                                                widget.message.replayMessage
-                                                        .isNotEmpty
-                                                    ? widget
-                                                        .message.replayMessage
-                                                        .substring(
-                                                            0,
-                                                            widget
-                                                                        .message
-                                                                        .replayMessage
-                                                                        .length >
-                                                                    20
-                                                                ? 19
-                                                                : widget
-                                                                    .message
-                                                                    .replayMessage
-                                                                    .length)
-                                                    : '',
-                                                style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Colors.black
-                                                      .withOpacity(0.6),
+                                                        .withOpacity(0.6),
+                                                  ),
                                                 ),
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                widget.message.content,
-                                style: TextStyle(
-                                  fontSize: _calculateFontSize(
-                                      widget.message.content),
-                                  color:
-                                      widget.isMe ? Colors.black : Colors.black,
-                                  overflow: TextOverflow.ellipsis,
+                                const SizedBox(
+                                  height: 10,
                                 ),
-                                maxLines: 50,
-                              ),
-                            ],
-                          ),
-                    // const SizedBox(height: 5),
-                    // Text(timeago.format(message.sentTime.toLocal()))
-                  ],
+                                Text(
+                                  widget.message.content,
+                                  style: TextStyle(
+                                    fontSize: _calculateFontSize(
+                                        widget.message.content),
+                                    color:
+                                        widget.isMe ? Colors.black : Colors.black,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  maxLines: 50,
+                                ),
+                              ],
+                            ),
+                      // const SizedBox(height: 5),
+                      // Text(timeago.format(message.sentTime.toLocal()))
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -303,9 +320,18 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
                       maxRadius: 20,
                     )
                   : CircleAvatar(
-                      backgroundImage:
-                          CachedNetworkImageProvider(profileDetails.imageUrl),
                       maxRadius: 20,
+                      child: ClipRRect(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(30)),
+                        child: CachedNetworkImage(
+                          imageUrl: profileDetails.imageUrl,
+                          errorListener: (value) =>
+                              const AssetImage('assets/avatar.jpg'),
+                          placeholder: (context, url) =>
+                              Image.asset('assets/avatar.jpg'),
+                        ),
+                      ),
                     ),
             ),
         ],

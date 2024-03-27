@@ -8,10 +8,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../data/models/users.dart';
-import '../../../domain/riverpod/data/other_user_data.dart';
-import 'other_profile.dart';
-
 class ListOfFollowers extends ConsumerStatefulWidget {
   const ListOfFollowers({super.key});
 
@@ -20,16 +16,15 @@ class ListOfFollowers extends ConsumerStatefulWidget {
 }
 
 class _ListOfFollowersState extends ConsumerState<ListOfFollowers> {
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       ref.read(listOfDataFollowersProvider);
       ref.read(userDetailsProvider.notifier).getCurrentUserData();
     });
   }
+
   @override
   Widget build(BuildContext context) {
     final persons = ref.watch(listOfDataFollowersProvider);
@@ -57,9 +52,7 @@ class _ListOfFollowersState extends ConsumerState<ListOfFollowers> {
                       itemCount: persons.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          onTap: () {
-                            // todo for visite
-                          },
+                          onTap: () {},
                           title: Text(persons[index]['user'].name!),
                           leading: persons[index]['user'].imageUrl == ''
                               ? const CircleAvatar(
@@ -69,8 +62,18 @@ class _ListOfFollowersState extends ConsumerState<ListOfFollowers> {
                                 )
                               : CircleAvatar(
                                   radius: 33,
-                                  backgroundImage: CachedNetworkImageProvider(
-                                      '${persons[index]['user'].imageUrl}'),
+                                  child: ClipRRect(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(30)),
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          '${persons[index]['user'].imageUrl}',
+                                      placeholder: (context, url) =>  Image.asset(
+                                          'assets/Avatar.png'),
+                                      errorListener: (value) =>  Image.asset(
+                                          'assets/Avatar.png'),
+                                    ),
+                                  ),
                                 ),
                           trailing: ElevatedButton(
                               onPressed: () async {
@@ -116,8 +119,9 @@ class _ListOfFollowersState extends ConsumerState<ListOfFollowers> {
                         itemCount: persons.length,
                         itemBuilder: (context, index) {
                           return ListTile(
-                            title: Text(persons[index]['user'].name!),
-                            leading: persons[index]['user'].imageUrl == ''
+                            title: Text(
+                                persons[index]['user'].name.toString().length>18?'${persons[index]['user'].name!}'.substring(0,18):persons[index]['user'].name!),
+                            leading: persons[index]['user'].imageUrl == '' ||persons[index]['user'].imageUrl==null
                                 ? const CircleAvatar(
                                     radius: 33,
                                     backgroundImage:
@@ -125,8 +129,18 @@ class _ListOfFollowersState extends ConsumerState<ListOfFollowers> {
                                   )
                                 : CircleAvatar(
                                     radius: 33,
-                                    backgroundImage: CachedNetworkImageProvider(
-                                        '${persons[index]['user'].imageUrl}'),
+                                    child: ClipRRect(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(30)),
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            '${persons[index]['user'].imageUrl}',
+                                        errorListener: (value) =>  Image.asset(
+                                            'assets/Avatar.png'),
+                                        placeholder: (context, url) =>  Image.asset(
+                                            'assets/Avatar.png'),
+                                      ),
+                                    ),
                                   ),
                             trailing: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
@@ -136,7 +150,7 @@ class _ListOfFollowersState extends ConsumerState<ListOfFollowers> {
                                       .read(followHttpsProvider.notifier)
                                       .updateFollowers(
                                           uid, persons[index]['user'].uid!)
-                                      .whenComplete(()async =>await ref
+                                      .whenComplete(() async => await ref
                                           .read(followerProvider.notifier)
                                           .followOrUnFollow(
                                               uid, persons[index]['user'].uid!))
@@ -148,7 +162,7 @@ class _ListOfFollowersState extends ConsumerState<ListOfFollowers> {
                                         !persons[index]['followBack'];
                                   });
                                   if (context.mounted) {
-                                    await  ref
+                                    await ref
                                         .read(userDetailsProvider.notifier)
                                         .getCurrentUserData();
                                   }

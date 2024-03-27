@@ -1,13 +1,12 @@
-import 'package:asan_yab/domain/riverpod/data/other_user_data.dart';
+import 'package:asan_yab/core/utils/utils.dart';
+import 'package:asan_yab/domain/riverpod/config/internet_connectivity_checker.dart';
 import 'package:asan_yab/domain/riverpod/data/search_id.dart';
-import 'package:asan_yab/domain/riverpod/screen/follow_checker.dart';
 import 'package:asan_yab/presentation/pages/profile/other_profile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
   const SearchPage({super.key});
@@ -25,38 +24,40 @@ class _SearchPageState extends ConsumerState<SearchPage> {
           elevation: 1,
           shadowColor: Colors.white,
           title: TextFormField(
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+              LengthLimitingTextInputFormatter(13),
+            ],
             keyboardType: TextInputType.number,
             controller: searchController,
-            // autofocus: true,
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: AppLocalizations.of(context)?.searchById,
-              hintStyle: const TextStyle(
-                  fontSize: 18, fontWeight: FontWeight.w500),
+              hintStyle:
+                  const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
             ),
-            // onFieldSubmitted: (value) {
-            //   print(value);
-            //
-            // },
             onChanged: (value) {
-              try {
-                final id = int.parse(value);
-                ref.read(searchProvider.notifier).getProfile(id);
+              if(ref.watch(internetConnectivityCheckerProvider.notifier).isConnected){
+                try {
+                  final id = int.parse(value);
+                  ref.read(searchProvider.notifier).getProfile(id);
 
-                if (value.isEmpty) {
-                  ref.refresh(searchProvider.notifier).clearSearch();
+                  if (value.isEmpty) {
+                    ref.refresh(searchProvider.notifier).clearSearch();
+                  }
+                  if (value.isNotEmpty) {
+                    ref.refresh(searchLoadingProvider.notifier).state = true;
+                  } else {
+                    ref.refresh(searchLoadingProvider.notifier).state = false;
+                  }
+                } catch (e) {
+                  print('Error parsing input: $e');
+                  // Handle the error here, such as displaying a message to the user
                 }
-                if (value.isNotEmpty) {
-                  ref.refresh(searchLoadingProvider.notifier).state = true;
-                } else {
-                  ref.refresh(searchLoadingProvider.notifier).state = false;
-                }
-              } catch (e) {
-                print('Error parsing input: $e');
-                // Handle the error here, such as displaying a message to the user
+              }else{
+                Utils.lostNetSnackBar(context);
               }
             },
-
           ),
           actions: [
             Padding(
@@ -88,8 +89,8 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             ? Center(
                 child: Text(
                 AppLocalizations.of(context)!.findingFriendById,
-                style: const TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.w500),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               ))
             : ListView.separated(
                 padding: const EdgeInsets.all(12),
@@ -99,35 +100,46 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                   // final items = ref.watch(searchTypeSenseProvider);
                   return InkWell(
                     onTap: () {
-                      // todo for visite
-                      ref
-                          .read(otherUserProvider.notifier)
-                          .setDataUser(ref.watch(searchProvider)[index]);
-                      ref.read(followerProvider.notifier).followOrUnFollow(
-                          FirebaseAuth.instance.currentUser!.uid,
-                          ref.watch(searchProvider)[index].uid!);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const OtherProfile(),
+                            builder: (context) =>  OtherProfile(
+                              user: ref.watch(searchProvider)[index],
+                              uid:ref.watch(searchProvider)[index].uid! ,
+                            ),
                           ));
                     },
                     child: Row(
                       children: [
-                        ref.watch(searchProvider)[index].imageUrl==''?
-                        const CircleAvatar(
-                          radius: 30,
-                          backgroundImage: AssetImage('assets/Avatar.png'),
-                        )
-                        :CircleAvatar(
-                          radius: 30,
-                          backgroundImage: CachedNetworkImageProvider(
-                              ref.watch(searchProvider)[index].imageUrl ?? ''),
-                        ),
+                        ref.watch(searchProvider)[index].imageUrl == '' ||
+                            ref.watch(searchProvider)[index].imageUrl.isEmpty
+                            ? const CircleAvatar(
+                                radius: 30,
+                                backgroundImage:
+                                    AssetImage('assets/Avatar.png'),
+                              )
+                            : CircleAvatar(
+                                radius: 30,
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(30)),
+                                  child: CachedNetworkImage(
+                                    imageUrl: ref
+                                        .watch(searchProvider)[index]
+                                        .imageUrl,
+                                    errorListener: (value) =>  Image.asset(
+                                        'assets/Avatar.png'),
+                                    placeholder: (context, url) =>  Image.asset(
+                                        'assets/Avatar.png'),
+                                  ),
+                                ),
+                              ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            ref.watch(searchProvider)[index].name ?? 'no data',
+                            ref.watch(searchProvider)[index].name.length > 15
+                                ? ref.watch(searchProvider)[index].name.substring(0, 15)
+                                : ref.watch(searchProvider)[index].name,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               fontSize: 18.0,

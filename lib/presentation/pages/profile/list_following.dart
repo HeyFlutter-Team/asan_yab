@@ -8,9 +8,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../domain/riverpod/data/other_user_data.dart';
-import '../../../domain/riverpod/data/search_id.dart';
-
 class ListOfFollowing extends ConsumerStatefulWidget {
   const ListOfFollowing({super.key});
 
@@ -50,7 +47,6 @@ class _ListOfFollowingState extends ConsumerState<ListOfFollowing> {
                             "is ture ${persons[index]['user'].uid! == uid}");
                         return ListTile(
                           onTap: () {
-                            // todo for visite
                           },
                           title: Text(persons[index]['user'].name!),
                           leading: persons[index]['user'].imageUrl == ''
@@ -61,8 +57,18 @@ class _ListOfFollowingState extends ConsumerState<ListOfFollowing> {
                                 )
                               : CircleAvatar(
                                   radius: 33,
-                                  backgroundImage: CachedNetworkImageProvider(
-                                      '${persons[index]['user'].imageUrl}'),
+                                  child: ClipRRect(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(30)),
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          '${persons[index]['user'].imageUrl}',
+                                      placeholder: (context, url) =>  Image.asset(
+                                          'assets/Avatar.png'),
+                                      errorListener: (value) =>  Image.asset(
+                                          'assets/Avatar.png'),
+                                    ),
+                                  ),
                                 ),
                           trailing: ElevatedButton(
                             onPressed: () async {
@@ -108,23 +114,18 @@ class _ListOfFollowingState extends ConsumerState<ListOfFollowing> {
                           debugPrint(
                               "is ture ${persons[index]['user'].uid! == uid}");
                           return ListTile(
-                            onTap: () async{
-                              ref
-                                  .read(otherUserProvider.notifier)
-                                  .setDataUser(persons[index]['user']);
-                             await ref.read(followerProvider.notifier).followOrUnFollow(
-                                  FirebaseAuth.instance.currentUser!.uid,
-                                  persons[index]['user'].uid).whenComplete(() =>
-                                 Navigator.push(
-                                     context,
-                                     MaterialPageRoute(
-                                       builder: (context) => const OtherProfile(),
-                                     )));
-
+                            onTap: () async {
+                               Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                             OtherProfile(user: persons[index]['user'],
+                                             uid:persons[index]['user'].uid ,),
+                                      ));
                             },
-
-                            title: Text(persons[index]['user'].name!),
-                            leading: persons[index]['user'].imageUrl == ''
+                            title: Text(
+                                persons[index]['user'].name.toString().length>18?'${persons[index]['user'].name!}'.substring(0,18):persons[index]['user'].name!),
+                            leading: persons[index]['user'].imageUrl == '' || persons[index]['user'].imageUrl==null
                                 ? const CircleAvatar(
                                     radius: 33,
                                     backgroundImage:
@@ -132,53 +133,71 @@ class _ListOfFollowingState extends ConsumerState<ListOfFollowing> {
                                   )
                                 : CircleAvatar(
                                     radius: 33,
-                                    backgroundImage: CachedNetworkImageProvider(
-                                        '${persons[index]['user'].imageUrl}'),
+                                    child: ClipRRect(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(30)),
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            '${persons[index]['user'].imageUrl}',
+                                        errorListener: (value) =>  Image.asset(
+                                            'assets/Avatar.png'),
+                                        placeholder: (context, url) =>  Image.asset(
+                                            'assets/Avatar.png'),
+                                      ),
+                                    ),
                                   ),
                             trailing: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red.shade300
-                              ),
+                                  backgroundColor: Colors.red.shade300),
                               onPressed: () async {
-                                ref.read(loadingFollowOrUnfollowProvider(index).notifier).state = true;
+                                ref
+                                    .read(loadingFollowOrUnfollowProvider(index)
+                                        .notifier)
+                                    .state = true;
                                 await ref
                                     .read(followHttpsProvider.notifier)
                                     .updateFollowers(
                                         uid, persons[index]['user'].uid!)
-                                    .whenComplete(()async => await ref
+                                    .whenComplete(() async => await ref
                                         .read(followerProvider.notifier)
                                         .followOrUnFollow(
                                             uid, persons[index]['user'].uid!))
-                                    .whenComplete(()  => ref
+                                    .whenComplete(() => ref
                                             .read(listOfDataProvider.notifier)
                                             .state[index]['follow'] =
                                         !persons[index]['follow']);
                                 if (context.mounted) {
-                                 await ref
+                                  await ref
                                       .read(userDetailsProvider.notifier)
                                       .getCurrentUserData()
-                                 .whenComplete((){
-                                   ref.read(listOfDataProvider.notifier).state =
-                                   List.of(persons)..removeAt(index);
-                                 });
+                                      .whenComplete(() {
+                                    ref
+                                        .read(listOfDataProvider.notifier)
+                                        .state = List.of(persons)
+                                      ..removeAt(index);
+                                  });
                                 }
-                                ref.read(loadingFollowOrUnfollowProvider(index).notifier).state = false;
+                                ref
+                                    .read(loadingFollowOrUnfollowProvider(index)
+                                        .notifier)
+                                    .state = false;
                               },
-                              child: ref.watch(loadingFollowOrUnfollowProvider(index))
+                              child: ref.watch(
+                                      loadingFollowOrUnfollowProvider(index))
                                   ? const SizedBox(
-                                    height: 7,
-                                    width: 7,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white70,
+                                      height: 7,
+                                      width: 7,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white70,
+                                      ),
+                                    )
+                                  : Text(
+                                      persons[index]['follow']
+                                          ? 'Follow'
+                                          : 'Unfollow',
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
-                                  )
-                                  :Text(persons[index]['follow']
-                                  ? 'Follow'
-                                  : 'Unfollow',
-                              style: const TextStyle(
-                                color: Colors.white
-                              ),)
-                              ,
                             ),
                           );
                         },

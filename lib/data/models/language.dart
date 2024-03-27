@@ -1,5 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 enum Language {
   farsi,
   english,
@@ -39,4 +37,3 @@ extension LanguageExtension on Language {
     }
   }
 }
-

@@ -85,7 +85,7 @@
 
 
   "profile_future_error": "Information not available",
-  "profile_copy_id_snack_bar": "Your ID was copied to the clipboard",
+  "profile_copy_id_snack_bar": "ID was copied to the clipboard",
   "profile_about_us_listTile": "About Us",
   "profile_edit_button_text": "Edit",
   "profile_buttonSheet_camera": "Camera",
@@ -176,9 +176,9 @@
   "chat_message": "Message",
   "message_check_user1": "To access the chat you must\n  Log in to your account...",
   "message_check_user2": "Enter to Email",
-  "message_personal_score": "current score",
-  "message_description": "To get points, \n you must introduce Asan Yab \n to two of your friends \n and they must enter your personal ID in the field \n mentioned below during registration...>",
-  "message_your_id": "Your Id =",
+  "message_personal_score": "Current score",
+  "message_description": "To get points, \n you must introduce Asan Yab \n to two of your friends \n and they must enter your personal ID in the field \n mentioned below during registration =",
+  "message_your_id": "Your Id",
   "for_add_comment": "for add comment",
   "log_in": "Log in",
   "emoji_recent": "There are no recent emojis",

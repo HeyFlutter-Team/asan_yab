@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:asan_yab/core/utils/download_image.dart';
+import 'package:asan_yab/core/utils/utils.dart';
 import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/domain/riverpod/config/internet_connectivity_checker.dart';
 import 'package:asan_yab/domain/riverpod/data/toggle_favorite.dart';
 import 'package:asan_yab/presentation/widgets/comments.dart';
 import 'package:asan_yab/presentation/widgets/hospital_doctors_widget.dart';
@@ -8,6 +10,7 @@ import 'package:asan_yab/presentation/widgets/mall_new_items_widget.dart';
 import 'package:asan_yab/presentation/widgets/rating.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -36,21 +39,26 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await ref.read(getSingleProvider.notifier).fetchSinglePlace(widget.id);
-     await ref.read(getInformationProvider).getFavorite();
-      final provider = ref.read(favoriteProvider.notifier);
-      final toggle = provider.isExist(widget.id);
-      ref.read(toggleProvider.notifier).toggle(toggle);
-
-      ref
-          .read(firebaseRatingProvider.notifier)
-          .getAverageRating(postId: widget.id);
+      if (!mounted) return;
+      if(ref.watch(internetConnectivityCheckerProvider.notifier).isConnected) {
+        await fetchDetails();
+      }
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  Future<void> fetchDetails() async {
+    try {
+      await ref.read(getSingleProvider.notifier).fetchSinglePlace(widget.id);
+      await ref.read(getInformationProvider).getFavorite();
+      final provider = ref.read(favoriteProvider.notifier);
+      final toggle = provider.isExist(widget.id);
+      ref.read(toggleProvider.notifier).toggle(toggle);
+      await ref
+          .read(firebaseRatingProvider.notifier)
+          .getAverageRating(postId: widget.id);
+    } catch (e) {
+      // Handle errors
+    }
   }
 
   @override
@@ -64,20 +72,14 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
     final isRTL = ref.watch(languageProvider).code == 'fa';
     final places = ref.watch(getSingleProvider);
     final languageText = AppLocalizations.of(context);
-    return PopScope(
-      onPopInvoked: (didPop) {
-        ref.read(getSingleProvider.notifier).state=null;
-      },
+    final isConnectedNet = ref.watch(internetConnectivityCheckerProvider.notifier).isConnected;
+    return GestureDetector(
+      onHorizontalDragEnd: (DragEndDetails details) {
+        if (details.primaryVelocity! > 10) {
+          Navigator.of(context).pop();
+        }},
       child: Scaffold(
-        //backgroundColor: Theme.of(context).primaryColor,
-        body: places == null
-            ? const Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 5,
-                  color: Colors.blueGrey,
-                ),
-              )
-            : Column(
+        body: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 35),
@@ -88,7 +90,6 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                       children: [
                         IconButton(
                           onPressed: () {
-                            ref.read(getSingleProvider.notifier).state=null;
                             Navigator.pop(context);
                           },
                           icon: const Icon(Icons.arrow_back),
@@ -98,38 +99,47 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                           onPressed: () {
                             bool isLogin =
                                 FirebaseAuth.instance.currentUser != null;
-                            if (isLogin) {
-                              ref.watch(getInformationProvider).toggle(widget.id);
-                              ref.watch(getInformationProvider).setFavorite();
+                            if (ref
+                                .watch(internetConnectivityCheckerProvider
+                                    .notifier)
+                                .isConnected) {
+                              if (isLogin) {
+                                ref
+                                    .watch(getInformationProvider)
+                                    .toggle(widget.id);
+                                ref.watch(getInformationProvider).setFavorite();
 
-                              if (!ref
-                                  .watch(favoriteProvider.notifier)
-                                  .isExist(places.id)) {
-                                DownloadImage.getImage(
-                                        places.logo, places.coverImage, context)
-                                    .whenComplete(() {
-                                  Navigator.pop(context);
+                                if (!ref
+                                    .watch(favoriteProvider.notifier)
+                                    .isExist('${places?.id}')) {
+                                  DownloadImage.getImage('${places?.logo}',
+                                          '${places?.coverImage}', context)
+                                      .whenComplete(() {
+                                    Navigator.pop(context);
+                                    provider.toggleFavorite(
+                                        '${places?.id}',
+                                        places!,
+                                        addressData,
+                                        phoneData,
+                                        DownloadImage.logo,
+                                        DownloadImage.coverImage);
+                                  });
+                                } else {
                                   provider.toggleFavorite(
-                                      places.id,
-                                      places,
+                                      '${places?.id}',
+                                      places!,
                                       addressData,
                                       phoneData,
                                       DownloadImage.logo,
                                       DownloadImage.coverImage);
-                                });
+                                }
                               } else {
-                                provider.toggleFavorite(
-                                    places.id,
-                                    places,
-                                    addressData,
-                                    phoneData,
-                                    DownloadImage.logo,
-                                    DownloadImage.coverImage);
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                    content: Text(
+                                        '${languageText?.details_page_snack_bar}')));
                               }
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                  content: Text(
-                                      '${languageText?.details_page_snack_bar}')));
+                              Utils.lostNetSnackBar(context);
                             }
                           },
                           icon: ref.watch(toggleProvider)
@@ -143,6 +153,17 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                       ],
                     ),
                   ),
+                  places == null
+                      ?  Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(top: MediaQuery.of(context).size.height/2.5),
+                          child: const CircularProgressIndicator(
+                            strokeWidth: 5,
+                            color: Colors.red,
+                          ),
+                        ),
+                      )
+                      :
                   Expanded(
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.only(bottom: 40, top: 12),
@@ -152,7 +173,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                             children: [
                               const SizedBox(height: 10),
                               (places.coverImage == '')
-                                  ? const CircularProgressIndicator()
+                                  ? const CircularProgressIndicator(color: Colors.red,)
                                   : Container(
                                       margin: const EdgeInsets.symmetric(
                                           horizontal: 12),
@@ -169,16 +190,29 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                       ),
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(12),
-                                        child: CachedNetworkImage(
-                                          imageUrl: places.coverImage,
-                                          width: double.infinity,
-                                          height: size.height * 0.31,
-                                          fit: BoxFit.cover,
-                                          placeholder: (context, url) =>
-                                              Image.asset(
-                                            ImageRes.asanYab,
-                                          ),
-                                        ),
+                                        child:
+                                        isConnectedNet?
+                                        places.coverImage != '' &&places.coverImage.isNotEmpty
+                                            ? CachedNetworkImage(
+                                                imageUrl: places.coverImage,
+                                                width: double.infinity,
+                                                height: size.height * 0.31,
+                                                fit: BoxFit.cover,
+                                                placeholder: (context, url) =>
+                                                    Image.asset(
+                                                  ImageRes.asanYab,
+                                                ),
+                                                errorListener: (value) =>
+                                                    Image.asset(
+                                                  ImageRes.asanYab,
+                                                ),
+                                              )
+                                            : Image.asset(
+                                                ImageRes.asanYab,
+                                              )
+                                            :Image.asset(
+                                          ImageRes.asanYab,
+                                        )
                                       ),
                                     ),
                               const SizedBox(height: 20),
@@ -190,7 +224,8 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
-                                      fontSize: 24, fontWeight: FontWeight.bold),
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                               RatingWidgets(
@@ -207,8 +242,9 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                   : CustomCard(
                                       title:
                                           '${languageText?.details_page_1_custom_card}',
-                                      child: Text(places.description,
-                                      textDirection: TextDirection.rtl,
+                                      child: Text(
+                                        places.description,
+                                        textDirection: TextDirection.rtl,
                                       ),
                                     ),
                               Padding(
@@ -240,21 +276,23 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                       height: size.height * 0.25,
                                       child: places.gallery.isEmpty
                                           ? const CircularProgressIndicator(
-                                              color: Colors.blueGrey,
+                                              color: Colors.red,
                                               strokeWidth: 3,
                                             )
                                           : ListView.builder(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 12),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 12),
                                               scrollDirection: Axis.horizontal,
                                               itemCount: places.gallery.length,
                                               itemBuilder: (context, index) {
                                                 return Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      top: 6,
-                                                      left: 2,
-                                                      right: 2,
-                                                      bottom: 18),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 6,
+                                                          left: 2,
+                                                          right: 2,
+                                                          bottom: 18),
                                                   child: PageViewItem(
                                                       selectedIndex: index,
                                                       gallery: places.gallery),
@@ -285,8 +323,8 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                             const NeverScrollableScrollPhysics(),
                                         shrinkWrap: true,
                                         itemBuilder: (context, index) {
-                                          phoneData
-                                              .add(places.addresses[index].phone);
+                                          phoneData.add(
+                                              places.addresses[index].phone);
                                           addressData.add(
                                               '${places.addresses[index].branch}: ${places.addresses[index].address}');
                                           return Row(
@@ -358,10 +396,17 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                       .isEmpty)
                                                   ? const SizedBox(height: 0)
                                                   : Directionality(
-
-                                                textDirection:isRTL? TextDirection.rtl:TextDirection.ltr,
-                                                    child: buildPhoneNumberWidget(context: context, isRTL: isRTL, phone:places.addresses[index].phone )
-                                                  ),
+                                                      textDirection: isRTL
+                                                          ? TextDirection.rtl
+                                                          : TextDirection.ltr,
+                                                      child:
+                                                          buildPhoneNumberWidget(
+                                                              context: context,
+                                                              isRTL: isRTL,
+                                                              phone: places
+                                                                  .addresses[
+                                                                      index]
+                                                                  .phone)),
                                             ],
                                           );
                                         },

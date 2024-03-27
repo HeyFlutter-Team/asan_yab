@@ -32,7 +32,7 @@ class DownloadImage {
               height: 100,
               child: AlertDialog(
                 elevation: 4,
-                content:  Row(
+                content: Row(
                   children: [
                     const SizedBox(
                       height: 30,
@@ -41,7 +41,8 @@ class DownloadImage {
                           color: Colors.blueGrey, strokeWidth: 3.0),
                     ),
                     const SizedBox(width: 12),
-                    Text('${languageText?.download_image_loading}',
+                    Text(
+                      '${languageText?.download_image_loading}',
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

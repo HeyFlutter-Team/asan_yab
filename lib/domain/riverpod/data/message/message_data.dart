@@ -45,17 +45,34 @@ class MessageProvider extends StateNotifier<List<MessageModel>> {
         final maxScroll = scrollController.position.maxScrollExtent;
         scrollController.animateTo(
           maxScroll,
-          duration: const Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 200),
           curve: Curves.easeOut,
         );
       }
     });
   }
-
-
-
-
-
 }
 
 final messageLoadingProvider = StateProvider((ref) => false);
+
+class ReplayScroll extends ChangeNotifier {
+  double savedScrollPosition = 0.0;
+  void saveScrollPosition(WidgetRef ref) {
+    savedScrollPosition =
+        ref.read(messageProvider.notifier).scrollController.position.pixels;
+    notifyListeners();
+    print('savedScrool $savedScrollPosition');
+  }
+
+  void setSavedScrollPosition(WidgetRef ref) {
+    ref
+        .read(messageProvider.notifier)
+        .scrollController
+        .jumpTo(savedScrollPosition);
+    notifyListeners();
+
+  }
+}
+
+
+final replayPositionProvider = ChangeNotifierProvider<ReplayScroll>((ref) => ReplayScroll());

@@ -1,4 +1,6 @@
+import 'package:asan_yab/core/utils/utils.dart';
 import 'package:asan_yab/data/models/place.dart';
+import 'package:asan_yab/domain/riverpod/config/internet_connectivity_checker.dart';
 import 'package:asan_yab/presentation/pages/search_notifire.dart';
 import 'package:asan_yab/presentation/pages/search_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -43,30 +45,32 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
-        //shadowColor: Colors.blue,
-        //backgroundColor: Theme.of(context).primaryColor,
         title: TextFormField(
-          controller: searchController,
-          // autofocus: true,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: languageText!.search_bar_hint_text,
-          ),
-          onChanged: (value) {
-            ref
-                .read(searchNotifierProvider.notifier)
-                .sendQuery(value.trimLeft());
-            ref.read(userDataProvider);
-            if (value.isEmpty) {
-              ref.read(searchNotifierProvider.notifier).clear;
-            }
-            if (value.isNotEmpty) {
-              ref.refresh(searchLoadingProvider.notifier).state = true;
-            } else {
-              ref.refresh(searchLoadingProvider.notifier).state = false;
-            }
-          },
-        ),
+            controller: searchController,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: languageText!.search_bar_hint_text,
+            ),
+            onChanged: (value) {
+              if (ref
+                  .watch(internetConnectivityCheckerProvider.notifier)
+                  .isConnected) {
+                ref
+                    .read(searchNotifierProvider.notifier)
+                    .sendQuery(value.trimLeft());
+                ref.read(userDataProvider);
+                if (value.isEmpty) {
+                  ref.read(searchNotifierProvider.notifier).clear;
+                }
+                if (value.isNotEmpty) {
+                  ref.refresh(searchLoadingProvider.notifier).state = true;
+                } else {
+                  ref.refresh(searchLoadingProvider.notifier).state = false;
+                }
+              }else{
+                Utils.lostNetSnackBar(context);
+              }
+            }),
         actions: [
           Padding(
             padding: const EdgeInsets.only(left: 20.0),
@@ -105,15 +109,17 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                       const SizedBox(height: 8),
                   itemBuilder: (context, index) {
                     return InkWell(
-                      onTap: () async{
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DetailsPage(
-                                id: postList[index].id,
-                              ),
+                      onTap: () async {
+                        ref.read(getSingleProvider.notifier).state = null;
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetailsPage(
+                              id: postList[index].id,
                             ),
-                          );
+                          ),
+                        );
                       },
                       child: Row(
                         children: [

@@ -30,7 +30,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
-          (timeStamp) async {
+      (timeStamp) async {
         ref.watch(nearbyPlace.notifier).refresh();
         if (mounted) {
           // Use ref only if the widget is still mounted
@@ -48,7 +48,6 @@ class _HomePageState extends ConsumerState<HomePage> {
       },
     );
   }
-
 
   @override
   void dispose() {
@@ -84,9 +83,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               const SizedBox(height: 16.0),
               NewPlaces(onRefresh: onRefresh),
               const SizedBox(height: 32),
-              widget.isConnected!
-                  ? Categories(onRefresh: onRefresh)
-                  : const SizedBox(),
+              Categories(onRefresh: onRefresh),
               const SizedBox(height: 32),
               ref.watch(nearbyPlace).isEmpty
                   ? const SizedBox(height: 0)

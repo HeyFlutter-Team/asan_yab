@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
 
+import 'package:asan_yab/core/utils/utils.dart';
 import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/domain/riverpod/config/internet_connectivity_checker.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/widgets/custom_text_field.dart';
 import 'package:email_validator/email_validator.dart';
@@ -49,7 +51,6 @@ class _UserDeleteAccountState extends ConsumerState<UserDeleteAccount>
     final loadingState = ref.watch(loadingProvider);
     final languageText = AppLocalizations.of(context);
     final isRTL = ref.watch(languageProvider).code == 'fa';
-    final usersData = ref.watch(userDetailsProvider);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
@@ -120,49 +121,53 @@ class _UserDeleteAccountState extends ConsumerState<UserDeleteAccount>
                         final isValid = formKey.currentState!.validate();
                         if (!isValid) return;
 
-                        final deleteIsLoadings = ref.read(deleteIsLoading.notifier);
-                        final deleteProfiles = ref.read(deleteProfile.notifier);
-                        final deleteAccountProviders = ref.read(deleteAccountProvider.notifier);
-                        FocusScope.of(context).unfocus();
+                        if(ref.watch(internetConnectivityCheckerProvider.notifier).isConnected){
+                          final deleteIsLoadings = ref.read(deleteIsLoading.notifier);
+                          final deleteProfiles = ref.read(deleteProfile.notifier);
+                          final deleteAccountProviders = ref.read(deleteAccountProvider.notifier);
+                          FocusScope.of(context).unfocus();
 
-                        deleteIsLoadings.state = true;
+                          deleteIsLoadings.state = true;
 
-                        try {
-                          await FirebaseAuth.instance.signInWithEmailAndPassword(
-                            email: emailCTRL.text,
-                            password: passwordCTRL.text,
-                          );
-                          await deleteAccountProviders.deleteLocalFavorite(ref);
-                          await deleteAccountProviders.deleteFavorites(widget.uid);
-                          await deleteProfiles.deleteImageAndClearUrl(widget.imageUrl);
-                          await deleteAccountProviders.deleteRating(widget.uid);
-                          await deleteAccountProviders.deleteUserComments(widget.uid);
-                          await deleteAccountProviders.deleteUserDocument(widget.uid);
-                          await deleteAccountProviders.deleteAccount(
-                            emailCTRL.text,
-                            passwordCTRL.text,
-                          );
-                          await deleteAccountProviders.deleteChatCollection(widget.uid);
+                          try {
+                            await FirebaseAuth.instance.signInWithEmailAndPassword(
+                              email: emailCTRL.text,
+                              password: passwordCTRL.text,
+                            );
+                            await deleteAccountProviders.deleteLocalFavorite(ref);
+                            await deleteAccountProviders.deleteFavorites(widget.uid);
+                            await deleteProfiles.deleteImageAndClearUrl(widget.imageUrl);
+                            await deleteAccountProviders.deleteRating(widget.uid);
+                            await deleteAccountProviders.deleteUserComments(widget.uid);
+                            await deleteAccountProviders.deleteUserDocument(widget.uid);
+                            await deleteAccountProviders.deleteAccount(
+                              emailCTRL.text,
+                              passwordCTRL.text,
+                            );
+                            await deleteAccountProviders.deleteChatCollection(widget.uid);
 
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MainPage(),
-                            ),
-                          );
-                        } on FirebaseAuthException catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(languageText.wrong_email,style: const TextStyle(
-                                color: Colors.white
-                              ),),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        } catch (error) {
-                          print('Error: $error');
-                        } finally {
-                          deleteIsLoadings.state = false;
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MainPage(),
+                              ),
+                            );
+                          } on FirebaseAuthException catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(languageText.wrong_email,style: const TextStyle(
+                                    color: Colors.white
+                                ),),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          } catch (error) {
+                            print('Error: $error');
+                          } finally {
+                            deleteIsLoadings.state = false;
+                          }
+                        }else{
+                          Utils.lostNetSnackBar(context);
                         }
                       },
 
