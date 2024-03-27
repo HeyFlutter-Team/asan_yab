@@ -165,6 +165,8 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
                       ),
                     PopupMenuItem(
                       onTap: () {
+                        ref.read(replayPositionProvider.notifier).saveScrollPosition(ref);
+
                         ref.read(emojiShowingProvider.notifier).state = false;
                         ref.read(replayProvider.notifier).state =
                             widget.message.content;
@@ -176,7 +178,6 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
                             .invokeMethod('TextInput.show')
                             .whenComplete(() =>
                                 ref.read(messageProvider.notifier).scrollDown());
-                        ref.read(replayPositionProvider.notifier).saveScrollPosition(ref);
                       },
                       child: const Text(
                         'Replay',
@@ -225,7 +226,7 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
                                           onTap: () {
 
 
-                                            ref.read(replayPositionProvider.notifier).setSavedScrollPosition(ref);;
+                                            ref.read(replayPositionProvider.notifier).setSavedScrollPosition(ref);
                                           },
                                           child: Container(
                                             margin: const EdgeInsets.only(
