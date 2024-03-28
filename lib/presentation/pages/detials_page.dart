@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:asan_yab/core/utils/download_image.dart';
-import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/core/extensions/language.dart';
 import 'package:asan_yab/domain/riverpod/data/toggle_favorite.dart';
 import 'package:asan_yab/presentation/pages/doctors_page.dart';
-import 'package:asan_yab/presentation/pages/newitem_shop.dart';
-import 'package:asan_yab/presentation/widgets/comments.dart';
-import 'package:asan_yab/presentation/widgets/rating.dart';
+import 'package:asan_yab/presentation/pages/shop_new_item.dart';
+import 'package:asan_yab/presentation/widgets/comments_widget.dart';
+import 'package:asan_yab/presentation/widgets/rating_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,13 +14,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/res/image_res.dart';
 import '../../core/utils/convert_digits_to_farsi.dart';
-import '../../data/repositoris/language_repository.dart';
+import '../../data/repositoris/language_repo.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
 import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../../domain/riverpod/data/firebase_rating_provider.dart';
 import '../../domain/riverpod/data/single_place_provider.dart';
-import '../widgets/page_view_item.dart';
-import 'detials_page_offline.dart';
+import '../widgets/custom_cards_widget.dart';
+import '../widgets/page_view_item_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DetailsPage extends ConsumerStatefulWidget {
@@ -38,7 +38,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
     super.initState();
     ref.read(getSingleProvider.notifier).fetchSinglePlace(widget.id);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      ref.read(getInformationProvider).getFavorite();
+      ref.read(getFavoriteProvider).getFavorite();
       final provider = ref.read(favoriteProvider.notifier);
       final toggle = provider.isExist(widget.id);
       ref.read(toggleProvider.notifier).toggle(toggle);
@@ -90,8 +90,8 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                           bool isLogin =
                               FirebaseAuth.instance.currentUser != null;
                           if (isLogin) {
-                            ref.watch(getInformationProvider).toggle(widget.id);
-                            ref.watch(getInformationProvider).setFavorite();
+                            ref.watch(getFavoriteProvider).toggle(widget.id);
+                            ref.watch(getFavoriteProvider).setFavorite();
 
                             if (!ref
                                 .watch(favoriteProvider.notifier)
@@ -187,13 +187,13 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                     fontSize: 24, fontWeight: FontWeight.bold),
                               ),
                             ),
-                            RatingWidgets(postId: places.id),
-                            Comments(postId: places.id),
+                            RatingWidget(postId: places.id),
+                            CommentsWidget(postId: places.id),
                             const SizedBox(height: 12),
                             (places.description == '' ||
                                     places.description.isEmpty)
                                 ? const SizedBox()
-                                : CustomCard(
+                                : CustomCardsWidget(
                                     title:
                                         '${languageText?.details_page_1_custom_card}',
                                     child: Text(places.description),
@@ -239,7 +239,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                     left: 2,
                                                     right: 2,
                                                     bottom: 18),
-                                                child: PageViewItem(
+                                                child: PageViewItemWidget(
                                                     selectedIndex: index,
                                                     gallery: places.gallery),
                                               );
@@ -271,7 +271,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const ItemsSopping(),
+                                                    const ShopNewItem(),
                                               ),
                                             );
                                           },
@@ -487,7 +487,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const Doctors_Page(),
+                                                    const DoctorsPage(),
                                               ),
                                             );
                                           },
@@ -585,7 +585,8 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                 Text(
                                                   maxLines: 1,
                                                   overflow: TextOverflow.fade,
-                                                  places.doctors![index].title,
+                                                  places.doctors![index]
+                                                      .spendTime,
                                                   style: TextStyle(
                                                       fontSize: 15,
                                                       color:
@@ -597,7 +598,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                 Text(
                                                   maxLines: 1,
                                                   overflow: TextOverflow.fade,
-                                                  '${languageText?.details_page_9_custom_card}: ${isRTL ? convertDigitsToFarsi(places.doctors![index].time) : places.doctors![index].time}',
+                                                  '${languageText?.details_page_9_custom_card}: ${isRTL ? convertDigitsToFarsi(places.doctors![index].spendTime) : places.doctors![index].spendTime}',
                                                   style: TextStyle(
                                                     fontSize: 15,
                                                     color:
@@ -614,7 +615,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                   ),
                             (places.addresses.isEmpty)
                                 ? const SizedBox()
-                                : CustomCard(
+                                : CustomCardsWidget(
                                     title:
                                         '${languageText?.details_page_3_custom_card}',
                                     child: ListView.builder(

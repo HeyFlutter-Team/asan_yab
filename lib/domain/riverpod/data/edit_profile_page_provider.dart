@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/constants/firebase_collection_names.dart';
+
 class EditProfileState {
   String name = '';
   String lastName = '';
@@ -13,8 +15,8 @@ class EditProfileState {
   });
 }
 
-class EditProfile extends StateNotifier<EditProfileState> {
-  EditProfile() : super(EditProfileState(name: '', lastName: ''));
+class EditProfilePageProvider extends StateNotifier<EditProfileState> {
+  EditProfilePageProvider() : super(EditProfileState(name: '', lastName: ''));
 
   Future editData(
     TextEditingController nameController,
@@ -24,7 +26,7 @@ class EditProfile extends StateNotifier<EditProfileState> {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         await FirebaseFirestore.instance
-            .collection('User')
+            .collection(FirebaseCollectionNames.user)
             .doc(user.uid)
             .update({
           'name': nameController.text,
@@ -47,5 +49,5 @@ class EditProfile extends StateNotifier<EditProfileState> {
 }
 
 final editProfilePageProvider =
-    StateNotifierProvider<EditProfile, EditProfileState>(
-        (ref) => EditProfile());
+    StateNotifierProvider<EditProfilePageProvider, EditProfileState>(
+        (ref) => EditProfilePageProvider());

@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:asan_yab/core/utils/translation_util.dart';
 import 'package:asan_yab/data/models/follow_user/follow_model.dart';
 import 'package:asan_yab/data/repositoris/follow/follow_repo.dart';
 import 'package:asan_yab/presentation/pages/verify_email_page.dart';
@@ -7,14 +8,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/constants/firebase_collection_names.dart';
 import '../../../data/models/users.dart';
 
-class SignUpNotifier {
+class SignUpProvider {
   final Ref ref;
-  SignUpNotifier(this.ref);
+  SignUpProvider(this.ref);
 
   Future signUp({
     required BuildContext context,
@@ -28,6 +29,7 @@ class SignUpNotifier {
         child: CircularProgressIndicator(color: Colors.red),
       ),
     ).whenComplete(() => Navigator.pop(context));
+    final text = texts(context);
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email.trim(),
@@ -40,12 +42,11 @@ class SignUpNotifier {
         ),
       );
     } on FirebaseAuthException catch (e) {
-      final languageText = AppLocalizations.of(context);
       debugPrint(e.toString());
       if (e.code == 'email-already-in-use') {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(languageText!.sign_up_method),
+            content: Text(text.sign_up_method),
             duration: const Duration(seconds: 5),
           ),
         );
@@ -55,7 +56,7 @@ class SignUpNotifier {
   }
 }
 
-final signUpNotifierProvider = Provider((ref) => SignUpNotifier(ref));
+final signUpNotifierProvider = Provider((ref) => SignUpProvider(ref));
 
 class CreateUserDetails {
   Future<void> addUserDetailsToFirebase({
@@ -66,19 +67,22 @@ class CreateUserDetails {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     final id = DateTime.now().millisecondsSinceEpoch;
 
-    final userRef = FirebaseFirestore.instance.collection('User').doc(uid);
+    final userRef = FirebaseFirestore.instance
+        .collection(FirebaseCollectionNames.user)
+        .doc(uid);
     final fcmToken = await FirebaseMessaging.instance.getToken();
     final user = Users(
-        createdAt: Timestamp.now(),
-        email: emailController!.trim(),
-        lastName: lastNameController!.trim(),
-        name: nameController!.trim(),
-        uid: userRef.id,
-        id: id,
-        followerCount: 0,
-        followingCount: 0,
-        fcmToken: fcmToken!,
-        isOnline: true);
+      createdAt: Timestamp.now(),
+      email: emailController!.trim(),
+      lastName: lastNameController!.trim(),
+      name: nameController!.trim(),
+      uid: userRef.id,
+      id: id,
+      followerCount: 0,
+      followingCount: 0,
+      fcmToken: fcmToken!,
+      isOnline: true,
+    );
     final json = user.toJson();
     await userRef.set(json).whenComplete(() async {
       final userFollow = FollowModel(followers: [], following: []);
@@ -89,7 +93,7 @@ class CreateUserDetails {
   Future<void> updateInviterRate(String inviterId) async {
     try {
       final querySnapshot = await FirebaseFirestore.instance
-          .collection('User')
+          .collection(FirebaseCollectionNames.user)
           .where('id', isEqualTo: int.parse(inviterId))
           .get();
 
@@ -99,7 +103,7 @@ class CreateUserDetails {
         final int newRate = currentRate + 1;
 
         await FirebaseFirestore.instance
-            .collection('User')
+            .collection(FirebaseCollectionNames.user)
             .doc(inviterDoc.id)
             .update({'invitationRate': newRate});
       }

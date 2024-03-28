@@ -1,6 +1,6 @@
 import 'package:asan_yab/data/models/follow_user/follow_model.dart';
-import 'package:asan_yab/data/repositoris/follow/count_follow.dart';
-import 'package:asan_yab/data/repositoris/single_user.dart';
+import 'package:asan_yab/data/repositoris/follow/count_follow_repo.dart';
+import 'package:asan_yab/data/repositoris/single_user_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

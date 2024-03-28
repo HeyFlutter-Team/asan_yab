@@ -3,19 +3,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../data/models/comment_model.dart';
+import '../../../core/constants/firebase_collection_names.dart';
+import '../../../data/models/comment.dart';
 import '../../../data/models/users.dart';
-import '../../../presentation/widgets/comment_sheet.dart';
+import '../../../presentation/widgets/comment_sheet_widget.dart';
 
-final commentProvider = ChangeNotifierProvider<VerticalDataNotifier>(
-    (ref) => VerticalDataNotifier());
+final commentProvider =
+    ChangeNotifierProvider<CommentProvider>((ref) => CommentProvider());
 
-class VerticalDataNotifier extends ChangeNotifier {
-  VerticalDataNotifier();
+class CommentProvider extends ChangeNotifier {
+  CommentProvider();
   bool _isLoading = false;
-  List<CommentM> _comments = [];
+  List<Comment> _comments = [];
   final firestore = FirebaseFirestore.instance;
-  List<CommentM> get comments => _comments;
+  List<Comment> get comments => _comments;
   final _commentController = TextEditingController();
 
   TextEditingController get controller => _commentController;
@@ -40,7 +41,7 @@ class VerticalDataNotifier extends ChangeNotifier {
     super.dispose();
   }
 
-  setComments(List<CommentM> newComments) {
+  setComments(List<Comment> newComments) {
     _comments = newComments;
     notifyListeners();
   }
@@ -63,20 +64,20 @@ class VerticalDataNotifier extends ChangeNotifier {
     _isLoading = true;
     Future.delayed(const Duration(seconds: 1)).then((value) async {
       final lastTimestamp =
-          comments.isNotEmpty ? comments.last.timestamp : DateTime.now();
+          comments.isNotEmpty ? comments.last.creationTime : DateTime.now();
 
       try {
         final snapshot = await firestore
-            .collection('Places')
+            .collection(FirebaseCollectionNames.places)
             .doc(postId)
-            .collection('postComments')
+            .collection(FirebaseCollectionNames.postComments)
             .orderBy("timestamp", descending: true)
             .startAfter([lastTimestamp])
             .limit(5)
             .get();
 
         for (final doc in snapshot.docs) {
-          _comments.add(CommentM.fromDocument(doc));
+          _comments.add(Comment.fromDocument(doc));
         }
 
         notifyListeners();
@@ -120,9 +121,9 @@ class VerticalDataNotifier extends ChangeNotifier {
         final info = await _getUserInfo(uid);
 
         final newCommentDoc = await firestore
-            .collection('Places')
+            .collection(FirebaseCollectionNames.places)
             .doc(postId)
-            .collection('postComments')
+            .collection(FirebaseCollectionNames.postComments)
             .add({
           'name': info.name,
           'imageUrl': info.imageUrl,
@@ -131,13 +132,13 @@ class VerticalDataNotifier extends ChangeNotifier {
           'timestamp': FieldValue.serverTimestamp(),
         });
 
-        final newComment = CommentM(
+        final newComment = Comment(
           name: info.name,
           imageUrl: info.imageUrl,
           text: commentText,
           uid: uid,
           commentId: newCommentDoc.id,
-          timestamp: DateTime.now(),
+          creationTime: DateTime.now(),
         );
 
         setComments([newComment, ...comments]);
@@ -149,7 +150,8 @@ class VerticalDataNotifier extends ChangeNotifier {
   }
 
   Future<Users> _getUserInfo(String uid) async {
-    final userDoc = await firestore.collection('User').doc(uid).get();
+    final userDoc =
+        await firestore.collection(FirebaseCollectionNames.user).doc(uid).get();
     return userDoc.exists
         ? Users.fromMap(userDoc.data() as Map<String, dynamic>)
         : Users(
@@ -165,7 +167,7 @@ class VerticalDataNotifier extends ChangeNotifier {
   }
 
   void deleteComment(
-    CommentM comment,
+    Comment comment,
     WidgetRef ref,
     String postId,
   ) async {
@@ -174,9 +176,9 @@ class VerticalDataNotifier extends ChangeNotifier {
 
     if (uid != null && comment.uid == uid) {
       await firestore
-          .collection('Places')
+          .collection(FirebaseCollectionNames.places)
           .doc(postId)
-          .collection('postComments')
+          .collection(FirebaseCollectionNames.postComments)
           .doc(comment.commentId)
           .delete();
     }
@@ -192,7 +194,7 @@ class VerticalDataNotifier extends ChangeNotifier {
   ) {
     showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) => CommentSheet(postId: postId),
+      builder: (BuildContext context) => CommentSheetWidget(postId: postId),
     );
     notifyListeners();
   }

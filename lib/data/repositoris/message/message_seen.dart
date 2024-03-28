@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/constants/firebase_collection_names.dart';
+
 class MessageSeen {
   MessageSeen();
   final firebaseAuth = FirebaseAuth.instance.currentUser;
@@ -9,9 +11,9 @@ class MessageSeen {
   Future<List<bool>> newMessage() async {
     try {
       final documentSnapshot = await firestore
-          .collection('User')
+          .collection(FirebaseCollectionNames.user)
           .doc(firebaseAuth!.uid)
-          .collection('chat')
+          .collection(FirebaseCollectionNames.chat)
           .orderBy('times', descending: true)
           .get();
       final data = documentSnapshot.docs
@@ -28,9 +30,9 @@ class MessageSeen {
   Future<void> updateSeenMessage(String receiverId, String uid) async {
     debugPrint("receiverId:$receiverId and uid:$uid");
     await firestore
-        .collection('User')
+        .collection(FirebaseCollectionNames.user)
         .doc(uid)
-        .collection('chat')
+        .collection(FirebaseCollectionNames.chat)
         .doc(receiverId)
         .update({'last_message': false});
   }

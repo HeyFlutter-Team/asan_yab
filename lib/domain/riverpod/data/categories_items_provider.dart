@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../data/models/place.dart';
-import '../../../data/repositoris/categories_items_rep.dart';
+import '../../../data/repositoris/categories_items_repo.dart';
 
 final categoriesItemsProvider =
     StateNotifierProvider<CategoriesItemsProvider, List<Place>>(
         (ref) => CategoriesItemsProvider([], ref));
 
 class CategoriesItemsProvider extends StateNotifier<List<Place>> {
-  final placeRepository = CategoriesItemsRepository();
+  final placeRepository = CategoriesItemsRepo();
 
   final Ref ref;
 

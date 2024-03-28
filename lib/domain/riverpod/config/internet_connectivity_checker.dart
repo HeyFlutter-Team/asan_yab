@@ -1,9 +1,9 @@
 import 'dart:async';
-
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../core/utils/convert_digits_to_farsi.dart';
 
 final internetConnectivityCheckerProvider =
     StateNotifierProvider<InternetConnectivityChecker, bool>(
@@ -38,41 +38,6 @@ class InternetConnectivityChecker extends StateNotifier<bool> {
   }
 
   bool isConnectedToNet() => state = isConnected;
-  void showsSnackBarForDisconnect(BuildContext context) {
-    final snackBar = SnackBar(
-      duration: const Duration(days: 1),
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: 'انترنت وصل نیست!',
-        message: 'لطفا انترنیت را وصل کنید!',
-        contentType: ContentType.warning,
-      ),
-    );
-
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
-  }
-
-  void showsSnackBarForConnect(BuildContext context) {
-    final snackBar = SnackBar(
-      duration: const Duration(seconds: 5),
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        message: 'از برنامه لذت ببرید!',
-        contentType: ContentType.success,
-        title: 'انترنت وصل است',
-      ),
-    );
-
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
-  }
 
   void startStreaming(BuildContext context) {
     subscription = Connectivity()

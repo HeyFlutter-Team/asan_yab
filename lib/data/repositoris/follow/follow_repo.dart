@@ -3,13 +3,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../core/constants/firebase_collection_names.dart';
+
 class FollowRepo {
   const FollowRepo();
   Future<void> newUser(String id, FollowModel followModel) async {
     await FirebaseFirestore.instance
-        .collection('User')
+        .collection(FirebaseCollectionNames.user)
         .doc(id)
-        .collection('Follow')
+        .collection(FirebaseCollectionNames.follow)
         .doc(id)
         .set(followModel.toJson());
   }

@@ -1,5 +1,5 @@
 import 'package:asan_yab/data/models/category.dart';
-import 'package:asan_yab/data/repositoris/categories_rep.dart';
+import 'package:asan_yab/data/repositoris/categories_repo.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,7 +8,7 @@ final categoriesProvider =
         (ref) => CategoriesProvider([]));
 
 class CategoriesProvider extends StateNotifier<List<Category>> {
-  final categoriesRepository = CategoriesRepository();
+  final categoriesRepository = CategoriesRepo();
 
   CategoriesProvider(super.state);
 

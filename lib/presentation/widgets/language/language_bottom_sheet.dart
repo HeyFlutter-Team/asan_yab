@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:asan_yab/data/models/language.dart';
-import 'package:asan_yab/data/repositoris/language_repository.dart';
+import 'package:asan_yab/core/extensions/language.dart';
+import 'package:asan_yab/data/repositoris/language_repo.dart';
+
+import '../../../core/utils/translation_util.dart';
 
 class LanguageBottomSheet extends ConsumerStatefulWidget {
   const LanguageBottomSheet({Key? key}) : super(key: key);
@@ -16,46 +17,42 @@ class _LanguagePopUpState extends ConsumerState<LanguageBottomSheet> {
   Widget build(BuildContext context) {
     final languageRepository = ref.watch(languageRepositoryProvider);
     final selectedLanguage = ref.watch(selectedLanguageProvider.notifier);
-
+    final text = texts(context);
     return ListTile(
-      onTap: () {
-        showModalBottomSheet(
-          backgroundColor: Colors.black,
-          context: context,
-          builder: (BuildContext context) => Column(
-            mainAxisSize: MainAxisSize.min,
-            children: Language.values
-                .map((value) => ListTile(
-                      onTap: () {
-                        ref.read(selectedLanguageProvider.notifier).state =
-                            value;
-                        languageRepository.setLanguage(value);
-                        Navigator.pop(context);
-                      },
-                      title: Row(
-                        children: [
-                          Text(value.flag),
-                          const SizedBox(width: 3),
-                          Text(
-                            value.name,
-                            style: const TextStyle(
-                              color: Colors.blue,
-                            ),
+      onTap: () => showModalBottomSheet(
+        backgroundColor: Colors.black,
+        context: context,
+        builder: (BuildContext context) => Column(
+          mainAxisSize: MainAxisSize.min,
+          children: Language.values
+              .map((value) => ListTile(
+                    onTap: () {
+                      ref.read(selectedLanguageProvider.notifier).state = value;
+                      languageRepository.setLanguage(value);
+                      Navigator.pop(context);
+                    },
+                    title: Row(
+                      children: [
+                        Text(value.flag),
+                        const SizedBox(width: 3),
+                        Text(
+                          value.name,
+                          style: const TextStyle(
+                            color: Colors.blue,
                           ),
-                          if (selectedLanguage.state == value)
-                            const Icon(Icons.done, color: Colors.green),
-                        ],
-                      ),
-                    ))
-                .toList(),
-          ),
-        );
-      },
+                        ),
+                        if (selectedLanguage.state == value)
+                          const Icon(Icons.done, color: Colors.green),
+                      ],
+                    ),
+                  ))
+              .toList(),
+        ),
+      ),
       title: selectedLanguage.state != null
           ? Text(
-              '${AppLocalizations.of(context)!.profile_language_listTile} ${selectedLanguage.state!.flag}')
-          : Text(
-              '${AppLocalizations.of(context)!.profile_language_listTile} 🇦🇫'),
+              '${text.profile_language_listTile} ${selectedLanguage.state!.flag}')
+          : Text('${text.profile_language_listTile} 🇦🇫'),
       leading: const Icon(
         Icons.language,
         color: Colors.red,

@@ -8,22 +8,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../core/constants/firebase_collection_names.dart';
 import '../../../data/models/users.dart';
 
-final userDetailsProvider = StateNotifierProvider<ReadUserDetails, Users?>(
-  (ref) => ReadUserDetails(),
+final profileDetailsProvider =
+    StateNotifierProvider<ProfileDataProvider, Users?>(
+  (ref) => ProfileDataProvider(),
 );
 
-class ReadUserDetails extends StateNotifier<Users?> {
-  ReadUserDetails({Users? user}) : super(user);
+class ProfileDataProvider extends StateNotifier<Users?> {
+  ProfileDataProvider({Users? user}) : super(user);
 
   Future<void> getCurrentUserData() async {
     final firebaseAuth = FirebaseAuth.instance.currentUser;
     final firestore = FirebaseFirestore.instance;
     try {
       if (firebaseAuth != null) {
-        final userSnapshot =
-            await firestore.collection('User').doc(firebaseAuth.uid).get();
+        final userSnapshot = await firestore
+            .collection(FirebaseCollectionNames.user)
+            .doc(firebaseAuth.uid)
+            .get();
 
         if (userSnapshot.exists) {
           state = Users.fromMap(userSnapshot.data()!);
@@ -100,7 +104,7 @@ class ImageNotifier extends StateNotifier<ImageState> {
       final uploadedImageUrl = await snapshot.ref.getDownloadURL();
 
       await FirebaseFirestore.instance
-          .collection('User')
+          .collection(FirebaseCollectionNames.user)
           .doc(user.uid)
           .update({'imageUrl': uploadedImageUrl});
 

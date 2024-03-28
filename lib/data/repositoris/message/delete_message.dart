@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../core/constants/firebase_collection_names.dart';
+
 class DeleteMessage {
   const DeleteMessage();
   Future<void> deleteMessage(
@@ -8,15 +10,15 @@ class DeleteMessage {
     String messageContent,
   ) async {
     FirebaseFirestore.instance
-        .collection('User')
+        .collection(FirebaseCollectionNames.user)
         .doc(uid)
-        .collection('chat')
+        .collection(FirebaseCollectionNames.chat)
         .doc(receiverId)
-        .collection('messages')
+        .collection(FirebaseCollectionNames.message)
         .where("content", isEqualTo: messageContent)
         .get()
         .then((query) {
-      for (QueryDocumentSnapshot docSnapshot in query.docs) {
+      for (final docSnapshot in query.docs) {
         docSnapshot.reference.delete();
       }
     });

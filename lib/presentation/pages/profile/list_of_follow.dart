@@ -1,23 +1,22 @@
-import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/core/extensions/language.dart';
 import 'package:asan_yab/domain/riverpod/data/following_data.dart';
 import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
 import 'package:asan_yab/domain/riverpod/screen/search_load_screen.dart';
-import 'package:asan_yab/presentation/pages/profile/list_followers.dart';
-import 'package:asan_yab/presentation/pages/profile/list_following.dart';
+import 'package:asan_yab/presentation/pages/profile/list_of_followers.dart';
+import 'package:asan_yab/presentation/pages/profile/list_of_following.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../../../data/repositoris/language_repository.dart';
+import '../../../core/utils/translation_util.dart';
+import '../../../data/repositoris/language_repo.dart';
 
 class ListOfFollow extends ConsumerWidget {
   const ListOfFollow({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final languageText = AppLocalizations.of(context);
-    final profileDetails = ref.watch(userDetailsProvider);
+    final text = texts(context);
+    final profileDetails = ref.watch(profileDetailsProvider);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     return DefaultTabController(
       initialIndex: ref.read(indexFollowPageProvider),
@@ -67,17 +66,18 @@ class ListOfFollow extends ConsumerWidget {
               },
               labelColor: Colors.black87,
               labelStyle: const TextStyle(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18),
+                color: Colors.black87,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
               tabs: [
                 Tab(
                   text:
-                      '${languageText?.profile_following} ${profileDetails.followingCount}',
+                      '${text.profile_following} ${profileDetails.followingCount}',
                 ),
                 Tab(
                   text:
-                      '${languageText?.profile_followers} ${profileDetails.followerCount}',
+                      '${text.profile_followers} ${profileDetails.followerCount}',
                 ),
               ],
             ),

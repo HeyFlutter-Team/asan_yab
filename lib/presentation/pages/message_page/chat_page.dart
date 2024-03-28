@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../domain/riverpod/data/message/message.dart';
-import '../../widgets/message/chat_messages.dart';
+import '../../widgets/message/chat_messages_widget.dart';
 
-class MessagePage extends ConsumerStatefulWidget {
-  const MessagePage({super.key});
+class ChatPage extends ConsumerStatefulWidget {
+  const ChatPage({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MessagePageState();
 }
 
-class _MessagePageState extends ConsumerState<MessagePage> {
+class _MessagePageState extends ConsumerState<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +50,7 @@ class _MessagePageState extends ConsumerState<MessagePage> {
       ),
       body: Stack(
         children: [
-          const ChatMessages(receiverId: '', urlImage: ''),
+          const ChatMessagesWidget(receiverId: '', urlImage: ''),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(

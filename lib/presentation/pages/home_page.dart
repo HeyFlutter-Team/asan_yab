@@ -2,8 +2,8 @@
 
 import 'dart:async';
 
-import 'package:asan_yab/presentation/widgets/nearby_place.dart';
-import 'package:asan_yab/presentation/widgets/new_places.dart';
+import 'package:asan_yab/presentation/widgets/nearby_place_widget.dart';
+import 'package:asan_yab/presentation/widgets/new_places_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,9 +13,9 @@ import '../../domain/riverpod/data/categories_provider.dart';
 import '../../domain/riverpod/data/update_favorite_provider.dart';
 import '../../domain/servers/check_new_version.dart';
 import '../../domain/servers/nearby_places.dart';
-import '../widgets/categories.dart';
-import '../widgets/custom_search_bar.dart';
-import '../widgets/favorites.dart';
+import '../widgets/categories_widget.dart';
+import '../widgets/custom_search_bar_widget.dart';
+import '../widgets/favorite_widget.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   final bool? isConnected;
@@ -46,7 +46,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   Future<void> onRefresh() async {
-    await ref.refresh(updateProvider.notifier).update(context, ref);
+    await ref.refresh(updateFavoriteProvider.notifier).update(context, ref);
     await Future.delayed(
       const Duration(milliseconds: 100),
     ).then((value) => ref.watch(nearbyPlace.notifier).refresh());
@@ -60,7 +60,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       appBar: AppBar(
         elevation: 0.0,
         automaticallyImplyLeading: false,
-        title: const CustomSearchBar(),
+        title: const CustomSearchBarWidget(),
       ),
       body: RefreshIndicator(
         triggerMode: RefreshIndicatorTriggerMode.onEdge,
@@ -71,17 +71,17 @@ class _HomePageState extends ConsumerState<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16.0),
-              NewPlaces(onRefresh: onRefresh),
+              NewPlacesWidget(onRefresh: onRefresh),
               const SizedBox(height: 32),
               widget.isConnected!
-                  ? Categories(onRefresh: onRefresh)
+                  ? CategoriesWidget(onRefresh: onRefresh)
                   : const SizedBox(),
               const SizedBox(height: 32),
               ref.watch(nearbyPlace).isEmpty
                   ? const SizedBox(height: 0)
                   : const NearbyPlaceWidget(),
               isLogin
-                  ? Favorites(isConnected: widget.isConnected!)
+                  ? FavoriteWidget(isConnected: widget.isConnected!)
                   : const SizedBox(),
             ],
           ),

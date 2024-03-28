@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/riverpod/screen/loading_circularPRI_provider.dart';
-import '../widgets/category_item.dart';
+import '../widgets/category_item_widget.dart';
 
 class ListCategoryItem extends ConsumerWidget {
   final String catId;
   final String categoryName;
 
-  const ListCategoryItem(
-      {super.key, required this.catId, required this.categoryName});
+  const ListCategoryItem({
+    super.key,
+    required this.catId,
+    required this.categoryName,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,9 +28,11 @@ class ListCategoryItem extends ConsumerWidget {
             IconButton(
                 onPressed: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SearchPage()));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SearchBarPage(),
+                    ),
+                  );
                 },
                 icon: const Icon(
                   Icons.search,
@@ -43,7 +48,7 @@ class ListCategoryItem extends ConsumerWidget {
             icon: const Icon(Icons.arrow_back, size: 25.0),
           ),
         ),
-        body: CategoryItem(id: catId),
+        body: CategoryItemWidget(id: catId),
       ),
     );
   }

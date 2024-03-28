@@ -1,10 +1,10 @@
+import 'package:asan_yab/core/utils/translation_util.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/riverpod/data/sign_up_provider.dart';
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
-import '../widgets/custom_text_field.dart';
+import '../widgets/custom_text_field_widget.dart';
 
 class PersonalInformation extends ConsumerStatefulWidget {
   final String? email;
@@ -30,7 +30,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
 
   @override
   Widget build(BuildContext context) {
-    final languageText = AppLocalizations.of(context);
+    final text = texts(context);
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -48,33 +48,31 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                     width: 200,
                   ),
                   const SizedBox(height: 2),
-                  CustomTextField(
+                  CustomTextFieldWidget(
                     textCapitalization: TextCapitalization.words,
-                    label: languageText!.first_text_field_label,
+                    label: text.first_text_field_label,
                     label2: '*',
                     controller: nameController,
                     keyboardType: TextInputType.emailAddress,
-                    hintText: languageText.first_text_field_hint,
-                    validator: (p0) => p0!.isEmpty
-                        ? languageText.first_text_field_valid
-                        : null,
+                    hintText: text.first_text_field_hint,
+                    validator: (value) =>
+                        value!.isEmpty ? text.first_text_field_valid : null,
                   ),
-                  CustomTextField(
+                  CustomTextFieldWidget(
                     textCapitalization: TextCapitalization.words,
-                    label: languageText.second_text_field_label,
+                    label: text.second_text_field_label,
                     label2: '*',
                     controller: lastNameController,
-                    hintText: languageText.second_text_field_hint,
+                    hintText: text.second_text_field_hint,
                     keyboardType: TextInputType.emailAddress,
-                    validator: (p0) => p0!.isEmpty
-                        ? languageText.second_text_field_valid
-                        : null,
+                    validator: (value) =>
+                        value!.isEmpty ? text.second_text_field_valid : null,
                   ),
-                  CustomTextField(
+                  CustomTextFieldWidget(
                     textCapitalization: TextCapitalization.words,
-                    label: languageText.inviter_ID,
+                    label: text.inviter_ID,
                     controller: invitingPersonId,
-                    hintText: languageText.third_text_field_hint,
+                    hintText: text.third_text_field_hint,
                     keyboardType: TextInputType.emailAddress,
                   ),
                   const SizedBox(height: 10),
@@ -110,7 +108,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                       });
                     },
                     child: Text(
-                      languageText.elevated_text,
+                      text.elevated_text,
                       style: const TextStyle(
                         fontSize: 17,
                         color: Colors.white,

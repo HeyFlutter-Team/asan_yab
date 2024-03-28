@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/constants/firebase_collection_names.dart';
+
 final messageProfileProvider = StateNotifierProvider<MessageProvider, Users?>(
     (ref) => MessageProvider(null));
 
@@ -25,7 +27,7 @@ class MessageProvider extends StateNotifier<Users?> {
     try {
       loading = true;
       firebase
-          .collection('User')
+          .collection(FirebaseCollectionNames.user)
           .doc(uid)
           .snapshots(includeMetadataChanges: true)
           .listen((user) {
@@ -51,14 +53,11 @@ class MessageProvider extends StateNotifier<Users?> {
             content: textController.text,
             receiverId: receiverId,
             replayMessage: replayMessage);
-        // textController.clear();
-        // FocusScope.of(context).unfocus();
       }
     } catch (e) {
       return debugPrint(e.toString());
     } finally {
       if (mounted) {
-        // FocusScope.of(context).unfocus();
       }
     }
   }

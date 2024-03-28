@@ -1,7 +1,6 @@
-import 'package:asan_yab/data/repositoris/language_repository.dart';
-import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
+import 'package:asan_yab/data/repositoris/language_repo.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
-import 'package:asan_yab/presentation/pages/themeProvider.dart';
+import 'package:asan_yab/data/repositoris/theme_Provider.dart';
 import 'package:asan_yab/presentation/pages/verify_email_page.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,7 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'data/models/language.dart';
+import 'core/extensions/language.dart';
 import 'firebase_options.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -132,9 +131,6 @@ class _MyAppState extends ConsumerState<MyApp> {
             useMaterial3: true,
             brightness: Theme.of(context).brightness,
             fontFamily: 'Shabnam',
-            // appBarTheme: AppBarTheme(
-
-            // Add other theme configurations here if needed
           ),
           child: child!,
         );

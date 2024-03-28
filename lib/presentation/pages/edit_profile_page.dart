@@ -1,17 +1,15 @@
 // ignore_for_file: avoid_print
 
-import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/core/extensions/language.dart';
 import 'package:asan_yab/domain/riverpod/data/edit_profile_page_provider.dart';
 import 'package:asan_yab/presentation/pages/profile/show_profile_page.dart';
 
-import 'package:asan_yab/presentation/widgets/buildProgress.dart';
+import 'package:asan_yab/core/utils/custom_progress_indicator_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../../data/repositoris/language_repository.dart';
+import '../../data/repositoris/language_repo.dart';
 import '../../domain/riverpod/data/profile_data_provider.dart';
 
 class EditProfilePage extends ConsumerStatefulWidget {
@@ -32,8 +30,8 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
     Future.delayed(
       Duration.zero,
       () {
-        nameController.text = ref.read(userDetailsProvider)!.name;
-        lastNameController.text = ref.read(userDetailsProvider)!.lastName;
+        nameController.text = ref.read(profileDetailsProvider)!.name;
+        lastNameController.text = ref.read(profileDetailsProvider)!.lastName;
         ref
             .read(editProfilePageProvider.notifier)
             .editData(nameController, lastNameController);
@@ -44,7 +42,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final usersData = ref.watch(userDetailsProvider);
+    final usersData = ref.watch(profileDetailsProvider);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     final languageText = AppLocalizations.of(context);
     return Scaffold(
@@ -109,7 +107,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                       MaterialPageRoute(
                         builder: (context) => ShowProfilePage(
                             imageUrl:
-                                '${ref.watch(userDetailsProvider)?.imageUrl}'),
+                                '${ref.watch(profileDetailsProvider)?.imageUrl}'),
                       ),
                     ),
                     child: usersData?.imageUrl == ''
@@ -126,7 +124,8 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                               Padding(
                                 padding:
                                     const EdgeInsets.only(top: 40.0, right: 50),
-                                child: ImageWidgets.buildProgress(ref: ref),
+                                child: CustomProgressIndicatorWidget
+                                    .progressIndicator(ref: ref),
                               ),
                               Positioned(
                                 bottom: 0,
@@ -138,8 +137,9 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                                   ),
                                   child: IconButton(
                                     onPressed: () {
-                                      ImageWidgets.showBottomSheets(
-                                          context: context, ref: ref);
+                                      CustomProgressIndicatorWidget
+                                          .showBottomSheets(
+                                              context: context, ref: ref);
                                     },
                                     icon: const Icon(
                                       Icons.camera_alt,
@@ -158,14 +158,15 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                                 child: CircleAvatar(
                                   maxRadius: 80,
                                   backgroundImage: NetworkImage(
-                                    '${ref.watch(userDetailsProvider)?.imageUrl}',
+                                    '${ref.watch(profileDetailsProvider)?.imageUrl}',
                                   ),
                                 ),
                               ),
                               Padding(
                                 padding:
                                     const EdgeInsets.only(top: 40.0, right: 50),
-                                child: ImageWidgets.buildProgress(ref: ref),
+                                child: CustomProgressIndicatorWidget
+                                    .progressIndicator(ref: ref),
                               ),
                               Positioned(
                                 bottom: 0,
@@ -177,8 +178,9 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                                   ),
                                   child: IconButton(
                                     onPressed: () =>
-                                        ImageWidgets.showBottomSheets(
-                                            context: context, ref: ref),
+                                        CustomProgressIndicatorWidget
+                                            .showBottomSheets(
+                                                context: context, ref: ref),
                                     icon: const Icon(
                                       Icons.camera_alt,
                                       size: 32,

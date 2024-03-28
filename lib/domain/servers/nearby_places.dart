@@ -5,18 +5,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../../data/models/place.dart';
-import '../../data/repositoris/places_rep.dart';
+import '../../data/repositoris/places_repo.dart';
 import '../riverpod/screen/drop_Down_Buton.dart';
 
-final nearbyPlace = StateNotifierProvider<NearbyPlace, List<Place>>(
-    (ref) => NearbyPlace([], ref));
+final nearbyPlace = StateNotifierProvider<NearbyPlaces, List<Place>>(
+    (ref) => NearbyPlaces([], ref));
 
-class NearbyPlace extends StateNotifier<List<Place>> {
+class NearbyPlaces extends StateNotifier<List<Place>> {
   final Ref ref;
-  final placeRepository = PlacesRepository();
+  final placeRepository = PlacesRepo();
   List<Place> nearestLocations = [];
   void nearPlace() => state = nearestLocations;
-  NearbyPlace(super.state, this.ref);
+  NearbyPlaces(super.state, this.ref);
   double degreesToRadians(double degrees) => degrees * pi / 180.0;
 
   double calculateDistance(

@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:asan_yab/domain/riverpod/data/toggle_favorite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../data/repositoris/local_rep/databasehelper.dart';
+import '../../../data/repositoris/local_rep/database_helper.dart';
 import '../../../data/models/place.dart';
 
 final favoriteProvider =
@@ -27,7 +27,7 @@ class FavoriteProvider extends StateNotifier<List<Map<String, dynamic>>> {
       delete(places.id);
       ref.read(toggleProvider.notifier).toggle(false);
     } else {
-      _saveData(
+      saveData(
         places,
         addressDataList,
         phoneDataList,
@@ -51,7 +51,7 @@ class FavoriteProvider extends StateNotifier<List<Map<String, dynamic>>> {
     return false;
   }
 
-  void _saveData(
+  void saveData(
     Place databaseModel,
     List<String> addressDataList,
     List<String> phoneDataList,

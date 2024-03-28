@@ -2,9 +2,9 @@ import 'package:asan_yab/data/models/users.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final otherUserProvider =
-    StateNotifierProvider<OtherUser, Users?>((ref) => OtherUser(null));
+    StateNotifierProvider<OtherUserDate, Users?>((ref) => OtherUserDate(null));
 
-class OtherUser extends StateNotifier<Users?> {
-  OtherUser(super.state);
+class OtherUserDate extends StateNotifier<Users?> {
+  OtherUserDate(super.state);
   void setDataUser(Users user) => state = user;
 }

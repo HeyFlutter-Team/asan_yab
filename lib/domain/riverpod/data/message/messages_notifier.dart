@@ -1,4 +1,4 @@
-import 'package:asan_yab/data/models/message/message.dart';
+import 'package:asan_yab/data/models/message/message_model.dart';
 import 'package:asan_yab/data/repositoris/message/history_message.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

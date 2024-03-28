@@ -1,8 +1,10 @@
-import 'package:asan_yab/data/models/message/message.dart';
+import 'package:asan_yab/data/models/message/message_model.dart';
 import 'package:asan_yab/data/models/users.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../../../core/constants/firebase_collection_names.dart';
 
 class HistoryMessage {
   HistoryMessage();
@@ -11,25 +13,18 @@ class HistoryMessage {
   List<String> usersId = [];
   List<bool> isNewMessage = [];
   Future<List<String>> getOtherUserId() async {
-    List<Users> data = [];
     try {
       final data = await fireStore
-          .collection('User')
+          .collection(FirebaseCollectionNames.user)
           .doc(firebaseAuth!.uid)
           .get()
           .then((value) async => await value.reference
-              .collection('chat')
+              .collection(FirebaseCollectionNames.chat)
               .orderBy('times', descending: true)
               .get());
       usersId = data.docs.map((e) => e.reference.id).toList();
-      // print('not work ${data.size}');
-      // print('uuuuuuu ${FirebaseAuth.instance.currentUser!.uid}');
-
-      //
     } catch (e) {
       rethrow;
-    } finally {
-      // print('hhhhhhh ${usersId[0]} ${usersId[1]} ${usersId[2]}');
     }
     return usersId;
   }
@@ -38,8 +33,10 @@ class HistoryMessage {
     try {
       List<Users> data = [];
       for (final uid in uidList) {
-        final userDataSnapshot =
-            await fireStore.collection('User').doc(uid).get();
+        final userDataSnapshot = await fireStore
+            .collection(FirebaseCollectionNames.user)
+            .doc(uid)
+            .get();
 
         if (userDataSnapshot.exists) {
           final userData = Users.fromMap(userDataSnapshot.data()!);
@@ -59,11 +56,11 @@ class HistoryMessage {
       for (final uid in uidList) {
         if (firebaseAuth != null) {
           final userDataSnapshot = await fireStore
-              .collection('User')
+              .collection(FirebaseCollectionNames.user)
               .doc(firebaseAuth!.uid)
-              .collection('chat')
+              .collection(FirebaseCollectionNames.chat)
               .doc(uid)
-              .collection('messages')
+              .collection(FirebaseCollectionNames.message)
               .orderBy('sentTime', descending: true)
               .limit(1)
               .get();

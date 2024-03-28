@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class TextFieldWidget extends StatelessWidget {
+class TextFormFieldWidget extends StatelessWidget {
   final TextEditingController addController;
   final String labelName;
   final Function validator;
   final int? line;
-  const TextFieldWidget({
+  const TextFormFieldWidget({
     super.key,
     required this.validator,
     required this.addController,
@@ -24,8 +24,9 @@ class TextFieldWidget extends StatelessWidget {
         filled: true,
         fillColor: Colors.blueGrey.withOpacity(0.1),
         focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(),
-            borderRadius: BorderRadius.circular(16)),
+          borderSide: const BorderSide(),
+          borderRadius: BorderRadius.circular(16),
+        ),
         hoverColor: Colors.black,
         labelText: labelName,
         labelStyle: const TextStyle(),

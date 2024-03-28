@@ -1,10 +1,13 @@
+import '../../core/constants/firebase_field_names.dart';
+
 class Favorite {
   final List<String> items;
 
   const Favorite({required this.items});
 
   factory Favorite.fromJson(Map<String, dynamic> json) {
-    final List<dynamic> jsonItems = json['items'] ?? [];
+    final List<dynamic> jsonItems =
+        json[FirebaseFieldNames.favoriteItems] ?? [];
     final List<String> items =
         jsonItems.map((item) => item.toString()).toList();
 
@@ -12,6 +15,6 @@ class Favorite {
   }
 
   Map<String, dynamic> toJson() => {
-        'items': items,
+        FirebaseFieldNames.favoriteItems: items,
       };
 }

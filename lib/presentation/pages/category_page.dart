@@ -1,10 +1,10 @@
-import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/core/extensions/language.dart';
 import 'package:asan_yab/domain/riverpod/data/categories_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../core/res/colors.dart';
-import '../../data/repositoris/language_repository.dart';
+import '../../data/repositoris/language_repo.dart';
 import 'list_category_item.dart';
 
 class CategoryPage extends ConsumerWidget {
@@ -60,7 +60,7 @@ class CategoryPage extends ConsumerWidget {
                             builder: (context) => ListCategoryItem(
                               catId: category[index].id,
                               categoryName: isRTL
-                                  ? category[index].categoryName
+                                  ? category[index].name
                                   : category[index].enCategoryName!,
                             ),
                           ),
@@ -85,7 +85,7 @@ class CategoryPage extends ConsumerWidget {
                             const SizedBox(height: 16.0),
                             Text(
                               isRTL
-                                  ? category[index].categoryName
+                                  ? category[index].name
                                   : category[index].enCategoryName!,
                               style: const TextStyle(
                                 color: Colors.white,

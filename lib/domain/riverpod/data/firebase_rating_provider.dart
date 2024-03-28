@@ -3,11 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final firebaseRatingProvider =
-    ChangeNotifierProvider<FirebaseRating>((ref) => FirebaseRating());
+import '../../../core/constants/firebase_collection_names.dart';
 
-class FirebaseRating extends ChangeNotifier {
-  FirebaseRating();
+final firebaseRatingProvider = ChangeNotifierProvider<FirebaseRatingProvider>(
+    (ref) => FirebaseRatingProvider());
+
+class FirebaseRatingProvider extends ChangeNotifier {
+  FirebaseRatingProvider();
   final firestore = FirebaseFirestore.instance;
   final firebaseAuth = FirebaseAuth.instance.currentUser;
   double _averageRatingProvider = 0;
@@ -26,7 +28,7 @@ class FirebaseRating extends ChangeNotifier {
     if (firebaseAuth!.uid.isNotEmpty) {
       try {
         final result = await firestore
-            .collection('ratings')
+            .collection(FirebaseCollectionNames.ratings)
             .where('placeId', isEqualTo: postId)
             .where('userId', isEqualTo: firebaseAuth!.uid)
             .get();
@@ -55,7 +57,7 @@ class FirebaseRating extends ChangeNotifier {
     double rate,
   ) async {
     try {
-      await firestore.collection('ratings').add({
+      await firestore.collection(FirebaseCollectionNames.ratings).add({
         'placeId': postId,
         'rating': rate,
         'userId': userId,
@@ -78,7 +80,7 @@ class FirebaseRating extends ChangeNotifier {
   ) async {
     try {
       final existingRating = await firestore
-          .collection('ratings')
+          .collection(FirebaseCollectionNames.ratings)
           .where('placeId', isEqualTo: postId)
           .where('userId', isEqualTo: userId)
           .get();
@@ -86,7 +88,7 @@ class FirebaseRating extends ChangeNotifier {
       if (existingRating.docs.isNotEmpty) {
         final docId = existingRating.docs.first.id;
         await firestore
-            .collection('ratings')
+            .collection(FirebaseCollectionNames.ratings)
             .doc(docId)
             .update({'rating': rate});
         if (context.mounted) {
@@ -102,7 +104,7 @@ class FirebaseRating extends ChangeNotifier {
   Future<double> getAverageRatingForPlace(String postId) async {
     try {
       final result = await firestore
-          .collection('ratings')
+          .collection(FirebaseCollectionNames.ratings)
           .where('placeId', isEqualTo: postId)
           .get();
 
@@ -124,7 +126,7 @@ class FirebaseRating extends ChangeNotifier {
   Future<void> getAverageRating({required String postId}) async {
     try {
       final result = await firestore
-          .collection('ratings')
+          .collection(FirebaseCollectionNames.ratings)
           .where('placeId', isEqualTo: postId)
           .get();
 

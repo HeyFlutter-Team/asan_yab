@@ -1,8 +1,10 @@
-import 'package:asan_yab/data/models/message/message.dart';
+import 'package:asan_yab/data/models/message/message_model.dart';
 import 'package:asan_yab/data/models/users.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../../../core/constants/firebase_collection_names.dart';
 
 class MessageRepo {
   MessageRepo();
@@ -62,40 +64,31 @@ class MessageRepo {
     required String receiverId,
     required MessageModel message,
   }) async {
-    await firestore
-        .collection('User')
-        .doc(firebaseAuth!.uid)
-        .collection('chat')
-        .doc(receiverId)
-        .set({
+    final userDocRef = firestore
+        .collection(FirebaseCollectionNames.user)
+        .doc(firebaseAuth!.uid);
+    final chatDocRef =
+        userDocRef.collection(FirebaseCollectionNames.chat).doc(receiverId);
+    await chatDocRef.set({
       'uid': receiverId,
       'times': Timestamp.now(),
-      "last_message": true
+      'last_message': true,
     });
-    await firestore
-        .collection('User')
-        .doc(firebaseAuth!.uid)
-        .collection('chat')
-        .doc(receiverId)
-        .collection('messages')
+    await chatDocRef
+        .collection(FirebaseCollectionNames.message)
         .add(message.toJson());
-
-    await firestore
-        .collection('User')
+    final receiverChatDocRef = firestore
+        .collection(FirebaseCollectionNames.user)
         .doc(receiverId)
-        .collection('chat')
-        .doc(firebaseAuth!.uid)
-        .set({
+        .collection(FirebaseCollectionNames.chat)
+        .doc(firebaseAuth!.uid);
+    await receiverChatDocRef.set({
       'uid': firebaseAuth!.uid,
       'times': Timestamp.now(),
       'last_message': true,
     });
-    await firestore
-        .collection('User')
-        .doc(receiverId)
-        .collection('chat')
-        .doc(firebaseAuth!.uid)
-        .collection('messages')
+    await receiverChatDocRef
+        .collection(FirebaseCollectionNames.message)
         .add(message.toJson());
   }
 }

@@ -1,20 +1,20 @@
 import 'package:asan_yab/domain/riverpod/config/notification_repo.dart';
-import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
-import 'package:asan_yab/presentation/pages/message_page/message_home.dart';
+import 'package:asan_yab/presentation/pages/message_page/home_message.dart';
 import 'package:asan_yab/presentation/pages/profile/profile_page.dart';
-import 'package:asan_yab/presentation/widgets/message/message_check_user.dart';
+import 'package:asan_yab/presentation/widgets/message/check_user_message_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/constants/firebase_collection_names.dart';
 import '../../domain/riverpod/config/internet_connectivity_checker.dart';
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
+import '../widgets/bottom_navigation_bar_widget.dart';
 import 'auth_page.dart';
 import 'home_page.dart';
-import 'suggestion.dart';
+import 'suggestion_page.dart';
 
 class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
@@ -42,7 +42,10 @@ class _MainPageState extends ConsumerState<MainPage>
   void setStatus(bool status) async {
     if (firebaseAuth != null) {
       final token = await FirebaseMessaging.instance.getToken();
-      await firestore.collection('User').doc(firebaseAuth!.uid).update({
+      await firestore
+          .collection(FirebaseCollectionNames.user)
+          .doc(firebaseAuth!.uid)
+          .update({
         'isOnline': status,
         'fcmToken': token,
       });
@@ -60,13 +63,13 @@ class _MainPageState extends ConsumerState<MainPage>
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userDetailsProvider);
     final selectedIndex = ref.watch(buttonNavigationProvider);
-    FirebaseApi().initInfo();
-    FirebaseApi().getToken();
-    FirebaseApi().initialize(context);
+    NotificationRepo().initInfo();
+    NotificationRepo().getToken();
+    NotificationRepo().initialize(context);
     return Scaffold(
-      bottomNavigationBar: buildBottomNavigationBar(),
+      bottomNavigationBar:
+          BottomNavigationBarWidget(ref: ref, context: context),
       body: IndexedStack(
         index: selectedIndex,
         children: [
@@ -76,8 +79,8 @@ class _MainPageState extends ConsumerState<MainPage>
                   .isConnected),
           const SuggestionPage(),
           FirebaseAuth.instance.currentUser == null
-              ? const MessageCheckUser()
-              : const MessageHome(),
+              ? const CheckUserMessageWidget()
+              : const HomeMessage(),
           FirebaseAuth.instance.currentUser == null
               ? const AuthPage()
               : const ProfilePage()
@@ -85,35 +88,4 @@ class _MainPageState extends ConsumerState<MainPage>
       ),
     );
   }
-
-  Widget buildBottomNavigationBar() => BottomNavigationBar(
-        selectedFontSize: 18.0,
-        unselectedFontSize: 14.0,
-        currentIndex: ref.watch(buttonNavigationProvider),
-        selectedItemColor: Colors.red,
-        type: BottomNavigationBarType.fixed,
-        onTap: (index) {
-          FocusScope.of(context).unfocus();
-          ref.read(buttonNavigationProvider.notifier).selectedIndex(index);
-        },
-        // backgroundColor: Colors.white,
-        items: [
-          BottomNavigationBarItem(
-            label: AppLocalizations.of(context)!.buttonNvB_1,
-            icon: const Icon(Icons.home),
-          ),
-          BottomNavigationBarItem(
-            label: AppLocalizations.of(context)!.buttonNvB_2,
-            icon: const Icon(Icons.place),
-          ),
-          BottomNavigationBarItem(
-            label: AppLocalizations.of(context)!.buttonNvB_3,
-            icon: const Icon(Icons.message),
-          ),
-          BottomNavigationBarItem(
-            label: AppLocalizations.of(context)!.buttonNvB_4,
-            icon: const Icon(Icons.person),
-          ),
-        ],
-      );
 }

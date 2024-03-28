@@ -1,15 +1,15 @@
 // ignore_for_file: avoid_print
 
-import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/core/extensions/language.dart';
 import 'package:asan_yab/domain/riverpod/data/edit_profile_page_provider.dart';
 import 'package:asan_yab/presentation/pages/profile/show_profile_page.dart';
-import 'package:asan_yab/presentation/widgets/buildProgress.dart';
+import 'package:asan_yab/core/utils/custom_progress_indicator_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../data/repositoris/language_repository.dart';
+import '../../../core/utils/translation_util.dart';
+import '../../../data/repositoris/language_repo.dart';
 import '../../../domain/riverpod/data/profile_data_provider.dart';
 
 class EditProfilePage extends ConsumerStatefulWidget {
@@ -30,23 +30,23 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
     Future.delayed(
       Duration.zero,
       () {
-        nameController.text = ref.read(userDetailsProvider)!.name;
-        lastNameController.text = ref.read(userDetailsProvider)!.lastName;
+        nameController.text = ref.read(profileDetailsProvider)!.name;
+        lastNameController.text = ref.read(profileDetailsProvider)!.lastName;
         ref
             .read(editProfilePageProvider.notifier)
             .editData(nameController, lastNameController);
         ref.read(imageProvider.notifier).state.imageUrl;
         ref.read(imageProvider.notifier).state.imageUrl =
-            ref.read(userDetailsProvider)?.imageUrl ?? '';
+            ref.read(profileDetailsProvider)?.imageUrl ?? '';
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final usersData = ref.watch(userDetailsProvider);
+    final usersData = ref.watch(profileDetailsProvider);
     final isRTL = ref.watch(languageProvider).code == 'fa';
-    final languageText = AppLocalizations.of(context);
+    final text = texts(context);
     return Scaffold(
       body: Column(
         children: [
@@ -88,7 +88,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                       : const EdgeInsets.only(top: 40.0, left: 334),
                   child: TextButton(
                     child: Text(
-                      languageText!.edit_appBar_leading,
+                      text.edit_appBar_leading,
                       style: const TextStyle(color: Colors.red),
                     ),
                     onPressed: () async {
@@ -110,7 +110,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                                 ? const SizedBox()
                                 : ShowProfilePage(
                                     imageUrl:
-                                        '${ref.watch(userDetailsProvider)?.imageUrl}'),
+                                        '${ref.watch(profileDetailsProvider)?.imageUrl}'),
                           )),
                       child: Stack(
                         children: [
@@ -121,7 +121,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                               backgroundImage: usersData?.imageUrl == ''
                                   ? const AssetImage('assets/Avatar.png')
                                   : NetworkImage(
-                                      '${ref.watch(userDetailsProvider)?.imageUrl}',
+                                      '${ref.watch(profileDetailsProvider)?.imageUrl}',
                                     ) as ImageProvider<
                                       Object>, // Your image URL
                             ),
@@ -130,7 +130,8 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                             padding: isRTL
                                 ? const EdgeInsets.only(top: 40.0, right: 50)
                                 : const EdgeInsets.only(top: 40.0, left: 55),
-                            child: ImageWidgets.buildProgress(ref: ref),
+                            child: CustomProgressIndicatorWidget
+                                .progressIndicator(ref: ref),
                           ),
                           Positioned(
                             bottom: 0,
@@ -141,10 +142,9 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                                 shape: BoxShape.circle,
                               ),
                               child: IconButton(
-                                onPressed: () {
-                                  ImageWidgets.showBottomSheets(
-                                      context: context, ref: ref);
-                                },
+                                onPressed: () => CustomProgressIndicatorWidget
+                                    .showBottomSheets(
+                                        context: context, ref: ref),
                                 icon: const Icon(
                                   Icons.camera_alt,
                                   size: 32,
@@ -164,7 +164,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
               TextField(
                 controller: nameController,
                 decoration: InputDecoration(
-                  labelText: languageText.edit_1_txf_label,
+                  labelText: text.edit_1_txf_label,
                   prefixIcon: const Icon(
                     Icons.person_2_outlined,
                     color: Colors.red,
@@ -175,7 +175,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
               TextField(
                 controller: lastNameController,
                 decoration: InputDecoration(
-                  labelText: languageText.edit_2_txf_label,
+                  labelText: text.edit_2_txf_label,
                   prefixIcon: const Icon(
                     Icons.person_2_outlined,
                     color: Colors.red,

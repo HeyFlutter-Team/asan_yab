@@ -3,23 +3,24 @@ import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../core/utils/translation_util.dart';
 
 //Sign In method
-final signInProvider = Provider((ref) => SignInNotifier(ref));
+final signInProvider = Provider((ref) => SignInProvider(ref));
 
-class SignInNotifier {
+class SignInProvider {
   final Ref read;
 
-  SignInNotifier(this.read);
+  SignInProvider(this.read);
 
   Future<void> signIn({
     required BuildContext context,
     required String email,
     required String password,
   }) async {
+    final text = texts(context);
     try {
-      read.read(userDetailsProvider);
+      read.read(profileDetailsProvider);
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -34,18 +35,17 @@ class SignInNotifier {
         password: password,
       );
     } on FirebaseAuthException catch (e) {
-      final languageText = AppLocalizations.of(context);
       if (e.code == 'user-not-found') {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(languageText!.sign_in_method_1_if)),
+          SnackBar(content: Text(text.sign_in_method_1_if)),
         );
       } else if (e.code == 'wrong-password') {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(languageText!.sign_in_method_2_if)),
+          SnackBar(content: Text(text.sign_in_method_2_if)),
         );
       } else if (e.code == 'too-many-requests') {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(languageText!.sign_in_method_3_if)),
+          SnackBar(content: Text(text.sign_in_method_3_if)),
         );
       }
     } catch (e) {

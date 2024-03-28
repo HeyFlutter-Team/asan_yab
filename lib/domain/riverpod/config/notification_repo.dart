@@ -1,4 +1,4 @@
-import 'package:asan_yab/data/repositoris/local_rep/notification.dart';
+import 'package:asan_yab/data/repositoris/local_rep/update_notification.dart';
 import 'package:asan_yab/main.dart';
 import 'package:asan_yab/presentation/pages/detials_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -7,8 +7,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 // }
 
-class FirebaseApi {
-  FirebaseApi();
+class NotificationRepo {
+  NotificationRepo();
   final _firebaseMessaging = FirebaseMessaging.instance;
   String? token = '';
   Future<void> initNotification() async {
@@ -26,7 +26,7 @@ class FirebaseApi {
   void getToken() async {
     final fcmToken = await _firebaseMessaging.getToken();
     token = fcmToken;
-    NotificationUpdate().saveToken(token);
+    UpdateNotification().saveToken(token);
     debugPrint('tokKen  token $token');
   }
 

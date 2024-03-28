@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
+import 'package:asan_yab/core/utils/translation_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DownloadImage {
   const DownloadImage._();
@@ -27,7 +27,7 @@ class DownloadImage {
   }
 
   static void showDialogBox(BuildContext context) {
-    final languageText = AppLocalizations.of(context);
+    final text = texts(context);
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -45,7 +45,7 @@ class DownloadImage {
               ),
               const SizedBox(width: 12),
               Text(
-                '${languageText?.download_image_loading}',
+                text.download_image_loading,
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

@@ -3,13 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/constants/firebase_collection_names.dart';
 import '../../../data/models/favorite.dart';
 
-final getInformationProvider =
-    ChangeNotifierProvider<Information>((ref) => Information());
+final getFavoriteProvider = ChangeNotifierProvider<FirebaseFavoriteProvider>(
+    (ref) => FirebaseFavoriteProvider());
 
-class Information extends ChangeNotifier {
-  Information();
+class FirebaseFavoriteProvider extends ChangeNotifier {
+  FirebaseFavoriteProvider();
   List<String> _favoriteList = [];
   List<String> get favoriteList => _favoriteList;
   final firestore = FirebaseFirestore.instance;
@@ -17,8 +18,10 @@ class Information extends ChangeNotifier {
   Future<void> getFavorite() async {
     _favoriteList = [];
     try {
-      final data =
-          await firestore.collection('Favorite').doc(firebaseAuth!.uid).get();
+      final data = await firestore
+          .collection(FirebaseCollectionNames.favorite)
+          .doc(firebaseAuth!.uid)
+          .get();
       final data1 = Favorite.fromJson(data.data()!);
       _favoriteList.addAll(data1.items);
     } catch (e) {
@@ -30,8 +33,9 @@ class Information extends ChangeNotifier {
   Future<void> setFavorite() async {
     try {
       if (firebaseAuth != null) {
-        final documentReference =
-            firestore.collection('Favorite').doc(firebaseAuth!.uid);
+        final documentReference = firestore
+            .collection(FirebaseCollectionNames.favorite)
+            .doc(firebaseAuth!.uid);
 
         final documentSnapshot = await documentReference.get();
 

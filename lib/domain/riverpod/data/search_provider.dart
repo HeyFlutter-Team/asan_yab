@@ -1,21 +1,21 @@
-import 'package:asan_yab/data/models/typesenses_models.dart';
+import 'package:asan_yab/data/models/search_model.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../servers/typesenseSearch.dart';
+import '../../servers/typesense_search.dart';
 
 final searchTypeSenseProvider =
-    StateNotifierProvider<MyPlaceList, List<SearchModel>>(
-        (ref) => MyPlaceList([]));
+    StateNotifierProvider<SearchProvider, List<SearchModel>>(
+        (ref) => SearchProvider([]));
 
-class MyPlaceList extends StateNotifier<List<SearchModel>> {
-  MyPlaceList(super.state);
+class SearchProvider extends StateNotifier<List<SearchModel>> {
+  SearchProvider(super.state);
   final searchController = TextEditingController();
   void clear() => state.clear();
 
   Future<List<SearchModel>> search(String query) async {
-    final search = SearchInstance();
+    final search = TypesenseSearch();
     search
         .searchForData(query.toString().trim())
         .then((value) => state = value);

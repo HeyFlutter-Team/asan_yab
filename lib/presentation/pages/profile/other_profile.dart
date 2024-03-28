@@ -1,6 +1,6 @@
 import 'package:asan_yab/core/utils/convert_digits_to_farsi.dart';
-import 'package:asan_yab/data/models/language.dart';
-import 'package:asan_yab/data/repositoris/language_repository.dart';
+import 'package:asan_yab/core/extensions/language.dart';
+import 'package:asan_yab/data/repositoris/language_repo.dart';
 import 'package:asan_yab/domain/riverpod/data/follow_https.dart';
 import 'package:asan_yab/domain/riverpod/data/other_user_data.dart';
 import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
@@ -10,8 +10,9 @@ import 'package:asan_yab/presentation/pages/message_page/chat_details_page.dart'
 import 'package:asan_yab/presentation/pages/profile/show_profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../core/utils/translation_util.dart';
 
 class OtherProfile extends ConsumerStatefulWidget {
   const OtherProfile({super.key});
@@ -25,8 +26,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
   Widget build(BuildContext context) {
     final usersData = ref.watch(otherUserProvider);
     final isRTL = ref.watch(languageProvider).code == 'fa';
-    final languageText = AppLocalizations.of(context);
-
+    final text = texts(context);
     return Scaffold(
       body: Column(
         children: [
@@ -129,11 +129,11 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                   onTap: () {
                     //todo user data for copy
                     ref
-                        .read(userDetailsProvider.notifier)
+                        .read(profileDetailsProvider.notifier)
                         .copyToClipboard('${usersData?.id}');
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(languageText!.profile_copy_id_snack_bar),
+                        content: Text(text.profile_copy_id_snack_bar),
                         duration: const Duration(seconds: 2),
                       ),
                     );
@@ -162,7 +162,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                       color: Colors.red,
                       size: 30,
                     ),
-                    title: Text(languageText!.profile_about_us_listTile),
+                    title: Text(text.profile_about_us_listTile),
                   ),
                 ),
                 const Divider(color: Colors.grey),
@@ -232,7 +232,9 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                       .whenComplete(() => ref
                           .read(followerProvider.notifier)
                           .followOrUnFollow(uid, followId));
-                  ref.read(userDetailsProvider.notifier).getCurrentUserData();
+                  ref
+                      .read(profileDetailsProvider.notifier)
+                      .getCurrentUserData();
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 28),

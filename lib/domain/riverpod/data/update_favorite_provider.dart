@@ -1,7 +1,5 @@
 import 'package:asan_yab/data/models/place.dart';
 import 'package:asan_yab/domain/riverpod/data/single_place_provider.dart';
-import 'package:asan_yab/domain/riverpod/data/toggle_favorite.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,17 +7,17 @@ import '../../../core/utils/download_image.dart';
 import 'favorite_provider.dart';
 import 'firbase_favorite_provider.dart';
 
-final updateProvider =
-    ChangeNotifierProvider<UpdateFavorite>((ref) => UpdateFavorite());
+final updateFavoriteProvider = ChangeNotifierProvider<UpdateFavoriteProvider>(
+    (ref) => UpdateFavoriteProvider());
 
-class UpdateFavorite extends ChangeNotifier {
-  UpdateFavorite();
+class UpdateFavoriteProvider extends ChangeNotifier {
+  UpdateFavoriteProvider();
   Future<void> update(
     BuildContext context,
     WidgetRef ref,
   ) async {
-    await ref.read(getInformationProvider.notifier).getFavorite();
-    final firebaseId = ref.watch(getInformationProvider).favoriteList;
+    await ref.read(getFavoriteProvider.notifier).getFavorite();
+    final firebaseId = ref.watch(getFavoriteProvider).favoriteList;
     await ref.read(favoriteProvider.notifier).fetchUser();
     final phoneId =
         ref.watch(favoriteProvider).map((e) => e['id'].toString()).toList();
