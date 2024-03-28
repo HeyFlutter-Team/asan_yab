@@ -9,14 +9,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositoris/language_repo.dart';
 
-class ShopNewItem extends ConsumerStatefulWidget {
-  const ShopNewItem({super.key});
+class ItemsSopping extends ConsumerStatefulWidget {
+  const ItemsSopping({super.key});
 
   @override
-  ConsumerState<ShopNewItem> createState() => _ItemsSoppingState();
+  ConsumerState<ItemsSopping> createState() => _ItemsSoppingState();
 }
 
-class _ItemsSoppingState extends ConsumerState<ShopNewItem> {
+class _ItemsSoppingState extends ConsumerState<ItemsSopping> {
   @override
   Widget build(BuildContext context) {
     final isRTL = ref.watch(languageProvider).code == 'fa';

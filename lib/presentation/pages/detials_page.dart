@@ -3,7 +3,7 @@ import 'package:asan_yab/core/utils/download_image.dart';
 import 'package:asan_yab/core/extensions/language.dart';
 import 'package:asan_yab/domain/riverpod/data/toggle_favorite.dart';
 import 'package:asan_yab/presentation/pages/doctors_page.dart';
-import 'package:asan_yab/presentation/pages/shop_new_item.dart';
+import 'package:asan_yab/presentation/pages/newitem_shop.dart';
 import 'package:asan_yab/presentation/widgets/comments_widget.dart';
 import 'package:asan_yab/presentation/widgets/rating_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -271,7 +271,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const ShopNewItem(),
+                                                    const ItemsSopping(),
                                               ),
                                             );
                                           },

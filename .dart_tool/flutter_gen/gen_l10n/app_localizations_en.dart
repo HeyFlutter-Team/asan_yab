@@ -357,4 +357,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get download_image_loading => 'Please waite...';
+
+  @override
+  String get menus_restaurant => 'Menu';
 }

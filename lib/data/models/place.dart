@@ -19,6 +19,7 @@ class Place {
   int distance;
   final List<NewProducts>? newItems;
   final List<NewItemsYounis>? newItemYounis;
+  final List<String>? menuItemName;
   Place({
     required this.createdAt,
     required this.addresses,
@@ -36,6 +37,7 @@ class Place {
     this.doctors,
     this.newItems,
     this.newItemYounis,
+    this.menuItemName
   });
 
   factory Place.fromJson(Map<String, dynamic> json) {
@@ -101,6 +103,9 @@ class Place {
       newItemYounis: json['newItemYounis'] != null
           ? List<NewItemsYounis>.from(json['newItemYounis']
               .map((newItemYounis) => NewProducts.fromJson(newItemYounis)))
+          : null,
+      menuItemName: json['menuItemName'] != null
+          ? List<String>.from(json['menuItemName'])
           : null,
     );
   }
@@ -235,3 +240,4 @@ class Doctors {
       imageUrl: json[FirebaseFieldNames.doctorImageUrl],
       spendTime: json[FirebaseFieldNames.doctorSpendTime]);
 }
+
