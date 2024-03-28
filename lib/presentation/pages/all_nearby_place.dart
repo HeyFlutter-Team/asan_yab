@@ -18,7 +18,7 @@ class NearbyPlacePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final languageText=AppLocalizations.of(context);
+    final languageText = AppLocalizations.of(context);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     final List<Place> place;
     place = ref.watch(nearbyPlace);
@@ -27,7 +27,7 @@ class NearbyPlacePage extends ConsumerWidget {
         appBar: AppBar(
           elevation: 0.0,
           // backgroundColor: Colors.white,
-          title:  Text(
+          title: Text(
             languageText!.nearby_place_page_title,
           ),
           leading: IconButton(
@@ -35,7 +35,7 @@ class NearbyPlacePage extends ConsumerWidget {
               FocusScope.of(context).unfocus();
               Navigator.pop(context);
             },
-            icon: const Icon(Icons.arrow_back,size: 25),
+            icon: const Icon(Icons.arrow_back, size: 25),
           ),
         ),
         body: place.isEmpty
@@ -53,7 +53,8 @@ class NearbyPlacePage extends ConsumerWidget {
                             onClicked: () async {
                               await ref.refresh(nearbyPlace.notifier).refresh();
                             },
-                            titleName: languageText.nearby_place_page_active_location,
+                            titleName:
+                                languageText.nearby_place_page_active_location,
                             textColor1: Colors.white,
                             btnColor: Colors.black26),
                       ))
@@ -74,7 +75,7 @@ class NearbyPlacePage extends ConsumerWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 14),
                       child: Row(
                         children: [
-                           Text(languageText.nearby_place_page_distances),
+                          Text(languageText.nearby_place_page_distances),
                           const SizedBox(
                             width: 10,
                           ),
@@ -100,11 +101,10 @@ class NearbyPlacePage extends ConsumerWidget {
                                     },
                                     value: e,
                                     child: isRTL
-                                    ?Text(
-                                        "  ${convertDigitsToFarsi((e < 1 ? (e * 1000).toInt().toString() : e.toInt().toString()))} ${e < 1 ? languageText.nearby_place_page_meter : languageText.nearby_place_page_km}")
-                               :Text(
-                                        "  ${(e < 1 ? (e * 1000).toInt().toString() : e.toInt().toString())} ${e < 1 ? languageText.nearby_place_page_meter : languageText.nearby_place_page_km}")
-                                );
+                                        ? Text(
+                                            "  ${convertDigitsToFarsi((e < 1 ? (e * 1000).toInt().toString() : e.toInt().toString()))} ${e < 1 ? languageText.nearby_place_page_meter : languageText.nearby_place_page_km}")
+                                        : Text(
+                                            "  ${(e < 1 ? (e * 1000).toInt().toString() : e.toInt().toString())} ${e < 1 ? languageText.nearby_place_page_meter : languageText.nearby_place_page_km}"));
                               }).toList(),
                               onChanged: (value) {
                                 ref
@@ -228,8 +228,12 @@ class NearbyPlacePage extends ConsumerWidget {
                                           padding: const EdgeInsets.all(8),
                                           child: Text(
                                             place[index].distance < 1000
-                                                ? isRTL?'${convertDigitsToFarsi(place[index].distance.toString())} ${languageText.nearby_place_page_meter_away}':'${place[index].distance.toString()} ${languageText.nearby_place_page_meter_away}'
-                                                : isRTL?'${convertDigitsToFarsi((place[index].distance / 1000).toStringAsFixed(1))} ${languageText.nearby_place_page_km_away}':'${(place[index].distance / 1000).toStringAsFixed(1)} ${languageText.nearby_place_page_km_away}',
+                                                ? isRTL
+                                                    ? '${convertDigitsToFarsi(place[index].distance.toString())} ${languageText.nearby_place_page_meter_away}'
+                                                    : '${place[index].distance.toString()} ${languageText.nearby_place_page_meter_away}'
+                                                : isRTL
+                                                    ? '${convertDigitsToFarsi((place[index].distance / 1000).toStringAsFixed(1))} ${languageText.nearby_place_page_km_away}'
+                                                    : '${(place[index].distance / 1000).toStringAsFixed(1)} ${languageText.nearby_place_page_km_away}',
                                             style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 12,

@@ -806,6 +806,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'you are not logged in'**
   String get you_are_not_logged_in;
+
+  /// No description provided for @menus_restaurant.
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get menus_restaurant;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

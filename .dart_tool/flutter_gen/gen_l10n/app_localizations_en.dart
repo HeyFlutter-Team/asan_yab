@@ -360,4 +360,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get you_are_not_logged_in => 'you are not logged in';
+
+  @override
+  String get menus_restaurant => 'Menu';
 }

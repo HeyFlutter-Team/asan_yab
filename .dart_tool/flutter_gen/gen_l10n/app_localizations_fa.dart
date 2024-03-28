@@ -360,4 +360,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get you_are_not_logged_in => 'شما وارد نشده اید';
+
+  @override
+  String get menus_restaurant => 'منوی';
 }
