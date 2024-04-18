@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:asan_yab/core/utils/download_image.dart';
 import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/data/models/place.dart';
 import 'package:asan_yab/domain/riverpod/data/toggle_favorite.dart';
 import 'package:asan_yab/presentation/pages/doctors_page.dart';
+import 'package:asan_yab/presentation/pages/google_map_page.dart';
 import 'package:asan_yab/presentation/pages/menu_restaurant_page.dart';
 import 'package:asan_yab/presentation/pages/newitem_shop.dart';
 import 'package:asan_yab/presentation/widgets/comments.dart';
@@ -20,7 +22,6 @@ import '../../domain/riverpod/data/favorite_provider.dart';
 import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../../domain/riverpod/data/firebase_rating_provider.dart';
 import '../../domain/riverpod/data/single_place_provider.dart';
-import '../../domain/riverpod/menus_bloc/menus_notifier.dart';
 import '../widgets/page_view_item.dart';
 import 'detials_page_offline.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -40,7 +41,6 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
     super.initState();
     ref.read(getSingleProvider.notifier).fetchSinglePlace(widget.id);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      //Todo: for selected
       ref.read(getInformationProvider).getFavorite();
       final provider = ref.read(favoriteProvider.notifier);
       final toggle = provider.isExist(widget.id);
@@ -56,6 +56,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
   void dispose() {
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     List<String> phoneData = [];
@@ -68,7 +69,6 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
     final places = ref.watch(getSingleProvider);
     final languageText = AppLocalizations.of(context);
     return Scaffold(
-      //backgroundColor: Theme.of(context).primaryColor,
       body: places == null
           ? const Center(
               child: CircularProgressIndicator(
@@ -87,7 +87,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          ref.read(getSingleProvider.notifier).state=null;
+                          ref.read(getSingleProvider.notifier).state = null;
                           Navigator.pop(context);
                         },
                         icon: const Icon(Icons.arrow_back),
@@ -202,50 +202,52 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                   postId: places.id,
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 20.0,right: 20),
-                                  child:(places.menuItemName == null ||
-                                      places.menuItemName!.isEmpty)?
-                                      SizedBox():
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                MenuRestaurant(placeId: places.id),
-                                          ));
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      elevation: 5,
-                                      minimumSize: Size(70, 35),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          '${languageText?.menus_restaurant}',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500,
-                                            color: Theme.of(context)
-                                                        .brightness ==
-                                                    Brightness.light
-                                                ? Colors
-                                                    .black // Set light theme color
-                                                : Colors.white,
+                                  padding: const EdgeInsets.only(
+                                      left: 20.0, right: 20),
+                                  child: (places.menuItemName == null ||
+                                          places.menuItemName!.isEmpty)
+                                      ? SizedBox()
+                                      : ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MenuRestaurant(
+                                                          placeId: places.id),
+                                                ));
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            elevation: 5,
+                                            minimumSize: Size(70, 35),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                '${languageText?.menus_restaurant}',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Theme.of(context)
+                                                              .brightness ==
+                                                          Brightness.light
+                                                      ? Colors
+                                                          .black // Set light theme color
+                                                      : Colors.white,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 7,
+                                              ),
+                                              Icon(Icons.menu_open,
+                                                  size: 20,
+                                                  color: Colors.blue.shade800),
+                                            ],
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: 7,
-                                        ),
-                                        Icon(Icons.menu_open,
-                                            size: 20,
-                                            color: Colors.blue.shade800),
-                                      ],
-                                    ),
-                                  ),
                                 ),
                               ],
                             ),
@@ -691,153 +693,26 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
 
                             ////hojjat finish////
 
-                            (places.addresses.isEmpty)
-                                ? const SizedBox()
-                                : CustomCard(
-                                    title:
-                                        '${languageText?.details_page_3_custom_card}',
-                                    child: ListView.builder(
-                                      padding: EdgeInsets.zero,
-                                      itemCount: places.addresses.length,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      itemBuilder: (context, index) {
-                                        phoneData
-                                            .add(places.addresses[index].phone);
-                                        addressData.add(
-                                            '${places.addresses[index].branch}: ${places.addresses[index].address}');
-                                        return Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Expanded(
-                                              flex: 1,
-                                              child: (places.addresses[index]
-                                                      .address.isEmpty)
-                                                  ? const SizedBox(height: 0)
-                                                  : InkWell(
-                                                      onTap: () async {
-                                                        if (Platform
-                                                            .isAndroid) {
-                                                          var uri = Uri.parse(
-                                                              "google.navigation:q=${places.addresses[index].lat},${places.addresses[index].lang}&mode=d");
-                                                          launchUrl(uri);
-                                                        } else {
-                                                          final urlAppleMaps =
-                                                              Uri.parse(
-                                                                  'https://maps.apple.com/?q=${places.addresses[index].lat},${places.addresses[index].lang}');
-                                                          var uri = Uri.parse(
-                                                              'comgooglemaps://?saddr=&daddr=${places.addresses[index].lat},${places.addresses[index].lang}&directionsmode=driving');
-                                                          // launchUrl(uri);
-                                                          if (await canLaunchUrl(
-                                                              uri)) {
-                                                            await launchUrl(
-                                                                uri);
-                                                          } else if (await canLaunchUrl(
-                                                              urlAppleMaps)) {
-                                                            await launchUrl(
-                                                                urlAppleMaps);
-                                                          } else {
-                                                            throw 'Could not launch $uri';
-                                                          }
-                                                        }
-                                                      },
-                                                      child: Row(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          const Icon(Icons
-                                                              .location_on_outlined),
-                                                          const SizedBox(
-                                                              width: 3),
-                                                          Flexible(
-                                                            flex: 2,
-                                                            child: Text(
-                                                              '${places.addresses[index].branch.isNotEmpty ? ' ${places.addresses[index].branch}: ' : ''} ${places.addresses[index].address}',
-                                                              maxLines: 4,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 14,
-                                                                // color: Colors
-                                                                //     .black54
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                            ),
-                                            (places.addresses[index].phone
-                                                    .isEmpty)
-                                                ? const SizedBox(height: 0)
-                                                : ConstrainedBox(
-                                                    constraints:
-                                                        const BoxConstraints(
-                                                            minWidth: 120),
-                                                    child: OutlinedButton(
-                                                      style: OutlinedButton
-                                                          .styleFrom(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .symmetric(
-                                                                      horizontal:
-                                                                          8)),
-                                                      onPressed: () async {
-                                                        await FlutterPhoneDirectCaller
-                                                            .callNumber(
-                                                          places
-                                                              .addresses[index]
-                                                              .phone,
-                                                        );
-                                                      },
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .end,
-                                                        children: [
-                                                          Text(
-                                                            isRTL
-                                                                ? convertDigitsToFarsi(
-                                                                    places
-                                                                        .addresses[
-                                                                            index]
-                                                                        .phone)
-                                                                : places
-                                                                    .addresses[
-                                                                        index]
-                                                                    .phone,
-                                                            style: TextStyle(
-                                                              fontSize: 16,
-                                                              color: Theme.of(context)
-                                                                          .brightness ==
-                                                                      Brightness
-                                                                          .dark
-                                                                  ? Colors.white
-                                                                  : Colors
-                                                                      .black,
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 8),
-                                                          const Icon(
-                                                            Icons
-                                                                .phone_android_sharp,
-                                                            color: Colors.green,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                          ],
-                                        );
+                            places.addresses.last.lang.isNotEmpty &&
+                                    places.addresses.last.lat.isNotEmpty
+                                ? Padding(
+                                    padding: const EdgeInsets.all(18.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        print('hojjat6');
                                       },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            color: Colors.black12),
+                                        height: 200,
+                                        width: 400,
+                                        child: const GoogleMapPage(),
+                                      ),
                                     ),
-                                  ),
+                                  )
+                                : SizedBox(),
                           ],
                         ),
                       ],
