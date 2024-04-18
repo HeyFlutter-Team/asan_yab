@@ -79,9 +79,9 @@ class _GoogleMapPageState extends ConsumerState<GoogleMapPage> {
                                   scrollGesturesEnabled: true,
                                   zoomGesturesEnabled: true,
                                   zoomControlsEnabled: true,
-                                  myLocationButtonEnabled: true,
+                                  myLocationButtonEnabled: false,
                                   rotateGesturesEnabled: true,
-                                  myLocationEnabled: true,
+                                  myLocationEnabled: false,
                                 ),
                               ),
                             ),
@@ -100,7 +100,7 @@ class _GoogleMapPageState extends ConsumerState<GoogleMapPage> {
                           itemBuilder: (context, index) {
                             return Container(
                               height: MediaQuery.of(context).size.height * 0.07,
-                              width: 330,
+                              width: MediaQuery.of(context).size.width * 0.73,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
                                 color: Colors.white,
@@ -185,7 +185,7 @@ class _GoogleMapPageState extends ConsumerState<GoogleMapPage> {
                                         },
                                         icon: const Icon(
                                           Icons.directions,
-                                          size: 40,
+                                          size: 45,
                                           color: Colors.blue,
                                         ),
                                       ),
