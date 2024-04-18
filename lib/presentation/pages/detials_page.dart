@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:asan_yab/core/utils/download_image.dart';
 import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/data/models/place.dart';
 import 'package:asan_yab/domain/riverpod/data/toggle_favorite.dart';
 import 'package:asan_yab/presentation/pages/doctors_page.dart';
+import 'package:asan_yab/presentation/pages/google_map_page.dart';
 import 'package:asan_yab/presentation/pages/menu_restaurant_page.dart';
 import 'package:asan_yab/presentation/pages/newitem_shop.dart';
 import 'package:asan_yab/presentation/widgets/comments.dart';
@@ -20,7 +22,6 @@ import '../../domain/riverpod/data/favorite_provider.dart';
 import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../../domain/riverpod/data/firebase_rating_provider.dart';
 import '../../domain/riverpod/data/single_place_provider.dart';
-import '../../domain/riverpod/menus_bloc/menus_notifier.dart';
 import '../widgets/page_view_item.dart';
 import 'detials_page_offline.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -40,7 +41,6 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
     super.initState();
     ref.read(getSingleProvider.notifier).fetchSinglePlace(widget.id);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      //Todo: for selected
       ref.read(getInformationProvider).getFavorite();
       final provider = ref.read(favoriteProvider.notifier);
       final toggle = provider.isExist(widget.id);
@@ -56,6 +56,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
   void dispose() {
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     List<String> phoneData = [];
@@ -68,7 +69,6 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
     final places = ref.watch(getSingleProvider);
     final languageText = AppLocalizations.of(context);
     return Scaffold(
-      //backgroundColor: Theme.of(context).primaryColor,
       body: places == null
           ? const Center(
               child: CircularProgressIndicator(
@@ -87,7 +87,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          ref.read(getSingleProvider.notifier).state=null;
+                          ref.read(getSingleProvider.notifier).state = null;
                           Navigator.pop(context);
                         },
                         icon: const Icon(Icons.arrow_back),
@@ -202,50 +202,52 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                   postId: places.id,
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 20.0,right: 20),
-                                  child:(places.menuItemName == null ||
-                                      places.menuItemName!.isEmpty)?
-                                      SizedBox():
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                MenuRestaurant(placeId: places.id),
-                                          ));
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      elevation: 5,
-                                      minimumSize: Size(70, 35),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          '${languageText?.menus_restaurant}',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500,
-                                            color: Theme.of(context)
-                                                        .brightness ==
-                                                    Brightness.light
-                                                ? Colors
-                                                    .black // Set light theme color
-                                                : Colors.white,
+                                  padding: const EdgeInsets.only(
+                                      left: 20.0, right: 20),
+                                  child: (places.menuItemName == null ||
+                                          places.menuItemName!.isEmpty)
+                                      ? SizedBox()
+                                      : ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MenuRestaurant(
+                                                          placeId: places.id),
+                                                ));
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            elevation: 5,
+                                            minimumSize: Size(70, 35),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                '${languageText?.menus_restaurant}',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Theme.of(context)
+                                                              .brightness ==
+                                                          Brightness.light
+                                                      ? Colors
+                                                          .black // Set light theme color
+                                                      : Colors.white,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 7,
+                                              ),
+                                              Icon(Icons.menu_open,
+                                                  size: 20,
+                                                  color: Colors.blue.shade800),
+                                            ],
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: 7,
-                                        ),
-                                        Icon(Icons.menu_open,
-                                            size: 20,
-                                            color: Colors.blue.shade800),
-                                      ],
-                                    ),
-                                  ),
                                 ),
                               ],
                             ),
@@ -838,6 +840,24 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                       },
                                     ),
                                   ),
+                            places.addresses.last.lang.isNotEmpty && places.addresses.last.lat.isNotEmpty?
+                            Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: InkWell(
+                                onTap: (){
+                                  print('hojjat6');
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
+                                    color: Colors.black12
+                                  ),
+                                  height: 200,
+                                  width: 400,
+                                  child:const GoogleMapPage(),
+                                ),
+                              ),
+                            ) : SizedBox(),
                           ],
                         ),
                       ],
@@ -848,4 +868,5 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
             ),
     );
   }
+
 }
