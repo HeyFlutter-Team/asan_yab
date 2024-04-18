@@ -1,20 +1,19 @@
 import 'package:asan_yab/core/extensions/language.dart';
-import 'package:asan_yab/domain/riverpod/screen/active_index.dart';
+import 'package:asan_yab/core/routes/routes.dart';
+import 'package:asan_yab/domain/riverpod/screen/active_index_smooth_animation.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
 import '../../core/res/image_res.dart';
 import '../../core/utils/convert_digits_to_farsi.dart';
 import '../../data/models/place.dart';
-
 import '../../data/repositoris/language_repo.dart';
-import '../../domain/riverpod/data/places_provider.dart';
-import '../pages/detials_page.dart';
+import '../../domain/riverpod/data/fetch_places.dart';
 
 class NewPlacesWidget extends ConsumerWidget {
   final RefreshCallback onRefresh;
@@ -25,13 +24,13 @@ class NewPlacesWidget extends ConsumerWidget {
   //
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.read(placeProvider.notifier).getPlaces();
+    ref.read(fetchPlacesProvider.notifier).getPlaces();
     final screenHeight = MediaQuery.of(context).size.height;
-    List<Place> places = ref.watch(placeProvider);
+    List<Place> places = ref.watch(fetchPlacesProvider);
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: places.isEmpty
-          ? const SizedBox(height: 0)
+          ? SizedBox(height: 0.h)
           : Stack(
               children: [
                 CarouselSlider.builder(
@@ -44,13 +43,8 @@ class NewPlacesWidget extends ConsumerWidget {
                         ? convertDigitsToFarsi(phoneNumberItems)
                         : phoneNumberItems;
                     return GestureDetector(
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              DetailsPage(id: places[index].id),
-                        ),
-                      ),
+                      onTap: () => context.pushNamed(Routes.details,
+                          pathParameters: {'placeId': places[index].id}),
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 12),
                         decoration: BoxDecoration(
@@ -82,8 +76,8 @@ class NewPlacesWidget extends ConsumerWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.7,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.7.w,
                                     child: Text(
                                       items.name,
                                       maxLines: 2,
@@ -95,7 +89,7 @@ class NewPlacesWidget extends ConsumerWidget {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 24),
+                                  SizedBox(height: 24.h),
                                   phoneNumber.isEmpty
                                       ? const SizedBox()
                                       : OutlinedButton(
@@ -150,7 +144,9 @@ class NewPlacesWidget extends ConsumerWidget {
                         const Duration(milliseconds: 500),
                     viewportFraction: 1,
                     onPageChanged: (index, reason) {
-                      ref.read(activeIndexNotifier.notifier).activeIndex(index);
+                      ref
+                          .read(activeIndexSmoothAnimationProvider.notifier)
+                          .activeIndex(index);
                     },
                   ),
                 ),
@@ -159,7 +155,7 @@ class NewPlacesWidget extends ConsumerWidget {
                   left: 35,
                   child: AnimatedSmoothIndicator(
                     count: places.length >= 5 ? 5 : places.length,
-                    activeIndex: ref.watch(activeIndexNotifier),
+                    activeIndex: ref.watch(activeIndexSmoothAnimationProvider),
                     effect: const ExpandingDotsEffect(
                       dotHeight: 12,
                       dotWidth: 12,

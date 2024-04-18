@@ -2,13 +2,15 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:asan_yab/core/extensions/language.dart';
+import 'package:asan_yab/domain/riverpod/data/favorite_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/utils/convert_digits_to_farsi.dart';
 import '../../data/repositoris/language_repo.dart';
-import '../../domain/riverpod/data/favorite_provider.dart';
 import '../widgets/custom_cards_widget.dart';
 
 class OfflineDetailPage extends ConsumerWidget {
@@ -20,30 +22,30 @@ class OfflineDetailPage extends ConsumerWidget {
     final isRTL = ref.watch(languageProvider).code == 'fa';
     final phoneData = List<String>.from(jsonDecode(favItem['phone']));
     final addressData = List<String>.from(jsonDecode(favItem['address']));
-    final provider = ref.read(favoriteProvider.notifier);
+    final provider = ref.read(favoriteItemProvider.notifier);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 30),
+          SizedBox(height: 30.h),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => context.pop(),
                   icon: const Icon(Icons.arrow_back),
                   iconSize: 25,
                 ),
                 IconButton(
                   onPressed: () {
                     provider.delete(favItem['id']);
-                    Navigator.pop(context);
+                    context.pop();
                   },
                   icon: ref
-                          .watch(favoriteProvider.notifier)
+                          .watch(favoriteItemProvider.notifier)
                           .isExist(favItem['id'])
                       ? const Icon(
                           Icons.favorite,
@@ -61,7 +63,7 @@ class OfflineDetailPage extends ConsumerWidget {
                 children: [
                   Column(
                     children: [
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10.h),
                       Container(
                         width: size.width * 0.93,
                         height: size.height * 0.31,
@@ -87,7 +89,7 @@ class OfflineDetailPage extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: Text(
@@ -119,9 +121,7 @@ class OfflineDetailPage extends ConsumerWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Icon(Icons.location_on_outlined),
-                                    const SizedBox(
-                                      width: 3,
-                                    ),
+                                    SizedBox(width: 3.w),
                                     Flexible(
                                       child: Text(addressData[index],
                                           maxLines: 4,
@@ -156,7 +156,7 @@ class OfflineDetailPage extends ConsumerWidget {
                                             fontSize: 16,
                                             color: Colors.black54),
                                       ),
-                                      const SizedBox(width: 8),
+                                      SizedBox(width: 8.w),
                                       const Icon(
                                         Icons.phone_android_sharp,
                                         color: Colors.green,

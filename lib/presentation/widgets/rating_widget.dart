@@ -1,16 +1,18 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:asan_yab/core/utils/convert_digits_to_farsi.dart';
 import 'package:asan_yab/core/extensions/language.dart';
+import 'package:asan_yab/core/utils/translation_util.dart';
 import 'package:asan_yab/domain/riverpod/data/firebase_rating_provider.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../data/repositoris/language_repo.dart';
 import '../../data/repositoris/theme_Provider.dart';
+import 'create_rating_widget.dart';
+import 'stars_widget.dart';
 
 class RatingWidget extends ConsumerStatefulWidget {
   final String postId;
@@ -27,7 +29,6 @@ class _RatingWidgetsState extends ConsumerState<RatingWidget> {
   @override
   void initState() {
     super.initState();
-
     user = FirebaseAuth.instance.currentUser;
   }
 
@@ -63,29 +64,11 @@ class _RatingWidgetsState extends ConsumerState<RatingWidget> {
                 bool isLogin = FirebaseAuth.instance.currentUser != null;
                 if (isLogin) showRating();
               },
-              child: stars(),
+              child: const StarsWidget(),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget buildRating() {
-    return RatingBar.builder(
-      initialRating: rate,
-      itemSize: 35,
-      minRating: 1,
-      maxRating: 5,
-      itemPadding: const EdgeInsets.symmetric(horizontal: 4),
-      updateOnDrag: true,
-      itemBuilder: (context, _) => const Icon(
-        Icons.star_rate,
-        color: Colors.amber,
-      ),
-      onRatingUpdate: (value) {
-        rate = value;
-      },
     );
   }
 
@@ -94,7 +77,7 @@ class _RatingWidgetsState extends ConsumerState<RatingWidget> {
       builder: (context) {
         final themeModel = ref.watch(themeModelProvider);
         final size = MediaQuery.of(context).size.width;
-        final languageText = AppLocalizations.of(context);
+        final text = texts(context);
 
         return Center(
           child: Container(
@@ -109,13 +92,13 @@ class _RatingWidgetsState extends ConsumerState<RatingWidget> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  languageText!.rating_widget_dialog,
+                  text.rating_widget_dialog,
                   style: const TextStyle(
                       fontSize: 25, fontWeight: FontWeight.w600),
                 ),
-                const SizedBox(height: 26),
-                buildRating(),
-                const SizedBox(height: 40),
+                SizedBox(height: 26.h),
+                CreateRatingWidget(rate: rate),
+                SizedBox(height: 40.h),
                 GestureDetector(
                   onTap: () async {
                     if (user != null) {
@@ -131,7 +114,7 @@ class _RatingWidgetsState extends ConsumerState<RatingWidget> {
                     } else {
                       // Handle unauthenticated user
                       debugPrint('User not authenticated');
-                      Navigator.pop(context);
+                      context.pop();
                     }
                   },
                   child: Container(
@@ -144,7 +127,7 @@ class _RatingWidgetsState extends ConsumerState<RatingWidget> {
                     height: 60,
                     child: Center(
                       child: Text(
-                        languageText.done_click,
+                        text.done_click,
                         style: const TextStyle(
                             fontSize: 25, fontWeight: FontWeight.bold),
                       ),
@@ -156,33 +139,4 @@ class _RatingWidgetsState extends ConsumerState<RatingWidget> {
           ),
         );
       });
-  Widget stars() {
-    final averageRatingProvider =
-        ref.watch(firebaseRatingProvider).averageRatingProvider;
-
-    return Row(
-      children: [
-        Icon(
-          Icons.star,
-          color: averageRatingProvider <= 0 ? Colors.grey : Colors.amber,
-        ),
-        Icon(
-          Icons.star,
-          color: averageRatingProvider <= 1 ? Colors.grey : Colors.amber,
-        ),
-        Icon(
-          Icons.star,
-          color: averageRatingProvider <= 2 ? Colors.grey : Colors.amber,
-        ),
-        Icon(
-          Icons.star,
-          color: averageRatingProvider <= 3 ? Colors.grey : Colors.amber,
-        ),
-        Icon(
-          Icons.star,
-          color: averageRatingProvider <= 4 ? Colors.grey : Colors.amber,
-        ),
-      ],
-    );
-  }
 }

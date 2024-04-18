@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:asan_yab/core/extensions/language.dart';
 import 'package:asan_yab/data/repositoris/language_repo.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/utils/translation_util.dart';
 
 class LanguageBottomSheet extends ConsumerStatefulWidget {
@@ -29,17 +30,15 @@ class _LanguagePopUpState extends ConsumerState<LanguageBottomSheet> {
                     onTap: () {
                       ref.read(selectedLanguageProvider.notifier).state = value;
                       languageRepository.setLanguage(value);
-                      Navigator.pop(context);
+                      context.pop();
                     },
                     title: Row(
                       children: [
                         Text(value.flag),
-                        const SizedBox(width: 3),
+                        SizedBox(width: 3.w),
                         Text(
                           value.name,
-                          style: const TextStyle(
-                            color: Colors.blue,
-                          ),
+                          style: const TextStyle(color: Colors.blue),
                         ),
                         if (selectedLanguage.state == value)
                           const Icon(Icons.done, color: Colors.green),

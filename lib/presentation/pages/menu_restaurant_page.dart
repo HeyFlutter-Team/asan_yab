@@ -1,10 +1,12 @@
+import 'package:asan_yab/domain/riverpod/data/single_place.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../data/models/menus_restaurant/rappi_category.dart';
 import '../../data/models/menus_restaurant/rappi_product.dart';
 import '../../data/models/menus_restaurant/rappi_tab_category.dart';
-import '../../domain/riverpod/data/single_place_provider.dart';
 import '../../domain/riverpod/menus_bloc/menus_notifier.dart';
 
 const categoryHeight = 55.0;
@@ -53,7 +55,7 @@ class _MenuRestaurantState extends ConsumerState<MenuRestaurant>
 
   @override
   Widget build(BuildContext context) {
-    final places = ref.watch(getSingleProvider);
+    final places = ref.watch(singlePlaceProvider);
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -69,8 +71,9 @@ class _MenuRestaurantState extends ConsumerState<MenuRestaurant>
           ),
         ),
         body: isLoading
-            ? const Center(
-                child: CircularProgressIndicator(),
+            ? Center(
+                child: LoadingAnimationWidget.fourRotatingDots(
+                    color: Colors.redAccent, size: 60),
               )
             : SafeArea(
                 child: AnimatedBuilder(
@@ -79,7 +82,7 @@ class _MenuRestaurantState extends ConsumerState<MenuRestaurant>
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       SizedBox(
-                        height: 60,
+                        height: 60.h,
                         child: TabBar(
                             tabAlignment: TabAlignment.start,
                             labelPadding:
@@ -132,7 +135,7 @@ class RappiTabWidget extends StatelessWidget {
     return Opacity(
       opacity: selected ? 1 : 0.5,
       child: SizedBox(
-        height: 45,
+        height: 45.h,
         child: Card(
           elevation: tabcategory.selected ? 6 : 1,
           child: Padding(
@@ -161,8 +164,8 @@ class _RappiCategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: categoryHeight,
+    return SizedBox(
+      height: categoryHeight.h,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Text(
@@ -184,8 +187,8 @@ class _RappiProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: productHeight,
+    return SizedBox(
+      height: productHeight.h,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Card(
@@ -217,9 +220,7 @@ class _RappiProductItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
+                SizedBox(width: 10.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,9 +231,7 @@ class _RappiProductItem extends StatelessWidget {
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 17),
                       ),
-                      const SizedBox(
-                        height: 5,
-                      ),
+                      SizedBox(height: 5.h),
                       Text(
                         product!.description,
                         style: TextStyle(
@@ -245,9 +244,7 @@ class _RappiProductItem extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.fade,
                       ),
-                      const SizedBox(
-                        height: 5,
-                      ),
+                      SizedBox(height: 5.h),
                       Text(
                         textDirection: TextDirection.ltr,
                         '${product!.price.toString()} AF',

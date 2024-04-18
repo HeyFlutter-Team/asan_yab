@@ -1,11 +1,13 @@
 import 'package:asan_yab/core/res/image_res.dart';
+import 'package:asan_yab/core/routes/routes.dart';
 import 'package:asan_yab/core/utils/convert_digits_to_farsi.dart';
 import 'package:asan_yab/core/extensions/language.dart';
-import 'package:asan_yab/domain/riverpod/data/single_place_provider.dart';
-import 'package:asan_yab/presentation/widgets/page_view_item_widget.dart';
+import 'package:asan_yab/domain/riverpod/data/single_place.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../data/repositoris/language_repo.dart';
 
@@ -20,7 +22,7 @@ class _ItemsSoppingState extends ConsumerState<ItemsSopping> {
   @override
   Widget build(BuildContext context) {
     final isRTL = ref.watch(languageProvider).code == 'fa';
-    final places = ref.watch(getSingleProvider);
+    final places = ref.watch(singlePlaceProvider);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(),
@@ -37,16 +39,18 @@ class _ItemsSoppingState extends ConsumerState<ItemsSopping> {
         itemBuilder: (context, index) => Padding(
           padding: const EdgeInsets.only(top: 6, left: 2, right: 2, bottom: 18),
           child: GestureDetector(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ImageView(
-                  selectedIndex: index,
-                  gallery:
-                      places.itemImages!.map((item) => item.imageUrl).toList(),
-                ),
-              ),
-            ),
+            onTap: () {
+              context.pushNamed(
+                Routes.imageView,
+                pathParameters: {
+                  'index': index.toString(),
+                  'imageList': places.itemImages!
+                      .map((item) => item.imageUrl)
+                      .toList()
+                      .toString(),
+                },
+              );
+            },
             child: Container(
               width: 220,
               height: 250,
@@ -61,10 +65,11 @@ class _ItemsSoppingState extends ConsumerState<ItemsSopping> {
                 children: [
                   ClipRRect(
                     borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(25),
-                        topLeft: Radius.circular(25),
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(10)),
+                      topRight: Radius.circular(25),
+                      topLeft: Radius.circular(25),
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    ),
                     child: CachedNetworkImage(
                       imageUrl: places.itemImages![index].imageUrl,
                       width: double.infinity,
@@ -77,7 +82,7 @@ class _ItemsSoppingState extends ConsumerState<ItemsSopping> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10.h),
                   Text(
                     maxLines: 1,
                     places.itemImages![index].name,

@@ -1,6 +1,7 @@
+import 'package:asan_yab/core/utils/translation_util.dart';
 import 'package:asan_yab/data/models/users.dart';
 import 'package:asan_yab/domain/riverpod/data/message/message.dart';
-import 'package:asan_yab/domain/riverpod/data/message/message_provider.dart';
+import 'package:asan_yab/domain/riverpod/data/message/fetch_message.dart';
 import 'package:asan_yab/domain/riverpod/data/message/message_history.dart';
 import 'package:asan_yab/domain/riverpod/data/message/seen_message.dart';
 import 'package:asan_yab/domain/riverpod/data/message/messages_notifier.dart';
@@ -12,7 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatDetailPage extends ConsumerStatefulWidget {
   const ChatDetailPage({super.key, this.uid});
@@ -26,15 +27,15 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-        (_) => ref.read(messageProvider.notifier).getMessages(widget.uid!));
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+        ref.read(fetchMessageProvider.notifier).getMessages(widget.uid!));
   }
 
   @override
   Widget build(BuildContext context) {
-    final newProfileUser = ref.watch(otherUserProvider);
+    final newProfileUser = ref.watch(otherUserDataProvider);
     final themDark = Theme.of(context).brightness == Brightness.dark;
-    final languageText = AppLocalizations.of(context);
+    final text = texts(context);
     final isMessageLoading = ref.watch(messageLoadingProvider);
     final isEmojiShowing = ref.watch(emojiShowingProvider);
     final replay = ref.watch(replayProvider);
@@ -134,16 +135,16 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                   .state = false,
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.zero,
-                                hintText: languageText?.chat_message,
+                                hintText: text.chat_message,
                                 border: InputBorder.none,
                               ),
                               controller: ref
-                                  .watch(messageProfileProvider.notifier)
+                                  .watch(messageProvider.notifier)
                                   .textController,
                             ),
                           ),
                         ),
-                        const SizedBox(width: 15),
+                        SizedBox(width: 15.w),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               backgroundColor:
@@ -167,13 +168,13 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                           Offstage(
                             offstage: !ref.watch(emojiShowingProvider),
                             child: SizedBox(
-                              height: 250,
+                              height: 250.h,
                               child: EmojiPicker(
                                 textEditingController: ref
-                                    .watch(messageProfileProvider.notifier)
+                                    .watch(messageProvider.notifier)
                                     .textController,
                                 onBackspacePressed: ref
-                                    .read(messageProfileProvider.notifier)
+                                    .read(messageProvider.notifier)
                                     .onBackspacePressed(),
                                 config: Config(
                                   columns: 7,
@@ -225,19 +226,22 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
     );
   }
 
-  void sendMessage(BuildContext context, Users newProfileUser) {
-    ref.read(messageProfileProvider.notifier).sendText(
+  void sendMessage(
+    BuildContext context,
+    Users newProfileUser,
+  ) {
+    ref.read(messageProvider.notifier).sendText(
         receiverId: newProfileUser.uid!,
         context: context,
         replayMessage: ref.watch(replayProvider));
     ref.read(replayProvider.notifier).state = '';
-    ref.read(messageProfileProvider.notifier).textController.clear();
+    ref.read(messageProvider.notifier).textController.clear();
   }
 
   Future<void> _onWillPop(Users newProfileUser) async {
-    ref.read(messageProvider.notifier).clearState();
-    ref.read(messageNotifierProvider.notifier).fetchMessage();
-    ref.read(messageHistory.notifier).getMessageHistory();
+    ref.read(fetchMessageProvider.notifier).clearState();
+    ref.read(messagesNotifierProvider.notifier).fetchMessage();
+    ref.read(messageHistoryProvider.notifier).getMessageHistory();
     ref
         .read(seenMassageProvider.notifier)
         .messageIsSeen(

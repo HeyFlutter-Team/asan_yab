@@ -4,6 +4,8 @@ import 'package:asan_yab/presentation/widgets/update_dialog_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/utils/convert_digits_to_farsi.dart';
@@ -102,7 +104,7 @@ class UpdateContentWidget extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: 12.h),
                         Expanded(
                           flex: 5,
                           child: SingleChildScrollView(
@@ -125,9 +127,7 @@ class UpdateContentWidget extends StatelessWidget {
                         widget.allowDismissal
                             ? Expanded(
                                 child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
+                                  onTap: () => context.pop(),
                                   child: Container(
                                     height: 30,
                                     width: 120,
@@ -150,7 +150,7 @@ class UpdateContentWidget extends StatelessWidget {
                                 ),
                               )
                             : const SizedBox(),
-                        SizedBox(width: widget.allowDismissal ? 16 : 0),
+                        SizedBox(width: widget.allowDismissal ? 16.w : 0.w),
                         Expanded(
                           child: GestureDetector(
                             onTap: () async => await launchUrl(

@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:asan_yab/core/utils/translation_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DownloadImage {
   const DownloadImage._();
@@ -32,18 +33,18 @@ class DownloadImage {
       barrierDismissible: false,
       context: context,
       builder: (context) => SizedBox(
-        height: 100,
+        height: 100.h,
         child: AlertDialog(
           elevation: 4,
           content: Row(
             children: [
-              const SizedBox(
-                height: 30,
-                width: 30,
-                child: CircularProgressIndicator(
+              SizedBox(
+                height: 30.h,
+                width: 30.w,
+                child: const CircularProgressIndicator(
                     color: Colors.blueGrey, strokeWidth: 3.0),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12.w),
               Text(
                 text.download_image_loading,
                 style: const TextStyle(

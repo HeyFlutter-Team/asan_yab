@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/constants/firebase_collection_names.dart';
 import '../../../data/models/comment.dart';
 import '../../../data/models/users.dart';
@@ -106,7 +108,7 @@ class CommentProvider extends ChangeNotifier {
           return;
         }
 
-        final restrictedWords = ref.watch(restrictedWord);
+        final restrictedWords = ref.watch(restrictedWordProvider);
 
         if (restrictedWords.any((word) => commentText.contains(word))) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -214,17 +216,17 @@ class CommentProvider extends ChangeNotifier {
                   leading: const Icon(Icons.delete),
                   title: const Text('Delete'),
                   onTap: () {
-                    Navigator.pop(context);
+                    context.pop();
                     if (isOwner) {
                       onDelete();
                     }
                   },
                 )
-              : const SizedBox(height: 0),
+              : SizedBox(height: 0.h),
           ListTile(
             leading: const Icon(Icons.report),
             title: const Text('Report'),
-            onTap: () => Navigator.pop(context),
+            onTap: () => context.pop(),
           ),
         ],
       ),

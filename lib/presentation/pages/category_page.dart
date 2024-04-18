@@ -1,11 +1,14 @@
 import 'package:asan_yab/core/extensions/language.dart';
-import 'package:asan_yab/domain/riverpod/data/categories_provider.dart';
+import 'package:asan_yab/domain/riverpod/data/categories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../core/res/colors.dart';
+import '../../core/routes/routes.dart';
+import '../../core/utils/translation_util.dart';
 import '../../data/repositoris/language_repo.dart';
-import 'list_category_item.dart';
 
 class CategoryPage extends ConsumerWidget {
   const CategoryPage({super.key});
@@ -13,27 +16,25 @@ class CategoryPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isRTL = ref.watch(languageProvider).code == 'fa';
-    final languageText = AppLocalizations.of(context);
+    final text = texts(context);
     ref.read(categoriesProvider.notifier).getCategories();
     final category = ref.watch(categoriesProvider);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        title: Text(languageText!.category_title),
+        title: Text(text.category_title),
         leading: IconButton(
           onPressed: () {
             FocusScope.of(context).unfocus();
-            Navigator.pop(context);
+            context.pop();
           },
           icon: const Icon(Icons.arrow_back, size: 25),
         ),
       ),
       body: category.isEmpty
-          ? const Center(
-              child: CircularProgressIndicator(
-                strokeWidth: 5,
-                color: Colors.blueGrey,
-              ),
+          ? Center(
+              child: LoadingAnimationWidget.fourRotatingDots(
+                  color: Colors.redAccent, size: 60),
             )
           : ListView(
               shrinkWrap: true,
@@ -52,20 +53,15 @@ class CategoryPage extends ConsumerWidget {
                     ),
                     itemCount: category.length,
                     itemBuilder: (context, index) => GestureDetector(
-                      onTap: () {
-                        debugPrint('the id is : ${category[index].id}');
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ListCategoryItem(
-                              catId: category[index].id,
-                              categoryName: isRTL
-                                  ? category[index].name
-                                  : category[index].enCategoryName!,
-                            ),
-                          ),
-                        );
-                      },
+                      onTap: () => context.pushNamed(
+                        Routes.listOfCategory,
+                        pathParameters: {
+                          'Id': category[index].id,
+                          'name': isRTL
+                              ? category[index].name
+                              : category[index].enCategoryName!,
+                        },
+                      ),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
@@ -82,7 +78,7 @@ class CategoryPage extends ConsumerWidget {
                               size: 40.0,
                               color: Colors.white,
                             ),
-                            const SizedBox(height: 16.0),
+                            SizedBox(height: 16.0.h),
                             Text(
                               isRTL
                                   ? category[index].name

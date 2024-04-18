@@ -1,12 +1,14 @@
+import 'package:asan_yab/core/routes/routes.dart';
+import 'package:asan_yab/domain/riverpod/data/other_user_data.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 import '../../core/res/image_res.dart';
 import '../../data/models/message/message_model.dart';
 import '../../data/models/users.dart';
-import '../../domain/riverpod/data/other_user_data.dart';
-import '../pages/message_page/chat_details_page.dart';
 
 class MessageCanSendWidget extends StatelessWidget {
   const MessageCanSendWidget({
@@ -26,7 +28,7 @@ class MessageCanSendWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         messageNotifier.isEmpty
             ? const Expanded(
                 child: Center(
@@ -49,14 +51,10 @@ class MessageCanSendWidget extends StatelessWidget {
                         onTap: () {
                           final id = userForChat.uid;
                           ref
-                              .read(otherUserProvider.notifier)
+                              .read(otherUserDataProvider.notifier)
                               .setDataUser(userForChat);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ChatDetailPage(uid: id),
-                            ),
-                          );
+                          context.pushNamed(Routes.chatDetail,
+                              pathParameters: {'followId': id!});
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -132,7 +130,7 @@ class MessageCanSendWidget extends StatelessWidget {
                                     title: Row(
                                       children: [
                                         Text(userForChat.name),
-                                        const SizedBox(width: 5),
+                                        SizedBox(width: 5.w),
                                         const Spacer(),
                                         Text(
                                           messageDetails.isEmpty
@@ -172,7 +170,7 @@ class MessageCanSendWidget extends StatelessWidget {
                                                   height: 20,
                                                   width: 20,
                                                 ),
-                                              const SizedBox(width: 5),
+                                              SizedBox(width: 5.w),
                                               newMessage[index]
                                                   ? const Icon(
                                                       Icons.circle,

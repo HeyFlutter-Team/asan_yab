@@ -1,4 +1,5 @@
 // this method is use to convert the farsi number to english number
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 
@@ -26,38 +27,23 @@ extension MediaQueryExtension on BuildContext {
   double get screenWidth => MediaQuery.of(this).size.width;
 }
 
- void showsSnackBarForDisconnect(BuildContext context) {
-    final snackBar = SnackBar(
-      duration: const Duration(days: 1),
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: 'انترنت وصل نیست!',
-        message: 'لطفا انترنیت را وصل کنید!',
-        contentType: ContentType.warning,
-      ),
-    );
+void showsSnackBarForConnectAndDisconnect({
+  required BuildContext context,
+  required bool isConnected,
+}) {
+  final snackBar = SnackBar(
+    duration: Duration(seconds: isConnected ? 5 : 2),
+    elevation: 0,
+    behavior: SnackBarBehavior.floating,
+    backgroundColor: Colors.transparent,
+    content: AwesomeSnackbarContent(
+      message: isConnected ? 'از برنامه لذت ببرید!' : 'انترنت وصل نیست!',
+      contentType: isConnected ? ContentType.success : ContentType.warning,
+      title: isConnected ? 'انترنت وصل است' : 'لطفا انترنیت را وصل کنید!',
+    ),
+  );
 
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
-  }
-
-  void showsSnackBarForConnect(BuildContext context) {
-    final snackBar = SnackBar(
-      duration: const Duration(seconds: 5),
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        message: 'از برنامه لذت ببرید!',
-        contentType: ContentType.success,
-        title: 'انترنت وصل است',
-      ),
-    );
-
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
-  }
+  ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(snackBar);
+}

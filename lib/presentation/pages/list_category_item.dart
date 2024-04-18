@@ -1,8 +1,8 @@
-import 'package:asan_yab/presentation/pages/search_bar_page.dart';
+import 'package:asan_yab/domain/riverpod/screen/circular_loading_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../domain/riverpod/screen/loading_circularPRI_provider.dart';
+import 'package:go_router/go_router.dart';
+import '../../core/routes/routes.dart';
 import '../widgets/category_item_widget.dart';
 
 class ListCategoryItem extends ConsumerWidget {
@@ -26,24 +26,19 @@ class ListCategoryItem extends ConsumerWidget {
           elevation: 0.0,
           actions: [
             IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SearchBarPage(),
-                    ),
-                  );
-                },
-                icon: const Icon(
-                  Icons.search,
-                  size: 25,
-                ))
+              onPressed: () => context.pushNamed(Routes.searchBar),
+              icon: const Icon(
+                Icons.search,
+                size: 25,
+              ),
+            )
           ],
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
-              ref.read(loadingProvider.notifier).state =
-                  !ref.watch(loadingProvider);
+              context.pop();
+              ref
+                  .read(circularLoadingProvider.notifier)
+                  .toggleCircularLoading();
             },
             icon: const Icon(Icons.arrow_back, size: 25.0),
           ),

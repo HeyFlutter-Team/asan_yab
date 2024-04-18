@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 import '../../core/constants/firebase_field_names.dart';
 
@@ -32,6 +33,26 @@ class Comment {
           ? creationTime.toDate()
           : DateTime
               .now(), // Default to current date if timestamp is null or not of type Timestamp
+    );
+  }
+}
+
+class CommentState {
+  final List<Comment> comments;
+  final TextEditingController commentController;
+
+  CommentState({
+    required this.comments,
+    required this.commentController,
+  });
+
+  CommentState copyWith({
+    List<Comment>? comments,
+    TextEditingController? commentController,
+  }) {
+    return CommentState(
+      comments: comments ?? this.comments,
+      commentController: commentController ?? this.commentController,
     );
   }
 }

@@ -1,13 +1,15 @@
 import 'package:asan_yab/domain/riverpod/data/other_user_data.dart';
-import 'package:asan_yab/domain/riverpod/data/search_user.dart';
-import 'package:asan_yab/domain/riverpod/screen/follow_checker.dart';
-import 'package:asan_yab/presentation/pages/profile/other_profile.dart';
+import 'package:asan_yab/domain/riverpod/data/search_list_of_user.dart';
+import 'package:asan_yab/domain/riverpod/screen/check_follower.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import '../../../core/routes/routes.dart';
 import '../../../core/utils/translation_util.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
@@ -34,10 +36,13 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             hintText: text.searchById,
           ),
           onChanged: (value) {
+            debugPrint('This is the Value of id $value');
             final id = int.parse(value);
-            ref.read(searchProvider.notifier).getProfile(id);
+            ref.read(searchListOfUserProvider.notifier).getProfile(id);
+            debugPrint(
+                'Sharif please check this${ref.read(searchListOfUserProvider.notifier).getProfile(id)}');
             if (value.isEmpty) {
-              ref.refresh(searchProvider.notifier).clearSearch();
+              ref.refresh(searchListOfUserProvider.notifier).clearSearch();
               ref.refresh(searchLoadingProvider.notifier).state = false;
             } else {
               ref.refresh(searchLoadingProvider.notifier).state = true;
@@ -51,7 +56,9 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                 ? IconButton(
                     onPressed: () {
                       searchController.clear();
-                      ref.refresh(searchProvider.notifier).clearSearch();
+                      ref
+                          .refresh(searchListOfUserProvider.notifier)
+                          .clearSearch();
                     },
                     icon: const Icon(
                       Icons.close,
@@ -63,13 +70,13 @@ class _SearchPageState extends ConsumerState<SearchPage> {
         ],
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
-            ref.refresh(searchProvider.notifier).clearSearch();
+            context.pop();
+            ref.refresh(searchListOfUserProvider.notifier).clearSearch();
           },
           icon: const Icon(Icons.arrow_back, size: 25.0),
         ),
       ),
-      body: ref.watch(searchProvider).isEmpty
+      body: ref.watch(searchListOfUserProvider).isEmpty
           ? Center(
               child: Text(
                 text.findingFriendById,
@@ -81,40 +88,35 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             )
           : ListView.separated(
               padding: const EdgeInsets.all(12),
-              itemCount: ref.watch(searchProvider).length,
-              separatorBuilder: (context, index) => const SizedBox(height: 8),
+              itemCount: ref.watch(searchListOfUserProvider).length,
+              separatorBuilder: (context, index) => SizedBox(height: 8.h),
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
-                    ref
-                        .read(otherUserProvider.notifier)
-                        .setDataUser(ref.watch(searchProvider)[index]);
-                    ref.read(followerProvider.notifier).followOrUnFollow(
+                    ref.read(otherUserDataProvider.notifier).setDataUser(
+                        ref.watch(searchListOfUserProvider)[index]);
+                    ref.read(checkFollowerProvider.notifier).followOrUnFollow(
                         FirebaseAuth.instance.currentUser!.uid,
-                        ref.watch(searchProvider)[index].uid!);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const OtherProfile(),
-                      ),
-                    );
+                        ref.watch(searchListOfUserProvider)[index].uid!);
+                    context.pushNamed(Routes.otherProfile);
                   },
                   child: Row(
                     children: [
-                      ref.watch(searchProvider)[index].imageUrl == ''
+                      ref.watch(searchListOfUserProvider)[index].imageUrl == ''
                           ? const CircleAvatar(
                               radius: 30,
                               backgroundImage: AssetImage('assets/Avatar.png'),
                             )
                           : CircleAvatar(
                               radius: 30,
-                              backgroundImage: CachedNetworkImageProvider(
-                                  ref.watch(searchProvider)[index].imageUrl),
+                              backgroundImage: CachedNetworkImageProvider(ref
+                                  .watch(searchListOfUserProvider)[index]
+                                  .imageUrl),
                             ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12.w),
                       Expanded(
                         child: Text(
-                          ref.watch(searchProvider)[index].name,
+                          ref.watch(searchListOfUserProvider)[index].name,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontSize: 18.0,

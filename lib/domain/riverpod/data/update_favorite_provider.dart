@@ -1,10 +1,10 @@
 import 'package:asan_yab/data/models/place.dart';
-import 'package:asan_yab/domain/riverpod/data/single_place_provider.dart';
+import 'package:asan_yab/domain/riverpod/data/favorite_item.dart';
+import 'package:asan_yab/domain/riverpod/data/single_place.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:go_router/go_router.dart';
 import '../../../core/utils/download_image.dart';
-import 'favorite_provider.dart';
 import 'firbase_favorite_provider.dart';
 
 final updateFavoriteProvider = ChangeNotifierProvider<UpdateFavoriteProvider>(
@@ -18,9 +18,9 @@ class UpdateFavoriteProvider extends ChangeNotifier {
   ) async {
     await ref.read(getFavoriteProvider.notifier).getFavorite();
     final firebaseId = ref.watch(getFavoriteProvider).favoriteList;
-    await ref.read(favoriteProvider.notifier).fetchUser();
+    await ref.read(favoriteItemProvider.notifier).fetchUser();
     final phoneId =
-        ref.watch(favoriteProvider).map((e) => e['id'].toString()).toList();
+        ref.watch(favoriteItemProvider).map((e) => e['id'].toString()).toList();
     debugPrint(firebaseId.toString());
     List<String> phoneData = [];
     List<String> addressData = [];
@@ -28,11 +28,11 @@ class UpdateFavoriteProvider extends ChangeNotifier {
     for (int i = 0; i < firebaseId.length; i++) {
       if (!(phoneId.contains(firebaseId[i]))) {
         await ref
-            .read(getSingleProvider.notifier)
+            .read(singlePlaceProvider.notifier)
             .fetchSinglePlace(firebaseId[i])
             .whenComplete(
           () async {
-            final places = ref.watch(getSingleProvider);
+            final places = ref.watch(singlePlaceProvider);
             addressData = [];
             phoneData = [];
             if (places != null) {
@@ -41,15 +41,14 @@ class UpdateFavoriteProvider extends ChangeNotifier {
                     '${places.addresses[i].branch}: ${places.addresses[i].address}');
                 phoneData.add(places.addresses[i].phone);
               }
-
               await DownloadImage.getImage(
                 places.logo,
                 places.coverImage,
                 context,
               ).then(
                 (_) {
-                  Navigator.pop(context);
-                  ref.read(favoriteProvider.notifier).toggleFavorite(
+                  context.pop();
+                  ref.read(favoriteItemProvider.notifier).toggleFavorite(
                         places.id,
                         places,
                         addressData,
@@ -67,7 +66,7 @@ class UpdateFavoriteProvider extends ChangeNotifier {
 
     for (int i = 0; i < phoneId.length; i++) {
       if (!(firebaseId.contains(phoneId[i]))) {
-        final provider = ref.read(favoriteProvider.notifier);
+        final provider = ref.read(favoriteItemProvider.notifier);
         final places = Place(
           categoryId: '',
           category: '',

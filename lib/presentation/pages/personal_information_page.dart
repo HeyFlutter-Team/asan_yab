@@ -1,9 +1,11 @@
 import 'package:asan_yab/core/utils/translation_util.dart';
-import 'package:asan_yab/presentation/pages/main_page.dart';
+import 'package:asan_yab/domain/riverpod/data/sign_up.dart';
+import 'package:asan_yab/domain/riverpod/screen/botton_navigation_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/riverpod/data/sign_up_provider.dart';
-import '../../domain/riverpod/screen/botton_navigation_provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import '../../core/routes/routes.dart';
 import '../widgets/custom_text_field_widget.dart';
 
 class PersonalInformation extends ConsumerStatefulWidget {
@@ -47,7 +49,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                     height: 200,
                     width: 200,
                   ),
-                  const SizedBox(height: 2),
+                  SizedBox(height: 2.h),
                   CustomTextFieldWidget(
                     textCapitalization: TextCapitalization.words,
                     label: text.first_text_field_label,
@@ -75,7 +77,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                     hintText: text.third_text_field_hint,
                     keyboardType: TextInputType.emailAddress,
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10.h),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red.shade800,
@@ -86,24 +88,21 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                       final isValid = signUpFormKey.currentState!.validate();
                       if (!isValid) return;
                       ref
-                          .read(userRegisterDetailsProvider)
+                          .read(createUserProvider)
                           .addUserDetailsToFirebase(
                               emailController: widget.email,
                               lastNameController: lastNameController.text,
                               nameController: nameController.text)
                           .whenComplete(() async {
                         await ref
-                            .read(userRegisterDetailsProvider)
+                            .read(createUserProvider)
                             .updateInviterRate(invitingPersonId.text);
                         signUpFormKey.currentState!.reset();
-
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MainPage(),
-                            ));
+                        if (context.mounted) {
+                          context.pushNamed(Routes.home);
+                        }
                         ref
-                            .read(buttonNavigationProvider.notifier)
+                            .read(stateButtonNavigationBarProvider.notifier)
                             .selectedIndex(0);
                       });
                     },

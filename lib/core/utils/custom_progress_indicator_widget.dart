@@ -2,25 +2,27 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../domain/riverpod/data/profile_data_provider.dart';
+import '../../domain/riverpod/data/profile_data.dart';
+import 'translation_util.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomProgressIndicatorWidget {
   static progressIndicator({required WidgetRef ref}) =>
       StreamBuilder<TaskSnapshot>(
-        stream: ref.watch(imageProvider).uploadTask?.snapshotEvents,
+        stream: ref.watch(imageNotifierProvider).uploadTask?.snapshotEvents,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final data = snapshot.data!;
             final progress = data.bytesTransferred / data.totalBytes;
             if (data.state == TaskState.success) {
-              ref.watch(profileDetailsProvider.notifier).getCurrentUserData();
+              ref.watch(profileDataProvider.notifier).getCurrentUserData();
               return Container();
             }
             return SizedBox(
-              height: 50,
-              width: 50,
+              height: 50.h,
+              width: 50.w,
               child: CircularProgressIndicator(
                 value: progress,
                 backgroundColor: Colors.grey,
@@ -37,7 +39,7 @@ class CustomProgressIndicatorWidget {
     required BuildContext context,
     required WidgetRef ref,
   }) {
-    final languageText = AppLocalizations.of(context);
+    final text = texts(context);
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -50,32 +52,32 @@ class CustomProgressIndicatorWidget {
                 onTap: () {
                   // Handle Camera option
                   ref
-                      .read(imageProvider.notifier)
+                      .read(imageNotifierProvider.notifier)
                       .pickImage(ImageSource.camera);
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     const Icon(Icons.camera),
-                    const SizedBox(height: 8.0),
-                    Text(languageText!.profile_buttonSheet_camera),
+                    SizedBox(height: 8.0.h),
+                    Text(text.profile_buttonSheet_camera),
                   ],
                 ),
               ),
               InkWell(
                 onTap: () {
                   ref
-                      .read(imageProvider.notifier)
+                      .read(imageNotifierProvider.notifier)
                       .pickImage(ImageSource.gallery);
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Icon(Icons.image),
-                    const SizedBox(height: 8.0),
-                    Text(languageText.profile_buttonSheet_gallery),
+                    SizedBox(height: 8.0.h),
+                    Text(text.profile_buttonSheet_gallery),
                   ],
                 ),
               ),

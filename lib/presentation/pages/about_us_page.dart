@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/res/image_res.dart';
@@ -19,7 +21,7 @@ class AboutUsPage extends StatelessWidget {
         title: Text(text.about_us_page_appbar_title),
         elevation: 0,
         leading: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(),
           icon: const Icon(Icons.arrow_back),
         ),
       ),
@@ -45,7 +47,7 @@ class AboutUsPage extends StatelessWidget {
                               width: screenWidth * 0.31,
                               height: screenHeight * 0.15,
                             ),
-                            const SizedBox(height: 16),
+                            SizedBox(height: 16.h),
                             Link(
                               uri: Uri.parse('https://heyflutter.com'),
                               builder: (context, followLink) => GestureDetector(
@@ -64,7 +66,7 @@ class AboutUsPage extends StatelessWidget {
                       ),
                       Column(
                         children: [
-                          const SizedBox(height: 16),
+                          SizedBox(height: 16.h),
                           RichText(
                             textAlign: TextAlign.justify,
                             text: TextSpan(children: <TextSpan>[
@@ -116,10 +118,10 @@ class AboutUsPage extends StatelessWidget {
                               ),
                             ]),
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 12.h),
                         ],
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
                       const UrlLinkWidget(
                         url: 'https://heyflutter.com',
                         image: ImageRes.worldWideWeb,
@@ -130,7 +132,7 @@ class AboutUsPage extends StatelessWidget {
                         image: ImageRes.youtube,
                         name: 'Follow YouTube',
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
                       Center(
                         child: Container(
                           padding: const EdgeInsets.all(8),
@@ -163,7 +165,7 @@ class AboutUsPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24.h),
                     ],
                   ),
                 ),

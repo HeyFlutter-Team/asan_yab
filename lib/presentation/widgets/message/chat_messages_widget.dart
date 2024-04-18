@@ -1,5 +1,5 @@
 import 'package:asan_yab/data/models/message/message_model.dart';
-import 'package:asan_yab/domain/riverpod/data/message/message_provider.dart';
+import 'package:asan_yab/domain/riverpod/data/message/fetch_message.dart';
 import 'package:asan_yab/presentation/widgets/message/message_bubble_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,13 +14,14 @@ class ChatMessagesWidget extends ConsumerWidget {
   final String urlImage;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final messages = ref.watch(messageProvider);
+    final messages = ref.watch(fetchMessageProvider);
     return messages.isEmpty
         ? const Center(child: Text('No Message'))
         : Padding(
             padding: const EdgeInsets.only(bottom: 75),
             child: ListView.builder(
-              controller: ref.watch(messageProvider.notifier).scrollController,
+              controller:
+                  ref.watch(fetchMessageProvider.notifier).scrollController,
               itemCount: messages.length,
               itemBuilder: (context, index) {
                 if (index < 0 || index >= messages.length) {

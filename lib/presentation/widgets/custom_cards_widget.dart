@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomCardsWidget extends StatelessWidget {
   const CustomCardsWidget({
@@ -19,7 +20,7 @@ class CustomCardsWidget extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(
-            width: double.infinity,
+            width: double.infinity.w,
             child: Card(
               margin: EdgeInsets.zero,
               elevation: 4,
@@ -31,13 +32,13 @@ class CustomCardsWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4.h),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: Row(
                         children: [
                           const Icon(Icons.library_books),
-                          const SizedBox(width: 12),
+                          SizedBox(width: 12.w),
                           Text(
                             title,
                             style: const TextStyle(
@@ -52,7 +53,7 @@ class CustomCardsWidget extends StatelessWidget {
                       thickness: 0.5,
                       color: Colors.grey,
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4.h),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: child,
@@ -62,7 +63,7 @@ class CustomCardsWidget extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
         ],
       ),
     );

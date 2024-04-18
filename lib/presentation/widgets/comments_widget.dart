@@ -1,9 +1,10 @@
 import 'dart:core';
+import 'package:asan_yab/core/utils/translation_util.dart';
 import 'package:asan_yab/domain/riverpod/data/comment_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../data/models/comment.dart';
 
 class CommentsWidget extends ConsumerStatefulWidget {
@@ -17,7 +18,7 @@ class CommentsWidget extends ConsumerStatefulWidget {
 class _CommentsState extends ConsumerState<CommentsWidget> {
   @override
   Widget build(BuildContext context) {
-    final languageText = AppLocalizations.of(context);
+    final text = texts(context);
     return GestureDetector(
       onTap: () {
         ref
@@ -27,7 +28,7 @@ class _CommentsState extends ConsumerState<CommentsWidget> {
       child: Padding(
         padding: const EdgeInsets.only(top: 10, left: 12, right: 12),
         child: SizedBox(
-          width: double.infinity,
+          width: double.infinity.w,
           child: Card(
             margin: EdgeInsets.zero,
             elevation: 4,
@@ -40,10 +41,10 @@ class _CommentsState extends ConsumerState<CommentsWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    languageText!.comment,
+                    text.comment,
                     style: const TextStyle(fontSize: 17),
                   ),
-                  const SizedBox(height: 3),
+                  SizedBox(height: 3.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -57,7 +58,7 @@ class _CommentsState extends ConsumerState<CommentsWidget> {
                               .snapshots(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
-                              return Text("${languageText.firstComment} !\n");
+                              return Text("${text.firstComment} !\n");
                             }
 
                             List<Comment> comments = [];
@@ -65,21 +66,21 @@ class _CommentsState extends ConsumerState<CommentsWidget> {
                               comments.add(Comment.fromDocument(doc));
                             }
                             if (comments.isEmpty) {
-                              return Text("${languageText.firstComment} !\n");
+                              return Text("${text.firstComment} !\n");
                             }
                             return Text(comments[0].text.length > 35
                                 ? comments[0].text.substring(0, 35)
                                 : comments[0].text);
                           }),
                       Text(
-                        "${languageText.more}...",
+                        "${text.more}...",
                         style: const TextStyle(
                           color: Colors.blueAccent,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 5)
+                  SizedBox(height: 5.h)
                 ],
               ),
             ),

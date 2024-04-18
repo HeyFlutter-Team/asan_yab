@@ -3,18 +3,17 @@ import 'package:asan_yab/data/repositoris/message/message_repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../../../core/constants/firebase_collection_names.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+part 'message.g.dart';
 
-final messageProfileProvider = StateNotifierProvider<MessageProvider, Users?>(
-    (ref) => MessageProvider(null));
-
-class MessageProvider extends StateNotifier<Users?> {
-  MessageProvider(super.state);
+@riverpod
+class Message extends _$Message {
   final messageRepo = MessageRepo();
   final textController = TextEditingController();
   bool loading = true;
-
+  @override
+  Users? build() => null;
   onBackspacePressed() {
     textController
       ..text = textController.text.characters.toString()
@@ -57,8 +56,7 @@ class MessageProvider extends StateNotifier<Users?> {
     } catch (e) {
       return debugPrint(e.toString());
     } finally {
-      if (mounted) {
-      }
+      if (context.mounted) {}
     }
   }
 
@@ -74,9 +72,11 @@ class MessageProvider extends StateNotifier<Users?> {
         content: '',
       );
     } catch (e) {
-      return print(e.toString());
+      return debugPrint(e.toString());
     } finally {
-      FocusScope.of(context).unfocus();
+      if (context.mounted) {
+        FocusScope.of(context).unfocus();
+      }
     }
   }
 }

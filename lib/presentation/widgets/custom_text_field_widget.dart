@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../data/repositoris/theme_Provider.dart';
 
@@ -35,9 +36,11 @@ class _CustomTextFieldState extends ConsumerState<CustomTextFieldWidget> {
   @override
   Widget build(BuildContext context) {
     final themeModel = ref.watch(themeModelProvider);
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.17,
-      width: MediaQuery.of(context).size.width * 0.9,
+      height: screenHeight * 0.17.h,
+      width: screenWidth * 0.9.w,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -51,9 +54,7 @@ class _CustomTextFieldState extends ConsumerState<CustomTextFieldWidget> {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              const SizedBox(
-                width: 5,
-              ),
+              SizedBox(width: 5.w),
               widget.label2 != null
                   ? Text(
                       '${widget.label2}',
@@ -62,7 +63,7 @@ class _CustomTextFieldState extends ConsumerState<CustomTextFieldWidget> {
                   : const SizedBox()
             ],
           ),
-          const SizedBox(height: 5),
+          SizedBox(height: 5.h),
           TextFormField(
               textCapitalization: widget.textCapitalization,
               obscureText: widget.obscureText,

@@ -1,7 +1,10 @@
 import 'package:asan_yab/core/extensions/language.dart';
+import 'package:asan_yab/core/utils/translation_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../core/constants/firebase_collection_names.dart';
 import '../../data/repositoris/firebase_suggestion_create.dart';
 import '../../data/repositoris/language_repo.dart';
@@ -10,7 +13,6 @@ import '../widgets/button_widget.dart';
 import '../widgets/custom_card_widget.dart';
 import '../widgets/custom_dialog_widget.dart';
 import '../widgets/text_form_field_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SuggestionPage extends ConsumerStatefulWidget {
   const SuggestionPage({super.key});
@@ -39,7 +41,7 @@ class _SuggestionPageState extends ConsumerState<SuggestionPage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      ref.read(isLoading.notifier).state = true;
+      ref.read(isloadingProvider.notifier).loadingTrue();
       final snapshot = await FirebaseFirestore.instance
           .collection(FirebaseCollectionNames.description)
           .doc('add_new_place')
@@ -48,12 +50,16 @@ class _SuggestionPageState extends ConsumerState<SuggestionPage> {
       if (snapshot.exists) {
         final isRTL = ref.watch(languageProvider).code == 'fa';
         if (!isRTL) {
-          ref.read(noteProvider.notifier).state = snapshot.data()?['eNote'];
+          ref
+              .read(suggestionTextProvider.notifier)
+              .updateSuggestion(snapshot.data()?['eNote']);
         } else {
-          ref.read(noteProvider.notifier).state = snapshot.data()?['pNote'];
+          ref
+              .read(suggestionTextProvider.notifier)
+              .updateSuggestion(snapshot.data()?['pNote']);
         }
 
-        ref.read(isLoading.notifier).state = false;
+        ref.read(isloadingProvider.notifier).loadingFalse();
       }
     });
   }
@@ -70,17 +76,17 @@ class _SuggestionPageState extends ConsumerState<SuggestionPage> {
 
   @override
   Widget build(BuildContext context) {
-    final languageText = AppLocalizations.of(context);
-    return ref.watch(isLoading)
-        ? const Center(
-            child: CircularProgressIndicator(),
+    final text = texts(context);
+    final suggestionText = ref.watch(suggestionTextProvider);
+    return ref.watch(isloadingProvider)
+        ? Center(
+            child: LoadingAnimationWidget.fourRotatingDots(
+                color: Colors.redAccent, size: 60),
           )
         : Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: false,
-              title: Text(
-                languageText!.suggestion_appBar_title,
-              ),
+              title: Text(text.suggestion_appBar_title),
               elevation: 0,
             ),
             body: SingleChildScrollView(
@@ -93,45 +99,45 @@ class _SuggestionPageState extends ConsumerState<SuggestionPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 15),
+                        SizedBox(height: 15.h),
                         TextFormFieldWidget(
                           addController: nameController,
-                          labelName: languageText.suggestion_1_tf_labelName,
+                          labelName: text.suggestion_1_tf_labelName,
                           validator: (value) => value != null && value.isEmpty
-                              ? languageText.suggestion_1_tf_valid
+                              ? text.suggestion_1_tf_valid
                               : null,
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10.h),
                         TextFormFieldWidget(
                           addController: addressController,
-                          labelName: languageText.suggestion_2_tf_labelName,
+                          labelName: text.suggestion_2_tf_labelName,
                           validator: (value) => value != null && value.isEmpty
-                              ? languageText.suggestion_2_tf_valid
+                              ? text.suggestion_2_tf_valid
                               : null,
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10.h),
                         TextFormFieldWidget(
                           line: 2,
                           addController: typeController,
-                          labelName: languageText.suggestion_3_tf_labelName,
+                          labelName: text.suggestion_3_tf_labelName,
                           validator: (value) => value != null && value.isEmpty
-                              ? languageText.suggestion_3_tf_valid
+                              ? text.suggestion_3_tf_valid
                               : null,
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10.h),
                         TextFormFieldWidget(
                           addController: phoneController,
-                          labelName: languageText.suggestion_4_tf_labelName,
+                          labelName: text.suggestion_4_tf_labelName,
                           validator: (value) => value != null && value.isEmpty
-                              ? languageText.suggestion_4_tf_valid
+                              ? text.suggestion_4_tf_valid
                               : null,
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20.h),
                         CustomCardWidget(
-                          title: languageText.suggestion_custom_card_title,
-                          child: Text(ref.watch(noteProvider)),
+                          title: text.suggestion_custom_card_title,
+                          child: Text(suggestionText),
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10.h),
                         ButtonWidget(
                           onClicked: () => suggestionCreation(
                             formeKey,
@@ -142,7 +148,7 @@ class _SuggestionPageState extends ConsumerState<SuggestionPage> {
                             context,
                             controllerClear,
                           ),
-                          titleName: languageText.suggestion_button,
+                          titleName: text.suggestion_button,
                           textColor1: Colors.white,
                           btnColor: Colors.grey,
                         ),

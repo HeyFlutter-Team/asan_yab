@@ -1,17 +1,19 @@
 import 'package:asan_yab/core/extensions/language.dart';
+import 'package:asan_yab/core/utils/translation_util.dart';
+import 'package:asan_yab/domain/riverpod/screen/botton_navigation_provider.dart';
+import 'package:asan_yab/domain/riverpod/screen/circular_loading_provider.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'dart:core';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../data/repositoris/language_repo.dart';
 import '../../domain/riverpod/data/comment_provider.dart';
 import '../../domain/riverpod/data/message/message.dart';
-
-import '../../domain/riverpod/screen/botton_navigation_provider.dart';
-import '../../domain/riverpod/screen/loading_circularPRI_provider.dart';
 import '../../data/repositoris/theme_Provider.dart';
 import 'comment_tile_widget.dart';
 import 'package:flutter/foundation.dart' as foundation;
@@ -40,11 +42,11 @@ class _CommentSheetState extends ConsumerState<CommentSheetWidget> {
     final verticalData = ref.watch(commentProvider).comments;
     final isLoading = verticalData.isEmpty;
     final themeModel = ref.watch(themeModelProvider);
-    final languageText = AppLocalizations.of(context);
+    final text = texts(context);
     final isRTL = ref.watch(languageProvider).code == 'fa';
-
+    final size = MediaQuery.of(context).size;
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.70,
+      height: size.height * 0.70.h,
       child: Stack(children: [
         Column(
           children: [
@@ -86,7 +88,8 @@ class _CommentSheetState extends ConsumerState<CommentSheetWidget> {
                                         ref
                                             .read(commentProvider.notifier)
                                             .calculateMaxLines())
-                                .toDouble(),
+                                .toDouble()
+                                .h,
                             width: MediaQuery.of(context).size.width - 100,
                             child: Consumer(
                               builder: (context, watch, child) {
@@ -115,8 +118,7 @@ class _CommentSheetState extends ConsumerState<CommentSheetWidget> {
                                       ),
                                       borderRadius: BorderRadius.circular(20),
                                     ),
-                                    hintText:
-                                        '${languageText!.add_a_comment}...',
+                                    hintText: '${text.add_a_comment}...',
                                     hintStyle: TextStyle(
                                       color: (themeModel.currentThemeMode ==
                                               ThemeMode.dark)
@@ -183,24 +185,27 @@ class _CommentSheetState extends ConsumerState<CommentSheetWidget> {
                         children: [
                           isRTL
                               ? Text(
-                                  languageText!.for_add_comment,
+                                  text.for_add_comment,
                                   style: const TextStyle(
                                       color: Colors.white, fontSize: 20),
                                 )
-                              : const SizedBox(height: 0),
+                              : SizedBox(height: 0.h),
                           TextButton(
                             onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              ref.read(loadingProvider.notifier).state =
-                                  !ref.watch(loadingProvider);
+                              context.pop();
+                              context.pop();
+                              context.pop();
+
                               ref
-                                  .read(buttonNavigationProvider.notifier)
+                                  .read(circularLoadingProvider.notifier)
+                                  .toggleCircularLoading();
+                              ref
+                                  .read(
+                                      stateButtonNavigationBarProvider.notifier)
                                   .selectedIndex(3);
                             },
                             child: Text(
-                              languageText!.log_in,
+                              text.log_in,
                               style: const TextStyle(
                                   color: Colors.blue,
                                   fontSize: 25,
@@ -208,9 +213,9 @@ class _CommentSheetState extends ConsumerState<CommentSheetWidget> {
                             ),
                           ),
                           isRTL
-                              ? const SizedBox(height: 0)
+                              ? SizedBox(height: 0.h)
                               : Text(
-                                  languageText.for_add_comment,
+                                  text.for_add_comment,
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 20,
@@ -218,7 +223,7 @@ class _CommentSheetState extends ConsumerState<CommentSheetWidget> {
                                 )
                         ],
                       )),
-            const SizedBox(height: 20.0),
+            SizedBox(height: 20.0.h),
             Expanded(
               child: LazyLoadScrollView(
                 isLoading: isLoading,
@@ -241,8 +246,11 @@ class _CommentSheetState extends ConsumerState<CommentSheetWidget> {
                     }
 
                     return ref.watch(commentProvider).isLoading
-                        ? const Center(child: CircularProgressIndicator())
-                        : const SizedBox(height: 0);
+                        ? Center(
+                            child: LoadingAnimationWidget.fourRotatingDots(
+                                color: Colors.redAccent, size: 60),
+                          )
+                        : SizedBox(height: 0.h);
                   },
                 ),
               ),
@@ -252,7 +260,7 @@ class _CommentSheetState extends ConsumerState<CommentSheetWidget> {
         Align(
           alignment: Alignment.bottomLeft,
           child: SizedBox(
-            height: !ref.watch(emojiShowingProvider) ? 0 : 250,
+            height: !ref.watch(emojiShowingProvider) ? 0.h : 250.h,
             width: double.infinity,
             child: Column(
               children: [
@@ -283,7 +291,7 @@ class _CommentSheetState extends ConsumerState<CommentSheetWidget> {
                       Offstage(
                         offstage: !ref.watch(emojiShowingProvider),
                         child: SizedBox(
-                          height: 250,
+                          height: 250.h,
                           child: EmojiPicker(
                             textEditingController:
                                 ref.watch(commentProvider.notifier).controller,

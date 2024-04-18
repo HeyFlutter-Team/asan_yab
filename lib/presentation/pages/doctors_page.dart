@@ -1,12 +1,13 @@
 import 'package:asan_yab/core/res/image_res.dart';
 import 'package:asan_yab/core/utils/convert_digits_to_farsi.dart';
 import 'package:asan_yab/core/extensions/language.dart';
+import 'package:asan_yab/core/utils/translation_util.dart';
 import 'package:asan_yab/data/repositoris/language_repo.dart';
-import 'package:asan_yab/domain/riverpod/data/single_place_provider.dart';
+import 'package:asan_yab/domain/riverpod/data/single_place.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorsPage extends ConsumerStatefulWidget {
   const DoctorsPage({super.key});
@@ -19,9 +20,9 @@ class _DoctorsPageState extends ConsumerState<DoctorsPage> {
   @override
   Widget build(BuildContext context) {
     final isRTL = ref.watch(languageProvider).code == 'fa';
-    final places = ref.watch(getSingleProvider);
+    final places = ref.watch(singlePlaceProvider);
     final size = MediaQuery.of(context).size;
-    final languageText = AppLocalizations.of(context);
+    final text = texts(context);
     return Scaffold(
       appBar: AppBar(),
       body: GridView.builder(
@@ -50,10 +51,11 @@ class _DoctorsPageState extends ConsumerState<DoctorsPage> {
                 children: [
                   ClipRRect(
                     borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(25),
-                        topLeft: Radius.circular(25),
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(10)),
+                      topRight: Radius.circular(25),
+                      topLeft: Radius.circular(25),
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    ),
                     child: CachedNetworkImage(
                       imageUrl: places.doctors![index].imageUrl,
                       width: double.infinity,
@@ -66,7 +68,7 @@ class _DoctorsPageState extends ConsumerState<DoctorsPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
                   Text(
                     places.doctors![index].name,
                     maxLines: 1,
@@ -76,7 +78,7 @@ class _DoctorsPageState extends ConsumerState<DoctorsPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10.h),
                   Text(
                     maxLines: 1,
                     overflow: TextOverflow.fade,
@@ -86,11 +88,11 @@ class _DoctorsPageState extends ConsumerState<DoctorsPage> {
                         color: Colors.green.shade400,
                         fontWeight: FontWeight.w500),
                   ),
-                  const SizedBox(height: 5),
+                  SizedBox(height: 5.h),
                   Text(
                     maxLines: 1,
                     overflow: TextOverflow.fade,
-                    '${languageText?.details_page_9_custom_card}: ${isRTL ? convertDigitsToFarsi(places.doctors![index].spendTime) : places.doctors![index].spendTime}',
+                    '${text.details_page_9_custom_card}: ${isRTL ? convertDigitsToFarsi(places.doctors![index].spendTime) : places.doctors![index].spendTime}',
                     style: TextStyle(
                         fontSize: 16,
                         color: Colors.green.shade400,

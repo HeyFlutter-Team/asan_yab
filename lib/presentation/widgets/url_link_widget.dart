@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/link.dart';
 
 class UrlLinkWidget extends StatelessWidget {
@@ -28,7 +29,7 @@ class UrlLinkWidget extends StatelessWidget {
                 width: 20,
                 height: 20,
               ),
-              const SizedBox(width: 5),
+              SizedBox(width: 5.w),
               TextButton(
                 onPressed: followLink,
                 child: Text(
@@ -39,7 +40,7 @@ class UrlLinkWidget extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4.h),
       ],
     );
   }

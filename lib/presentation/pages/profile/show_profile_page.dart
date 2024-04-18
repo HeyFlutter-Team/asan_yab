@@ -12,9 +12,12 @@ class _ShowProfilePageState extends State<ShowProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Center(
-        child:
-            Hero(tag: 'avatarHeroTag', child: Image.network(widget.imageUrl)),
+        child: Hero(
+          tag: 'avatarHeroTag',
+          child: Image.network(widget.imageUrl),
+        ),
       ),
     );
   }

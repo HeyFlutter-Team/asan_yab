@@ -1,14 +1,15 @@
 // ignore_for_file: avoid_print
 
 import 'package:asan_yab/core/utils/translation_util.dart';
-import 'package:asan_yab/domain/riverpod/data/sign_up_provider.dart';
+import 'package:asan_yab/domain/riverpod/data/sign_in.dart';
+import 'package:asan_yab/domain/riverpod/data/sign_up.dart';
 import 'package:asan_yab/presentation/widgets/custom_text_field_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../domain/riverpod/data/sign_in_provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
   final Function()? onClickedSignIn;
@@ -58,10 +59,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) => validateEmail(value, text)),
                 CustomTextFieldWidget(
-                  obscureText: ref.watch(isObscureProvider),
+                  obscureText: ref.watch(obscureBoolProvider),
                   suffixIcon: IconButton(
                       onPressed: () =>
-                          ref.read(isObscureProvider.notifier).isObscure(),
+                          ref.read(obscureBoolProvider.notifier).isObscure(),
                       icon: const Icon(Icons.remove_red_eye_outlined)),
                   label: text.sign_in_password,
                   controller: passwordController,
@@ -89,9 +90,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                           fontWeight: FontWeight.bold, fontSize: 15),
                     ),
                     InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
+                      onTap: () => context.pop(),
                       child: Text(
                         '  ${text.sign_up_account_text1}',
                         style:
@@ -100,7 +99,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     )
                   ],
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10.h),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red.shade800,
@@ -114,7 +113,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     style: const TextStyle(fontSize: 20, color: Colors.white),
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
               ],
             ),
           ),
@@ -157,7 +156,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
 
-    ref.read(signUpNotifierProvider).signUp(
+    ref.read(signUpProvider).signUp(
           context: context,
           email: emailController.text,
           password: passwordController.text,

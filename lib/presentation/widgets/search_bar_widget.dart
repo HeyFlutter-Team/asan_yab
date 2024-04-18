@@ -1,6 +1,5 @@
+import 'package:asan_yab/core/utils/translation_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 class SearchBarWidget extends StatelessWidget {
   const SearchBarWidget({
@@ -9,7 +8,7 @@ class SearchBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final languageText=AppLocalizations.of(context);
+    final text = texts(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: TextField(
@@ -26,7 +25,7 @@ class SearchBarWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(12.0),
             borderSide: const BorderSide(color: Colors.white),
           ),
-          hintText: languageText!.search_bar_hint_text,
+          hintText: text.search_bar_hint_text,
           prefixIcon: const Icon(Icons.search),
         ),
       ),

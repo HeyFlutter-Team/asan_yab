@@ -1,8 +1,9 @@
+import 'package:asan_yab/core/routes/routes.dart';
 import 'package:asan_yab/data/models/users.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../pages/search_bar_page.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 class MessageAppBarWidget extends StatelessWidget {
   const MessageAppBarWidget({
@@ -23,7 +24,7 @@ class MessageAppBarWidget extends StatelessWidget {
         title: Column(
           children: [
             Text('${user?.name}'),
-            const SizedBox(height: 4),
+            SizedBox(height: 4.h),
             Text(
               "${user?.userType} ${text.proFile_type}",
               style: const TextStyle(
@@ -38,12 +39,7 @@ class MessageAppBarWidget extends StatelessWidget {
           IconButton(
             onPressed: () {
               user!.invitationRate >= 2
-                  ? Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SearchBarPage(),
-                      ),
-                    )
+                  ? context.pushNamed(Routes.searchBar)
                   : null;
             },
             icon: const Icon(Icons.search),

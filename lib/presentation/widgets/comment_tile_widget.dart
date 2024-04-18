@@ -1,14 +1,15 @@
+import 'package:asan_yab/core/routes/routes.dart';
 import 'package:asan_yab/domain/riverpod/data/comment_provider.dart';
+import 'package:asan_yab/domain/riverpod/data/other_user_data.dart';
+import 'package:asan_yab/domain/riverpod/screen/check_follower.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../data/models/comment.dart';
 import '../../data/models/users.dart';
-import '../../domain/riverpod/data/other_user_data.dart';
-
-import '../../domain/riverpod/screen/follow_checker.dart';
-import '../pages/profile/other_profile.dart';
 
 class CommentTileWidget extends ConsumerStatefulWidget {
   final Comment comment;
@@ -42,34 +43,29 @@ class _CommentTileState extends ConsumerState<CommentTileWidget> {
                 widget.comment.imageUrl != ""
                     ? GestureDetector(
                         onTap: () async {
-                          DocumentSnapshot snapshot = await FirebaseFirestore
-                              .instance
+                          final snapshot = await FirebaseFirestore.instance
                               .collection('User')
                               .doc(widget.comment.uid)
                               .get();
                           if (snapshot.exists) {
-                            Users myUser = Users.fromMap(
+                            final myUser = Users.fromMap(
                                 snapshot.data() as Map<String, dynamic>);
                             ref
-                                .read(otherUserProvider.notifier)
+                                .read(otherUserDataProvider.notifier)
                                 .setDataUser(myUser);
                             ref
-                                .read(followerProvider.notifier)
+                                .read(checkFollowerProvider.notifier)
                                 .followOrUnFollow(
                                     FirebaseAuth.instance.currentUser!.uid,
                                     widget.comment.uid);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const OtherProfile(),
-                                ));
-                            print('6');
+                            if (context.mounted) {
+                              context.pushNamed(Routes.otherProfile);
+                            }
                           }
                         },
                         child: CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(widget.comment.imageUrl),
-                        ),
+                            backgroundImage:
+                                NetworkImage(widget.comment.imageUrl)),
                       )
                     : GestureDetector(
                         onTap: () async {
@@ -84,21 +80,18 @@ class _CommentTileState extends ConsumerState<CommentTileWidget> {
                                 snapshot.data() as Map<String, dynamic>);
                             debugPrint('3');
                             ref
-                                .read(otherUserProvider.notifier)
+                                .read(otherUserDataProvider.notifier)
                                 .setDataUser(myUser);
                             debugPrint('4');
                             ref
-                                .read(followerProvider.notifier)
+                                .read(checkFollowerProvider.notifier)
                                 .followOrUnFollow(
                                     FirebaseAuth.instance.currentUser!.uid,
                                     widget.comment.uid);
                             debugPrint('5');
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const OtherProfile(),
-                              ),
-                            );
+                            if (context.mounted) {
+                              context.pushNamed(Routes.otherProfile);
+                            }
                             debugPrint('7');
                           }
                         },
@@ -106,7 +99,7 @@ class _CommentTileState extends ConsumerState<CommentTileWidget> {
                           backgroundImage: AssetImage('assets/Avatar.png'),
                         ),
                       ),
-                const SizedBox(width: 8.0),
+                SizedBox(width: 8.0.w),
                 GestureDetector(
                   onTap: () async {
                     debugPrint('1');
@@ -119,17 +112,17 @@ class _CommentTileState extends ConsumerState<CommentTileWidget> {
                       final myUser = Users.fromMap(
                           snapshot.data() as Map<String, dynamic>);
                       debugPrint('3');
-                      ref.read(otherUserProvider.notifier).setDataUser(myUser);
+                      ref
+                          .read(otherUserDataProvider.notifier)
+                          .setDataUser(myUser);
                       debugPrint('4');
-                      ref.read(followerProvider.notifier).followOrUnFollow(
+                      ref.read(checkFollowerProvider.notifier).followOrUnFollow(
                           FirebaseAuth.instance.currentUser!.uid,
                           widget.comment.uid);
                       debugPrint('5');
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const OtherProfile(),
-                          ));
+                      if (context.mounted) {
+                        context.pushNamed(Routes.otherProfile);
+                      }
                       debugPrint('6');
                     }
                   },
@@ -137,7 +130,7 @@ class _CommentTileState extends ConsumerState<CommentTileWidget> {
                 ),
               ],
             ),
-            const SizedBox(height: 4.0),
+            SizedBox(height: 4.0.h),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Text(widget.comment.text),

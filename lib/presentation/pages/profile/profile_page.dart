@@ -2,22 +2,20 @@
 
 import 'package:asan_yab/core/utils/convert_digits_to_farsi.dart';
 import 'package:asan_yab/domain/riverpod/data/following_data.dart';
-import 'package:asan_yab/presentation/pages/about_us_page.dart';
-import 'package:asan_yab/presentation/pages/main_page.dart';
-import 'package:asan_yab/presentation/pages/profile/edit_profile_page.dart';
-import 'package:asan_yab/presentation/pages/profile/list_of_follow.dart';
-import 'package:asan_yab/presentation/pages/profile/show_profile_page.dart';
 import 'package:asan_yab/data/repositoris/theme_Provider.dart';
 import 'package:asan_yab/core/utils/custom_progress_indicator_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/constants/firebase_collection_names.dart';
 import '../../../core/extensions/language.dart';
+import '../../../core/routes/routes.dart';
 import '../../../core/utils/translation_util.dart';
 import '../../../data/repositoris/language_repo.dart';
-import '../../../domain/riverpod/data/profile_data_provider.dart';
+import '../../../domain/riverpod/data/profile_data.dart';
 import '../../widgets/language/language_bottom_sheet.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
@@ -33,9 +31,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
-        ref.read(profileDetailsProvider.notifier).getCurrentUserData();
-        ref.read(imageProvider).imageUrl ==
-            ref.read(profileDetailsProvider)?.imageUrl;
+        ref.read(profileDataProvider.notifier).getCurrentUserData();
+        ref.read(imageNotifierProvider).imageUrl ==
+            ref.read(profileDataProvider)?.imageUrl;
       },
     );
   }
@@ -45,7 +43,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   final userName = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
-    final usersData = ref.watch(profileDetailsProvider);
+    final usersData = ref.watch(profileDataProvider);
     final themeModel = ref.watch(themeModelProvider);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     final text = texts(context);
@@ -53,7 +51,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       body: Column(
         children: [
           SizedBox(
-            height: 280,
+            height: 280.h,
             child: Stack(
               children: [
                 Container(
@@ -91,13 +89,11 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   child: InkWell(
                     onTap: () => usersData?.imageUrl == ''
                         ? const SizedBox()
-                        : Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ShowProfilePage(
-                                  imageUrl:
-                                      '${ref.watch(profileDetailsProvider)?.imageUrl}'),
-                            )),
+                        : context.pushNamed(Routes.showProfile,
+                            pathParameters: {
+                                'imageUrl':
+                                    '${ref.watch(profileDataProvider)?.imageUrl}'
+                              }),
                     child: usersData?.imageUrl == ''
                         ? Stack(
                             children: [
@@ -141,44 +137,40 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                               ),
                             ],
                           )
-                        : ref.watch(profileDetailsProvider)?.imageUrl == ''
+                        : ref.watch(profileDataProvider)?.imageUrl == ''
                             ? const SizedBox()
                             : Hero(
                                 tag: 'avatarHeroTag',
                                 child: CircleAvatar(
                                   maxRadius: 80,
                                   backgroundImage: NetworkImage(
-                                    '${ref.watch(profileDetailsProvider)?.imageUrl}',
+                                    '${ref.watch(profileDataProvider)?.imageUrl}',
                                   ),
                                 ),
                               ),
                   ),
                 ),
                 Padding(
-                    padding:
-                        const EdgeInsets.only(top: 50.0, right: 10, left: 10),
-                    child: IconButton(
-                      onPressed: () async {
-                        if (FirebaseAuth.instance.currentUser != null) {
-                          await FirebaseFirestore.instance
-                              .collection(FirebaseCollectionNames.user)
-                              .doc(FirebaseAuth.instance.currentUser!.uid)
-                              .update({'isOnline': false, 'fcmToken': "token"});
+                  padding:
+                      const EdgeInsets.only(top: 50.0, right: 10, left: 10),
+                  child: IconButton(
+                    onPressed: () async {
+                      if (FirebaseAuth.instance.currentUser != null) {
+                        await FirebaseFirestore.instance
+                            .collection(FirebaseCollectionNames.user)
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .update({'isOnline': false, 'fcmToken': "token"});
 
-                          await signOut();
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MainPage(),
-                            ),
-                          );
-                        }
-                      },
-                      icon: const Icon(
-                        Icons.logout,
-                        color: Colors.white,
-                      ),
-                    )),
+                        await signOut();
+                        context.pushReplacementNamed(Routes.home);
+                      }
+                    },
+                    icon: const Icon(
+                      Icons.logout,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -195,12 +187,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     ref
                         .read(followingDataProvider.notifier)
                         .getProfile(FirebaseAuth.instance.currentUser!.uid);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ListOfFollow(),
-                      ),
-                    );
+
+                    context.pushNamed(Routes.listOfFollow);
                   },
                   title: Text(text.profile_followers),
                   leading: const Icon(
@@ -220,7 +208,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   ),
                   onTap: () {
                     ref
-                        .read(profileDetailsProvider.notifier)
+                        .read(profileDataProvider.notifier)
                         .copyToClipboard('${usersData?.id}');
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -270,14 +258,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 ),
                 const Divider(color: Colors.grey),
                 InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const AboutUsPage(),
-                      ),
-                    );
-                  },
+                  onTap: () => context.pushNamed(Routes.aboutUs),
                   child: ListTile(
                     leading: const Icon(
                       Icons.info_outline,
@@ -298,7 +279,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   ),
                 ),
                 const Divider(color: Colors.grey),
-                const SizedBox(height: 5),
+                SizedBox(height: 5.h),
               ],
             ),
           ),
@@ -311,21 +292,15 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               ),
             ),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const EditProfilePage(),
-                ),
-              ).then((value) => ref
-                  .read(profileDetailsProvider.notifier)
-                  .getCurrentUserData());
+              context.pushNamed(Routes.editProfile).then((_) =>
+                  ref.read(profileDataProvider.notifier).getCurrentUserData());
             },
             child: Text(
               text.profile_edit_button_text,
               style: const TextStyle(fontSize: 20, color: Colors.white),
             ),
           ),
-          const SizedBox(height: 20)
+          SizedBox(height: 20.h)
         ],
       ),
     );

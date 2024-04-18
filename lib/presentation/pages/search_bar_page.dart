@@ -1,13 +1,16 @@
+import 'package:asan_yab/core/routes/routes.dart';
 import 'package:asan_yab/data/models/place.dart';
-import 'package:asan_yab/domain/riverpod/data/search_notifire.dart';
 import 'package:asan_yab/domain/riverpod/data/search_user_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../core/res/image_res.dart';
 import '../../core/utils/translation_util.dart';
+import '../../domain/riverpod/data/search_place.dart';
 import '../widgets/search_result_widget.dart';
-import 'detials_page.dart';
 
 final searchLoadingProvider = StateProvider<bool>((ref) => false);
 final fetchProvider = StateProvider<bool>((ref) => true);
@@ -50,7 +53,7 @@ class _SearchPageState extends ConsumerState<SearchBarPage> {
                 ? IconButton(
                     onPressed: () {
                       searchController.clear();
-                      ref.refresh(searchNotifierProvider.notifier).clear;
+                      ref.refresh(searchPlaceProvider.notifier).clear;
                     },
                     icon: const Icon(
                       Icons.close,
@@ -62,13 +65,13 @@ class _SearchPageState extends ConsumerState<SearchBarPage> {
         ],
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
-            ref.refresh(searchNotifierProvider.notifier).clear;
+            context.pop();
+            ref.refresh(searchPlaceProvider.notifier).clear;
           },
           icon: const Icon(Icons.arrow_back, size: 25.0),
         ),
       ),
-      body: ref.watch(searchNotifierProvider) == ''
+      body: ref.watch(searchPlaceProvider) == ''
           ? const SizedBox()
           : data.when(
               data: (data) {
@@ -76,18 +79,11 @@ class _SearchPageState extends ConsumerState<SearchBarPage> {
                 return ListView.separated(
                   padding: const EdgeInsets.all(12),
                   itemCount: postList.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 8),
+                  separatorBuilder: (context, index) => SizedBox(height: 8.h),
                   itemBuilder: (context, index) => InkWell(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailsPage(
-                            id: postList[index].id,
-                          ),
-                        ),
-                      );
+                      context.pushNamed(Routes.details,
+                          pathParameters: {'placeId': postList[index].id});
                     },
                     child: Row(
                       children: [
@@ -102,7 +98,7 @@ class _SearchPageState extends ConsumerState<SearchBarPage> {
                                 Image.asset(ImageRes.asanYab),
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12.w),
                         Expanded(
                           child: SearchResultWidget(
                             searchController: searchController,
@@ -115,16 +111,19 @@ class _SearchPageState extends ConsumerState<SearchBarPage> {
                 );
               },
               error: (error, stackTrace) => Text(' hello: ${error.toString()}'),
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => Center(
+                child: LoadingAnimationWidget.fourRotatingDots(
+                    color: Colors.redAccent, size: 60),
+              ),
             ),
     );
   }
 
   void handleSearchValueChanged(String value) {
-    ref.read(searchNotifierProvider.notifier).sendQuery(value.trimLeft());
+    ref.read(searchPlaceProvider.notifier).sendQuery(value.trimLeft());
     ref.read(searchUserProvider);
     if (value.isEmpty) {
-      ref.read(searchNotifierProvider.notifier).clear();
+      ref.read(searchPlaceProvider.notifier).clear();
       ref.refresh(searchLoadingProvider.notifier).state = false;
     } else {
       ref.refresh(searchLoadingProvider.notifier).state = true;

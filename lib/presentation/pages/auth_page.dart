@@ -9,9 +9,6 @@ class AuthPage extends ConsumerWidget {
   const AuthPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(authPageStateProvider)
-        ? const SignInPage()
-        : const SignUpPage();
-  }
+  Widget build(BuildContext context, WidgetRef ref) =>
+      ref.watch(authStateProvider) ? const SignInPage() : const SignUpPage();
 }

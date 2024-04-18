@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/firebase_collection_names.dart';
 
@@ -63,7 +64,7 @@ class FirebaseRatingProvider extends ChangeNotifier {
         'userId': userId,
       });
       if (context.mounted) {
-        Navigator.pop(context);
+        context.pop();
       }
     } catch (e) {
       debugPrint('Error saving rating: $e');
@@ -92,7 +93,7 @@ class FirebaseRatingProvider extends ChangeNotifier {
             .doc(docId)
             .update({'rating': rate});
         if (context.mounted) {
-          Navigator.pop(context);
+          context.pop();
         }
       }
     } catch (e) {

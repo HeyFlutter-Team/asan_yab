@@ -35,4 +35,21 @@ class FollowRepo {
       debugPrint("Error: $e");
     }
   }
+
+  Future<FollowModel> getCountUser(String? uid) async {
+    final fireStore = FirebaseFirestore.instance;
+    try {
+      final query = await fireStore
+          .collection(FirebaseCollectionNames.user)
+          .doc(uid)
+          .collection(FirebaseCollectionNames.follow)
+          .doc(uid)
+          .get();
+      final followUserProfile = FollowModel.fromJson(query.data()!);
+      return followUserProfile;
+    } catch (e) {
+      debugPrint('in count follow ${e.toString()}');
+      rethrow;
+    }
+  }
 }

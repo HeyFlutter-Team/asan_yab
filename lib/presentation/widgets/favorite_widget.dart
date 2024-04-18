@@ -3,18 +3,21 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:asan_yab/core/extensions/language.dart';
+import 'package:asan_yab/core/routes/routes.dart';
 import 'package:asan_yab/domain/riverpod/data/firebase_rating_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../core/utils/convert_digits_to_farsi.dart';
+import '../../core/utils/translation_util.dart';
 import '../../data/repositoris/language_repo.dart';
-import '../../domain/riverpod/data/favorite_provider.dart';
+import '../../domain/riverpod/data/favorite_item.dart';
 import '../../domain/riverpod/data/firbase_favorite_provider.dart';
-import '../pages/detials_page.dart';
-import '../pages/offline_detials_page.dart';
 
 class FavoriteWidget extends ConsumerStatefulWidget {
   final bool isConnected;
@@ -28,13 +31,10 @@ class _FavoritesState extends ConsumerState<FavoriteWidget> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final favoriteState = ref.watch(favoriteProvider);
-    debugPrint('favorite $favoriteState');
+    final favoriteState = ref.watch(favoriteItemProvider);
     final favorites = favoriteState.map((e) => e).toList();
-    final languageText = AppLocalizations.of(context);
+    final text = texts(context);
     final isRTL = ref.watch(languageProvider).code == 'fa';
-    print("this is the lenght");
-    print(favorites.length);
     return favorites.isEmpty
         ? const SizedBox()
         : Column(
@@ -44,7 +44,7 @@ class _FavoritesState extends ConsumerState<FavoriteWidget> {
                 padding:
                     const EdgeInsets.only(right: 16.0, top: 12.0, left: 16),
                 child: Text(
-                  languageText!.favorite_page_title,
+                  text.favorite_page_title,
                   style: const TextStyle(color: Colors.grey, fontSize: 20.0),
                 ),
               ),
@@ -65,7 +65,7 @@ class _FavoritesState extends ConsumerState<FavoriteWidget> {
                     final toggle =
                         favorites[index]['toggle'] == 1 ? true : false;
                     final items = favorites[index];
-                    List<String> phoneData =
+                    final phoneData =
                         List<String>.from(jsonDecode(items['phone']));
                     final phoneNumber = isRTL
                         ? convertDigitsToFarsi(phoneData[0])
@@ -78,24 +78,19 @@ class _FavoritesState extends ConsumerState<FavoriteWidget> {
                               debugPrint(
                                   'Ramin check connectivity: ${widget.isConnected}');
                               widget.isConnected
-                                  ? Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => DetailsPage(
-                                            id: favorites[index]['id']),
-                                      ))
-                                  : Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => OfflineDetailPage(
-                                            favItem: favorites[index]),
-                                      ));
+                                  ? context.pushNamed(Routes.details,
+                                      pathParameters: {
+                                          'placeId': favorites[index]['id']
+                                        })
+                                  : context.pushNamed(Routes.offlineDetails,
+                                      pathParameters: {
+                                          'favoritesItem':
+                                              favorites[index].toString()
+                                        });
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12.0),
-                                // color: Colors.white,
-                              ),
+                                  borderRadius: BorderRadius.circular(12.0)),
                               child: Column(
                                 children: [
                                   Container(
@@ -121,7 +116,7 @@ class _FavoritesState extends ConsumerState<FavoriteWidget> {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 10.0),
+                                  SizedBox(height: 10.0.h),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 5),
@@ -158,8 +153,9 @@ class _FavoritesState extends ConsumerState<FavoriteWidget> {
                                                         overflow: TextOverflow
                                                             .ellipsis),
                                                     const Icon(
-                                                        Icons.phone_android,
-                                                        color: Colors.green),
+                                                      Icons.phone_android,
+                                                      color: Colors.green,
+                                                    ),
                                                   ],
                                                 ),
                                         ),
@@ -183,7 +179,7 @@ class _FavoritesState extends ConsumerState<FavoriteWidget> {
 
                                 ref.read(getFavoriteProvider).setFavorite();
                                 ref
-                                    .read(favoriteProvider.notifier)
+                                    .read(favoriteItemProvider.notifier)
                                     .delete(favorites[index]['id']);
                                 print(favorites[index]['id']);
                               }
@@ -213,10 +209,13 @@ class _FavoritesState extends ConsumerState<FavoriteWidget> {
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
-                                      return const CircularProgressIndicator(); // Show loading indicator while fetching rating
+                                      return LoadingAnimationWidget
+                                          .fourRotatingDots(
+                                              color: Colors.redAccent,
+                                              size: 60);
                                     } else if (snapshot.hasError) {
                                       return const Text(
-                                          'Error fetching rating'); // Show error message if there's an error
+                                          'Error fetching rating');
                                     } else {
                                       final averageRating = snapshot.data ?? 0;
                                       return Container(
@@ -247,7 +246,7 @@ class _FavoritesState extends ConsumerState<FavoriteWidget> {
                                   },
                                 ),
                               )
-                            : const SizedBox(height: 0)
+                            : SizedBox(height: 0.h)
                       ],
                     );
                   },

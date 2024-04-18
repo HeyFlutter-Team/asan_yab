@@ -1,17 +1,18 @@
 import 'package:asan_yab/core/utils/convert_digits_to_farsi.dart';
 import 'package:asan_yab/core/extensions/language.dart';
 import 'package:asan_yab/data/repositoris/language_repo.dart';
-import 'package:asan_yab/domain/riverpod/data/follow_https.dart';
+import 'package:asan_yab/domain/riverpod/data/following_data.dart';
 import 'package:asan_yab/domain/riverpod/data/other_user_data.dart';
-import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
-import 'package:asan_yab/domain/riverpod/screen/follow_checker.dart';
-import 'package:asan_yab/presentation/pages/about_us_page.dart';
-import 'package:asan_yab/presentation/pages/message_page/chat_details_page.dart';
-import 'package:asan_yab/presentation/pages/profile/show_profile_page.dart';
+import 'package:asan_yab/domain/riverpod/data/profile_data.dart';
+import 'package:asan_yab/domain/riverpod/screen/check_follower.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
+import '../../../core/routes/routes.dart';
 import '../../../core/utils/translation_util.dart';
 
 class OtherProfile extends ConsumerStatefulWidget {
@@ -24,14 +25,14 @@ class OtherProfile extends ConsumerStatefulWidget {
 class _OtherProfileState extends ConsumerState<OtherProfile> {
   @override
   Widget build(BuildContext context) {
-    final usersData = ref.watch(otherUserProvider);
+    final usersData = ref.watch(otherUserDataProvider);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     final text = texts(context);
     return Scaffold(
       body: Column(
         children: [
           SizedBox(
-            height: 280,
+            height: 280.h,
             child: Stack(
               children: [
                 Container(
@@ -69,13 +70,11 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                   child: InkWell(
                     onTap: () => usersData?.imageUrl == ''
                         ? const SizedBox()
-                        : Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ShowProfilePage(
-                                  imageUrl:
-                                      '${ref.watch(otherUserProvider)?.imageUrl}'),
-                            )),
+                        : context.pushNamed(Routes.showProfile,
+                            pathParameters: {
+                                'imageUrl':
+                                    '${ref.watch(otherUserDataProvider)?.imageUrl}'
+                              }),
                     child: usersData?.imageUrl == ''
                         ? const Stack(
                             children: [
@@ -90,14 +89,14 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                               ),
                             ],
                           )
-                        : ref.watch(otherUserProvider)?.imageUrl == ''
+                        : ref.watch(otherUserDataProvider)?.imageUrl == ''
                             ? const SizedBox()
                             : Hero(
                                 tag: 'avatarHeroTag',
                                 child: CircleAvatar(
                                   maxRadius: 80,
                                   backgroundImage: NetworkImage(
-                                    '${ref.watch(otherUserProvider)?.imageUrl}',
+                                    '${ref.watch(otherUserDataProvider)?.imageUrl}',
                                   ),
                                 ),
                               ),
@@ -107,7 +106,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                     padding:
                         const EdgeInsets.only(top: 50.0, right: 10, left: 10),
                     child: IconButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => context.pop(),
                       icon: const Icon(
                         Icons.arrow_back,
                         color: Colors.white,
@@ -129,7 +128,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                   onTap: () {
                     //todo user data for copy
                     ref
-                        .read(profileDetailsProvider.notifier)
+                        .read(profileDataProvider.notifier)
                         .copyToClipboard('${usersData?.id}');
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -150,12 +149,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                 ),
                 const Divider(color: Colors.grey),
                 InkWell(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AboutUsPage(),
-                    ),
-                  ),
+                  onTap: () => context.pushNamed(Routes.aboutUs),
                   child: ListTile(
                     leading: const Icon(
                       Icons.info_outline,
@@ -166,7 +160,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                   ),
                 ),
                 const Divider(color: Colors.grey),
-                const SizedBox(height: 5),
+                SizedBox(height: 5.h),
               ],
             ),
           ),
@@ -177,12 +171,8 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                 onTap: () {
                   //todo for chat
                   final followId = usersData!.uid!;
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChatDetailPage(uid: followId),
-                    ),
-                  );
+                  context.pushNamed(Routes.chatDetail,
+                      pathParameters: {'followId': followId});
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -199,15 +189,15 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       )),
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.chat_outlined,
                         color: Colors.white,
                       ),
-                      SizedBox(width: 8),
-                      Text(
+                      SizedBox(width: 8.w),
+                      const Text(
                         'Chat',
                         style: TextStyle(
                           color: Colors.white,
@@ -218,7 +208,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8.w),
               InkWell(
                 focusColor: Colors.transparent,
                 splashColor: Colors.transparent,
@@ -227,14 +217,12 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                   final uid = FirebaseAuth.instance.currentUser!.uid;
                   final followId = usersData!.uid!;
                   ref
-                      .read(followHttpsProvider.notifier)
+                      .read(followingDataProvider.notifier)
                       .updateFollowers(uid, followId)
                       .whenComplete(() => ref
-                          .read(followerProvider.notifier)
+                          .read(checkFollowerProvider.notifier)
                           .followOrUnFollow(uid, followId));
-                  ref
-                      .read(profileDetailsProvider.notifier)
-                      .getCurrentUserData();
+                  ref.read(profileDataProvider.notifier).getCurrentUserData();
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -252,15 +240,15 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                         end: Alignment.bottomRight,
                       )),
                   child: ref.watch(loadingFollowers)
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white70,
-                            strokeWidth: 2,
-                          ),
+                      ? Center(
+                          child: LoadingAnimationWidget.fourRotatingDots(
+                              color: Colors.redAccent, size: 60),
                         )
                       : Center(
                           child: Text(
-                            ref.watch(followerProvider) ? 'Follow' : "Unfollow",
+                            ref.watch(checkFollowerProvider)
+                                ? 'Follow'
+                                : "Unfollow",
                             style: const TextStyle(
                               fontSize: 20,
                               color: Colors.white,
@@ -271,7 +259,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
         ],
       ),
     );

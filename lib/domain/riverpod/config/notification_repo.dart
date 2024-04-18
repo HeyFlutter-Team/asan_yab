@@ -1,9 +1,10 @@
 import 'package:asan_yab/data/repositoris/local_rep/update_notification.dart';
-import 'package:asan_yab/main.dart';
 import 'package:asan_yab/presentation/pages/detials_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import '../../../core/routes/route_config.dart';
 
 // }
 

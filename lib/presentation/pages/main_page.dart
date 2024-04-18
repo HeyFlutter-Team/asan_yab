@@ -1,5 +1,7 @@
+import 'package:asan_yab/domain/riverpod/config/check_internet_connectivity.dart';
 import 'package:asan_yab/domain/riverpod/config/notification_repo.dart';
-import 'package:asan_yab/presentation/pages/message_page/home_message.dart';
+import 'package:asan_yab/domain/riverpod/screen/botton_navigation_provider.dart';
+import 'package:asan_yab/presentation/pages/message_page/message_page.dart';
 import 'package:asan_yab/presentation/pages/profile/profile_page.dart';
 import 'package:asan_yab/presentation/widgets/message/check_user_message_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,8 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/constants/firebase_collection_names.dart';
-import '../../domain/riverpod/config/internet_connectivity_checker.dart';
-import '../../domain/riverpod/screen/botton_navigation_provider.dart';
+
 import '../widgets/bottom_navigation_bar_widget.dart';
 import 'auth_page.dart';
 import 'home_page.dart';
@@ -34,7 +35,7 @@ class _MainPageState extends ConsumerState<MainPage>
     WidgetsBinding.instance.addObserver(this);
     setStatus(true);
     ref
-        .read(internetConnectivityCheckerProvider.notifier)
+        .read(checkInternetConnectivityProvider.notifier)
         .startStreaming(context);
     firebaseAuth;
   }
@@ -63,7 +64,7 @@ class _MainPageState extends ConsumerState<MainPage>
 
   @override
   Widget build(BuildContext context) {
-    final selectedIndex = ref.watch(buttonNavigationProvider);
+    final selectedIndex = ref.watch(stateButtonNavigationBarProvider);
     NotificationRepo().initInfo();
     NotificationRepo().getToken();
     NotificationRepo().initialize(context);
@@ -75,12 +76,12 @@ class _MainPageState extends ConsumerState<MainPage>
         children: [
           HomePage(
               isConnected: ref
-                  .watch(internetConnectivityCheckerProvider.notifier)
+                  .watch(checkInternetConnectivityProvider.notifier)
                   .isConnected),
           const SuggestionPage(),
           FirebaseAuth.instance.currentUser == null
               ? const CheckUserMessageWidget()
-              : const HomeMessage(),
+              : const MessagePage(),
           FirebaseAuth.instance.currentUser == null
               ? const AuthPage()
               : const ProfilePage()

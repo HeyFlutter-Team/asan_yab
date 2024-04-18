@@ -1,19 +1,23 @@
 import 'package:asan_yab/core/extensions/language.dart';
+import 'package:asan_yab/core/routes/routes.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../core/res/image_res.dart';
+import '../../data/models/screen_image_view.dart';
 import '../../data/repositoris/language_repo.dart';
 
 class PageViewItemWidget extends StatelessWidget {
   final int selectedIndex;
-  final List<String?> gallery;
+  final List<String> gallery;
   const PageViewItemWidget({
     super.key,
     required this.gallery,
@@ -23,14 +27,9 @@ class PageViewItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ImageView(
-            selectedIndex: selectedIndex,
-            gallery: gallery,
-          ),
-        ),
+      onTap: () => context.pushNamed(
+        Routes.imageView,
+        extra: ScreenImageView(imageList: gallery, index: selectedIndex),
       ),
       child: Card(
         elevation: 4,
@@ -38,7 +37,7 @@ class PageViewItemWidget extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(50),
           child: CachedNetworkImage(
-            imageUrl: gallery[selectedIndex]!,
+            imageUrl: gallery[selectedIndex],
             fit: BoxFit.cover,
             errorWidget: (context, url, error) => Image.asset(ImageRes.asanYab),
           ),
@@ -49,13 +48,10 @@ class PageViewItemWidget extends StatelessWidget {
 }
 
 class ImageView extends ConsumerStatefulWidget {
-  final int selectedIndex;
-  final List<String?> gallery;
-  const ImageView({
-    super.key,
-    required this.selectedIndex,
-    required this.gallery,
-  });
+  // final int selectedIndex;
+  // final List<String?> gallery;
+  final ScreenImageView arguments;
+  const ImageView({super.key, required this.arguments});
 
   @override
   ConsumerState<ImageView> createState() => _ImageViewState();
@@ -68,7 +64,7 @@ class _ImageViewState extends ConsumerState<ImageView> {
   @override
   void initState() {
     super.initState();
-    pageController = PageController(initialPage: widget.selectedIndex);
+    pageController = PageController(initialPage: widget.arguments.index);
   }
 
   @override
@@ -95,10 +91,8 @@ class _ImageViewState extends ConsumerState<ImageView> {
                     height: MediaQuery.of(context).size.height,
                     color: Colors.black,
                   ),
-                  const CircularProgressIndicator(
-                    strokeWidth: 3,
-                    color: Colors.white,
-                  ),
+                  LoadingAnimationWidget.fourRotatingDots(
+                      color: Colors.redAccent, size: 60),
                 ],
               );
             },
@@ -108,10 +102,10 @@ class _ImageViewState extends ConsumerState<ImageView> {
                 initialScale: PhotoViewComputedScale.contained,
                 minScale: PhotoViewComputedScale.contained * 0.8,
                 maxScale: PhotoViewComputedScale.covered * 2.0,
-                imageProvider: NetworkImage(widget.gallery[index]!),
+                imageProvider: NetworkImage(widget.arguments.imageList[index]),
               );
             },
-            itemCount: widget.gallery.length,
+            itemCount: widget.arguments.imageList.length,
             pageController: pageController,
             // onPageChanged: onPageChanged,
           ),
@@ -124,7 +118,7 @@ class _ImageViewState extends ConsumerState<ImageView> {
                     curve: Curves.bounceIn);
               },
               controller: pageController,
-              count: widget.gallery.length,
+              count: widget.arguments.imageList.length,
               effect: const ScrollingDotsEffect(
                 dotHeight: 12,
                 dotWidth: 12,
@@ -138,7 +132,7 @@ class _ImageViewState extends ConsumerState<ImageView> {
             child: Align(
               alignment: Alignment.topRight,
               child: IconButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => context.pop(),
                   icon: Icon(
                     isRTL
                         ? Icons.arrow_back_ios_sharp

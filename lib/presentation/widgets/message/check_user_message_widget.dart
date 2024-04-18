@@ -1,7 +1,8 @@
 import 'package:asan_yab/core/extensions/language.dart';
+import 'package:asan_yab/core/utils/translation_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../data/repositoris/language_repo.dart';
 import '../../../domain/riverpod/screen/botton_navigation_provider.dart';
 
@@ -17,13 +18,11 @@ class _MessageCheckUserState extends ConsumerState<CheckUserMessageWidget> {
   @override
   Widget build(BuildContext context) {
     final isRTL = ref.watch(languageProvider).code == 'fa';
-    final languageText = AppLocalizations.of(context);
+    final text = texts(context);
     return Scaffold(
       body: Column(
         children: [
-          const SizedBox(
-            height: 100,
-          ),
+          SizedBox(height: 100.h),
           isRTL
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -61,10 +60,8 @@ class _MessageCheckUserState extends ConsumerState<CheckUserMessageWidget> {
                     )
                   ],
                 ),
-          const SizedBox(
-            height: 190,
-          ),
-          Text(languageText!.message_check_user1,
+          const SizedBox(height: 190),
+          Text(text.message_check_user1,
               textAlign: TextAlign.center,
               style:
                   const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
@@ -79,15 +76,15 @@ class _MessageCheckUserState extends ConsumerState<CheckUserMessageWidget> {
                   minimumSize: const Size(340, 55),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12))),
-              onPressed: () {
-                ref.read(buttonNavigationProvider.notifier).selectedIndex(3);
-              },
+              onPressed: () => ref
+                  .read(stateButtonNavigationBarProvider.notifier)
+                  .selectedIndex(3),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    languageText.message_check_user2,
+                    text.message_check_user2,
                     style: const TextStyle(fontSize: 20, color: Colors.white),
                   ),
                 ],

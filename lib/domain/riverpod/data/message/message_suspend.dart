@@ -1,11 +1,10 @@
 import 'dart:async';
+import 'package:asan_yab/domain/riverpod/data/message/message_history.dart';
+import 'package:asan_yab/domain/riverpod/data/message/messages_notifier.dart';
 import 'package:asan_yab/domain/riverpod/data/message/seen_message.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'message_history.dart';
-import 'messages_notifier.dart';
 
 class MessageSuspend {
   final WidgetRef ref;
@@ -21,8 +20,8 @@ class MessageSuspend {
       _streamController = StreamController<int>();
       _streamSubscription = _streamController.stream.listen((_) async {
         if (context.mounted && FirebaseAuth.instance.currentUser != null) {
-          ref.watch(messageHistory.notifier).getMessageHistory();
-          ref.watch(messageNotifierProvider.notifier).fetchMessage();
+          ref.watch(messageHistoryProvider.notifier).getMessageHistory();
+          ref.watch(messagesNotifierProvider.notifier).fetchMessage();
           ref.watch(seenMassageProvider.notifier).isNewMassage();
         }
       });

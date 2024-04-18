@@ -16,7 +16,6 @@ class PlacesRepo {
           .get();
       final places =
           data.docs.map((doc) => Place.fromJson(doc.data())).toList();
-
       return places;
     } catch (e) {
       debugPrint('Fetching Places: Error: $e');

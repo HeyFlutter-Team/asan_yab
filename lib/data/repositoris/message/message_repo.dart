@@ -8,8 +8,10 @@ import '../../../core/constants/firebase_collection_names.dart';
 
 class MessageRepo {
   MessageRepo();
-  final firestore = FirebaseFirestore.instance;
+
   final firebaseAuth = FirebaseAuth.instance.currentUser;
+  final fireStore = FirebaseFirestore.instance;
+
   Users? user;
   Future<void> addTextMessage({
     required String content,
@@ -64,7 +66,7 @@ class MessageRepo {
     required String receiverId,
     required MessageModel message,
   }) async {
-    final userDocRef = firestore
+    final userDocRef = fireStore
         .collection(FirebaseCollectionNames.user)
         .doc(firebaseAuth!.uid);
     final chatDocRef =
@@ -77,7 +79,7 @@ class MessageRepo {
     await chatDocRef
         .collection(FirebaseCollectionNames.message)
         .add(message.toJson());
-    final receiverChatDocRef = firestore
+    final receiverChatDocRef = fireStore
         .collection(FirebaseCollectionNames.user)
         .doc(receiverId)
         .collection(FirebaseCollectionNames.chat)
@@ -90,5 +92,120 @@ class MessageRepo {
     await receiverChatDocRef
         .collection(FirebaseCollectionNames.message)
         .add(message.toJson());
+  }
+
+  Future<void> deleteMessage(
+    String uid,
+    String receiverId,
+    String messageContent,
+  ) async {
+    FirebaseFirestore.instance
+        .collection(FirebaseCollectionNames.user)
+        .doc(uid)
+        .collection(FirebaseCollectionNames.chat)
+        .doc(receiverId)
+        .collection(FirebaseCollectionNames.message)
+        .where("content", isEqualTo: messageContent)
+        .get()
+        .then((query) {
+      for (final docSnapshot in query.docs) {
+        docSnapshot.reference.delete();
+      }
+    });
+  }
+
+  List<String> usersId = [];
+  List<bool> isNewMessage = [];
+  Future<List<String>> getOtherUserId() async {
+    try {
+      final data = await fireStore
+          .collection(FirebaseCollectionNames.user)
+          .doc(firebaseAuth!.uid)
+          .get()
+          .then((value) async => await value.reference
+              .collection(FirebaseCollectionNames.chat)
+              .orderBy('times', descending: true)
+              .get());
+      usersId = data.docs.map((e) => e.reference.id).toList();
+    } catch (e) {
+      rethrow;
+    }
+    return usersId;
+  }
+
+  Future<List<Users>> getUser(List<String> uidList) async {
+    try {
+      List<Users> data = [];
+      for (final uid in uidList) {
+        final userDataSnapshot = await fireStore
+            .collection(FirebaseCollectionNames.user)
+            .doc(uid)
+            .get();
+
+        if (userDataSnapshot.exists) {
+          final userData = Users.fromMap(userDataSnapshot.data()!);
+          data.add(userData);
+        }
+      }
+      return data;
+    } catch (e) {
+      debugPrint('history message ${e.toString()}');
+      rethrow;
+    }
+  }
+
+  Future<List<MessageModel>> getLastMessage(List<String> uidList) async {
+    List<MessageModel> data = [];
+    try {
+      for (final uid in uidList) {
+        if (firebaseAuth != null) {
+          final userDataSnapshot = await fireStore
+              .collection(FirebaseCollectionNames.user)
+              .doc(firebaseAuth!.uid)
+              .collection(FirebaseCollectionNames.chat)
+              .doc(uid)
+              .collection(FirebaseCollectionNames.message)
+              .orderBy('sentTime', descending: true)
+              .limit(1)
+              .get();
+          final userData =
+              MessageModel.fromJson(userDataSnapshot.docs.first.data());
+          data.add(userData);
+        }
+      }
+      return data;
+    } catch (e) {
+      debugPrint('history message ${e.toString()}');
+      rethrow;
+    }
+  }
+
+  Future<List<bool>> newMessage() async {
+    try {
+      final documentSnapshot = await fireStore
+          .collection(FirebaseCollectionNames.user)
+          .doc(firebaseAuth!.uid)
+          .collection(FirebaseCollectionNames.chat)
+          .orderBy('times', descending: true)
+          .get();
+      final data = documentSnapshot.docs
+          .map((e) => e.data()['last_message'] as bool)
+          .toList();
+      debugPrint("Last Message: $data");
+      return data;
+    } catch (e) {
+      debugPrint("Error retrieving document: $e");
+      rethrow;
+    }
+  }
+
+  Future<void> updateSeenMessage(String receiverId, String uid) async {
+    debugPrint("receiverId:$receiverId and uid:$uid");
+    await fireStore
+        .collection(FirebaseCollectionNames.user)
+        .doc(uid)
+        .collection(FirebaseCollectionNames.chat)
+        .doc(receiverId)
+        .update({'last_message': false});
   }
 }

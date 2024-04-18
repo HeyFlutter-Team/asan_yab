@@ -1,12 +1,13 @@
 import 'package:asan_yab/core/extensions/language.dart';
 import 'package:asan_yab/domain/riverpod/data/following_data.dart';
-import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
+import 'package:asan_yab/domain/riverpod/data/profile_data.dart';
 import 'package:asan_yab/domain/riverpod/screen/search_load_screen.dart';
 import 'package:asan_yab/presentation/pages/profile/list_of_followers.dart';
 import 'package:asan_yab/presentation/pages/profile/list_of_following.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/utils/translation_util.dart';
 import '../../../data/repositoris/language_repo.dart';
 
@@ -16,16 +17,16 @@ class ListOfFollow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final text = texts(context);
-    final profileDetails = ref.watch(profileDetailsProvider);
+    final profileDetails = ref.watch(profileDataProvider);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     return DefaultTabController(
-      initialIndex: ref.read(indexFollowPageProvider),
+      initialIndex: ref.read(stateFollowPageProvider),
       length: 2, // Number of tabs
       child: WillPopScope(
         onWillPop: () async {
           ref.read(listOfDataProvider.notifier).state.clear();
           ref.read(listOfDataFollowersProvider.notifier).state.clear();
-          Navigator.pop(context);
+          context.pop();
           return true;
         },
         child: Scaffold(
@@ -53,7 +54,7 @@ class ListOfFollow extends ConsumerWidget {
               onPressed: () {
                 ref.read(listOfDataProvider.notifier).state.clear();
                 ref.read(listOfDataFollowersProvider.notifier).state.clear();
-                Navigator.pop(context);
+                context.pop();
               },
             ),
             bottom: TabBar(

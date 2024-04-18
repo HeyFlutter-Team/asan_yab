@@ -1,11 +1,12 @@
-import 'package:asan_yab/domain/riverpod/data/follow_https.dart';
 import 'package:asan_yab/domain/riverpod/data/following_data.dart';
-import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
-import 'package:asan_yab/domain/riverpod/screen/follow_checker.dart';
+import 'package:asan_yab/domain/riverpod/data/profile_data.dart';
+import 'package:asan_yab/domain/riverpod/screen/check_follower.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class ListOfFollowers extends ConsumerWidget {
   const ListOfFollowers({super.key});
@@ -17,13 +18,14 @@ class ListOfFollowers extends ConsumerWidget {
     debugPrint('following ${persons.length}');
     return Scaffold(
       body: ref.watch(loadingFollowingDataProvider)
-          ? const Center(
-              child: CircularProgressIndicator(color: Colors.pinkAccent),
+          ? Center(
+              child: LoadingAnimationWidget.fourRotatingDots(
+                  color: Colors.redAccent, size: 60),
             )
           : ref.watch(loadingFollowers)
               ? Column(
                   children: [
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14.h),
                     ListView.builder(
                       itemCount: persons.length,
                       itemBuilder: (context, index) => ListTile(
@@ -37,11 +39,11 @@ class ListOfFollowers extends ConsumerWidget {
                         trailing: ElevatedButton(
                           onPressed: () async {
                             await ref
-                                .read(followHttpsProvider.notifier)
+                                .read(followingDataProvider.notifier)
                                 .updateFollowers(
                                     uid, persons[index]['user'].uid!)
                                 .whenComplete(() => ref
-                                    .read(followerProvider.notifier)
+                                    .read(checkFollowerProvider.notifier)
                                     .followOrUnFollow(
                                         uid, persons[index]['user'].uid!))
                                 .whenComplete(() {
@@ -52,7 +54,7 @@ class ListOfFollowers extends ConsumerWidget {
                             });
                             if (context.mounted) {
                               ref
-                                  .read(profileDetailsProvider.notifier)
+                                  .read(profileDataProvider.notifier)
                                   .getCurrentUserData();
                             }
                           },
@@ -68,7 +70,7 @@ class ListOfFollowers extends ConsumerWidget {
                 )
               : Column(
                   children: [
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14.h),
                     Expanded(
                       child: ListView.builder(
                         itemCount: persons.length,
@@ -84,11 +86,11 @@ class ListOfFollowers extends ConsumerWidget {
                           trailing: ElevatedButton(
                             onPressed: () async {
                               await ref
-                                  .read(followHttpsProvider.notifier)
+                                  .read(followingDataProvider.notifier)
                                   .updateFollowers(
                                       uid, persons[index]['user'].uid!)
                                   .whenComplete(() => ref
-                                      .read(followerProvider.notifier)
+                                      .read(checkFollowerProvider.notifier)
                                       .followOrUnFollow(
                                           uid, persons[index]['user'].uid!))
                                   .whenComplete(() {
@@ -99,7 +101,7 @@ class ListOfFollowers extends ConsumerWidget {
                               });
                               if (context.mounted) {
                                 ref
-                                    .read(profileDetailsProvider.notifier)
+                                    .read(profileDataProvider.notifier)
                                     .getCurrentUserData();
                               }
                             },

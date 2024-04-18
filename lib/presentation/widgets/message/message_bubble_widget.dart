@@ -1,11 +1,13 @@
 import 'package:asan_yab/data/models/message/message_model.dart';
-import 'package:asan_yab/domain/riverpod/data/message/delete_messages.dart';
+
 import 'package:asan_yab/domain/riverpod/data/message/message.dart';
-import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
+import 'package:asan_yab/domain/riverpod/data/message/messages_notifier.dart';
+import 'package:asan_yab/domain/riverpod/data/profile_data.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:timeago/timeago.dart' as timeago;
 
 class MessageBubbleWidget extends ConsumerStatefulWidget {
@@ -36,9 +38,8 @@ class _MessageBubbleState extends ConsumerState<MessageBubbleWidget> {
   @override
   Widget build(BuildContext context) {
     final themDark = Theme.of(context).brightness == Brightness.dark;
-
     overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
-    final profileDetails = ref.watch(profileDetailsProvider);
+    final profileDetails = ref.watch(profileDataProvider);
     return Align(
       alignment: widget.isMe ? Alignment.topRight : Alignment.topLeft,
       child: Row(
@@ -99,11 +100,10 @@ class _MessageBubbleState extends ConsumerState<MessageBubbleWidget> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
                                 image: DecorationImage(
-                                    image: CachedNetworkImageProvider(widget
-                                        .message.content
-                                        .split(' ')
-                                        .first),
-                                    fit: BoxFit.fill),
+                                  image: CachedNetworkImageProvider(
+                                      widget.message.content.split(' ').first),
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
                           ],
@@ -118,7 +118,8 @@ class _MessageBubbleState extends ConsumerState<MessageBubbleWidget> {
                                   onTap: () {
                                     if (widget.isMe) {
                                       ref
-                                          .read(deleteMessagesProvider.notifier)
+                                          .read(
+                                              messagesNotifierProvider.notifier)
                                           .deleteSingleMessage(
                                               FirebaseAuth
                                                   .instance.currentUser!.uid,
@@ -166,9 +167,7 @@ class _MessageBubbleState extends ConsumerState<MessageBubbleWidget> {
                                               ? Colors.black
                                               : Colors.black),
                                     ),
-                              const SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10.h),
                               Text(widget.message.content,
                                   style: TextStyle(
                                     fontSize: 16,

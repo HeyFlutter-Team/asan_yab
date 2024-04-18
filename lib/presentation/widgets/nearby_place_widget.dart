@@ -1,14 +1,14 @@
+import 'package:asan_yab/core/routes/routes.dart';
 import 'package:asan_yab/core/utils/convert_digits_to_farsi.dart';
 import 'package:asan_yab/core/extensions/language.dart';
-import 'package:asan_yab/presentation/pages/nearby_place_page.dart';
+import 'package:asan_yab/core/utils/translation_util.dart';
+import 'package:asan_yab/domain/servers/nearby_places.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../data/models/place.dart';
 import '../../data/repositoris/language_repo.dart';
-import '../../domain/servers/nearby_places.dart';
-import '../pages/detials_page.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NearbyPlaceWidget extends ConsumerWidget {
   const NearbyPlaceWidget({super.key});
@@ -16,11 +16,11 @@ class NearbyPlaceWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final List<Place> place;
-    place = ref.watch(nearbyPlace);
+    place = ref.watch(nearbyPlacesProvider);
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final languageText = AppLocalizations.of(context);
+    final text = texts(context);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     return place.isEmpty
         ? const SizedBox()
@@ -33,16 +33,12 @@ class NearbyPlaceWidget extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      languageText!.nearbyPlaces_title,
+                      text.nearbyPlaces_title,
                       style:
                           const TextStyle(color: Colors.grey, fontSize: 20.0),
                     ),
                     IconButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const NearbyPlacePage()),
-                      ),
+                      onPressed: () => context.pushNamed(Routes.nearbyPlace),
                       icon: Icon(
                         isRTL
                             ? Icons.arrow_circle_left_outlined
@@ -54,23 +50,21 @@ class NearbyPlaceWidget extends ConsumerWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10.h),
               SizedBox(
-                height: screenHeight * 0.3,
+                height: screenHeight * 0.3.h,
                 width: screenWidth,
                 child: ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) => SizedBox(
-                          width: screenWidth * 0.5,
+                          width: screenWidth * 0.5.w,
                           child: InkWell(
                             onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        DetailsPage(id: place[index].id),
-                                  ));
+                              context.pushNamed(
+                                Routes.details,
+                                pathParameters: {'placeId': place[index].id},
+                              );
                             },
                             child: Card(
                               shape: RoundedRectangleBorder(
@@ -85,19 +79,22 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                       height: 200,
                                       padding: EdgeInsets.zero,
                                       decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.only(
-                                              topLeft: Radius.circular(12),
-                                              topRight: Radius.circular(12),
-                                              bottomLeft:
-                                                  Radius.elliptical(200, 90),
-                                              bottomRight:
-                                                  Radius.elliptical(200, 20)),
-                                          shape: BoxShape.rectangle,
-                                          image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: NetworkImage(ref
-                                                  .watch(nearbyPlace)[index]
-                                                  .coverImage))),
+                                        borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(12),
+                                            topRight: Radius.circular(12),
+                                            bottomLeft:
+                                                Radius.elliptical(200, 90),
+                                            bottomRight:
+                                                Radius.elliptical(200, 20)),
+                                        shape: BoxShape.rectangle,
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: NetworkImage(ref
+                                              .watch(
+                                                  nearbyPlacesProvider)[index]
+                                              .coverImage),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                   Padding(
@@ -105,23 +102,27 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                             horizontal: 12)
                                         .copyWith(top: 10),
                                     child: Text(
-                                      ref.watch(nearbyPlace)[index].category,
+                                      ref
+                                          .watch(nearbyPlacesProvider)[index]
+                                          .category,
                                       style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
+                                  SizedBox(height: 10.h),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 12),
                                     child: Text(
-                                      ref.watch(nearbyPlace)[index].name,
+                                      ref
+                                          .watch(nearbyPlacesProvider)[index]
+                                          .name,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(),
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
+                                  SizedBox(height: 10.h),
                                   Row(
                                     children: [
                                       const Icon(
@@ -131,7 +132,8 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                       Flexible(
                                         child: Text(
                                           ref
-                                              .watch(nearbyPlace)[index]
+                                              .watch(
+                                                  nearbyPlacesProvider)[index]
                                               .addresses[0]
                                               .address,
                                           overflow: TextOverflow.ellipsis,
@@ -144,7 +146,7 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 10),
+                                  SizedBox(height: 10.h),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 12),
@@ -157,14 +159,14 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                       padding: const EdgeInsets.all(8),
                                       child: isRTL
                                           ? Text(
-                                              '${convertDigitsToFarsi(place[index].distance.toString())} ${languageText.nearbyPlaces_meter_title}',
+                                              '${convertDigitsToFarsi(place[index].distance.toString())} ${text.nearbyPlaces_meter_title}',
                                               style: const TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.bold),
                                             )
                                           : Text(
-                                              '${place[index].distance} ${languageText.nearbyPlaces_meter_title}',
+                                              '${place[index].distance} ${text.nearbyPlaces_meter_title}',
                                               style: const TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 12,
@@ -172,18 +174,16 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                             ),
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
+                                  SizedBox(height: 10.h),
                                 ],
                               ),
                             ),
                           ),
                         ),
-                    separatorBuilder: (context, index) => const SizedBox(
-                          width: 5,
-                        ),
-                    itemCount: ref.watch(nearbyPlace).length >= 5
+                    separatorBuilder: (context, index) => SizedBox(width: 5.w),
+                    itemCount: ref.watch(nearbyPlacesProvider).length >= 5
                         ? 5
-                        : ref.watch(nearbyPlace).length),
+                        : ref.watch(nearbyPlacesProvider).length),
               ),
             ],
           );

@@ -1,22 +1,20 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unused_local_variable
 
+import 'package:asan_yab/core/routes/routes.dart';
+import 'package:asan_yab/core/utils/translation_util.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/res/image_res.dart';
-import '../pages/search_bar_page.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomSearchBarWidget extends StatelessWidget {
   const CustomSearchBarWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final languageText = AppLocalizations.of(context);
+    final text = texts(context);
     final screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const SearchBarPage()),
-      ),
+      onTap: () => context.pushNamed(Routes.searchBar),
       child: Container(
         height: 46,
         width: double.infinity,
@@ -33,7 +31,7 @@ class CustomSearchBarWidget extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  languageText!.container_text,
+                  text.container_text,
                   style: TextStyle(fontSize: 15.0),
                 ),
                 Image.asset(
