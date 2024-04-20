@@ -18,7 +18,6 @@ class RappiBloc with ChangeNotifier {
   ScrollController scrollController = ScrollController();
   bool _listen = true;
 
-
   void _onScrollListener() {
     if (_listen && !tabController!.indexIsChanging) {
       double scrollPosition = scrollController.offset;
@@ -28,7 +27,8 @@ class RappiBloc with ChangeNotifier {
         final tab = tabs[i];
         final nextTab = tabs[i + 1];
         onCategorySelected(i, animationRequired: false);
-        if (scrollPosition >= tab.offsetFrom && scrollPosition < nextTab.offsetFrom) {
+        if (scrollPosition >= tab.offsetFrom &&
+            scrollPosition < nextTab.offsetFrom) {
           selectedTabIndex = i;
           break;
         }
@@ -47,8 +47,6 @@ class RappiBloc with ChangeNotifier {
     }
   }
 
-
-
   Future<void> fetchMenu(String placeId, TickerProvider ticker) async {
     rappiCategories.clear();
     items.clear();
@@ -56,11 +54,13 @@ class RappiBloc with ChangeNotifier {
 
     final List<String> menus = [];
 
-    DocumentSnapshot docSnapshot =
-    await FirebaseFirestore.instance.collection('Places').doc(placeId).get();
+    DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
+        .collection('Places')
+        .doc(placeId)
+        .get();
     if (docSnapshot.exists) {
       Place restaurantMenu =
-      Place.fromJson(docSnapshot.data() as Map<String, dynamic>);
+          Place.fromJson(docSnapshot.data() as Map<String, dynamic>);
       final List<String> menuItemNames = restaurantMenu.menuItemName!;
       final List<String> customPopups = menus;
 
@@ -93,7 +93,7 @@ class RappiBloc with ChangeNotifier {
         if (docSnapshot.exists) {
           final restaurantMenu = RestaurantMenu.fromJson(docSnapshot.data());
 
-          debugPrint('Mahdi: checking: 3: ${docSnapshot} : ${restaurantMenu}');
+          debugPrint('Mahdi: checking: 3: $docSnapshot : $restaurantMenu');
 
           for (int j = 0; j < restaurantMenu.menus.length; j++) {
             rappiProduct.add(RappiProduct(
@@ -102,7 +102,7 @@ class RappiBloc with ChangeNotifier {
                 price: restaurantMenu.menus[j].fPrice,
                 image: restaurantMenu.menus[j].fImage));
           }
-          print('sharif${menus}');
+          print('sharif$menus');
         }
 
         rappiCategories
@@ -133,7 +133,7 @@ class RappiBloc with ChangeNotifier {
           _listen = false;
           scrollController.animateTo(
             tabs[tabController!.index].offsetFrom,
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             curve: Curves.linear,
           );
           _listen = true;
@@ -156,7 +156,7 @@ class RappiBloc with ChangeNotifier {
     if (animationRequired) {
       _listen = false;
       await scrollController.animateTo(selected.offsetFrom,
-          duration: Duration(milliseconds: 500), curve: Curves.linear);
+          duration: const Duration(milliseconds: 500), curve: Curves.linear);
       _listen = true;
     }
   }

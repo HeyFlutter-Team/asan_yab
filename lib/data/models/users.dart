@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../core/constants/firebase_field_names.dart';
+
 class Users {
   final int id;
   final String? uid;
@@ -32,49 +34,46 @@ class Users {
     this.followingCount = 0,
     required this.fcmToken,
     required this.isOnline,
-    this.invitationRate = 0
+    this.invitationRate = 0,
   });
 
   Map<String, dynamic> toJson() => {
-        'name': name,
-        'lastName': lastName,
-        'email': email,
-        'createdAt': createdAt,
-        'imageUrl': imageUrl,
-        'userType': userType,
-        'uid': uid,
-        'id': id,
-        'owner': owner,
-        'ownerPlaceName': ownerPlaceName,
-        'followerCount': followerCount,
-        'followingCount': followingCount,
-        'fcmToken': fcmToken,
-        'isOnline': isOnline,
-        'invitationRate':invitationRate
+        FirebaseFieldNames.userName: name,
+        FirebaseFieldNames.userLastName: lastName,
+        FirebaseFieldNames.userEmail: email,
+        FirebaseFieldNames.userCreatedAt: createdAt,
+        FirebaseFieldNames.userImageUrl: imageUrl,
+        FirebaseFieldNames.userType: userType,
+        FirebaseFieldNames.userUid: uid,
+        FirebaseFieldNames.userId: id,
+        FirebaseFieldNames.userOwner: owner,
+        FirebaseFieldNames.userOwnerPlaceName: ownerPlaceName,
+        FirebaseFieldNames.userFollowerCount: followerCount,
+        FirebaseFieldNames.userFollowingCount: followingCount,
+        FirebaseFieldNames.userFcmToken: fcmToken,
+        FirebaseFieldNames.userIsOnline: isOnline,
+        FirebaseFieldNames.userInvitationRate: invitationRate
       };
 
-  factory Users.fromMap(Map<String, dynamic> json) {
-    return Users(
-        name: json['name'],
-        lastName: json['lastName'],
-        email: json['email'],
-        createdAt: json['createdAt'] != null
-            ? (json['createdAt'] as Timestamp)
-            : Timestamp.now(), // Ensure correct Timestamp conversion
-        imageUrl: json['imageUrl'],
-        userType: json['userType'],
-        uid: json['uid'],
-        id: json['id'],
-        owner: List<String>.from(json['owner']),
-        ownerPlaceName: List<String>.from(json['ownerPlaceName']),
-        followerCount: json['followerCount'],
-        followingCount: json['followingCount'],
-        fcmToken: json['fcmToken'],
-        isOnline: json['isOnline'] ?? false,
-        invitationRate: json['invitationRate']
-    );
-
-  }
+  factory Users.fromMap(Map<String, dynamic> json) => Users(
+      name: json[FirebaseFieldNames.userName],
+      lastName: json[FirebaseFieldNames.userLastName],
+      email: json[FirebaseFieldNames.userEmail],
+      createdAt: json[FirebaseFieldNames.userCreatedAt] != null
+          ? (json[FirebaseFieldNames.userCreatedAt] as Timestamp)
+          : Timestamp.now(), // Ensure correct Timestamp conversion
+      imageUrl: json[FirebaseFieldNames.userImageUrl],
+      userType: json[FirebaseFieldNames.userType],
+      uid: json[FirebaseFieldNames.userUid],
+      id: json[FirebaseFieldNames.userId],
+      owner: List<String>.from(json[FirebaseFieldNames.userOwner]),
+      ownerPlaceName:
+          List<String>.from(json[FirebaseFieldNames.userOwnerPlaceName]),
+      followerCount: json[FirebaseFieldNames.userFollowerCount],
+      followingCount: json[FirebaseFieldNames.userFollowingCount],
+      fcmToken: json[FirebaseFieldNames.userFcmToken],
+      isOnline: json[FirebaseFieldNames.userIsOnline] ?? false,
+      invitationRate: json[FirebaseFieldNames.userInvitationRate]);
   Users copyWith({
     int? id,
     String? uid,
@@ -90,9 +89,9 @@ class Users {
     int? followingCount,
     String? fcmToken,
     bool? isOnline,
-    int? invitationRate
-  }) {
-    return Users(
+    int? invitationRate,
+  }) =>
+      Users(
         id: id ?? this.id,
         uid: uid ?? this.uid,
         name: name ?? this.name,
@@ -107,7 +106,6 @@ class Users {
         followingCount: followingCount ?? this.followingCount,
         fcmToken: fcmToken ?? this.fcmToken,
         isOnline: isOnline ?? this.isOnline,
-        invitationRate: invitationRate??this.invitationRate
-    );
-  }
+        invitationRate: invitationRate ?? this.invitationRate,
+      );
 }

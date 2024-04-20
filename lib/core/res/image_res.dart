@@ -1,16 +1,16 @@
 class ImageRes {
-  ImageRes._();
+  const ImageRes._();
   static const _imageBase = 'assets';
-  static String youtube = '$_imageBase/youtube.png';
-  static String worldWideWeb = '$_imageBase/world-wide-web.png';
-  static String twitter = '$_imageBase/twitter.png';
-  static String tiktok = '$_imageBase/tiktok.png';
-  static String noInfo = '$_imageBase/noInfo.jpg';
-  static String nodata = '$_imageBase/nodata.jpg';
-  static String linkedin = '$_imageBase/linkedin.png';
-  static String instagram = '$_imageBase/instagram.png';
-  static String heyFlutter = '$_imageBase/hey_flutter.png';
-  static String facebook = '$_imageBase/facebook.png';
-  static String code = '$_imageBase/code.png';
-  static String asanYab = '$_imageBase/asan_yab.png';
+  static const youtube = '$_imageBase/youtube.png';
+  static const worldWideWeb = '$_imageBase/world-wide-web.png';
+  static const twitter = '$_imageBase/twitter.png';
+  static const tikTok = '$_imageBase/tiktok.png';
+  static const noInfo = '$_imageBase/noInfo.jpg';
+  static const noData = '$_imageBase/nodata.jpg';
+  static const linkedin = '$_imageBase/linkedin.png';
+  static const instagram = '$_imageBase/instagram.png';
+  static const heyFlutter = '$_imageBase/hey_flutter.png';
+  static const facebook = '$_imageBase/facebook.png';
+  static const code = '$_imageBase/code.png';
+  static const asanYab = '$_imageBase/asan_yab.png';
 }

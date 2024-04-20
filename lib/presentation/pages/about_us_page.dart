@@ -1,9 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../core/res/image_res.dart';
+import '../../core/utils/translation_util.dart';
+import '../widgets/url_link_widget.dart';
 
 class AboutUsPage extends StatelessWidget {
   const AboutUsPage({super.key});
@@ -12,18 +15,15 @@ class AboutUsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    final languageText=AppLocalizations.of(context);
+    final text = texts(context);
     return Scaffold(
-      // backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        title:  Text(
-          languageText!.about_us_page_appbar_title,
-          // style: TextStyle(color: Colors.black),
-        ),
+        title: Text(text.about_us_page_appbar_title),
         elevation: 0,
         leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.arrow_back)),
+          onPressed: () => context.pop(),
+          icon: const Icon(Icons.arrow_back),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -47,28 +47,26 @@ class AboutUsPage extends StatelessWidget {
                               width: screenWidth * 0.31,
                               height: screenHeight * 0.15,
                             ),
-                            const SizedBox(height: 16),
+                            SizedBox(height: 16.h),
                             Link(
                               uri: Uri.parse('https://heyflutter.com'),
-                              builder: (context, followLink) {
-                                return GestureDetector(
-                                  onTap: followLink,
-                                  child: const Text(
-                                    'HeyFlutter.com',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                    ),
+                              builder: (context, followLink) => GestureDetector(
+                                onTap: followLink,
+                                child: const Text(
+                                  'HeyFlutter.com',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
                                   ),
-                                );
-                              },
+                                ),
+                              ),
                             ),
                           ],
                         ),
                       ),
                       Column(
                         children: [
-                          const SizedBox(height: 16),
+                          SizedBox(height: 16.h),
                           RichText(
                             textAlign: TextAlign.justify,
                             text: TextSpan(children: <TextSpan>[
@@ -120,21 +118,21 @@ class AboutUsPage extends StatelessWidget {
                               ),
                             ]),
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 12.h),
                         ],
                       ),
-                      const SizedBox(height: 12),
-                      _BuildLinkWidget(
+                      SizedBox(height: 12.h),
+                      const UrlLinkWidget(
                         url: 'https://heyflutter.com',
                         image: ImageRes.worldWideWeb,
                         name: '12-WEEK Flutter Training',
                       ),
-                      _BuildLinkWidget(
+                      const UrlLinkWidget(
                         url: 'https://www.youtube.com/@HeyFlutter',
                         image: ImageRes.youtube,
                         name: 'Follow YouTube',
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
                       Center(
                         child: Container(
                           padding: const EdgeInsets.all(8),
@@ -144,7 +142,7 @@ class AboutUsPage extends StatelessWidget {
                           ),
                           child: RichText(
                             text: TextSpan(
-                              style: TextStyle(color: Colors.black54),
+                              style: const TextStyle(color: Colors.black54),
                               text: 'This app organized by ',
                               children: [
                                 TextSpan(
@@ -167,7 +165,7 @@ class AboutUsPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24.h),
                     ],
                   ),
                 ),
@@ -176,49 +174,6 @@ class AboutUsPage extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _BuildLinkWidget extends StatelessWidget {
-  final String url;
-  final String image;
-  final String name;
-
-  const _BuildLinkWidget({
-    required this.url,
-    required this.image,
-    required this.name,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Link(
-          target: LinkTarget.blank,
-          uri: Uri.parse(url),
-          builder: (context, followLink) => Row(
-            children: [
-              Image.asset(
-                image,
-                fit: BoxFit.cover,
-                width: 20,
-                height: 20,
-              ),
-              const SizedBox(width: 5),
-              TextButton(
-                onPressed: followLink,
-                child: Text(
-                  name,
-                  style: const TextStyle(fontSize: 14),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 4),
-      ],
     );
   }
 }

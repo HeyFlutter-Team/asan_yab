@@ -1,22 +1,20 @@
-import 'package:asan_yab/data/models/message/message.dart';
-import 'package:asan_yab/data/repositoris/message/history_message.dart';
+import 'package:asan_yab/data/models/message/message_model.dart';
+import 'package:asan_yab/data/repositoris/message/message_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+part 'messages_notifier.g.dart';
 
-final messageNotifierProvider =
-    StateNotifierProvider<MessagesNotifier, List<MessageModel>>(
-        (ref) => MessagesNotifier([], ref));
-
-class MessagesNotifier extends StateNotifier<List<MessageModel>> {
-  final Ref ref;
-  MessagesNotifier(super.state, this.ref);
-  final historyRepo = HistoryMessage();
-
+@riverpod
+class MessagesNotifier extends _$MessagesNotifier {
+  final messageRepo = MessageRepo();
+  @override
+  List<MessageModel> build() => [];
   Future<void> fetchMessage() async {
     ref.read(loadingMessagesNotifier.notifier).state = true;
     try {
-      final data = await historyRepo
+      final data = await messageRepo
           .getOtherUserId()
-          .then((value) async => await historyRepo.getLastMessage(value));
+          .then((value) async => await messageRepo.getLastMessage(value));
       state.clear();
       state = data;
     } catch (e) {
@@ -24,20 +22,14 @@ class MessagesNotifier extends StateNotifier<List<MessageModel>> {
     } finally {
       ref.read(loadingMessagesNotifier.notifier).state = false;
     }
-
-    // String messageDateFormat(DateTime dateTime) {
-    //   DateTime now = DateTime.now();
-    //   DateTime today = DateTime(now.year, now.month, now.day);
-    //   DateTime yesterday = DateTime(now.year, now.month, now.day - 1);
-    //   if (dateTime.compareTo(today) >= 0) {
-    //     return DateFormat('h:mm:a').format(dateTime);
-    //   } else if (dateTime.compareTo(yesterday) >= 0) {
-    //     return 'Yesterday';
-    //   } else {
-    //     return DateFormat('MM/dd/yy').format(dateTime);
-    //   }
-    // }
   }
+
+  Future<void> deleteSingleMessage(
+    String uid,
+    String receiverId,
+    String messageContent,
+  ) async =>
+      messageRepo.deleteMessage(uid, receiverId, messageContent);
 }
 
 final loadingMessagesNotifier = StateProvider((ref) => false);

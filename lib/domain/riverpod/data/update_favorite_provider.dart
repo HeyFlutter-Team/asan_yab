@@ -1,76 +1,72 @@
 import 'package:asan_yab/data/models/place.dart';
-import 'package:asan_yab/domain/riverpod/data/single_place_provider.dart';
-import 'package:asan_yab/domain/riverpod/data/toggle_favorite.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:asan_yab/domain/riverpod/data/favorite_item.dart';
+import 'package:asan_yab/domain/riverpod/data/single_place.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:go_router/go_router.dart';
 import '../../../core/utils/download_image.dart';
-import 'favorite_provider.dart';
 import 'firbase_favorite_provider.dart';
 
-final updateProvider =
-    ChangeNotifierProvider<UpdateFavorite>((ref) => UpdateFavorite());
+final updateFavoriteProvider = ChangeNotifierProvider<UpdateFavoriteProvider>(
+    (ref) => UpdateFavoriteProvider());
 
-class UpdateFavorite extends ChangeNotifier {
-  Future<void> update(BuildContext context, WidgetRef ref) async {
-    await ref.read(getInformationProvider.notifier).getFavorite();
-    List<String> firebaseId = ref.watch(getInformationProvider).favoriteList;
-    await ref.read(favoriteProvider.notifier).fetchUser();
-    List<String> phoneId =
-        ref.watch(favoriteProvider).map((e) => e['id'].toString()).toList();
-    print(firebaseId);
+class UpdateFavoriteProvider extends ChangeNotifier {
+  UpdateFavoriteProvider();
+  Future<void> update(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    await ref.read(getFavoriteProvider.notifier).getFavorite();
+    final firebaseId = ref.watch(getFavoriteProvider).favoriteList;
+    await ref.read(favoriteItemProvider.notifier).fetchUser();
+    final phoneId =
+        ref.watch(favoriteItemProvider).map((e) => e['id'].toString()).toList();
+    debugPrint(firebaseId.toString());
     List<String> phoneData = [];
     List<String> addressData = [];
 
-    // if  the ides of firebase  are not into the  ides list of phone ,it gets all the information into phone
-    // firebase ides ---> phone ides
-    //
     for (int i = 0; i < firebaseId.length; i++) {
       if (!(phoneId.contains(firebaseId[i]))) {
         await ref
-            .read(getSingleProvider.notifier)
+            .read(singlePlaceProvider.notifier)
             .fetchSinglePlace(firebaseId[i])
-            .whenComplete(() async {
-          final places = ref.watch(getSingleProvider);
-
-          addressData = [];
-          phoneData = [];
-
-          // this loop just add same  addresses and phone numbers that needed into  2 lists , which are above
-          //  lists name {phoneData    ,  addressData}
-
-          if (places != null) {
-            for (int i = 0; i < places.addresses.length; i++) {
-              addressData.add(
-                  '${places.addresses[i].branch}: ${places.addresses[i].address}');
-              phoneData.add(places.addresses[i].phone);
+            .whenComplete(
+          () async {
+            final places = ref.watch(singlePlaceProvider);
+            addressData = [];
+            phoneData = [];
+            if (places != null) {
+              for (int i = 0; i < places.addresses.length; i++) {
+                addressData.add(
+                    '${places.addresses[i].branch}: ${places.addresses[i].address}');
+                phoneData.add(places.addresses[i].phone);
+              }
+              await DownloadImage.getImage(
+                places.logo,
+                places.coverImage,
+                context,
+              ).then(
+                (_) {
+                  context.pop();
+                  ref.read(favoriteItemProvider.notifier).toggleFavorite(
+                        places.id,
+                        places,
+                        addressData,
+                        phoneData,
+                        DownloadImage.logo,
+                        DownloadImage.coverImage,
+                      );
+                },
+              );
             }
-
-            await DownloadImage.getImage(
-                    places.logo, places.coverImage, context)
-                .then((_) {
-              Navigator.pop(context);
-              ref.read(favoriteProvider.notifier).toggleFavorite(
-                  places.id,
-                  places,
-                  addressData,
-                  phoneData,
-                  DownloadImage.logo,
-                  DownloadImage.coverImage);
-            });
-          }
-        });
+          },
+        );
       }
     }
 
-    // this loop check the phones ides that are they into firebase ides or not
-    // if  the ides are not into  firebase this  , it delete that extra  id from phones ides
-    // phones id ---> firebase id
-
     for (int i = 0; i < phoneId.length; i++) {
       if (!(firebaseId.contains(phoneId[i]))) {
-        final provider = ref.read(favoriteProvider.notifier);
+        final provider = ref.read(favoriteItemProvider.notifier);
         final places = Place(
           categoryId: '',
           category: '',

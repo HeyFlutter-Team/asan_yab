@@ -3,19 +3,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../data/models/comment_model.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import '../../../core/constants/firebase_collection_names.dart';
+import '../../../data/models/comment.dart';
 import '../../../data/models/users.dart';
-import '../../../presentation/widgets/comment_sheet.dart';
+import '../../../presentation/widgets/comment_sheet_widget.dart';
 
-final commentProvider = ChangeNotifierProvider<VerticalDataNotifier>(
-    (ref) => VerticalDataNotifier());
+final commentProvider =
+    ChangeNotifierProvider<CommentProvider>((ref) => CommentProvider());
 
-class VerticalDataNotifier extends ChangeNotifier {
+class CommentProvider extends ChangeNotifier {
+  CommentProvider();
   bool _isLoading = false;
-  List<CommentM> _comments = [];
-
-  List<CommentM> get comments => _comments;
-  final TextEditingController _commentController = TextEditingController();
+  List<Comment> _comments = [];
+  final firestore = FirebaseFirestore.instance;
+  List<Comment> get comments => _comments;
+  final _commentController = TextEditingController();
 
   TextEditingController get controller => _commentController;
 
@@ -39,18 +43,16 @@ class VerticalDataNotifier extends ChangeNotifier {
     super.dispose();
   }
 
-  setComments(List<CommentM> newComments) {
+  setComments(List<Comment> newComments) {
     _comments = newComments;
     notifyListeners();
   }
 
-  // Getter for isLoading
   bool get isLoading => _isLoading;
 
-  // Setter for isLoading
   set isLoading(bool value) {
     _isLoading = value;
-    notifyListeners(); // Notify listeners whenever isLoading changes
+    notifyListeners();
   }
 
   onBackspacePressed() {
@@ -64,25 +66,25 @@ class VerticalDataNotifier extends ChangeNotifier {
     _isLoading = true;
     Future.delayed(const Duration(seconds: 1)).then((value) async {
       final lastTimestamp =
-          comments.isNotEmpty ? comments.last.timestamp : DateTime.now();
+          comments.isNotEmpty ? comments.last.creationTime : DateTime.now();
 
       try {
-        final snapshot = await FirebaseFirestore.instance
-            .collection('Places')
+        final snapshot = await firestore
+            .collection(FirebaseCollectionNames.places)
             .doc(postId)
-            .collection('postComments')
+            .collection(FirebaseCollectionNames.postComments)
             .orderBy("timestamp", descending: true)
-            .startAfter([lastTimestamp]) // Start after the last loaded comment
-            .limit(5) // Load next 3 comments
+            .startAfter([lastTimestamp])
+            .limit(5)
             .get();
 
         for (final doc in snapshot.docs) {
-          _comments.add(CommentM.fromDocument(doc));
+          _comments.add(Comment.fromDocument(doc));
         }
 
-        notifyListeners(); // Notify listeners after updating the list
+        notifyListeners();
       } catch (error) {
-        print("Error loading more comments: $error");
+        debugPrint("Error loading more comments: $error");
       }
       notifyListeners();
     }).whenComplete(() {
@@ -90,19 +92,23 @@ class VerticalDataNotifier extends ChangeNotifier {
     });
   }
 
-  void submitComment(String commentText, BuildContext context, WidgetRef ref,
-      String postId) async {
+  void submitComment(
+    String commentText,
+    BuildContext context,
+    WidgetRef ref,
+    String postId,
+  ) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       final uid = user?.uid;
 
       if (uid != null) {
         if (commentText.trim().isEmpty) {
-          print('Comment cannot be empty.');
+          debugPrint('Comment cannot be empty.');
           return;
         }
 
-        List<String> restrictedWords = ref.watch(restrictedWord);
+        final restrictedWords = ref.watch(restrictedWordProvider);
 
         if (restrictedWords.any((word) => commentText.contains(word))) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -116,10 +122,10 @@ class VerticalDataNotifier extends ChangeNotifier {
 
         final info = await _getUserInfo(uid);
 
-        final newCommentDoc = await FirebaseFirestore.instance
-            .collection('Places')
+        final newCommentDoc = await firestore
+            .collection(FirebaseCollectionNames.places)
             .doc(postId)
-            .collection('postComments')
+            .collection(FirebaseCollectionNames.postComments)
             .add({
           'name': info.name,
           'imageUrl': info.imageUrl,
@@ -128,26 +134,26 @@ class VerticalDataNotifier extends ChangeNotifier {
           'timestamp': FieldValue.serverTimestamp(),
         });
 
-        final newComment = CommentM(
+        final newComment = Comment(
           name: info.name,
           imageUrl: info.imageUrl,
           text: commentText,
           uid: uid,
           commentId: newCommentDoc.id,
-          timestamp: DateTime.now(),
+          creationTime: DateTime.now(),
         );
 
         setComments([newComment, ...comments]);
       }
     } catch (e) {
-      print('Error submitting comment: $e');
+      debugPrint('Error submitting comment: $e');
     }
     notifyListeners();
   }
 
   Future<Users> _getUserInfo(String uid) async {
     final userDoc =
-        await FirebaseFirestore.instance.collection('User').doc(uid).get();
+        await firestore.collection(FirebaseCollectionNames.user).doc(uid).get();
     return userDoc.exists
         ? Users.fromMap(userDoc.data() as Map<String, dynamic>)
         : Users(
@@ -162,15 +168,19 @@ class VerticalDataNotifier extends ChangeNotifier {
           );
   }
 
-  void deleteComment(CommentM comment, WidgetRef ref, String postId) async {
+  void deleteComment(
+    Comment comment,
+    WidgetRef ref,
+    String postId,
+  ) async {
     final user = FirebaseAuth.instance.currentUser;
     final uid = user?.uid;
 
     if (uid != null && comment.uid == uid) {
-      await FirebaseFirestore.instance
-          .collection('Places')
+      await firestore
+          .collection(FirebaseCollectionNames.places)
           .doc(postId)
-          .collection('postComments')
+          .collection(FirebaseCollectionNames.postComments)
           .doc(comment.commentId)
           .delete();
     }
@@ -180,49 +190,46 @@ class VerticalDataNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void showCommentSheet(BuildContext context, String postId) {
+  void showCommentSheet(
+    BuildContext context,
+    String postId,
+  ) {
     showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) {
-        return CommentSheet(
-          postId: postId,
-        );
-      },
+      builder: (BuildContext context) => CommentSheetWidget(postId: postId),
     );
     notifyListeners();
   }
 
   void showOptionsBottomSheet(
-      BuildContext context, bool isOwner, VoidCallback onDelete) {
+    BuildContext context,
+    bool isOwner,
+    VoidCallback onDelete,
+  ) {
     showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            isOwner
-                ? ListTile(
-                    leading: const Icon(Icons.delete),
-                    title: const Text('Delete'),
-                    onTap: () {
-                      Navigator.pop(context); // Close the bottom sheet
-                      if (isOwner) {
-                        onDelete(); // Perform delete action
-                      }
-                    },
-                  )
-                : const SizedBox(height: 0),
-            ListTile(
-              leading: const Icon(Icons.report),
-              title: const Text('Report'),
-              onTap: () {
-                Navigator.pop(context); // Close the bottom sheet
-                // Implement report action
-              },
-            ),
-          ],
-        );
-      },
+      builder: (BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          isOwner
+              ? ListTile(
+                  leading: const Icon(Icons.delete),
+                  title: const Text('Delete'),
+                  onTap: () {
+                    context.pop();
+                    if (isOwner) {
+                      onDelete();
+                    }
+                  },
+                )
+              : SizedBox(height: 0.h),
+          ListTile(
+            leading: const Icon(Icons.report),
+            title: const Text('Report'),
+            onTap: () => context.pop(),
+          ),
+        ],
+      ),
     );
     notifyListeners();
   }

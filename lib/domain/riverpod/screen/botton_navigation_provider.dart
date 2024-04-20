@@ -1,9 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+part 'botton_navigation_provider.g.dart';
 
-final buttonNavigationProvider =
-    StateNotifierProvider<ButtonNavigation, int>((ref) => ButtonNavigation(0));
-
-class ButtonNavigation extends StateNotifier<int> {
-  ButtonNavigation(super._state);
+@riverpod
+class StateButtonNavigationBar extends _$StateButtonNavigationBar {
+  @override
+  int build() => 0;
   int selectedIndex(int index) => state = index;
 }

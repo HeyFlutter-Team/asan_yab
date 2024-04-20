@@ -1,7 +1,8 @@
 import 'dart:math';
 
-import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/core/extensions/language.dart';
 import 'package:asan_yab/data/models/place.dart';
+import 'package:asan_yab/domain/riverpod/data/single_place.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/utils/convert_digits_to_farsi.dart';
-import '../../data/repositoris/language_repository.dart';
-import '../../domain/riverpod/data/single_place_provider.dart';
+import '../../data/repositoris/language_repo.dart';
 
 class GoogleMapPage extends ConsumerStatefulWidget {
   const GoogleMapPage({super.key});
@@ -29,7 +29,7 @@ class _GoogleMapPageState extends ConsumerState<GoogleMapPage> {
 
   @override
   Widget build(BuildContext context) {
-    final places = ref.watch(getSingleProvider);
+    final places = ref.watch(singlePlaceProvider);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     return ClipRRect(
       borderRadius: const BorderRadius.only(

@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../core/constants/firebase_field_names.dart';
+
 class Place {
   final DateTime createdAt;
   final List<Address> addresses;
@@ -15,7 +17,7 @@ class Place {
   final List<ItemImage>? itemImages;
   final List<Doctors>? doctors;
   int distance;
-  final List<NewItems>? newItems;
+  final List<NewProducts>? newItems;
   final List<NewItemsYounis>? newItemYounis;
   final List<String>? menuItemName;
   Place({
@@ -41,24 +43,27 @@ class Place {
   factory Place.fromJson(Map<String, dynamic> json) {
     DateTime createdAt;
 
-    if (json['createdAt'] == null) {
+    if (json[FirebaseFieldNames.placeCreatedAt] == null) {
       throw Exception("Missing 'createdAt' field in JSON");
     }
 
     try {
-      if (json['createdAt'] is Timestamp) {
+      if (json[FirebaseFieldNames.placeCreatedAt] is Timestamp) {
         // If 'createdAt' is already a Timestamp
-        createdAt = (json['createdAt'] as Timestamp).toDate();
-      } else if (json['createdAt'] is Map<String, dynamic>) {
+        createdAt =
+            (json[FirebaseFieldNames.placeCreatedAt] as Timestamp).toDate();
+      } else if (json[FirebaseFieldNames.placeCreatedAt]
+          is Map<String, dynamic>) {
         // If 'createdAt' is a map with '_seconds' and '_nanoseconds'
         createdAt = DateTime.fromMillisecondsSinceEpoch(
-          (json['createdAt']['_seconds'] * 1000) +
-              (json['createdAt']['_nanoseconds'] / 1e6).round(),
+          (json[FirebaseFieldNames.placeCreatedAt]['_seconds'] * 1000) +
+              (json[FirebaseFieldNames.placeCreatedAt]['_nanoseconds'] / 1e6)
+                  .round(),
         );
       } else {
         // Handle other cases or throw an error if necessary
         throw Exception(
-            "Invalid 'createdAt' type: ${json['createdAt'].runtimeType}");
+            "Invalid 'createdAt' type: ${json[FirebaseFieldNames.placeCreatedAt].runtimeType}");
       }
     } catch (e) {
       throw Exception("Error parsing 'createdAt': $e");
@@ -67,34 +72,37 @@ class Place {
     return Place(
       createdAt: createdAt,
       addresses: List<Address>.from(
-        json['addresses'].map((address) => Address.fromJson(address)),
+        json[FirebaseFieldNames.placeAddresses]
+            .map((address) => Address.fromJson(address)),
       ),
-      coverImage: json['coverImage'],
-      name: json['name'],
-      description: json['description'],
-      logo: json['logo'],
-      id: json['id'],
-      categoryId: json['categoryId'],
-      gallery: List<String>.from(json['gallery']),
-      category: json['category'],
-      order: json['order'],
-      itemImages: json['itemImages'] != null
+      coverImage: json[FirebaseFieldNames.placeCoverImage],
+      name: json[FirebaseFieldNames.placeName],
+      description: json[FirebaseFieldNames.placeDescription],
+      logo: json[FirebaseFieldNames.placeLogo],
+      id: json[FirebaseFieldNames.placeId],
+      categoryId: json[FirebaseFieldNames.placeCategoryId],
+      gallery: List<String>.from(json[FirebaseFieldNames.placeGallery]),
+      category: json[FirebaseFieldNames.placeCategory],
+      order: json[FirebaseFieldNames.placeOrder],
+      itemImages: json[FirebaseFieldNames.placeItemImages] != null
           ? List<ItemImage>.from(
-              json['itemImages'].map((item) => ItemImage.fromJson(item)),
+              json[FirebaseFieldNames.placeItemImages]
+                  .map((item) => ItemImage.fromJson(item)),
             )
           : null,
-      doctors: json['doctors'] != null
+      doctors: json[FirebaseFieldNames.placeDoctors] != null
           ? List<Doctors>.from(
-              json['doctors'].map((doctors) => Doctors.fromJson(doctors)),
+              json[FirebaseFieldNames.placeDoctors]
+                  .map((doctors) => Doctors.fromJson(doctors)),
             )
           : null,
       newItems: json['newItems'] != null
-          ? List<NewItems>.from(
-              json['newItems'].map((newItem) => NewItems.fromJson(newItem)))
+          ? List<NewProducts>.from(
+              json['newItems'].map((newItem) => NewProducts.fromJson(newItem)))
           : null,
       newItemYounis: json['newItemYounis'] != null
           ? List<NewItemsYounis>.from(json['newItemYounis']
-              .map((newItemYounis) => NewItems.fromJson(newItemYounis)))
+              .map((newItemYounis) => NewProducts.fromJson(newItemYounis)))
           : null,
       menuItemName: json['menuItemName'] != null
           ? List<String>.from(json['menuItemName'])
@@ -110,7 +118,7 @@ class Address {
   final String branch;
   final String lat;
 
-  Address({
+  const Address({
     required this.address,
     required this.phone,
     required this.lang,
@@ -120,31 +128,36 @@ class Address {
 
   factory Address.fromJson(Map<String, dynamic> json) {
     return Address(
-      address: json['address'],
-      phone: json['phone'],
-      lang: json['lang'],
-      branch: json['branch'],
-      lat: json['lat'],
+      address: json[FirebaseFieldNames.address],
+      phone: json[FirebaseFieldNames.addressPhone],
+      lang: json[FirebaseFieldNames.addressLang],
+      branch: json[FirebaseFieldNames.addressBranch],
+      lat: json[FirebaseFieldNames.addressLat],
     );
   }
 }
 
-class NewItems {
+class NewProducts {
   final String? imageUrl;
-  final String? itemName;
-  final String? itemPrice;
-  NewItems({this.imageUrl, this.itemName, this.itemPrice});
+  final String? name;
+  final String? price;
+  const NewProducts({
+    this.imageUrl,
+    this.name,
+    this.price,
+  });
 
-  Map<String, dynamic> toJson() {
-    return {'imageUrl': imageUrl, 'itemName': itemName, 'itemPrice': itemPrice};
-  }
+  Map<String, dynamic> toJson() => {
+        FirebaseFieldNames.newProductImage: imageUrl,
+        FirebaseFieldNames.newProductName: name,
+        FirebaseFieldNames.newProductPrice: price,
+      };
 
-  factory NewItems.fromJson(Map<String, dynamic> json) {
-    return NewItems(
-        imageUrl: json['imageUrl'],
-        itemName: json['itemName'],
-        itemPrice: json['itemPrice']);
-  }
+  factory NewProducts.fromJson(Map<String, dynamic> json) => NewProducts(
+        imageUrl: json[FirebaseFieldNames.newProductImage],
+        name: json[FirebaseFieldNames.newProductName],
+        price: json[FirebaseFieldNames.newProductPrice],
+      );
 }
 
 class NewItemsYounis {
@@ -152,19 +165,17 @@ class NewItemsYounis {
   final String? itemYounisName;
   final String? itemYounisPrice;
 
-  NewItemsYounis({
+  const NewItemsYounis({
     this.newItemYounisImage,
     this.itemYounisName,
     this.itemYounisPrice,
   });
 
-  factory NewItemsYounis.fromJson(Map<String, dynamic> json) {
-    return NewItemsYounis(
-      newItemYounisImage: json['newItemYounis'],
-      itemYounisName: json['itemYounisName'],
-      itemYounisPrice: json['itemYounisPrice'],
-    );
-  }
+  factory NewItemsYounis.fromJson(Map<String, dynamic> json) => NewItemsYounis(
+        newItemYounisImage: json['newItemYounis'],
+        itemYounisName: json['itemYounisName'],
+        itemYounisPrice: json['itemYounisPrice'],
+      );
 
   Map<String, dynamic> toJson() {
     return {
@@ -180,7 +191,7 @@ class ItemImage {
   final String price;
   final String imageUrl;
 
-  ItemImage({
+  const ItemImage({
     required this.name,
     required this.price,
     required this.imageUrl,
@@ -206,25 +217,27 @@ class ItemImage {
 class Doctors {
   final String name;
   final String title;
-  final String time;
+  final String spendTime;
   final String imageUrl;
 
-  Doctors(
-      {required this.name,
-      required this.title,
-      required this.imageUrl,
-      required this.time});
+  const Doctors({
+    required this.name,
+    required this.title,
+    required this.imageUrl,
+    required this.spendTime,
+  });
 
-  Map<String, dynamic> toJson() {
-    return {'name': name, 'title': title, 'imageUrl': imageUrl, "time": time};
-  }
+  Map<String, dynamic> toJson() => {
+        FirebaseFieldNames.doctorName: name,
+        FirebaseFieldNames.doctorTitle: title,
+        FirebaseFieldNames.doctorImageUrl: imageUrl,
+        FirebaseFieldNames.doctorSpendTime: spendTime,
+      };
 
-  factory Doctors.fromJson(Map<String, dynamic> json) {
-    return Doctors(
-        name: json['name'],
-        title: json['title'],
-        imageUrl: json['imageUrl'],
-        time: json['time']);
-  }
+  factory Doctors.fromJson(Map<String, dynamic> json) => Doctors(
+      name: json[FirebaseFieldNames.doctorName],
+      title: json[FirebaseFieldNames.doctorTitle],
+      imageUrl: json[FirebaseFieldNames.doctorImageUrl],
+      spendTime: json[FirebaseFieldNames.doctorSpendTime]);
 }
 

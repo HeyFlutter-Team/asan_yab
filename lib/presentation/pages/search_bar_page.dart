@@ -1,69 +1,50 @@
+import 'package:asan_yab/core/routes/routes.dart';
 import 'package:asan_yab/data/models/place.dart';
-import 'package:asan_yab/presentation/pages/search_notifire.dart';
-import 'package:asan_yab/presentation/pages/search_provider.dart';
+import 'package:asan_yab/domain/riverpod/data/search_user_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../core/res/image_res.dart';
-import 'detials_page.dart';
+import '../../core/utils/translation_util.dart';
+import '../../domain/riverpod/data/search_place.dart';
+import '../widgets/search_result_widget.dart';
 
 final searchLoadingProvider = StateProvider<bool>((ref) => false);
-final fetchprovider = StateProvider<bool>((ref) => true);
+final fetchProvider = StateProvider<bool>((ref) => true);
 
-class SearchPage extends ConsumerStatefulWidget {
-  const SearchPage({super.key});
+class SearchBarPage extends ConsumerStatefulWidget {
+  const SearchBarPage({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SearchPageState();
 }
 
-class _SearchPageState extends ConsumerState<SearchPage> {
+class _SearchPageState extends ConsumerState<SearchBarPage> {
   final searchController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     searchController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final _data = ref.watch(userDataProvider);
-    final languageText = AppLocalizations.of(context);
+    final data = ref.watch(searchUserProvider);
+    final text = texts(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
-        //shadowColor: Colors.blue,
-        //backgroundColor: Theme.of(context).primaryColor,
         title: TextFormField(
           controller: searchController,
-          // autofocus: true,
           decoration: InputDecoration(
             border: InputBorder.none,
-            hintText: languageText!.search_bar_hint_text,
+            hintText: text.search_bar_hint_text,
           ),
-          onChanged: (value) {
-            ref
-                .read(searchNotifierProvider.notifier)
-                .sendQuery(value.trimLeft());
-            ref.read(userDataProvider);
-            if (value.isEmpty) {
-              ref.read(searchNotifierProvider.notifier).clear;
-            }
-            if (value.isNotEmpty) {
-              ref.refresh(searchLoadingProvider.notifier).state = true;
-            } else {
-              ref.refresh(searchLoadingProvider.notifier).state = false;
-            }
-          },
+          onChanged: (value) => handleSearchValueChanged(value),
         ),
         actions: [
           Padding(
@@ -72,12 +53,11 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                 ? IconButton(
                     onPressed: () {
                       searchController.clear();
-                      ref.refresh(searchNotifierProvider.notifier).clear;
+                      ref.refresh(searchPlaceProvider.notifier).clear;
                     },
                     icon: const Icon(
                       Icons.close,
                       size: 25.0,
-                      // color: Colors.black,
                     ),
                   )
                 : null,
@@ -85,93 +65,68 @@ class _SearchPageState extends ConsumerState<SearchPage> {
         ],
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
-            ref.refresh(searchNotifierProvider.notifier).clear;
+            context.pop();
+            ref.refresh(searchPlaceProvider.notifier).clear;
           },
           icon: const Icon(Icons.arrow_back, size: 25.0),
         ),
       ),
-      body: ref.watch(searchNotifierProvider) == ''
-          ? SizedBox()
-          : _data.when(
-              data: (_data) {
-                List<Place> postList = _data.map((e) => e).toList();
+      body: ref.watch(searchPlaceProvider) == ''
+          ? const SizedBox()
+          : data.when(
+              data: (data) {
+                List<Place> postList = data.map((e) => e).toList();
                 return ListView.separated(
                   padding: const EdgeInsets.all(12),
                   itemCount: postList.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 8),
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DetailsPage(
-                              id: postList[index].id,
-                            ),
+                  separatorBuilder: (context, index) => SizedBox(height: 8.h),
+                  itemBuilder: (context, index) => InkWell(
+                    onTap: () {
+                      context.pushNamed(Routes.details,
+                          pathParameters: {'placeId': postList[index].id});
+                    },
+                    child: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(60),
+                          child: CachedNetworkImage(
+                            imageUrl: postList[index].logo,
+                            fit: BoxFit.cover,
+                            height: 60,
+                            width: 60,
+                            placeholder: (context, url) =>
+                                Image.asset(ImageRes.asanYab),
                           ),
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(60),
-                            child: CachedNetworkImage(
-                              imageUrl: postList[index].logo,
-                              fit: BoxFit.cover,
-                              height: 60,
-                              width: 60,
-                              placeholder: (context, url) =>
-                                  Image.asset(ImageRes.asanYab),
-                            ),
+                        ),
+                        SizedBox(width: 12.w),
+                        Expanded(
+                          child: SearchResultWidget(
+                            searchController: searchController,
+                            name: postList[index].name.toString(),
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: buildSearchResultText(
-                              postList[index].name.toString(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                        ),
+                      ],
+                    ),
+                  ),
                 );
               },
               error: (error, stackTrace) => Text(' hello: ${error.toString()}'),
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => Center(
+                child: LoadingAnimationWidget.fourRotatingDots(
+                    color: Colors.redAccent, size: 60),
+              ),
             ),
     );
   }
 
-  Widget buildSearchResultText(String name) {
-    final startIndex =
-        name.toLowerCase().indexOf(searchController.text.toLowerCase());
-
-    if (startIndex == -1) {
-      return Text(name);
+  void handleSearchValueChanged(String value) {
+    ref.read(searchPlaceProvider.notifier).sendQuery(value.trimLeft());
+    ref.read(searchUserProvider);
+    if (value.isEmpty) {
+      ref.read(searchPlaceProvider.notifier).clear();
+      ref.refresh(searchLoadingProvider.notifier).state = false;
+    } else {
+      ref.refresh(searchLoadingProvider.notifier).state = true;
     }
-
-    final endIndex = startIndex + searchController.text.length;
-    final beforeMatch = name.substring(0, startIndex);
-    final match = name.substring(startIndex, endIndex);
-    final afterMatch = name.substring(endIndex);
-
-    return RichText(
-      text: TextSpan(
-        style: const TextStyle(
-          // color: Colors.black,
-          fontSize: 20.0,
-        ),
-        children: [
-          TextSpan(text: beforeMatch),
-          TextSpan(
-            text: match,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          TextSpan(text: afterMatch),
-        ],
-      ),
-    );
   }
 }

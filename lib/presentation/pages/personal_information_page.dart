@@ -1,10 +1,12 @@
-import 'package:asan_yab/presentation/pages/main_page.dart';
+import 'package:asan_yab/core/utils/translation_util.dart';
+import 'package:asan_yab/domain/riverpod/data/sign_up.dart';
+import 'package:asan_yab/domain/riverpod/screen/botton_navigation_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/riverpod/data/sign_up_provider.dart';
-import '../../domain/riverpod/screen/botton_navigation_provider.dart';
-import '../widgets/custom_text_field.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import '../../core/routes/routes.dart';
+import '../widgets/custom_text_field_widget.dart';
 
 class PersonalInformation extends ConsumerStatefulWidget {
   final String? email;
@@ -21,7 +23,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
   final invitingPersonId = TextEditingController();
   final signUpFormKey = GlobalKey<FormState>();
 
-  @override 
+  @override
   void dispose() {
     nameController.dispose();
     lastNameController.dispose();
@@ -30,9 +32,9 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
 
   @override
   Widget build(BuildContext context) {
-    final languageText = AppLocalizations.of(context);
-    return WillPopScope(
-      onWillPop: () async => false,
+    final text = texts(context);
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         body: Form(
           key: signUpFormKey,
@@ -47,41 +49,35 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                     height: 200,
                     width: 200,
                   ),
-                  const SizedBox(
-                    height: 2,
-                  ),
-                  CustomTextField(
+                  SizedBox(height: 2.h),
+                  CustomTextFieldWidget(
                     textCapitalization: TextCapitalization.words,
-                    label: languageText!.first_text_field_label,
+                    label: text.first_text_field_label,
                     label2: '*',
                     controller: nameController,
                     keyboardType: TextInputType.emailAddress,
-                    hintText: languageText.first_text_field_hint,
-                    validator: (p0) => p0!.isEmpty
-                        ? languageText.first_text_field_valid
-                        : null,
+                    hintText: text.first_text_field_hint,
+                    validator: (value) =>
+                        value!.isEmpty ? text.first_text_field_valid : null,
                   ),
-                  CustomTextField(
+                  CustomTextFieldWidget(
                     textCapitalization: TextCapitalization.words,
-                    label: languageText.second_text_field_label,
+                    label: text.second_text_field_label,
                     label2: '*',
                     controller: lastNameController,
-                    hintText: languageText.second_text_field_hint,
+                    hintText: text.second_text_field_hint,
                     keyboardType: TextInputType.emailAddress,
-                    validator: (p0) => p0!.isEmpty
-                        ? languageText.second_text_field_valid
-                        : null,
+                    validator: (value) =>
+                        value!.isEmpty ? text.second_text_field_valid : null,
                   ),
-                  CustomTextField(
+                  CustomTextFieldWidget(
                     textCapitalization: TextCapitalization.words,
-                    label: languageText.inviter_ID,
+                    label: text.inviter_ID,
                     controller: invitingPersonId,
-                    hintText: languageText.third_text_field_hint,
+                    hintText: text.third_text_field_hint,
                     keyboardType: TextInputType.emailAddress,
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  SizedBox(height: 10.h),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red.shade800,
@@ -92,30 +88,30 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                       final isValid = signUpFormKey.currentState!.validate();
                       if (!isValid) return;
                       ref
-                          .read(userRegesterDetailsProvider)
+                          .read(createUserProvider)
                           .addUserDetailsToFirebase(
                               emailController: widget.email,
                               lastNameController: lastNameController.text,
                               nameController: nameController.text)
                           .whenComplete(() async {
                         await ref
-                            .read(userRegesterDetailsProvider)
+                            .read(createUserProvider)
                             .updateInviterRate(invitingPersonId.text);
                         signUpFormKey.currentState!.reset();
-
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MainPage(),
-                            ));
+                        if (context.mounted) {
+                          context.pushNamed(Routes.home);
+                        }
                         ref
-                            .read(buttonNavigationProvider.notifier)
+                            .read(stateButtonNavigationBarProvider.notifier)
                             .selectedIndex(0);
                       });
                     },
                     child: Text(
-                      languageText.elevated_text,
-                      style: const TextStyle(fontSize: 17, color: Colors.white),
+                      text.elevated_text,
+                      style: const TextStyle(
+                        fontSize: 17,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ],

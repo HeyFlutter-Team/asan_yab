@@ -2,11 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-final firebaseRatingProvider =
-    ChangeNotifierProvider<FirebaseRating>((ref) => FirebaseRating());
+import '../../../core/constants/firebase_collection_names.dart';
 
-class FirebaseRating extends ChangeNotifier {
+final firebaseRatingProvider = ChangeNotifierProvider<FirebaseRatingProvider>(
+    (ref) => FirebaseRatingProvider());
+
+class FirebaseRatingProvider extends ChangeNotifier {
+  FirebaseRatingProvider();
+  final firestore = FirebaseFirestore.instance;
+  final firebaseAuth = FirebaseAuth.instance.currentUser;
   double _averageRatingProvider = 0;
   double get averageRatingProvider => _averageRatingProvider;
   set averageRatingProvider(double averageRatingProvider) {
@@ -15,121 +21,127 @@ class FirebaseRating extends ChangeNotifier {
   }
 
   Future<void> checkIfUserRated(
-      BuildContext context, String postId, WidgetRef ref, double rate) async {
-    final userUid = FirebaseAuth.instance.currentUser!.uid;
-    if (userUid.isNotEmpty) {
+    BuildContext context,
+    String postId,
+    WidgetRef ref,
+    double rate,
+  ) async {
+    if (firebaseAuth!.uid.isNotEmpty) {
       try {
-        var result = await FirebaseFirestore.instance
-            .collection('ratings')
+        final result = await firestore
+            .collection(FirebaseCollectionNames.ratings)
             .where('placeId', isEqualTo: postId)
-            .where('userId', isEqualTo: userUid)
+            .where('userId', isEqualTo: firebaseAuth!.uid)
             .get();
 
-        if (result.docs.isNotEmpty) {
-          // User has already rated the place
-          print('User already rated this place');
-          await updateRating(context, postId, ref, userUid, rate);
+        if (result.docs.isNotEmpty && context.mounted) {
+          debugPrint('User already rated this place');
+
+          await updateRating(context, postId, ref, firebaseAuth!.uid, rate);
         } else {
-          // Save the rating to the database
-          await saveRating(context, postId, ref, userUid, rate);
+          if (context.mounted) {
+            await saveRating(context, postId, ref, firebaseAuth!.uid, rate);
+          }
         }
       } catch (e) {
-        print('Error checking if user rated: $e');
-        // Handle the error
+        debugPrint('Error checking if user rated: $e');
       }
     }
     notifyListeners();
   }
 
-  Future<void> saveRating(BuildContext context, String postId, WidgetRef ref,
-      String userId, double rate) async {
+  Future<void> saveRating(
+    BuildContext context,
+    String postId,
+    WidgetRef ref,
+    String userId,
+    double rate,
+  ) async {
     try {
-      await FirebaseFirestore.instance.collection('ratings').add({
+      await firestore.collection(FirebaseCollectionNames.ratings).add({
         'placeId': postId,
         'rating': rate,
-        'userId': userId, // Include the user ID
+        'userId': userId,
       });
-
-      Navigator.pop(context);
-      // Close the rating screen after submission
+      if (context.mounted) {
+        context.pop();
+      }
     } catch (e) {
-      print('Error saving rating: $e');
-      // Handle the error
+      debugPrint('Error saving rating: $e');
     }
-
     notifyListeners();
   }
 
-  Future<void> updateRating(BuildContext context, String postId, WidgetRef ref,
-      String userId, double rate) async {
+  Future<void> updateRating(
+    BuildContext context,
+    String postId,
+    WidgetRef ref,
+    String userId,
+    double rate,
+  ) async {
     try {
-      var existingRating = await FirebaseFirestore.instance
-          .collection('ratings')
+      final existingRating = await firestore
+          .collection(FirebaseCollectionNames.ratings)
           .where('placeId', isEqualTo: postId)
           .where('userId', isEqualTo: userId)
           .get();
 
       if (existingRating.docs.isNotEmpty) {
-        // Update the existing rating
-        var docId = existingRating.docs.first.id;
-        await FirebaseFirestore.instance
-            .collection('ratings')
+        final docId = existingRating.docs.first.id;
+        await firestore
+            .collection(FirebaseCollectionNames.ratings)
             .doc(docId)
-            .update({
-          'rating': rate,
-        });
-
-        Navigator.pop(context);
-        // Close the rating screen after submission
+            .update({'rating': rate});
+        if (context.mounted) {
+          context.pop();
+        }
       }
     } catch (e) {
-      print('Error updating rating: $e');
-      // Handle the error
+      debugPrint('Error updating rating: $e');
     }
     notifyListeners();
   }
 
-// Inside the FirebaseRating class
   Future<double> getAverageRatingForPlace(String postId) async {
     try {
-      var result = await FirebaseFirestore.instance
-          .collection('ratings')
+      final result = await firestore
+          .collection(FirebaseCollectionNames.ratings)
           .where('placeId', isEqualTo: postId)
           .get();
 
       if (result.docs.isNotEmpty) {
-        var ratings =
+        final ratings =
             result.docs.map((doc) => doc['rating'] as double).toList();
-        var averageRating = ratings.reduce((a, b) => a + b) / ratings.length;
+        final averageRating = ratings.reduce((a, b) => a + b) / ratings.length;
 
         return averageRating;
       } else {
         return 0;
       }
     } catch (e) {
-      print('Error fetching average rating: $e');
+      debugPrint('Error fetching average rating: $e');
       return 0;
     }
   }
 
   Future<void> getAverageRating({required String postId}) async {
     try {
-      var result = await FirebaseFirestore.instance
-          .collection('ratings')
+      final result = await firestore
+          .collection(FirebaseCollectionNames.ratings)
           .where('placeId', isEqualTo: postId)
           .get();
 
       if (result.docs.isNotEmpty) {
-        var ratings =
+        final ratings =
             result.docs.map((doc) => doc['rating'] as double).toList();
-        var averageRating = ratings.reduce((a, b) => a + b) / ratings.length;
+        final averageRating = ratings.reduce((a, b) => a + b) / ratings.length;
 
         _averageRatingProvider = averageRating;
       } else {
         _averageRatingProvider = 0;
       }
     } catch (e) {
-      print('Error fetching average rating: $e');
+      debugPrint('Error fetching average rating: $e');
       _averageRatingProvider = 0;
     }
     notifyListeners();

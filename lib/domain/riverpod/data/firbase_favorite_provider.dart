@@ -3,21 +3,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/constants/firebase_collection_names.dart';
 import '../../../data/models/favorite.dart';
 
-final getInformationProvider =
-    ChangeNotifierProvider<Information>((ref) => Information());
+final getFavoriteProvider = ChangeNotifierProvider<FirebaseFavoriteProvider>(
+    (ref) => FirebaseFavoriteProvider());
 
-class Information extends ChangeNotifier {
+class FirebaseFavoriteProvider extends ChangeNotifier {
+  FirebaseFavoriteProvider();
   List<String> _favoriteList = [];
   List<String> get favoriteList => _favoriteList;
-
+  final firestore = FirebaseFirestore.instance;
+  final firebaseAuth = FirebaseAuth.instance.currentUser;
   Future<void> getFavorite() async {
+    _favoriteList = [];
     try {
-      _favoriteList = [];
-      final data = await FirebaseFirestore.instance
-          .collection('Favorite')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
+      final data = await firestore
+          .collection(FirebaseCollectionNames.favorite)
+          .doc(firebaseAuth!.uid)
           .get();
       final data1 = Favorite.fromJson(data.data()!);
       _favoriteList.addAll(data1.items);
@@ -29,21 +32,18 @@ class Information extends ChangeNotifier {
 
   Future<void> setFavorite() async {
     try {
-      if (FirebaseAuth.instance.currentUser != null) {
-        // Reference to the 'Favorite' collection and the document with the user's email
-        final documentReference = FirebaseFirestore.instance
-            .collection('Favorite')
-            .doc(FirebaseAuth.instance.currentUser!.uid);
+      if (firebaseAuth != null) {
+        final documentReference = firestore
+            .collection(FirebaseCollectionNames.favorite)
+            .doc(firebaseAuth!.uid);
 
         final documentSnapshot = await documentReference.get();
 
         if (documentSnapshot.exists) {
-          // Update the document with the new list
           await documentReference
               .set({'items': favoriteList}, SetOptions(merge: true));
           debugPrint('List updated successfully');
         } else {
-          // If the document doesn't exist, create a new one with the list
           await documentReference.set({'items': favoriteList});
           debugPrint('New document created with the list');
         }
@@ -58,11 +58,7 @@ class Information extends ChangeNotifier {
 
   void toggle(String id) {
     final isExist = favoriteList.contains(id);
-    if (isExist) {
-      _favoriteList.remove(id);
-    } else {
-      _favoriteList.add(id);
-    }
+    isExist ? _favoriteList.remove(id) : _favoriteList.add(id);
     debugPrint("$favoriteList");
     notifyListeners();
   }

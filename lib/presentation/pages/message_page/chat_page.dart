@@ -1,17 +1,17 @@
+import 'package:asan_yab/domain/riverpod/data/message/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../widgets/message/chat_messages_widget.dart';
 
-import '../../../domain/riverpod/data/message/message.dart';
-import '../../widgets/message/chat_messages.dart';
-
-class MessagePage extends ConsumerStatefulWidget {
-  const MessagePage({super.key});
+class ChatPage extends ConsumerStatefulWidget {
+  const ChatPage({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MessagePageState();
 }
 
-class _MessagePageState extends ConsumerState<MessagePage> {
+class _MessagePageState extends ConsumerState<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,10 +19,10 @@ class _MessagePageState extends ConsumerState<MessagePage> {
         backgroundColor: Colors.white,
         shadowColor: Colors.white70,
         elevation: 5,
-        title: const Row(
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Expanded(
+            const Expanded(
               child: CircleAvatar(
                 backgroundImage: NetworkImage(''),
                 radius: 23,
@@ -31,16 +31,16 @@ class _MessagePageState extends ConsumerState<MessagePage> {
             Expanded(
               flex: 5,
               child: ListTile(
-                title: Text('name'),
+                title: const Text('name'),
                 subtitle: Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.circle,
                       color: Colors.green,
                       size: 14,
                     ),
-                    SizedBox(width: 2),
-                    Text('online'),
+                    SizedBox(width: 2.w),
+                    const Text('online'),
                   ],
                 ),
               ),
@@ -50,7 +50,7 @@ class _MessagePageState extends ConsumerState<MessagePage> {
       ),
       body: Stack(
         children: [
-          ChatMessages(receiverId: '', urlImage: ''),
+          const ChatMessagesWidget(receiverId: '', urlImage: ''),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -61,30 +61,7 @@ class _MessagePageState extends ConsumerState<MessagePage> {
               child: Column(
                 children: [
                   Row(
-                    children: <Widget>[
-                      ///
-                      ///
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     sendImage();
-                      //   },
-                      //   child: Container(
-                      //     height: 30,
-                      //     width: 30,
-                      //     decoration: BoxDecoration(
-                      //       color: Colors.lightBlue,
-                      //       borderRadius: BorderRadius.circular(30),
-                      //     ),
-                      //     child: const Icon(
-                      //       Icons.add,
-                      //       color: Colors.white,
-                      //       size: 20,
-                      //     ),
-                      //   ),
-                      // ),
-                      // const SizedBox(
-                      //   width: 15,
-                      // ),
+                    children: [
                       Expanded(
                         child: TextField(
                           onTap: () {},
@@ -95,25 +72,20 @@ class _MessagePageState extends ConsumerState<MessagePage> {
                             border: InputBorder.none,
                           ),
                           controller: ref
-                              .watch(messageProfileProvider.notifier)
+                              .watch(messageProvider.notifier)
                               .textController,
                         ),
                       ),
-                      const SizedBox(width: 15),
+                      SizedBox(width: 15.w),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             shape: const CircleBorder(),
                             padding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 10)),
-                        onPressed: () {
-                          // ref.read(messageProfileProvider.notifier).sendText(
-                          //     receiverId: newProfileUser.uid!,
-                          //     context: context);
-                          ref
-                              .read(messageProfileProvider.notifier)
-                              .textController
-                              .clear();
-                        },
+                        onPressed: () => ref
+                            .read(messageProvider.notifier)
+                            .textController
+                            .clear(),
                         child: const Icon(
                           Icons.send,
                           color: Colors.white,

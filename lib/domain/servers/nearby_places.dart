@@ -5,48 +5,51 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../../data/models/place.dart';
-import '../../data/repositoris/places_rep.dart';
-import '../riverpod/screen/drop_Down_Buton.dart';
+import '../../data/repositoris/places_repo.dart';
+import '../riverpod/screen/value_of_nearby_drop_Down_Button.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+part 'nearby_places.g.dart';
 
-final nearbyPlace = StateNotifierProvider<NearbyPlace, List<Place>>(
-    (ref) => NearbyPlace([], ref));
-
-class NearbyPlace extends StateNotifier<List<Place>> {
-  final Ref ref;
-  final placeRepository = PlacesRepository();
+@riverpod
+class NearbyPlaces extends _$NearbyPlaces {
+  final placeRepository = PlacesRepo();
   List<Place> nearestLocations = [];
   void nearPlace() => state = nearestLocations;
-  NearbyPlace(super.state, this.ref);
-  double degreesToRadians(double degrees) {
-    return degrees * pi / 180.0;
-  }
+  @override
+  List<Place> build() => [];
 
-  double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-    const double earthRadius = 6371; // Radius of the Earth in kilometers
-    final double lat1Rad = degreesToRadians(lat1);
-    final double lon1Rad = degreesToRadians(lon1);
-    final double lat2Rad = degreesToRadians(lat2);
-    final double lon2Rad = degreesToRadians(lon2);
+  double degreesToRadians(double degrees) => degrees * pi / 180.0;
 
-    final double dLat = lat2Rad - lat1Rad;
-    final double dLon = lon2Rad - lon1Rad;
+  double calculateDistance(
+    double lat1,
+    double lon1,
+    double lat2,
+    double lon2,
+  ) {
+    const earthRadius = 6371;
+    final lat1Rad = degreesToRadians(lat1);
+    final lon1Rad = degreesToRadians(lon1);
+    final lat2Rad = degreesToRadians(lat2);
+    final lon2Rad = degreesToRadians(lon2);
 
-    final double a = sin(dLat / 2) * sin(dLat / 2) +
+    final dLat = lat2Rad - lat1Rad;
+    final dLon = lon2Rad - lon1Rad;
+
+    final a = sin(dLat / 2) * sin(dLat / 2) +
         cos(lat1Rad) * cos(lat2Rad) * sin(dLon / 2) * sin(dLon / 2);
-    final double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    final c = 2 * atan2(sqrt(a), sqrt(1 - a));
 
     return earthRadius * c;
   }
 
-  // double baseLat, double baseLng
   Future<List<Place>> getNearestLocations() async {
     Position? currentLocation;
-    late bool servicePremission = false;
+    late bool servicePermission = false;
     late LocationPermission permission;
 
     Future<Position> getCurrentLocation() async {
-      servicePremission = await Geolocator.isLocationServiceEnabled();
-      if (!servicePremission) {
+      servicePermission = await Geolocator.isLocationServiceEnabled();
+      if (!servicePermission) {
         debugPrint('servies disabled');
       }
       permission = await Geolocator.checkPermission();
@@ -59,22 +62,19 @@ class NearbyPlace extends StateNotifier<List<Place>> {
 
     currentLocation = await getCurrentLocation();
 
-    double maxDistance =
-        ref.watch(valueOfDropButtonProvider); // Maximum distance in kilometers
+    double maxDistance = ref.watch(valueOfDropButtonProvider);
     final locationsRef = await placeRepository.fetchPlaces();
     nearestLocations.clear();
     for (final doc in locationsRef) {
       for (final addressN in doc.addresses) {
         debugPrint(' ${doc.name}');
         if (addressN.lat.isNotEmpty) {
-          final double lat = double.parse(addressN.lat);
-          final double lng = double.parse(addressN.lang);
-          final double distance = calculateDistance(
+          final lat = double.parse(addressN.lat);
+          final lng = double.parse(addressN.lang);
+          final distance = calculateDistance(
               currentLocation.latitude, currentLocation.longitude, lat, lng);
 
           if (distance <= maxDistance) {
-            // debugPrint(
-            //     'hello it place that near you  ${doc.name} distance : ${distance},id: ${doc.id} lang:${doc.adresses[0].lang} , lat:${doc.adresses[0].lat} ');
             doc.distance = (distance * 1000).round();
             nearestLocations.add(doc);
             debugPrint(' ${doc.distance}');
@@ -89,12 +89,10 @@ class NearbyPlace extends StateNotifier<List<Place>> {
     return nearestLocations.toList();
   }
 
-  Future<void> refresh() async {
-    await getNearestLocations();
-  }
+  Future<void> refresh() async => await getNearestLocations();
 
   List removeDuplicates() {
-    Set<Place> uniqueData = Set<Place>.from(nearestLocations);
+    final uniqueData = Set<Place>.from(nearestLocations);
     nearestLocations = uniqueData.toList();
     nearestLocations.sort((a, b) => a.distance.compareTo(b.distance));
     return nearestLocations;

@@ -1,15 +1,14 @@
 import 'package:asan_yab/data/models/users.dart';
-import 'package:asan_yab/data/repositoris/message/history_message.dart';
+import 'package:asan_yab/data/repositoris/message/message_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+part 'message_history.g.dart';
 
-final messageHistory = StateNotifierProvider<MessageHistory, List<Users>>(
-    (ref) => MessageHistory([], ref));
-
-class MessageHistory extends StateNotifier<List<Users>> {
-  MessageHistory(super.state, this.ref);
-  final Ref ref;
-  final historyRepo = HistoryMessage();
-
+@riverpod
+class MessageHistory extends _$MessageHistory {
+  final historyRepo = MessageRepo();
+  @override
+  List<Users> build() => [];
   Future<void> getMessageHistory() async {
     ref.read(loadingDataMessage.notifier).state = true;
     try {

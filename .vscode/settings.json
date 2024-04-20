@@ -1,3 +1,11 @@
 {
-    "editor.defaultFormatter": "Dart-Code.flutter"
+    "editor.defaultFormatter": "Dart-Code.flutter",
+    "cSpell.words": [
+        "firestore",
+        "Geolocator",
+        "Imagewidget",
+        "Isloading",
+        "Typesense",
+        "unfocus"
+    ]
 }
