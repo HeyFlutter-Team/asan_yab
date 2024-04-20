@@ -69,6 +69,10 @@ dependencies:
   go_router: ^13.2.2
   loading_animation_widget: ^1.2.1
   flutter_screenutil: ^5.9.0
+  expandable_text: ^2.3.0
+
+
+
 
 
 

@@ -226,6 +226,9 @@ class _RappiProductItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      const SizedBox(
+                        height: 5,
+                      ),
                       Text(
                         '${product?.name}',
                         style: const TextStyle(
@@ -239,10 +242,9 @@ class _RappiProductItem extends StatelessWidget {
                                 Theme.of(context).brightness == Brightness.light
                                     ? Colors.black87 // Set light theme color
                                     : Colors.grey,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14),
-                        maxLines: 2,
-                        overflow: TextOverflow.fade,
+                            fontSize: 12),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(height: 5.h),
                       Text(
