@@ -83,7 +83,7 @@ class _MessageHomeState extends ConsumerState<MessageHome> {
           // ? user.invitationRate >= 2
               ? const MessageHomeListView()
               // : const MessageHomeDescription()
-          : const Text('null'),
+          : const SizedBox(),
     );
   }
 }

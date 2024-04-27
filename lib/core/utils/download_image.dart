@@ -38,7 +38,7 @@ class DownloadImage {
                       height: 30,
                       width: 30,
                       child: CircularProgressIndicator(
-                          color: Colors.blueGrey, strokeWidth: 3.0),
+                          color: Colors.red, strokeWidth: 3.0),
                     ),
                     const SizedBox(width: 12),
                     Text(

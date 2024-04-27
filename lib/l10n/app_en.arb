@@ -191,7 +191,8 @@
 
   "user_delete_account": "Delete Account",
   "wrong_email": "Your email or password is wrong, please check first and then try again",
-  "wrong_password": "Your Password is wrong"
+  "wrong_password": "Your Password is wrong",
 
+  "menus_restaurant": "Menu"
 
 }

@@ -257,7 +257,9 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                     }
 
                     return ref.watch(commentProvider).isLoading
-                        ? const Center(child: CircularProgressIndicator())
+                        ? const Center(child: CircularProgressIndicator(
+                      color: Colors.red,
+                    ))
                         : const SizedBox(height: 0);
                   },
                 ),

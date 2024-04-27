@@ -208,7 +208,9 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
-                                      return const CircularProgressIndicator(); // Show loading indicator while fetching rating
+                                      return const CircularProgressIndicator(
+                                        color: Colors.red,
+                                      ); // Show loading indicator while fetching rating
                                     } else if (snapshot.hasError) {
                                       return const Text(
                                           'Error fetching rating'); // Show error message if there's an error

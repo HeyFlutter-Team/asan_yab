@@ -147,7 +147,9 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                 );
               },
               error: (error, stackTrace) => Text(' hello: ${error.toString()}'),
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => const Center(child: CircularProgressIndicator(
+                color: Colors.red,
+              )),
             ),
     );
   }

@@ -26,7 +26,7 @@ class ImageWidgets {
             width: 50,
             child: CircularProgressIndicator(
               value: progress,
-              backgroundColor: Colors.grey,
+              backgroundColor: Colors.white,
               color: Colors.red,
             ),
           );

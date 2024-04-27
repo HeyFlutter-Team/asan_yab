@@ -169,10 +169,10 @@
   "emoji_recent": "هیچ ایموجی اخیری وجود ندارد",
 
 
-  "download_image_loading": "لطفا صبر کنید...",
-
-
   "user_delete_account": "حذف حساب",
   "wrong_email": "ایمیل یا رمز شما اشتباه است لطفا اول چک کنید بعد امتحان کنید",
-  "wrong_password": "رمز شما اشتباه است"
+  "wrong_password": "رمز شما اشتباه است",
+  "download_image_loading": "لطفا صبر کنید...",
+  "menus_restaurant": "منوی"
+
 }

@@ -63,7 +63,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
         ? const Padding(
       padding: EdgeInsets.only(bottom: 40,top: 10),
           child: CircularProgressIndicator(
-            color: Colors.blue,
+            color: Colors.red,
             strokeWidth: 5,
           ),
         )

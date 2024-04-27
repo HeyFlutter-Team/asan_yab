@@ -43,7 +43,7 @@ class CategoryPage extends ConsumerWidget {
             ? const Center(
                 child: CircularProgressIndicator(
                   strokeWidth: 5,
-                  color: Colors.blueGrey,
+                  color: Colors.red,
                 ),
               )
             : ListView(

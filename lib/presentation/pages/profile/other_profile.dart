@@ -34,7 +34,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
        if(mounted){
          ref.read(otherUserProvider.notifier).setDataUser(widget.user);
-         await ref
+          ref
              .read(followerProvider.notifier)
              .followOrUnFollow(FirebaseAuth.instance.currentUser!.uid, widget.uid);
          print('younissssssssssssss ${ref.watch(followerProvider)}');

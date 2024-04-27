@@ -1,11 +1,9 @@
 import 'package:asan_yab/data/models/users.dart';
 import 'package:asan_yab/data/repositoris/message/message_repo.dart';
-import 'package:asan_yab/domain/riverpod/config/message_notification_repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../../data/models/message/message.dart';
 import 'message_data.dart';
 
@@ -29,7 +27,7 @@ class MessageProvider extends StateNotifier<Users?> {
   Future<Users> getUserById(String uid) async {
     final firebase = FirebaseFirestore.instance;
     try {
-      print('getUserById 1');
+      debugPrint('getUserById 1');
       loading = true;
       firebase
           .collection('User')
@@ -39,7 +37,7 @@ class MessageProvider extends StateNotifier<Users?> {
         state = Users.fromMap(user.data()!);
       });
       debugPrint('test get user ${state!.name}');
-      print('getUserById 2');
+      debugPrint('getUserById 2');
       return state!;
     } catch (e) {
       rethrow;
@@ -60,7 +58,7 @@ required WidgetRef ref,
         required Users users
       }) async {
     try {
-      print('sendText 1');
+      debugPrint('sendText 1');
       if (textController.text.isNotEmpty) {
          messageRepo.addTextMessage(
             content: textController.text,
@@ -78,13 +76,13 @@ required WidgetRef ref,
              .watch(messageProvider)
              .length);
 
-         print('younis message sent2');
+         debugPrint('younis message sent2');
 
 
-         print('sendText 2');
+         debugPrint('sendText 2');
       }
     } catch (e) {
-      return print(e.toString());
+      return debugPrint(e.toString());
     }
   }
 
@@ -95,15 +93,15 @@ required WidgetRef ref,
     required double scrollPositioned
   }) async {
     try {
-      print('sendSticker 1');
+      debugPrint('sendSticker 1');
       await messageRepo.addStickerMessage(
         receiverId: receiverId,
         currentUserCoinCount: currentUserCoinCount,
         content: '',
       );
-      print('sendSticker 2');
+      debugPrint('sendSticker 2');
     } catch (e) {
-      return print(e.toString());
+      return debugPrint(e.toString());
     } finally {
       FocusScope.of(context).unfocus();
     }
@@ -150,7 +148,7 @@ final editingMessageDetails = StateNotifierProvider<EditingMessageDetailsNotifie
 
 
 class WallpaperStateNotifier extends StateNotifier<String> {
-  WallpaperStateNotifier() : super('assets/wallPaper7-min.jpg');
+  WallpaperStateNotifier() : super('assets/wallpaper_6_main.jpg');
 
   Future<void> loadInitialWallpaperPath() async {
     String? initialWallpaperPath = await _loadWallpaperPath();
