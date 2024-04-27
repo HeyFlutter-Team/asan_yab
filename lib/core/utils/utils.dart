@@ -1,5 +1,8 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../domain/riverpod/config/internet_connectivity_checker.dart';
 
 class Utils{
   Utils._();
@@ -20,5 +23,9 @@ class Utils{
       ..hideCurrentSnackBar()
       ..showSnackBar(snackBar);
     return snackBar;
+  }
+  static bool netIsConnected(WidgetRef ref){
+    return  ref.watch(internetConnectivityCheckerProvider.notifier).isConnected;
+
   }
 }

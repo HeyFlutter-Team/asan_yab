@@ -38,7 +38,7 @@ class _ShowProfilePageState extends ConsumerState<ShowProfilePage> {
             widget.isEditing
                 ? IconButton(
                     onPressed: () async {
-                     if(ref.watch(internetConnectivityCheckerProvider.notifier).isConnected){
+                     if(Utils.netIsConnected(ref)){
                        await ref
                            .read(deleteProfile.notifier)
                            .deleteImageAndClearUrl(widget.imagUrl)

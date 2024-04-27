@@ -47,6 +47,7 @@ class ReadUserDetails extends StateNotifier<Users?> {
   Future<Map<String, int>> getCurrentUserFollowCounts() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
+        print('getCurrentUserFollowCounts 1');
 
       if (user != null) {
         final userSnapshot = await FirebaseFirestore.instance
@@ -66,6 +67,7 @@ class ReadUserDetails extends StateNotifier<Users?> {
       } else {
         print('Current user is null');
       }
+        print('getCurrentUserFollowCounts 2');
     } catch (e, stackTrace) {
       print('Error getting current user data: $e\n$stackTrace');
     }
@@ -111,6 +113,7 @@ class ImageNotifier extends StateNotifier<ImageState> {
 
   Future<void> pickImage(ImageSource source) async {
     try {
+      print('pickImage 1');
       await _imagePicker.pickImage(source: source).then((image)async {
         if (image == null) {
           return;
@@ -128,7 +131,7 @@ class ImageNotifier extends StateNotifier<ImageState> {
         } );
       });
 
-
+      print('pickImage 2');
 
     } catch (e, stackTrace) {
       print('Failed to pick image: $e\n$stackTrace');
@@ -144,6 +147,7 @@ class ImageNotifier extends StateNotifier<ImageState> {
     final ref = FirebaseStorage.instance.ref().child(path);
 
     try {
+      print('uploadFile 1');
       final uploadTask = ref.putFile(state.image!);
       state = state.copyWith(uploadTask: uploadTask);
 
@@ -155,6 +159,7 @@ class ImageNotifier extends StateNotifier<ImageState> {
       });
 
       state = state.copyWith(imageUrl: uploadedImageUrl);
+      print('uploadFile 2');
     } catch (e, stackTrace) {
       print('Error uploading image: $e\n$stackTrace');
     }
@@ -170,6 +175,7 @@ class DeleteProfile extends ChangeNotifier{
 
   Future<void> deleteImageAndClearUrl(String imageUrl) async {
     try {
+      print('deleteImageAndClearUrl 1');
       // Delete the image file from storage
       final imageRef = FirebaseStorage.instance.refFromURL(imageUrl);
       await imageRef.delete();
@@ -185,7 +191,7 @@ notifyListeners();
         print('Image URL cleared from database.');
       }
       notifyListeners();
-
+      print('deleteImageAndClearUrl 2');
     } catch (error) {
       print('Error deleting image: $error');
     }

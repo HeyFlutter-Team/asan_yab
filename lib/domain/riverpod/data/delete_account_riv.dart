@@ -23,7 +23,6 @@ class AccountDeletionNotifier extends ChangeNotifier {
         await user.reauthenticateWithCredential(credential);
         await user.delete();
         notifyListeners();
-        print('younis');
         print('user data deleted');
       }
     } catch (e) {
@@ -79,11 +78,8 @@ class AccountDeletionNotifier extends ChangeNotifier {
           .get();
       for (DocumentSnapshot docSnapshot in querySnapshot.docs) {
         await docSnapshot.reference.delete();
-        print('younis yaser done1');
       }
-      print('younis yaser done2');
     }
-    print('younis yaser done3');
   }
 
   Future<void> deleteChatCollection(String userId) async {
@@ -93,7 +89,6 @@ class AccountDeletionNotifier extends ChangeNotifier {
 
       for (QueryDocumentSnapshot followDoc in followSnapshot.docs) {
         await followDoc.reference.delete();
-        print('younis Follow deleted');
       }
       final chatCollectionRef = FirebaseFirestore.instance
           .collection('User')
@@ -114,7 +109,6 @@ class AccountDeletionNotifier extends ChangeNotifier {
 
         // Delete the chat document itself
         await chatCollectionRef.doc(chatDoc.id).delete();
-        print('younis chat deleted');
       }
     } catch (e) {
       print('Error deleting collection: $e');

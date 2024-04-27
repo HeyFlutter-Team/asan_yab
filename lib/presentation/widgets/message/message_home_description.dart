@@ -121,6 +121,8 @@ class MessageHomeDescription extends ConsumerWidget {
                       height: 30,
                     ),
                     InkWell(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
                       onTap: () {
                         ref
                             .read(

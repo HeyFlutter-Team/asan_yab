@@ -282,7 +282,7 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 18.0),
                                 child: Text(
-                                  'Replay: ${ref.watch(replayProvider)}',
+                                  'Reply: ${ref.watch(replayProvider)}',
                                   style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w300,
@@ -318,20 +318,22 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                               horizontalSpacing: 0,
                               gridPadding: EdgeInsets.zero,
                               initCategory: Category.RECENT,
-                              bgColor: const Color(0xFFF2F2F2),
-                              indicatorColor: Colors.blue,
-                              iconColor: Colors.grey,
-                              iconColorSelected: Colors.blue,
-                              backspaceColor: Colors.blue,
+                              bgColor:(themeModel.currentThemeMode == ThemeMode.dark)
+                                  ? Colors.black
+                              :Colors.grey,
+                              indicatorColor: Colors.red,
+                              iconColor: Colors.white,
+                              iconColorSelected: Colors.red,
+                              backspaceColor: Colors.red,
                               skinToneDialogBgColor: Colors.white,
                               skinToneIndicatorColor: Colors.grey,
                               enableSkinTones: true,
                               recentTabBehavior: RecentTabBehavior.RECENT,
                               recentsLimit: 28,
                               replaceEmojiOnLimitExceed: false,
-                              noRecents: const Text(
-                                'لا توجد رموز تعبيرية حديثة',
-                                style: TextStyle(
+                              noRecents:  Text(
+                                '${languageText?.emoji_recent}',
+                                style: const TextStyle(
                                     fontSize: 20, color: Colors.black26),
                                 textAlign: TextAlign.center,
                               ),

@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../core/utils/convert_digits_to_farsi.dart';
+import '../../core/utils/utils.dart';
 import '../../data/models/place.dart';
 import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/single_place_provider.dart';
@@ -60,7 +61,7 @@ class _NearbyPlacePageState extends ConsumerState<NearbyPlacePage> {
               icon: const Icon(Icons.arrow_back, size: 25),
             ),
           ),
-          body:ref.watch(internetConnectivityCheckerProvider.notifier).isConnected? place.isEmpty
+          body:Utils.netIsConnected(ref)? place.isEmpty
               ? Center(
                   child: ref.watch(isConnectedLocation)
                       ? const Center(
@@ -235,6 +236,8 @@ class _NearbyPlacePageState extends ConsumerState<NearbyPlacePage> {
                                     crossAxisSpacing: 10,
                                     mainAxisSpacing: 10),
                             itemBuilder: (context, index) => InkWell(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
                                   onTap: () async {
                                     ref.read(getSingleProvider.notifier).state =
                                         null;

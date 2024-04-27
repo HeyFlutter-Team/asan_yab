@@ -54,7 +54,6 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
 
   @override
   Widget build(BuildContext context) {
-    print('younis build ${ref.watch(loadingProvider)}');
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.width;
     final data = ref.watch(categoriesItemsProvider);
@@ -74,6 +73,8 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
             itemBuilder: (context, index) {
               if (index < data.length) {
                 return InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
                   onTap: () async {
                     ref.read(getSingleProvider.notifier).state = null;
 

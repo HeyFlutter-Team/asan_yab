@@ -71,8 +71,8 @@
   "suggestion_1_tf_valid": "مکان خود را وارد کنید!",
   "suggestion_2_tf_labelName": "آدرس مکان",
   "suggestion_2_tf_valid": "آدرس خود را وارد کنید!",
-  "suggestion_3_tf_labelName": "توضیجات مکان",
-  "suggestion_3_tf_valid": "توضیجات مکان را بنویسید",
+  "suggestion_3_tf_labelName": "توضیحات مکان",
+  "suggestion_3_tf_valid": "توضیحات مکان را بنویسید",
   "suggestion_4_tf_labelName": "شماره تماس",
   "suggestion_4_tf_valid": "شماره خود را وارد کنید!",
   "suggestion_custom_card_title": "نوت",
@@ -81,6 +81,7 @@
   "suggestion_customDialog_title": "ارسال درخواست مکان",
   "suggestion_customDialog_content": "درخواست شما ثیت گردید",
   "suggestion_customDialog_textButton": "بازگشت به صفحه قبلی",
+  "suggestion_check_user": "برای ارسال درخواست باید وارد حساب آسان یاب خود شوید",
 
 
 
@@ -96,6 +97,7 @@
   "profile_rate_score": "امتیاز",
   "profile_followers": "دنبال کننده ها",
   "profile_following": "دنبال شونده ها",
+  "profile_wall_paper": "پس زمینه گفتگو",
 
 
 

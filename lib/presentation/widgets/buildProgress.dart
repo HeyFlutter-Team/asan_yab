@@ -49,6 +49,8 @@ class ImageWidgets {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               InkWell(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
                 onTap: () {
                   // Handle Camera option
                   ref
@@ -66,6 +68,8 @@ class ImageWidgets {
                 ),
               ),
               InkWell(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
                 onTap: () {
                   // Handle Gallery option
                   ref

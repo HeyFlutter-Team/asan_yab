@@ -8,6 +8,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'other_profile.dart';
+
 class ListOfFollowers extends ConsumerStatefulWidget {
   const ListOfFollowers({super.key});
 
@@ -119,6 +121,15 @@ class _ListOfFollowersState extends ConsumerState<ListOfFollowers> {
                         itemCount: persons.length,
                         itemBuilder: (context, index) {
                           return ListTile(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        OtherProfile(user: persons[index]['user'],
+                                          uid:persons[index]['user'].uid ,),
+                                  ));
+                            },
                             title: Text(
                                 persons[index]['user'].name.toString().length>18?'${persons[index]['user'].name!}'.substring(0,18):persons[index]['user'].name!),
                             leading: persons[index]['user'].imageUrl == '' ||persons[index]['user'].imageUrl==null

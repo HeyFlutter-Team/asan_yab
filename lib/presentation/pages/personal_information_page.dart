@@ -20,6 +20,7 @@ class PersonalInformation extends ConsumerStatefulWidget {
 class _PersonalInformationState extends ConsumerState<PersonalInformation> {
   final nameController = TextEditingController();
   final lastNameController = TextEditingController();
+  final personalId = TextEditingController();
   final invitingPersonId = TextEditingController();
   final signUpFormKey = GlobalKey<FormState>();
   @override
@@ -83,6 +84,29 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                   ),
                   CustomTextField(
                     textCapitalization: TextCapitalization.words,
+                    label: 'آیدی',
+                    label2: '*',
+                    controller: personalId,
+                    keyboardType: TextInputType.emailAddress,
+                    hintText: 'آیدی خود را وارد کنید',
+                    validator: (p0) {
+                      if (p0!.isEmpty) {
+                        return languageText.first_text_field_valid;
+                      } else if(p0.isNotEmpty && ref.watch(isContainIdProvider)){
+                        return 'این آیدی قبلا استفاده شده است';
+                      }else{
+                        return null;
+                      }
+                    },
+                    onChange: (p0) {
+                      ref
+                          .read(userRegisterDetailsProvider)
+                          .updateIsContainId(personalId.text,ref);
+                      print('shah lalaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+                    },
+                  ),
+                  CustomTextField(
+                    textCapitalization: TextCapitalization.words,
                     label: languageText.inviter_ID,
                     controller: invitingPersonId,
                     hintText: languageText.third_text_field_hint,
@@ -108,15 +132,16 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                                 true;
                             FocusScope.of(context).unfocus();
                             ref
-                                .read(userRegesterDetailsProvider)
+                                .read(userRegisterDetailsProvider)
                                 .addUserDetailsToFirebase(
                                   emailController: widget.email,
                                   lastNameController: lastNameController.text,
                                   nameController: nameController.text,
+                              personalIdController:personalId.text
                                 )
                                 .whenComplete(() async {
                               await ref
-                                  .read(userRegesterDetailsProvider)
+                                  .read(userRegisterDetailsProvider)
                                   .updateInviterRate(invitingPersonId.text);
                               signUpFormKey.currentState!.reset();
                             }).whenComplete(() {

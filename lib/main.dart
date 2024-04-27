@@ -11,6 +11,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_notification_channel/flutter_notification_channel.dart';
+import 'package:flutter_notification_channel/notification_importance.dart';
+import 'package:flutter_notification_channel/notification_visibility.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'data/models/language.dart';
@@ -21,40 +24,51 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   debugPrint('Handling a background message ${message.data['id']}');
 }
-
 Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   WidgetsFlutterBinding.ensureInitialized();
   final container = ProviderContainer();
   final language =
-      await container.read(languageRepositoryProvider).getLanguage();
+  await container.read(languageRepositoryProvider).getLanguage();
   await Future.delayed(const Duration(seconds: 2));
   FlutterNativeSplash.remove();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseAnalytics.instance
-      .setAnalyticsCollectionEnabled(true); //firebase analytics
+  FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true); // Firebase Analytics
   SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp])
+      .then((_) async {
+    // Register notification channel
+    await FlutterNotificationChannel().registerNotificationChannel(
+      description: 'For Showing Message Notification',
+      id: 'Chats',
+      importance: NotificationImportance.IMPORTANCE_HIGH,
+      name: 'Chats',
+      enableSound: true,
+      showBadge: true,
+    );
+  });
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   PlatformDispatcher.instance.onError = (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
-  //firebase messegaing
-  FirebaseMessaging.instance.requestPermission();
+  // Firebase messaging
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  //
-  // FirebaseFirestore.instance.useFirestoreEmulator('host', '');
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: false,
+    badge: false,
+    sound: true,
+  );
+  // End of Firebase messaging setup
 
   runApp(ProviderScope(
     overrides: [languageProvider.overrideWith((ref) => language)],
     child: const MyApp(),
   ));
 }
-
 class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 

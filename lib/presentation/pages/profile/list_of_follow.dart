@@ -23,7 +23,7 @@ class _ListOfFollowState extends ConsumerState<ListOfFollow> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    if(ref.watch(internetConnectivityCheckerProvider.notifier).isConnected){
+    if(Utils.netIsConnected(ref)){
       ref.read(listOfDataProvider.notifier).state.clear();
       ref.read(listOfDataFollowersProvider.notifier).state.clear();
       ref

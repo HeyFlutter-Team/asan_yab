@@ -151,11 +151,11 @@ class VerticalDataNotifier extends ChangeNotifier {
     return userDoc.exists
         ? Users.fromMap(userDoc.data() as Map<String, dynamic>)
         : Users(
-            id: 1,
+            id: '1',
             name: 'name',
             lastName: 'lastName',
             email: 'email',
-            createdAt: Timestamp.now(),
+            createdAt: Timestamp.now().toString(),
             fcmToken: 'fcmToken',
             isOnline: true,
             imageUrl: '',

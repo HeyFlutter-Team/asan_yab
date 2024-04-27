@@ -121,7 +121,7 @@ class _UserDeleteAccountState extends ConsumerState<UserDeleteAccount>
                         final isValid = formKey.currentState!.validate();
                         if (!isValid) return;
 
-                        if(ref.watch(internetConnectivityCheckerProvider.notifier).isConnected){
+                        if(Utils.netIsConnected(ref)){
                           final deleteIsLoadings = ref.read(deleteIsLoading.notifier);
                           final deleteProfiles = ref.read(deleteProfile.notifier);
                           final deleteAccountProviders = ref.read(deleteAccountProvider.notifier);

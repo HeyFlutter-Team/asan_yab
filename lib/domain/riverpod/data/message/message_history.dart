@@ -13,11 +13,13 @@ class MessageHistory extends StateNotifier<List<Users>> {
   Future<void> getMessageHistory() async {
     ref.read(loadingDataMessage.notifier).state = true;
     try {
+      print('getMessageHistory 1');
       final data = await historyRepo
           .getOtherUserId()
           .then((value) async => await historyRepo.getUser(value));
       state.clear();
       state.addAll(data);
+      print('getMessageHistory 2');
     } catch (e) {
       rethrow;
     } finally {

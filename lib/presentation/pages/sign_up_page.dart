@@ -112,6 +112,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [Text(languageText.sign_up_account_text,style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)
                 ,InkWell(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
                     onTap: () {
                       FocusScope.of(context).unfocus();
                       Navigator.pop(context);

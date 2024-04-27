@@ -2,7 +2,6 @@
 
 import 'package:asan_yab/core/utils/utils.dart';
 import 'package:asan_yab/data/models/language.dart';
-import 'package:asan_yab/domain/riverpod/config/internet_connectivity_checker.dart';
 import 'package:asan_yab/domain/riverpod/data/edit_profile_page_provider.dart';
 import 'package:asan_yab/presentation/pages/profile/show_profile_page.dart';
 import 'package:asan_yab/presentation/widgets/buildProgress.dart';
@@ -135,7 +134,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                           color: Colors.white,
                         ),
                         onPressed: () {
-                          if(ref.watch(internetConnectivityCheckerProvider.notifier).isConnected){
+                          if(Utils.netIsConnected(ref)){
                             if (nameController.text ==
                                 ref.read(userDetailsProvider)!.name &&
                                 lastNameController.text ==
@@ -197,7 +196,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                         style: const TextStyle(color: Colors.red),
                       ),
                       onPressed: () async {
-                        if(ref.watch(internetConnectivityCheckerProvider.notifier).isConnected){
+                        if(Utils.netIsConnected(ref)){
                           ref
                               .read(editProfilePageProvider.notifier)
                               .editData(nameController, lastNameController)
@@ -212,6 +211,8 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                     padding:
                         const EdgeInsets.only(top: 118.0, left: 116, right: 116),
                     child: InkWell(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
                         onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -254,7 +255,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                                 ),
                                 child: IconButton(
                                   onPressed: () {
-                                    if(ref.watch(internetConnectivityCheckerProvider.notifier).isConnected){
+                                    if(Utils.netIsConnected(ref)){
                                       ImageWidgets.showBottomSheets(
                                           context: context, ref: ref);
                                     }else{
@@ -278,6 +279,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
             Column(
               children: [
                 TextField(
+                  textCapitalization: TextCapitalization.words,
                   inputFormatters: [
                     LengthLimitingTextInputFormatter(25),
                   ],
@@ -292,6 +294,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                   ),
                 ),
                 TextField(
+                  textCapitalization: TextCapitalization.words,
                   inputFormatters: [
                     LengthLimitingTextInputFormatter(25),
                   ],

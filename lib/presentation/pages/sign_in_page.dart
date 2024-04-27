@@ -11,9 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import '../../domain/riverpod/data/isOnline.dart';
 import '../../domain/riverpod/data/sign_in_provider.dart';
-import '../../domain/riverpod/screen/botton_navigation_provider.dart';
 
 final isSignInningProvider = StateProvider<bool>((ref) => false);
 
@@ -205,12 +204,12 @@ class _LogInPageState extends ConsumerState<LogInPage>
                                 FirebaseAuth.instance.currentUser;
                             if (currentUser != null) {
                               if (context.mounted) {
-                                if (currentUser.emailVerified) {
-                                  Navigator.pushReplacement(
-                                    currentContext, // Use the stored context
-                                    MaterialPageRoute(
-                                        builder: (context) => const MainPage()),
-                                  );
+                                  if (currentUser.emailVerified) {  Navigator.pushReplacement(
+                                     currentContext, // Use the stored context
+                                     MaterialPageRoute(
+                                         builder: (context) => const MainPage(),
+                                   ));
+                                 
                                 } else {
                                   Navigator.pushReplacement(
                                     currentContext, // Use the stored context

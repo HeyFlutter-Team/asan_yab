@@ -4,7 +4,8 @@ class TextFieldMessage{
   final String userId;
   final String? textFieldMessage;
 final String? replayText;
-  TextFieldMessage({required this.userId,this.textFieldMessage,this.replayText});
+final String? editingMessage;
+  TextFieldMessage({required this.userId,this.textFieldMessage,this.replayText,this.editingMessage});
 
 }
 

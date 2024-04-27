@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class MessageSeen {
   Future<List<bool>> newMessage() async {
     try {
+      print('newMessage 1');
       final uid = FirebaseAuth.instance.currentUser!.uid;
       if (uid.isNotEmpty) {
         var querySnapshot = await FirebaseFirestore.instance
@@ -19,7 +20,8 @@ class MessageSeen {
           final states = querySnapshot.docs
               .map((doc) => doc.data()['last_message'] as bool)
               .toList();
-          print("Message States: $states");
+          print("Message Statesss: $states");
+          print('newMessage 2');
           return states;
         } else {
           print("No messages found");
@@ -37,6 +39,7 @@ class MessageSeen {
 
   Future<void> updateSeenMessage(String receiverId, String uid) async {
     try {
+      print('updateSeenMessage 1');
       print("Updating message seen status for receiver $receiverId");
       await FirebaseFirestore.instance
           .collection('User')
@@ -44,6 +47,7 @@ class MessageSeen {
           .collection('chat')
           .doc(receiverId)
           .update({'last_message': false});
+      print('updateSeenMessage 2');
     } catch (e) {
       print("Error updating message seen status: $e");
       rethrow; // Rethrow the exception

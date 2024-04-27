@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../presentation/pages/sign_in_page.dart';
 import '../screen/botton_navigation_provider.dart';
+import 'isOnline.dart';
 
 //Sign In method
 final signInProvider = Provider((ref) => SignInNotifier(ref));
@@ -24,22 +25,13 @@ class SignInNotifier {
   }) async {
     try {
       read.read(userDetailsProvider);
-      // showDialog(
-      //   context: context,
-      //   barrierDismissible: false,
-      //   builder: (BuildContext context) {
-      //     return const Center(child: CircularProgressIndicator(
-      //       color: Colors.red,
-      //     )); // Use the custom dialog widget
-      //   },
-      // );
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.trim(),
         password: password,
-      );
-      ref
-          .read(buttonNavigationProvider.notifier)
-          .selectedIndex(0);
+      ).whenComplete(() =>
+          ref
+              .read(buttonNavigationProvider.notifier)
+              .selectedIndex(0));
     } on FirebaseAuthException catch (e) {
         final languageText = AppLocalizations.of(context);
         if (e.code == 'user-not-found') {

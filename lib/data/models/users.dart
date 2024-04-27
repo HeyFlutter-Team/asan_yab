@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Users {
-  final int id;
+  final String id;
   final String? uid;
   late final String name;
   final String lastName;
   final String email;
-  final Timestamp createdAt;
+  final String createdAt;
   final String imageUrl;
   final String userType;
   final List<String> owner;
@@ -14,7 +14,7 @@ class Users {
   final int invitationRate;
   final int followerCount;
   final int followingCount;
-  final String fcmToken;
+  late final String fcmToken;
   final bool isOnline;
 
   Users({
@@ -58,9 +58,9 @@ class Users {
         name: json['name'],
         lastName: json['lastName'],
         email: json['email'],
-        createdAt: json['createdAt'] != null
-            ? (json['createdAt'] as Timestamp)
-            : Timestamp.now(), // Ensure correct Timestamp conversion
+        createdAt: (json['createdAt'] != null
+            ? (json['createdAt'])
+            : Timestamp.now().toString()), // Ensure correct Timestamp conversion
         imageUrl: json['imageUrl'],
         userType: json['userType'],
         uid: json['uid'],
@@ -76,12 +76,12 @@ class Users {
 
   }
   Users copyWith({
-    int? id,
+    String? id,
     String? uid,
     String? name,
     String? lastName,
     String? email,
-    Timestamp? createdAt,
+    String? createdAt,
     String? imageUrl,
     String? userType,
     List<String>? owner,

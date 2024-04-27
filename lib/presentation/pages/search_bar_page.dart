@@ -52,9 +52,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
               hintText: languageText!.search_bar_hint_text,
             ),
             onChanged: (value) {
-              if (ref
-                  .watch(internetConnectivityCheckerProvider.notifier)
-                  .isConnected) {
+              if (Utils.netIsConnected(ref)) {
                 ref
                     .read(searchNotifierProvider.notifier)
                     .sendQuery(value.trimLeft());
@@ -109,6 +107,8 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                       const SizedBox(height: 8),
                   itemBuilder: (context, index) {
                     return InkWell(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
                       onTap: () async {
                         ref.read(getSingleProvider.notifier).state = null;
 

@@ -65,6 +65,8 @@ class NearbyPlaceWidget extends ConsumerWidget {
                     itemBuilder: (context, index) => SizedBox(
                           width: screenWidth * 0.5,
                           child: InkWell(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                             onTap: () async {
                               ref.read(getSingleProvider.notifier).state = null;
 

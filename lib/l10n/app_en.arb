@@ -81,6 +81,7 @@
   "suggestion_customDialog_title": "Submit a location request",
   "suggestion_customDialog_content": "Your request has been registered",
   "suggestion_customDialog_textButton": "Return to the previous page",
+  "suggestion_check_user": "To submit a request, you must log in to your Asan Yab account",
 
 
 
@@ -96,6 +97,7 @@
   "profile_rate_score": "Score",
   "profile_followers": "Followers",
   "profile_following": "Following",
+  "profile_wall_paper": "Chat WallPapers",
 
 
 

@@ -12,6 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/utils/convert_digits_to_farsi.dart';
+import '../../core/utils/utils.dart';
 import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
 import '../../domain/riverpod/data/firbase_favorite_provider.dart';
@@ -91,7 +92,7 @@ class _FavoritesState extends ConsumerState<Favorites> {
                           child: GestureDetector(
                             onTap: () async {
                               ref.read(getSingleProvider.notifier).state = null;
-                              ref.watch(internetConnectivityCheckerProvider.notifier).isConnected
+                              Utils.netIsConnected(ref)
                                   ? Navigator.push(
                                       context,
                                       MaterialPageRoute(

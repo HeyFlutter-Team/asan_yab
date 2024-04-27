@@ -3,6 +3,7 @@
 import 'package:asan_yab/core/utils/convert_digits_to_farsi.dart';
 import 'package:asan_yab/core/utils/utils.dart';
 import 'package:asan_yab/data/repositoris/firebase_modle_helper.dart';
+import 'package:asan_yab/domain/riverpod/data/message/message.dart';
 import 'package:asan_yab/presentation/pages/about_us_page.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/profile/edit_profile_page.dart';
@@ -10,6 +11,7 @@ import 'package:asan_yab/presentation/pages/profile/list_of_follow.dart';
 import 'package:asan_yab/presentation/pages/profile/show_profile_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:asan_yab/presentation/pages/user_delete_account.dart';
+import 'package:asan_yab/presentation/pages/wall_paper_page.dart';
 import 'package:asan_yab/presentation/widgets/buildProgress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,7 +20,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/models/language.dart';
 import '../../../data/repositoris/language_repository.dart';
-import '../../../domain/riverpod/config/internet_connectivity_checker.dart';
 import '../../../domain/riverpod/data/message/message_stream_riv.dart';
 import '../../../domain/riverpod/data/profile_data_provider.dart';
 import '../../widgets/language/language_bottom_sheet.dart';
@@ -35,6 +36,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+     print('younis init called');
       if (mounted) {
         await ref.read(userDetailsProvider.notifier).getCurrentUserData();
       }
@@ -48,8 +50,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     final isRTL = ref.watch(languageProvider).code == 'fa';
     final languageText = AppLocalizations.of(context);
     final profileDetails = ref.watch(userDetailsProvider);
-    final isConnectedNet =
-        ref.watch(internetConnectivityCheckerProvider.notifier).isConnected;
     return Scaffold(
         body: Column(
       children: [
@@ -92,6 +92,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 padding:
                     const EdgeInsets.only(top: 118.0, right: 116, left: 116),
                 child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
                   onTap: () => usersData?.imageUrl == '' || usersData?.imageUrl == null
                       ? const SizedBox()
                       : Navigator.push(
@@ -166,11 +168,11 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       const EdgeInsets.only(top: 50.0, right: 10, left: 10),
                   child: IconButton(
                     onPressed: () async {
-                      if (isConnectedNet) {
+                      if (Utils.netIsConnected(ref)) {
                         if (FirebaseAuth.instance.currentUser != null) {
                           ref.read(isSigningOut.notifier).state = true;
                           ref.read(isDisposedProvider.notifier).disposeStream();
-                          Future.delayed(const Duration(seconds: 5))
+                          Future.delayed(const Duration(seconds: 2))
                               .whenComplete(() async {
                             FirebaseSuggestionCreate()
                                 .updateOnlineStatus(false)
@@ -216,6 +218,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       children: [
                         Expanded(
                           child: InkWell(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                             onTap: () {
                                 Navigator.push(
                                   context,
@@ -243,6 +247,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         const VerticalDivider(),
                         Expanded(
                           child: InkWell(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                             onTap: () {
                                 Navigator.push(
                                   context,
@@ -342,6 +348,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 color: Colors.grey,
               ),
               InkWell(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -373,6 +381,22 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               const Divider(
                 color: Colors.grey,
               ),
+               ListTile(
+                onTap: () {
+                 Navigator.push(context, MaterialPageRoute(builder:
+                 (context) =>const WallPaperPage() ,));
+                },
+                title:  Text('${languageText?.profile_wall_paper}'),
+                leading: const Icon(
+                  color: Colors.red,
+                  Icons.wallpaper_outlined,
+                  size: 30,
+                ),
+              ),
+              const Divider(
+                color: Colors.grey,
+              ),
+
               ListTile(
                 onTap: () {
                     Navigator.push(
@@ -427,4 +451,5 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       ],
     ));
   }
+
 }

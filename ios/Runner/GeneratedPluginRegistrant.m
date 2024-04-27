@@ -90,6 +90,12 @@
 @import flutter_native_splash;
 #endif
 
+#if __has_include(<flutter_notification_channel/FlutterNotificationChannelPlugin.h>)
+#import <flutter_notification_channel/FlutterNotificationChannelPlugin.h>
+#else
+@import flutter_notification_channel;
+#endif
+
 #if __has_include(<flutter_phone_direct_caller/FlutterPhoneDirectCallerPlugin.h>)
 #import <flutter_phone_direct_caller/FlutterPhoneDirectCallerPlugin.h>
 #else
@@ -191,6 +197,7 @@
   [FLTFirebaseStoragePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseStoragePlugin"]];
   [FlutterLocalNotificationsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterLocalNotificationsPlugin"]];
   [FlutterNativeSplashPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterNativeSplashPlugin"]];
+  [FlutterNotificationChannelPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterNotificationChannelPlugin"]];
   [FlutterPhoneDirectCallerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterPhoneDirectCallerPlugin"]];
   [FluttertoastPlugin registerWithRegistrar:[registry registrarForPlugin:@"FluttertoastPlugin"]];
   [GeocodingPlugin registerWithRegistrar:[registry registrarForPlugin:@"GeocodingPlugin"]];

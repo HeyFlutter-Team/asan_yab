@@ -53,19 +53,21 @@ class CreateUserDetails {
   Future<void> addUserDetailsToFirebase(
       {String? emailController,
       String? lastNameController,
-      String? nameController}) async {
+      String? nameController,
+      String? personalIdController
+      }) async {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     final id = DateTime.now().millisecondsSinceEpoch;
 
     final userRef = FirebaseFirestore.instance.collection('User').doc(uid);
     final fcmToken = await FirebaseMessaging.instance.getToken();
     final user = Users(
-        createdAt: Timestamp.now(),
+        createdAt: Timestamp.now().toString(),
         email: emailController!.trim(),
         lastName: lastNameController!.trim(),
         name: nameController!.trim(),
         uid: userRef.id,
-        id: id,
+        id: personalIdController!,
         followerCount: 0,
         followingCount: 0,
         fcmToken: fcmToken!,
@@ -82,7 +84,7 @@ class CreateUserDetails {
     try {
       final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('User')
-          .where('id', isEqualTo: int.parse(inviterId))
+          .where('id', isEqualTo:inviterId)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
@@ -99,6 +101,30 @@ class CreateUserDetails {
       print('Error updating inviter rate: $e');
     }
   }
+
+  Future<bool> isUniqueValue(String value) async {
+    try {
+      final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('User')
+          .where('id', isEqualTo: value)
+          .get();
+
+      // If any document matches the condition, return false (not unique)
+      return querySnapshot.docs.isEmpty;
+    } catch (e) {
+      print('Error checking uniqueness: $e');
+      // If an error occurs, return false to be safe
+      return false;
+    }
+  }
+  Future<void> updateIsContainId(String value,WidgetRef ref) async {
+    final isContainId = ref.read(isContainIdProvider.notifier);
+    bool isUnique = await isUniqueValue(value);
+    isContainId.state = !isUnique;
+  }
+
 }
 
-final userRegesterDetailsProvider = Provider((ref) => CreateUserDetails());
+final userRegisterDetailsProvider = Provider((ref) => CreateUserDetails());
+
+final isContainIdProvider = StateProvider<bool>((ref) => false);

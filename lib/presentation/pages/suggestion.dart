@@ -1,6 +1,8 @@
 import 'package:asan_yab/data/models/language.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositoris/firebase_modle_helper.dart';
 import '../../data/repositoris/language_repository.dart';
@@ -142,28 +144,37 @@ class _SuggestionPageState extends ConsumerState<SuggestionPage> {
                         ButtonWidget(
                           onClicked: () {
                             final isValid = _key.currentState!.validate();
-
+                            SystemChannels.textInput.invokeMethod('TextInput.hide');
                             if (isValid) {
-                              FirebaseSuggestionCreate create =
-                                  FirebaseSuggestionCreate();
-                              create
-                                  .createSuggestion(
-                                      nameController.text,
-                                      addressController.text,
-                                      phoneController.text,
-                                      typeController.text)
-                                  .whenComplete(() => showDialog(
-                                        context: context,
-                                        builder: (context) =>
-                                            const CustomDialog(),
-                                      ));
-                              controllerClear();
+                             if(FirebaseAuth.instance.currentUser != null){
+                               FirebaseSuggestionCreate create =
+                               FirebaseSuggestionCreate();
+                               create
+                                   .createSuggestion(
+                                   nameController.text,
+                                   addressController.text,
+                                   phoneController.text,
+                                   typeController.text,ref)
+                                   .whenComplete(() =>
+                                   ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text(languageText.suggestion_customDialog_content))
+
+                                   ))
+                                   .whenComplete(() =>
+                                   controllerClear()
+                               );
+                             }else{
+                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                   content: Text(
+                                       languageText.suggestion_check_user)));
+                             }
                             }
                           },
                           titleName: languageText.suggestion_button,
                           textColor1: Colors.white,
-                          btnColor: Colors.grey,
+                          btnColor:Colors.red.shade800,
                         ),
+                        const SizedBox(height: 15,)
                       ],
                     ),
                   ),
@@ -171,31 +182,6 @@ class _SuggestionPageState extends ConsumerState<SuggestionPage> {
               ),
             ),
           );
-  }
-}
-
-class CustomDialog extends StatelessWidget {
-  const CustomDialog({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final languageText = AppLocalizations.of(context);
-    return AlertDialog(
-      title: Text(languageText!.suggestion_customDialog_title),
-      content: Text(languageText.suggestion_customDialog_content),
-      actions: <Widget>[
-        TextButton(
-          child: Text(languageText.suggestion_customDialog_textButton,
-              style: const TextStyle(
-                color: Colors.blueAccent,
-              )),
-          onPressed: () {
-            FocusScope.of(context).unfocus();
-            Navigator.of(context).pop(); // Close the dialog
-          },
-        ),
-      ],
-    );
   }
 }
 

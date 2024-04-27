@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class ButtonWidget extends StatelessWidget {
-  late Function() onClicked;
-  late String titleName;
-  late Color textColor1;
-  late Color btnColor;
+  final Function() onClicked;
+  final String titleName;
+  final Color textColor1;
+  final Color btnColor;
   final double? elevation;
   bool? border;
   ButtonWidget(

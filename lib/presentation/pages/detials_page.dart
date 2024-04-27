@@ -40,7 +40,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) return;
-      if(ref.watch(internetConnectivityCheckerProvider.notifier).isConnected) {
+      if(Utils.netIsConnected(ref)) {
         await fetchDetails();
       }
     });
@@ -72,7 +72,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
     final isRTL = ref.watch(languageProvider).code == 'fa';
     final places = ref.watch(getSingleProvider);
     final languageText = AppLocalizations.of(context);
-    final isConnectedNet = ref.watch(internetConnectivityCheckerProvider.notifier).isConnected;
+    final isConnectedNet = Utils.netIsConnected(ref);
     return GestureDetector(
       onHorizontalDragEnd: (DragEndDetails details) {
         if (details.primaryVelocity! > 10) {
@@ -99,10 +99,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                           onPressed: () {
                             bool isLogin =
                                 FirebaseAuth.instance.currentUser != null;
-                            if (ref
-                                .watch(internetConnectivityCheckerProvider
-                                    .notifier)
-                                .isConnected) {
+                            if (Utils.netIsConnected(ref)) {
                               if (isLogin) {
                                 ref
                                     .watch(getInformationProvider)
@@ -337,6 +334,8 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                                         .address.isEmpty)
                                                     ? const SizedBox(height: 0)
                                                     : InkWell(
+                                                  splashColor: Colors.transparent,
+                                                  highlightColor: Colors.transparent,
                                                         onTap: () async {
                                                           if (Platform
                                                               .isAndroid) {

@@ -15,6 +15,7 @@ class CustomTextField extends ConsumerStatefulWidget {
   final String? label;
   final String? label2;
   final String? hintText;
+  final void Function(String)? onChange;
   const CustomTextField({
     this.textCapitalization = TextCapitalization.none,
     this.suffixIcon,
@@ -26,6 +27,7 @@ class CustomTextField extends ConsumerStatefulWidget {
     this.label,
     this.label2,
     this.hintText,
+    this.onChange
   }) : super(key: key);
 
   @override
@@ -62,9 +64,6 @@ class _CustomTextFieldState extends ConsumerState<CustomTextField> {
             height: 5,
           ),
           TextFormField(
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(15),
-              ],
               textCapitalization: widget.textCapitalization,
               obscureText: widget.obscureText,
               controller: widget.controller,
@@ -99,7 +98,9 @@ class _CustomTextFieldState extends ConsumerState<CustomTextField> {
               ),
               keyboardType: widget.keyboardType,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: widget.validator),
+              validator: widget.validator,
+            onChanged: widget.onChange,
+          ),
         ],
       ),
     );

@@ -15,12 +15,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../data/models/users.dart';
+import '../../../domain/riverpod/data/following_data.dart';
+import '../../../domain/riverpod/data/message/message_data.dart';
 
 class OtherProfile extends ConsumerStatefulWidget {
   final bool isFromChat;
-  final Users? user;
+  final Users user;
   final String uid;
-  const OtherProfile({super.key, this.isFromChat = false, this.user,required this.uid});
+  const OtherProfile({super.key, this.isFromChat = false,required this.user,required this.uid});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _OtherProfileState();
@@ -30,16 +32,13 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (widget.user != null) {
-        ref.read(otherUserProvider.notifier).setDataUser(widget.user!);
-        if (FirebaseAuth.instance.currentUser != null) {
-          await ref
-              .read(followerProvider.notifier)
-              .followOrUnFollow(FirebaseAuth.instance.currentUser!.uid, widget.uid);
-        } else {
-        }
-      } else {
-      }
+       if(mounted){
+         ref.read(otherUserProvider.notifier).setDataUser(widget.user);
+         await ref
+             .read(followerProvider.notifier)
+             .followOrUnFollow(FirebaseAuth.instance.currentUser!.uid, widget.uid);
+         print('younissssssssssssss ${ref.watch(followerProvider)}');
+       }
     });
 
     super.initState();
@@ -79,10 +78,14 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                     padding: const EdgeInsets.only(bottom: 65.0),
                     child: Center(
                       child: Text(
-                        '${usersData?.name} ${usersData?.lastName}'.substring(0,18),
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 28),
+                        (usersData != null &&
+                            (usersData.name.length + usersData.lastName.length) > 18)
+                            ? '${usersData.name} ${usersData.lastName}'.substring(0, 18)
+                            : '${usersData?.name ?? ''} ${usersData?.lastName ?? ''}',
+                        style: const TextStyle(color: Colors.white, fontSize: 28),
                       ),
+
+
                     ),
                   ),
                 ),
@@ -90,6 +93,8 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                   padding:
                       const EdgeInsets.only(top: 118.0, right: 116, left: 116),
                   child: InkWell(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
                     onTap: () => usersData?.imageUrl == '' || usersData?.imageUrl == null
                         ? const SizedBox()
                         : Navigator.push(
@@ -146,7 +151,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                         Navigator.pop(context);
                       },
                       icon: const Icon(
-                        Icons.arrow_back,
+                        Icons.arrow_back_ios_outlined,
                         color: Colors.white,
                       ),
                     ))
@@ -179,7 +184,13 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                   color: Colors.grey,
                 ),
                 ListTile(
-                  title: Text('${usersData?.name} ${usersData?.lastName}'.substring(0,25)),
+                  title:Text(
+                    ((usersData?.name.length ?? 0) + (usersData?.lastName.length ?? 0)) > 25
+                        ? '${usersData?.name ?? ''} ${usersData?.lastName ?? ''}'.substring(0, 25)
+                        : '${usersData?.name ?? ''} ${usersData?.lastName ?? ''}',
+                  ),
+
+
                   leading: const Icon(
                     color: Colors.red,
                     Icons.person_2_outlined,
@@ -191,6 +202,8 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                 ),
                 // LanguageIcon(),
                 InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
                   onTap: () {
                     Navigator.push(
                         context,
@@ -220,11 +233,14 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               InkWell(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
                 onTap: () {
                   if (widget.isFromChat) {
                     Navigator.pop(context);
                   } else {
                     final followId = usersData!.uid!;
+                    ref.read(messageProvider.notifier).clearState();
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -265,24 +281,28 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
               ),
               const SizedBox(width: 24),
               InkWell(
+                highlightColor: Colors.transparent,
                 focusColor: Colors.transparent,
                 splashColor: Colors.transparent,
                 onTap: ref.watch(loadingFollowers)
                     ? null
                     : () async {
-                        ref.read(loadingFollowers.notifier).state = true;
-                        final uid = FirebaseAuth.instance.currentUser!.uid;
-                        final followId = usersData!.uid!;
-                        await ref
-                            .read(followHttpsProvider.notifier)
-                            .updateFollowers(uid, followId)
-                            .whenComplete(() async => await ref
-                                .read(followerProvider.notifier)
-                                .followOrUnFollow(uid, followId));
-                        await ref
-                            .read(userDetailsProvider.notifier)
-                            .getCurrentUserData();
-                      },
+                  if (!mounted) return; // Check if the widget is mounted
+                  ref.read(loadingFollowers.notifier).state = true;
+                  final uid = FirebaseAuth.instance.currentUser!.uid;
+                  final followId = usersData!.uid!;
+                  final refValue = ref; // Store the ref value before the asynchronous operation
+                  await refValue // Use the stored ref value
+                      .read(followHttpsProvider.notifier)
+                      .updateFollowers(uid, followId)
+                      .whenComplete(() async {
+                    if (!mounted) return; // Check if the widget is still mounted
+                    await refValue
+                        .read(followerProvider.notifier)
+                        .followOrUnFollow(uid, followId);
+                  });
+                },
+
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 28),
                   height: 55,
@@ -307,7 +327,7 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                         )
                       : Center(
                           child: Text(
-                            ref.watch(followerProvider) ? 'Follow' : "Unfollow",
+                             ref.watch(followerProvider) ? 'Follow' : "Unfollow",
                             style: const TextStyle(
                                 fontSize: 20, color: Colors.white),
                           ),

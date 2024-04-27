@@ -102,6 +102,8 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                   padding:
                       const EdgeInsets.only(top: 118.0, left: 116, right: 116),
                   child: InkWell(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
