@@ -8,6 +8,7 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_emoji_gif_picker/flutter_emoji_gif_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../data/models/message/textfield_message.dart';
@@ -82,10 +83,11 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
             .read(handleWillPopProvider.notifier)
             .handleWillPop(context, ref, '${widget.uid}');
       },
-      canPop: ref.watch(emojiShowingProvider) ? false : true,
+      canPop: ref.watch(emojiShowingProvider) || ref.watch(gifShowingProvider) ? false : true,
       child: GestureDetector(
         onTap: () {
           ref.read(emojiShowingProvider.notifier).state = false;
+          ref.read(gifShowingProvider.notifier).state = false;
         },
         onHorizontalDragEnd: (DragEndDetails details) {
           if (details.primaryVelocity! > 10) {
@@ -408,6 +410,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                               textDirection: ui.TextDirection.ltr,
                               child: Row(
                                 children: <Widget>[
+                                  const SizedBox(width: 10),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor: themDark
@@ -422,6 +425,9 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                       SystemChannels.textInput.invokeMethod('TextInput.hide');
                                       await Future.delayed(
                                           const Duration(milliseconds: 100));
+                                      if(ref.watch(gifShowingProvider)){
+                                        ref.read(gifShowingProvider.notifier).state=false;
+                                      }
                                       ref
                                               .read(emojiShowingProvider.notifier)
                                               .state =
@@ -480,7 +486,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                             ? Colors.grey.shade800
                                             : Colors.grey.shade300,
                                       ),
-                                      child: TextField(
+                                      child:TextField(
                                         autocorrect: true,
                                         minLines: 1,
                                         maxLines: 5,
@@ -492,27 +498,78 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                           ref
                                               .read(emojiShowingProvider.notifier)
                                               .state = false;
+                                          ref
+                                              .read(gifShowingProvider.notifier)
+                                              .state = false;
                                         },
-                                        decoration: InputDecoration(
+                                        decoration: const InputDecoration(
                                           contentPadding:
-                                              const EdgeInsets.symmetric(
+                                              EdgeInsets.symmetric(
                                             vertical: 13.0,
                                             horizontal: 15.0,
                                           ),
-                                          hintText:
-                                              '   ${languageText?.chat_message}',
+                                          // hintText:
+                                          //     '   ${languageText?.chat_message}',
                                           border: InputBorder.none,
                                         ),
                                         controller: ref
                                             .watch(
                                                 messageProfileProvider.notifier)
                                             .textController,
+                                        onChanged: (value) {
+                                          if(value.isNotEmpty) {
+                                            ref
+                                                .read(hasTextFieldValueProvider
+                                                .notifier)
+                                                .state = true;
+                                          }else{
+                                            ref
+                                                .read(hasTextFieldValueProvider
+                                                .notifier)
+                                                .state = false;
+                                          }
+                                        },
                                       ),
                                     ),
                                   ),
 
                                   const SizedBox(width: 10),
-
+                                  !ref.watch(hasTextFieldValueProvider)?
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: themDark
+                                            ? Colors.grey.shade800
+                                            : Colors.grey.shade300,
+                                        elevation: 0,
+                                        shape: const CircleBorder(),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10, horizontal: 10)),
+                                    onPressed: () async {
+                                      FocusScope.of(context).unfocus();
+                                      SystemChannels.textInput.invokeMethod('TextInput.hide');
+                                      await Future.delayed(
+                                          const Duration(milliseconds: 100));
+                                      if(ref.watch(emojiShowingProvider)){
+                                        ref.read(emojiShowingProvider.notifier).state=false;
+                                      }
+                                      ref
+                                          .read(gifShowingProvider.notifier)
+                                          .state =
+                                      !ref.watch(gifShowingProvider);
+                                      if (ref.watch(gifShowingProvider)) {
+                                        FocusScope.of(context).unfocus();
+                                      }
+                                    },
+                                    child: Icon(
+                                      Icons.gif_box_outlined,
+                                      size: 24,
+                                      color: ref.watch(gifShowingProvider)
+                                          ? Colors.blue.shade200
+                                          : themDark
+                                          ? Colors.white
+                                          : Colors.black45,
+                                    ),
+                                  ):
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor: themDark
@@ -590,6 +647,10 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                                .textController.text,ref.watch(userDetailsProvider)!);
                                        print('hold check 1');
                                        ref
+                                           .read(hasTextFieldValueProvider
+                                           .notifier)
+                                           .state = false;
+                                       ref
                                            .read(messageProfileProvider
                                            .notifier)
                                            .sendText(
@@ -656,42 +717,14 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                 const SizedBox(
                                   height: 9,
                                 ),
-                                // Flexible(
-                                //   child: Row(
-                                //     mainAxisAlignment:
-                                //         MainAxisAlignment.spaceAround,
-                                //     children: [
-                                //       const Stickers(),
-                                //       GestureDetector(
-                                //         onTap: () {
-                                //           ref
-                                //                   .read(emojiShowingProvider.notifier)
-                                //                   .state =
-                                //               !ref.watch(emojiShowingProvider);
-                                //           if (ref.watch(emojiShowingProvider)) {
-                                //             FocusManager.instance.primaryFocus
-                                //                 ?.unfocus();
-                                //           }
-                                //
-                                //           print('TAPPED ON EMOJI');
-                                //         },
-                                //         child: Icon(
-                                //           Icons.emoji_emotions_outlined,
-                                //           color: ref.watch(emojiShowingProvider)
-                                //               ? Colors.red
-                                //               : Colors.black45,
-                                //         ),
-                                //       ),
-                                //     ],
-                                //   ),
-                                // ),
                                 Expanded(
                                   child: Offstage(
                                     offstage: !ref.watch(emojiShowingProvider),
-                                    child: EmojiPicker(
+                                    child:
+                                    EmojiPicker(
                                       textEditingController: ref
                                           .watch(
-                                              messageProfileProvider.notifier)
+                                          messageProfileProvider.notifier)
                                           .textController,
                                       onBackspacePressed: ref
                                           .read(messageProfileProvider.notifier)
@@ -701,7 +734,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                         // Issue: https://github.com/flutter/flutter/issues/28894
                                         emojiSizeMax: 32 *
                                             (foundation.defaultTargetPlatform ==
-                                                    TargetPlatform.iOS
+                                                TargetPlatform.iOS
                                                 ? 1.30
                                                 : 1.0),
                                         verticalSpacing: 0,
@@ -709,7 +742,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                         gridPadding: EdgeInsets.zero,
                                         initCategory: Category.RECENT,
                                         bgColor: (themeModel.currentThemeMode ==
-                                                ThemeMode.dark)
+                                            ThemeMode.dark)
                                             ? Colors.black
                                             : Colors.white,
                                         indicatorColor: Colors.red,
@@ -720,7 +753,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                         skinToneIndicatorColor: Colors.grey,
                                         enableSkinTones: true,
                                         recentTabBehavior:
-                                            RecentTabBehavior.RECENT,
+                                        RecentTabBehavior.RECENT,
                                         recentsLimit: 28,
                                         replaceEmojiOnLimitExceed: false,
                                         noRecents: Text(
@@ -731,9 +764,9 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                           textAlign: TextAlign.center,
                                         ),
                                         loadingIndicator:
-                                            const SizedBox.shrink(),
+                                        const SizedBox.shrink(),
                                         tabIndicatorAnimDuration:
-                                            kTabScrollDuration,
+                                        kTabScrollDuration,
                                         categoryIcons: const CategoryIcons(),
                                         buttonMode: ButtonMode.MATERIAL,
                                         checkPlatformCompatibility: true,
@@ -741,9 +774,60 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                     ),
                                   ),
                                 ),
+
                               ],
                             ),
                           ),
+                                //gif
+                          SizedBox(
+                            height: !ref.watch(gifShowingProvider)?20 : 300,
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: Offstage(
+                                    offstage: !ref.watch(gifShowingProvider),
+                                    child:
+                                    EmojiGifMenuLayout(
+                                      child: EmojiGifPickerIcon(
+                                        id: "1",
+                                        onGifSelected: (gif) async{
+                                          if(mounted) {
+                                            ref
+                                                .read(messageProfileProvider
+                                                .notifier)
+                                                .sendSticker(
+                                                receiverId: newProfileUser.uid!,
+                                                context: context,
+                                                currentUserCoinCount: 0,
+                                                scrollPositioned: 0,
+                                                gifUrl: '${gif?.images
+                                                    ?.fixedHeight?.url}'
+                                            );
+                                          }
+                                        },
+                                        fromStack: false,
+                                        hoveredBackgroundColor: Colors.black,
+                                        backgroundColor: Colors.black,
+                                        controller: ref
+                                            .watch(
+                                            messageProfileProvider.notifier)
+                                            .textController ,
+                                        viewEmoji: false,
+                                        viewGif: true,
+                                        keyboardIcon: const Icon(Icons.gif_box_outlined
+                                          ,color: Colors.red,),
+                                        icon: const Icon(
+                                          Icons.gif_box_outlined
+                                          ,color: Colors.red,
+                                          size: 80,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -752,7 +836,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
               ),
             ],
           ),
-          floatingActionButton: ref.watch(emojiShowingProvider) ||
+          floatingActionButton: ref.watch(emojiShowingProvider) ||ref.watch(gifShowingProvider)||
                   ref.watch(isMessageEditing) ||ref.watch(messageProvider).length<13
               ? const SizedBox()
               : Padding(

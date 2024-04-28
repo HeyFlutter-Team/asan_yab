@@ -19,8 +19,9 @@ class HandleWillPopNotifier extends StateNotifier<bool> {
 
   Future<void> handleWillPop(BuildContext context,WidgetRef ref,String userId) async {
     ref.read(activeChatIdProvider.notifier).state='';
-    if (ref.watch(emojiShowingProvider)) {
+    if (ref.watch(emojiShowingProvider) || ref.watch(gifShowingProvider)) {
       ref.read(emojiShowingProvider.notifier).state = false;
+      ref.read(gifShowingProvider.notifier).state = false;
     } else {
       FocusScope.of(context).unfocus();
       if (ref
@@ -55,8 +56,9 @@ class HandleWillPopNotifier extends StateNotifier<bool> {
         ref.read(editingMessageDetails.notifier).setContent('');
       }
 
-      if (ref.watch(emojiShowingProvider)) {
+      if (ref.watch(emojiShowingProvider) || ref.watch(gifShowingProvider)) {
         ref.read(emojiShowingProvider.notifier).state = false;
+        ref.read(gifShowingProvider.notifier).state = false;
       }
       if (FirebaseAuth.instance.currentUser != null) {
         ref.read(messageNotifierProvider.notifier).fetchMessage();

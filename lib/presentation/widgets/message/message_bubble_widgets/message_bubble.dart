@@ -146,7 +146,7 @@ class _MessageBubbleState extends ConsumerState<MessageBubble>
                         ? widget.isMe
                             ? Colors.grey.shade700
                             : Colors.brown.shade800
-                        : _shouldHideDecoration() && widget.replayMessage == ''
+                        : _shouldHideDecoration() && widget.replayMessage == ''|| widget.message.messageType == MessageType.sticker
                             ? Colors.transparent
                             : widget.isMe
                                 ? themDark
@@ -214,7 +214,10 @@ class _MessageBubbleState extends ConsumerState<MessageBubble>
                                 widget.isMe,
                                 widget.userId,
                                 widget.friendName,
-                                themDark);
+                                themDark,
+                            widget.message.messageType != MessageType.sticker
+
+                        );
                       },
                       child:
                       MessageContentInChat(shouldHideDecoration: _shouldHideDecoration,

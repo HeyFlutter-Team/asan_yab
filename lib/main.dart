@@ -10,6 +10,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_emoji_gif_picker/flutter_emoji_gif_picker.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_notification_channel/flutter_notification_channel.dart';
 import 'package:flutter_notification_channel/notification_importance.dart';
@@ -25,6 +26,20 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   debugPrint('Handling a background message ${message.data['id']}');
 }
 Future<void> main() async {
+  EmojiGifPickerPanel.setup(
+      // colors: MenuColors(
+      //   backgroundColor:  Colors.grey.shade600,
+      //   searchBarBackgroundColor: Colors.grey.shade600,
+      //   searchBarBorderColor: Colors.grey.shade600,
+      //   searchBarEnabledColor: Colors.grey.shade600,
+      //   searchBarFocusedColor: Colors.grey.shade600,
+      //   menuSelectedIconColor: Colors.grey.shade600,
+      //   buttonColor:Colors.grey.shade600,
+      //   iconBackgroundColor: null,
+      //   iconHoveredBackgroundColor: Colors.grey.shade600,
+      //   indicatorColor: Colors.transparent,
+      // ),
+      giphyApiKey: "qpt8c8ZZp7fTW7Ypui7KuhDmOKr3TPYy", mode: Mode.dark);
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   WidgetsFlutterBinding.ensureInitialized();

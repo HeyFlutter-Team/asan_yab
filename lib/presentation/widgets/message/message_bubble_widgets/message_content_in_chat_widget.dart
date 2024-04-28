@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 import 'dart:ui' as ui;
 import '../../../../domain/riverpod/data/message/message_data.dart';
 
@@ -43,12 +44,14 @@ class _MessageContentInChatState extends ConsumerState<MessageContentInChat> {
   Widget build(BuildContext context) {
     final themDark = Theme.of(context).brightness == Brightness.dark;
     final myDetails = ref.watch(userDetailsProvider);
+    final isMessageText = widget.message.replayMessage.contains('giphy.com');
     return Stack(
       children: [
         Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment:
               widget.shouldHideDecoration() && widget.replayMessage == ''
+              || widget.message.messageType == MessageType.sticker
                   ? widget.isMe
                       ? CrossAxisAlignment.end
                       : CrossAxisAlignment.start
@@ -70,12 +73,19 @@ class _MessageContentInChatState extends ConsumerState<MessageContentInChat> {
                           borderRadius:
                               const BorderRadius.all(Radius.circular(30)),
                           child: CachedNetworkImage(
-                            imageUrl: widget.urlImage,
+                            imageUrl: widget.message.content,
                             placeholder: (context, url) =>
-                                Image.asset('assets/Avatar.png'),
+                            const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.red,
+                                )),
                             errorListener: (value) =>
-                                Image.asset('assets/Avatar.png'),
-                          ),
+                            const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.red,
+                              ),
+                            ),
+                          )
                         ),
                       ),
                     ],
@@ -138,7 +148,10 @@ class _MessageContentInChatState extends ConsumerState<MessageContentInChat> {
                                             color:
                                                 Colors.black.withOpacity(0.7)),
                                       ),
-                                      subtitle: Text(
+                                      subtitle:isMessageText?  Text('Gif',style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.black.withOpacity(0.6),
+                                      ),):Text(
                                         widget.message.replayMessage.isNotEmpty
                                             ? widget.message.replayMessage
                                                 .substring(
@@ -177,7 +190,7 @@ class _MessageContentInChatState extends ConsumerState<MessageContentInChat> {
                       ),
                     ],
                   ),
-            SizedBox(height: widget.shouldHideDecoration() ? 25 : 15),
+            SizedBox(height: widget.shouldHideDecoration() || widget.message.messageType == MessageType.sticker? 25 : 15),
           ],
         ),
         Positioned(
@@ -186,7 +199,7 @@ class _MessageContentInChatState extends ConsumerState<MessageContentInChat> {
           child: Directionality(
             textDirection: ui.TextDirection.rtl,
             child: Container(
-              padding: widget.shouldHideDecoration()
+              padding: widget.shouldHideDecoration()|| widget.message.messageType == MessageType.sticker
                   ? const EdgeInsets.all(3)
                   : EdgeInsets.zero,
               constraints: BoxConstraints(
@@ -196,7 +209,7 @@ class _MessageContentInChatState extends ConsumerState<MessageContentInChat> {
                       : MediaQuery.of(context).size.width * 0.24),
               decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(32)),
-                  color: widget.shouldHideDecoration()
+                  color: widget.shouldHideDecoration()|| widget.message.messageType == MessageType.sticker
                       ? themDark
                           ? Colors.black.withOpacity(0.4)
                           : Colors.black.withOpacity(0.2)
@@ -216,7 +229,7 @@ class _MessageContentInChatState extends ConsumerState<MessageContentInChat> {
                   if (widget.isMe && !widget.isMessageSeen)
                     Icon(
                       Icons.done,
-                      color: widget.shouldHideDecoration()
+                      color: widget.shouldHideDecoration()|| widget.message.messageType == MessageType.sticker
                           ? Colors.white
                           : themDark
                               ? Colors.grey.shade800
@@ -229,7 +242,7 @@ class _MessageContentInChatState extends ConsumerState<MessageContentInChat> {
                       widget.message.sentTime.toLocal(),
                     ),
                     style: TextStyle(
-                        color: widget.shouldHideDecoration()
+                        color: widget.shouldHideDecoration()|| widget.message.messageType == MessageType.sticker
                             ? Colors.white
                             : themDark
                                 ? Colors.grey.shade800
@@ -243,7 +256,7 @@ class _MessageContentInChatState extends ConsumerState<MessageContentInChat> {
                     Text(
                       'edited',
                       style: TextStyle(
-                          color: widget.shouldHideDecoration()
+                          color: widget.shouldHideDecoration()|| widget.message.messageType == MessageType.sticker
                               ? Colors.white
                               : themDark
                                   ? Colors.grey.shade800

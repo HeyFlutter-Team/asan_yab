@@ -71,6 +71,8 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                               onTap: () {
                                 ref.read(emojiShowingProvider.notifier).state =
                                     !ref.watch(emojiShowingProvider);
+                                ref.read(gifShowingProvider.notifier).state =
+                                    !ref.watch(gifShowingProvider);
                                 if (ref.watch(emojiShowingProvider)) {
                                   FocusScope.of(context).unfocus();
                                 }

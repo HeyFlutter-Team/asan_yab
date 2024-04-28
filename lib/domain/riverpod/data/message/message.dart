@@ -90,14 +90,15 @@ required WidgetRef ref,
     required String receiverId,
     required BuildContext context,
     required int currentUserCoinCount,
-    required double scrollPositioned
+    required double scrollPositioned,
+    required String gifUrl,
   }) async {
     try {
       debugPrint('sendSticker 1');
       await messageRepo.addStickerMessage(
         receiverId: receiverId,
         currentUserCoinCount: currentUserCoinCount,
-        content: '',
+        content: gifUrl,
       );
       debugPrint('sendSticker 2');
     } catch (e) {
@@ -109,6 +110,8 @@ required WidgetRef ref,
 }
 
 final emojiShowingProvider = StateProvider((ref) => false);
+final gifShowingProvider = StateProvider((ref) => false);
+final hasTextFieldValueProvider = StateProvider((ref) => false);
 final replayProvider = StateProvider((ref) => '');
 final messageIndexProvider = StateProvider<int>((ref) => 0);
 final replayMessageTimeProvider = StateProvider((ref) => '');

@@ -39,11 +39,12 @@ class HandleOnHorizontalDragEndNotifier extends StateNotifier<bool> {
     }
     if (details.primaryVelocity! < 20) {
       ref.read(emojiShowingProvider.notifier).state = false;
+      ref.read(gifShowingProvider.notifier).state = false;
       ref.read(replayProvider.notifier).state = message.content;
       ref.read(replayMessageTimeProvider.notifier).state =
           '${message.sentTime}';
 
-      if (ref.watch(emojiShowingProvider)) {
+      if (ref.watch(emojiShowingProvider) || ref.watch(gifShowingProvider)) {
         FocusScope.of(context).unfocus();
       }
       SystemChannels.textInput.invokeMethod('TextInput.show');
@@ -58,6 +59,7 @@ class HandleOnHorizontalDragEndNotifier extends StateNotifier<bool> {
       ref.read(replayIsMineProvider.notifier).state = false;
       ref.read(messageIndexProvider.notifier).state = replayMessageIndex;
       ref.read(emojiShowingProvider.notifier).state = false;
+      ref.read(gifShowingProvider.notifier).state = false;
       ref.read(replayProvider.notifier).state = message.content;
       ref.read(replayMessageTimeProvider.notifier).state =
           '${message.sentTime}';
@@ -65,13 +67,14 @@ class HandleOnHorizontalDragEndNotifier extends StateNotifier<bool> {
         ref.read(replayIsMineProvider.notifier).state = true;
       }
 
-      if (ref.watch(emojiShowingProvider)) {
+      if (ref.watch(emojiShowingProvider)||ref.watch(gifShowingProvider)) {
         FocusScope.of(context).unfocus();
       }
     } else {
       ref.read(replayIsMineProvider.notifier).state = false;
       ref.read(messageIndexProvider.notifier).state = replayMessageIndex;
       ref.read(emojiShowingProvider.notifier).state = false;
+      ref.read(gifShowingProvider.notifier).state = false;
       ref.read(replayProvider.notifier).state = message.content;
       ref.read(replayMessageTimeProvider.notifier).state =
           '${message.sentTime}';
@@ -79,7 +82,7 @@ class HandleOnHorizontalDragEndNotifier extends StateNotifier<bool> {
         ref.read(replayIsMineProvider.notifier).state = true;
       }
 
-      if (ref.watch(emojiShowingProvider)) {
+      if (ref.watch(emojiShowingProvider) || ref.watch(gifShowingProvider)) {
         FocusScope.of(context).unfocus();
       }
       SystemChannels.textInput.invokeMethod('TextInput.show');
@@ -105,12 +108,14 @@ class MessageOnLongPressNotifier extends StateNotifier<bool>{
       bool isMe,
       String userId,
       String friendName,
-      bool themDark
+      bool themDark,
+      bool isMessageText
 
       )async{
     showPopover(
         context: context,
-        bodyBuilder: (context) => Column(children: [
+        bodyBuilder: (context){
+         return Column(children: [
           PopupMenuItem(
             onTap: () {
               if (ref
@@ -140,6 +145,9 @@ class MessageOnLongPressNotifier extends StateNotifier<bool>{
                 ref
                     .read(emojiShowingProvider.notifier)
                     .state = false;
+                ref
+                    .read(gifShowingProvider.notifier)
+                    .state = false;
                 ref.read(replayProvider.notifier).state =
                     message.content;
                 ref.read(replayMessageTimeProvider.notifier).state =
@@ -153,7 +161,7 @@ class MessageOnLongPressNotifier extends StateNotifier<bool>{
                 }
 
 
-                if (ref.watch(emojiShowingProvider)) {
+                if (ref.watch(emojiShowingProvider) || ref.watch(gifShowingProvider)) {
                   FocusScope.of(context).unfocus();
                 }
                 SystemChannels.textInput
@@ -174,6 +182,9 @@ class MessageOnLongPressNotifier extends StateNotifier<bool>{
                 ref
                     .read(emojiShowingProvider.notifier)
                     .state = false;
+                ref
+                    .read(gifShowingProvider.notifier)
+                    .state = false;
                 ref.read(replayProvider.notifier).state =
                    message.content;
                 ref.read(replayMessageTimeProvider.notifier).state =
@@ -186,7 +197,7 @@ class MessageOnLongPressNotifier extends StateNotifier<bool>{
                       .state = true;
                 }
 
-                if (ref.watch(emojiShowingProvider)) {
+                if (ref.watch(emojiShowingProvider) || ref.watch(gifShowingProvider)) {
                   FocusScope.of(context).unfocus();
                 }
                 SystemChannels.textInput
@@ -214,6 +225,7 @@ class MessageOnLongPressNotifier extends StateNotifier<bool>{
           const Divider(
             color: Colors.grey,
           ),
+          if(isMessageText)
           PopupMenuItem(
             onTap: () async {
               ref
@@ -247,10 +259,12 @@ class MessageOnLongPressNotifier extends StateNotifier<bool>{
             ),
           ),
           if (isMe)
+           if(isMessageText)
             const Divider(
               color: Colors.grey,
             ),
           if (isMe)
+            if(isMessageText)
             PopupMenuItem(
               onTap: () async {
                 if (ref
@@ -268,8 +282,11 @@ class MessageOnLongPressNotifier extends StateNotifier<bool>{
                   ref
                       .read(emojiShowingProvider.notifier)
                       .state = false;
+                  ref
+                      .read(gifShowingProvider.notifier)
+                      .state = false;
 
-                  if (ref.watch(emojiShowingProvider)) {
+                  if (ref.watch(emojiShowingProvider) || ref.watch(gifShowingProvider)) {
                     FocusScope.of(context).unfocus();
                   }
                   SystemChannels.textInput
@@ -297,8 +314,11 @@ class MessageOnLongPressNotifier extends StateNotifier<bool>{
                   ref
                       .read(emojiShowingProvider.notifier)
                       .state = false;
+                  ref
+                      .read(gifShowingProvider.notifier)
+                      .state = false;
 
-                  if (ref.watch(emojiShowingProvider)) {
+                  if (ref.watch(emojiShowingProvider) || ref.watch(gifShowingProvider)) {
                     FocusScope.of(context).unfocus();
                   }
                   SystemChannels.textInput
@@ -337,6 +357,7 @@ class MessageOnLongPressNotifier extends StateNotifier<bool>{
                 ),
               ),
             ),
+           if(isMessageText)
           const Divider(
             color: Colors.grey,
           ),
@@ -457,14 +478,14 @@ class MessageOnLongPressNotifier extends StateNotifier<bool>{
               ),
             ),
           ),
-        ]),
+        ]);},
         onPop: () => print('Popover was popped!'),
         direction: PopoverDirection.bottom,
         backgroundColor: themDark
             ? Colors.grey.shade600.withOpacity(0.3)
             : Colors.black12.withOpacity(0.5),
         width: 220,
-        height: isMe ? 275 : 205,
+        height: isMe ? isMessageText?275:137 : 205,
         arrowHeight: 15,
         arrowWidth: 30,
       transition: PopoverTransition.other,
