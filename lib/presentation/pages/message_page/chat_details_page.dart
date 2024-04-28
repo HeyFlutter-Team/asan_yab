@@ -722,6 +722,9 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                     offstage: !ref.watch(emojiShowingProvider),
                                     child:
                                     EmojiPicker(
+                                      onEmojiSelected: (category, emoji) {
+                                        ref.read(hasTextFieldValueProvider.notifier).state=true;
+                                      },
                                       textEditingController: ref
                                           .watch(
                                           messageProfileProvider.notifier)
