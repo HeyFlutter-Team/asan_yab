@@ -19,7 +19,13 @@ jobs:
 
       - name: Check if last commit message contains 'deploy'
         id: check_deploy
-        run: echo "${{ steps.extract_commit_message.outputs.message }}" | grep -qi 'deploy' || exit 1
+        run: |
+          if echo "${{ steps.extract_commit_message.outputs.message }}" | grep -qi 'deploy'; then
+            echo "Deploy keyword found in commit message. Proceeding with deployment."
+          else
+            echo "Deploy keyword not found in commit message. Skipping deployment."
+            exit 78 # Use a custom exit code to indicate the specific failure
+          fi
 
       - name: Set Fastlane environment to non-interactive
         if: steps.check_deploy.outputs.status == 'success'
@@ -47,7 +53,3 @@ jobs:
           KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         working-directory: android
-
-      - name: Notify failure if 'deploy' keyword not found
-        if: steps.check_deploy.outputs.status == 'failure'
-        run: echo "The last commit message did not contain 'deploy'. Skipping deployment." # You can customize this message
