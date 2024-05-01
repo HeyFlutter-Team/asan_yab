@@ -24,7 +24,6 @@ jobs:
             echo "Deploy keyword found in commit message. Proceeding with deployment."
           else
             echo "Deploy keyword not found in commit message. Skipping deployment."
-            exit 78 # Use a custom exit code to indicate the specific failure
           fi
 
       - name: Set Fastlane environment to non-interactive
