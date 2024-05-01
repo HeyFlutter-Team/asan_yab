@@ -47,3 +47,7 @@ jobs:
           KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         working-directory: android
+
+      - name: Notify failure if 'deploy' keyword not found
+        if: steps.check_deploy.outputs.status == 'failure'
+        run: echo "The last commit message did not contain 'deploy'. Skipping deployment." # You can customize this message
