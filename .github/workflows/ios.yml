@@ -56,13 +56,14 @@ jobs:
         run: |
           if echo "${{ steps.extract_commit_message.outputs.message }}" | grep -qi 'deploy'; then
             echo "Deploy keyword found in commit message. Proceeding with deployment."
+            echo "::set-output name=deploy::true"
           else
             echo "Deploy keyword not found in commit message. Skipping deployment."
-            exit 0
+            echo "::set-output name=deploy::false"
           fi
 
       - name: Build and Deploy to App Store
-        if: steps.check_deploy.outputs.status == 'success'
+        if: steps.check_deploy.outputs.deploy == 'true'
         run: |
           cd ..
           flutter clean
@@ -96,4 +97,4 @@ jobs:
           GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-        working-directory: ios
+        working-directory: ios 
