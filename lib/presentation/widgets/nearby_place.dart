@@ -1,11 +1,12 @@
 import 'package:asan_yab/core/utils/convert_digits_to_farsi.dart';
 import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/presentation/pages/all_nearby_place.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../data/models/place.dart';
 import '../../data/repositoris/language_repository.dart';
+import '../../domain/riverpod/data/single_place_provider.dart';
 import '../../domain/servers/nearby_places.dart';
 import '../pages/detials_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -64,7 +65,11 @@ class NearbyPlaceWidget extends ConsumerWidget {
                     itemBuilder: (context, index) => SizedBox(
                           width: screenWidth * 0.5,
                           child: InkWell(
-                            onTap: () {
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onTap: () async {
+                              ref.read(getSingleProvider.notifier).state = null;
+
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -75,107 +80,116 @@ class NearbyPlaceWidget extends ConsumerWidget {
                             child: Card(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Flexible(
-                                    child: Container(
-                                      width: 200,
-                                      height: 200,
-                                      padding: EdgeInsets.zero,
-                                      decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.only(
-                                              topLeft: Radius.circular(12),
-                                              topRight: Radius.circular(12),
-                                              bottomLeft:
-                                                  Radius.elliptical(200, 90),
-                                              bottomRight:
-                                                  Radius.elliptical(200, 20)),
-                                          shape: BoxShape.rectangle,
-                                          image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: NetworkImage(ref
-                                                  .watch(nearbyPlace)[index]
-                                                  .coverImage))),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                            horizontal: 12)
-                                        .copyWith(top: 10),
-                                    child: Text(
-                                      ref.watch(nearbyPlace)[index].category!,
-                                      style: const TextStyle(
-                                          // color: Colors.black,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12),
-                                    child: Text(
-                                      ref.watch(nearbyPlace)[index].name!,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          //color: Colors.indigo.withOpacity(0.6),
+                              child: Directionality(
+                                textDirection: TextDirection.rtl,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Flexible(
+                                      child: Container(
+                                        width: 200,
+                                        height: 200,
+                                        padding: EdgeInsets.zero,
+                                        decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(12),
+                                            topRight: Radius.circular(12),
+                                            bottomLeft:
+                                                Radius.elliptical(100, 90),
+                                            bottomRight:
+                                                Radius.elliptical(200, 20),
                                           ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.location_on_outlined,
-                                        color: Colors.grey,
-                                      ),
-                                      Flexible(
-                                        child: Text(
-                                          ref
-                                              .watch(nearbyPlace)[index]
-                                              .addresses[0]
-                                              .address,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w300),
+                                          shape: BoxShape.rectangle,
+                                        ),
+                                        child: CachedNetworkImage(
+                                          imageUrl: place[index].logo,
+                                          placeholder: (context, url) =>
+                                              Image.asset(
+                                                  'assets/asan_yab.png'),
+                                          errorWidget: (context, url, error) =>
+                                              Image.asset(
+                                                  'assets/asan_yab.png'),
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color:
-                                              Colors.redAccent.withOpacity(0.7),
-                                          borderRadius:
-                                              BorderRadius.circular(8)),
-                                      padding: const EdgeInsets.all(8),
-                                      child: isRTL
-                                          ? Text(
-                                              '${convertDigitsToFarsi(place[index].distance.toString())} ${languageText.nearbyPlaces_meter_title}',
-                                              style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.bold),
-                                            )
-                                          : Text(
-                                              '${place[index].distance} ${languageText.nearbyPlaces_meter_title}',
-                                              style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                ],
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                              horizontal: 12)
+                                          .copyWith(top: 10),
+                                      child: Text(
+                                        ref.watch(nearbyPlace)[index].name,
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12),
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.location_on_outlined,
+                                            color: Colors.grey,
+                                          ),
+                                          Flexible(
+                                            child: Text(
+                                              ref
+                                                  .watch(nearbyPlace)[index]
+                                                  .addresses[0]
+                                                  .address,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.redAccent
+                                                .withOpacity(0.7),
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        padding: const EdgeInsets.all(8),
+                                        child: isRTL
+                                            ? Text(
+                                                '${convertDigitsToFarsi(place[index].distance.toString())} ${languageText.nearbyPlaces_meter_title}',
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )
+                                            : Directionality(
+                                                textDirection:
+                                                    TextDirection.ltr,
+                                                child: Text(
+                                                  '${place[index].distance} ${languageText.nearbyPlaces_meter_title}',
+                                                  style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

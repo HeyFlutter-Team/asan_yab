@@ -35,6 +35,8 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
     });
   }
 
+  final List<String> commentIds = [];
+
   @override
   Widget build(BuildContext context) {
     final verticalData = ref.watch(commentProvider).comments;
@@ -69,8 +71,10 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                               onTap: () {
                                 ref.read(emojiShowingProvider.notifier).state =
                                     !ref.watch(emojiShowingProvider);
+                                ref.read(gifShowingProvider.notifier).state =
+                                    !ref.watch(gifShowingProvider);
                                 if (ref.watch(emojiShowingProvider)) {
-                                  FocusManager.instance.primaryFocus?.unfocus();
+                                  FocusScope.of(context).unfocus();
                                 }
                               },
                               child: const Text(
@@ -157,7 +161,14 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
 
                           //done icon
                           IconButton(
-                              onPressed: () {
+                              onPressed: () async {
+                                final userUid =
+                                    FirebaseAuth.instance.currentUser?.uid;
+                                if (!commentIds.contains(widget.postId)) {
+                                  commentIds.addAll([widget.postId]);
+                                }
+                                print('younis list: $commentIds');
+                                print(widget.postId);
                                 ref
                                     .read(commentProvider.notifier)
                                     .submitComment(
@@ -168,6 +179,9 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                                         context,
                                         ref,
                                         widget.postId);
+                                ref
+                                    .read(commentProvider.notifier)
+                                    .userComments('$userUid', commentIds);
                                 ref
                                     .read(commentProvider.notifier)
                                     .controller
@@ -245,7 +259,9 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                     }
 
                     return ref.watch(commentProvider).isLoading
-                        ? const Center(child: CircularProgressIndicator())
+                        ? const Center(child: CircularProgressIndicator(
+                      color: Colors.red,
+                    ))
                         : const SizedBox(height: 0);
                   },
                 ),
@@ -270,7 +286,7 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 18.0),
                                 child: Text(
-                                  'Replay: ${ref.watch(replayProvider)}',
+                                  'Reply: ${ref.watch(replayProvider)}',
                                   style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w300,
@@ -306,20 +322,22 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                               horizontalSpacing: 0,
                               gridPadding: EdgeInsets.zero,
                               initCategory: Category.RECENT,
-                              bgColor: const Color(0xFFF2F2F2),
-                              indicatorColor: Colors.blue,
-                              iconColor: Colors.grey,
-                              iconColorSelected: Colors.blue,
-                              backspaceColor: Colors.blue,
+                              bgColor:(themeModel.currentThemeMode == ThemeMode.dark)
+                                  ? Colors.black
+                              :Colors.grey,
+                              indicatorColor: Colors.red,
+                              iconColor: Colors.white,
+                              iconColorSelected: Colors.red,
+                              backspaceColor: Colors.red,
                               skinToneDialogBgColor: Colors.white,
                               skinToneIndicatorColor: Colors.grey,
                               enableSkinTones: true,
                               recentTabBehavior: RecentTabBehavior.RECENT,
                               recentsLimit: 28,
                               replaceEmojiOnLimitExceed: false,
-                              noRecents: const Text(
-                                'لا توجد رموز تعبيرية حديثة',
-                                style: TextStyle(
+                              noRecents:  Text(
+                                '${languageText?.emoji_recent}',
+                                style: const TextStyle(
                                     fontSize: 20, color: Colors.black26),
                                 textAlign: TextAlign.center,
                               ),

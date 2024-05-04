@@ -1,4 +1,5 @@
 import 'package:asan_yab/domain/riverpod/data/comment_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -67,14 +68,26 @@ class _CommentTileState extends ConsumerState<CommentTile> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const OtherProfile(),
+                                  builder: (context) =>  OtherProfile(
+                                    user: myUser,
+                                    uid: widget.comment.uid,
+                                  ),
                                 ));
                             print('6');
                           }
                         },
                         child: CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(widget.comment.imageUrl),
+                          child: ClipRRect(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(30)),
+                            child: CachedNetworkImage(
+                              imageUrl: widget.comment.imageUrl,
+                              errorListener: (value) =>
+                                  const AssetImage('assets/avatar.jpg'),
+                              placeholder: (context, url) =>
+                                  Image.asset('assets/avatar.jpg'),
+                            ),
+                          ),
                         ),
                       )
                     : GestureDetector(
@@ -103,7 +116,10 @@ class _CommentTileState extends ConsumerState<CommentTile> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const OtherProfile(),
+                                  builder: (context) =>  OtherProfile(
+                                    user: myUser,
+                                    uid: widget.comment.uid,
+                                  ),
                                 ));
                             print('6');
                           }
@@ -125,18 +141,13 @@ class _CommentTileState extends ConsumerState<CommentTile> {
                         Users myUser = Users.fromMap(
                             snapshot.data() as Map<String, dynamic>);
                         print('3');
-                        ref
-                            .read(otherUserProvider.notifier)
-                            .setDataUser(myUser);
-                        print('4');
-                        ref.read(followerProvider.notifier).followOrUnFollow(
-                            FirebaseAuth.instance.currentUser!.uid,
-                            widget.comment.uid);
-                        print('5');
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const OtherProfile(),
+                              builder: (context) =>  OtherProfile(
+                                uid: widget.comment.uid,
+                                user: myUser,
+                              ),
                             ));
                         print('6');
                       }

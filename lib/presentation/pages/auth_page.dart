@@ -1,4 +1,3 @@
-import 'package:asan_yab/presentation/pages/personal_information_page.dart';
 import 'package:asan_yab/presentation/pages/sign_in_page.dart';
 import 'package:asan_yab/presentation/pages/sign_up_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,8 +12,6 @@ class AuthPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isLogin = ref.watch(authPageStateProvider);
 
-    return isLogin
-        ? const LogInPage()
-        : const SignUpPage();
+    return isLogin ? const LogInPage() : const SignUpPage();
   }
 }

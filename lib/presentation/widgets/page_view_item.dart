@@ -42,6 +42,7 @@ class PageViewItem extends StatelessWidget {
             imageUrl: gallery[selectedIndex]!,
             fit: BoxFit.cover,
             errorWidget: (context, url, error) => Image.asset(ImageRes.asanYab),
+            placeholder: (context, url) => Image.asset(ImageRes.asanYab),
           ),
         ),
       ),

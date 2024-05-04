@@ -3,7 +3,6 @@ import 'package:asan_yab/core/utils/convert_digits_to_farsi.dart';
 import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/data/repositoris/language_repository.dart';
 import 'package:asan_yab/domain/riverpod/data/single_place_provider.dart';
-import 'package:asan_yab/presentation/widgets/page_view_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,7 +24,7 @@ class _Doctors_PageState extends ConsumerState<Doctors_Page> {
     final languageText = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(),
-      body:GridView.builder(
+      body: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           childAspectRatio: 0.7,
           crossAxisCount: 2, // Number of columns
@@ -38,7 +37,7 @@ class _Doctors_PageState extends ConsumerState<Doctors_Page> {
         itemBuilder: (context, index) {
           return Padding(
             padding:
-            const EdgeInsets.only(top: 6, left: 2, right: 2, bottom: 18),
+                const EdgeInsets.only(top: 6, left: 2, right: 2, bottom: 18),
             child: Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).brightness == Brightness.light
@@ -56,19 +55,15 @@ class _Doctors_PageState extends ConsumerState<Doctors_Page> {
                         bottomLeft: Radius.circular(10),
                         bottomRight: Radius.circular(10)),
                     child: CachedNetworkImage(
-                      imageUrl: places
-                          .doctors![index]
-                          .imageUrl,
+                      imageUrl: places.doctors![index].imageUrl,
                       width: double.infinity,
                       height: size.height * 0.16,
                       fit: BoxFit.cover,
-                      placeholder:
-                          (context, url) =>
-                          Image.asset(
-                            ImageRes.asanYab,
-                            height: 170,
-                            width: 130,
-                          ),
+                      placeholder: (context, url) => Image.asset(
+                        ImageRes.asanYab,
+                        height: 170,
+                        width: 130,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -84,24 +79,22 @@ class _Doctors_PageState extends ConsumerState<Doctors_Page> {
                   const SizedBox(height: 10),
                   Text(
                     maxLines: 1,
-                    overflow:TextOverflow.fade,
+                    overflow: TextOverflow.fade,
                     places.doctors![index].title,
-                    style:  TextStyle(
+                    style: TextStyle(
                         fontSize: 16,
                         color: Colors.green.shade400,
-                        fontWeight: FontWeight.w500
-                    ),
+                        fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 5),
                   Text(
                     maxLines: 1,
-                    overflow:TextOverflow.fade,
+                    overflow: TextOverflow.fade,
                     '${languageText?.details_page_9_custom_card}: ${isRTL ? convertDigitsToFarsi(places.doctors![index].time) : places.doctors![index].time}',
-                    style:  TextStyle(
+                    style: TextStyle(
                         fontSize: 16,
                         color: Colors.green.shade400,
-                        fontWeight: FontWeight.w500
-                    ),
+                        fontWeight: FontWeight.w500),
                   ),
                 ],
               ),

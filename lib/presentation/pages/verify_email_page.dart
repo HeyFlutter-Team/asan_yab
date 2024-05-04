@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/personal_information_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -73,11 +74,9 @@ class VerifyEmailNotifier extends StateNotifier<VerifyEmailState> {
 //my class
 class VerifyEmailPage extends ConsumerStatefulWidget {
   final String email;
-  final String? password;
 
   const VerifyEmailPage({
     required this.email,
-    this.password,
     Key? key,
   }) : super(key: key);
 
@@ -88,9 +87,7 @@ class VerifyEmailPage extends ConsumerStatefulWidget {
 class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
   @override
   void initState() {
-    Future.delayed(
-      Duration.zero,
-      () {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
         ref
             .read(verifyEmailProvider.notifier)
             ._sendVerificationEmail()
@@ -106,115 +103,146 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
     final verifyEmailState = ref.watch(verifyEmailProvider);
     final languageText = AppLocalizations.of(context);
     final isRTL = ref.watch(languageProvider).code == 'fa';
-    return FirebaseAuth.instance.currentUser!.emailVerified
-        ? PersonalInformation(
-            email: widget.email,
-          )
-        : Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              backgroundColor: Colors.red.shade900,
-              title: Text(
-                languageText!.verify_appBar_title,
-                style: const TextStyle(color: Colors.white),
+    final currentUser = FirebaseAuth.instance.currentUser?.emailVerified;
+    if (currentUser != null) {
+      return currentUser
+          ? PersonalInformation(
+              email: widget.email,
+            )
+          : Scaffold(
+              appBar: AppBar(
+                automaticallyImplyLeading: false,
+                backgroundColor: Colors.red.shade900,
+                title: Text(
+                  languageText!.verify_appBar_title,
+                  style: const TextStyle(color: Colors.white),
+                ),
+                centerTitle: true,
               ),
-              centerTitle: true,
-            ),
-            body: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: isRTL
-                        ? const EdgeInsets.only(right: 28.0)
-                        : const EdgeInsets.only(left: 28.0),
-                    child: Text(languageText.verify_body_text),
-                  ),
-                  Text(widget.email),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red.shade800,
-                          minimumSize: const Size(340, 55),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12))),
-                      onPressed: verifyEmailState.canResendEmail
-                          ? () => ref
-                              .read(verifyEmailProvider.notifier)
-                              ._sendVerificationEmail()
-                          : null,
-                      icon: const Icon(
-                        Icons.mail,
-                        color: Colors.white,
-                      ),
-                      label: Text(
-                        languageText.verify_elb_text,
-                        style:
-                            const TextStyle(fontSize: 16, color: Colors.white),
-                      )),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text(widget.email,textAlign: TextAlign.center,style: const TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
-                            content: Text(languageText.verify_email_dialog,
-                                textAlign: TextAlign.center),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child:  Text(languageText.verify_email_give_up),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  await FirebaseAuth.instance
-                                      .signOut()
-                                      .whenComplete(
-                                        () => Navigator.pop(context),
-                                  )
-                                      .whenComplete(
-                                        () => Navigator.pop(context),
-                                  )
-                                      .whenComplete(
-                                        () => Navigator.pop(context),
-                                  );
-                                },
-                                child:  Text(languageText.verify_email_continue),
-                              ),
-
-                            ],
-                          );
-                        },
-                      );
-                      // FirebaseAuth.instance.signOut().whenComplete(
-                      //       () => Navigator.push(
-                      //         context,
-                      //         MaterialPageRoute(
-                      //           builder: (context) => const MainPage(),
-                      //         ),
-                      //       ),
-                      //     );
-                    },
-                    child: Text(
-                      '${languageText.verify_tbt_text}',
-                      style: TextStyle(color: Colors.red.shade800,fontSize: 19),
+              body: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: isRTL
+                          ? const EdgeInsets.only(right: 28.0)
+                          : const EdgeInsets.only(left: 28.0),
+                      child: Text(languageText.verify_body_text),
                     ),
-                  ),
-                ],
+                    Text(widget.email),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red.shade800,
+                            minimumSize:  Size(MediaQuery.of(context).size.width * 0.9, 55),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12))),
+                        onPressed: verifyEmailState.canResendEmail
+                            ? () => ref
+                                .read(verifyEmailProvider.notifier)
+                                ._sendVerificationEmail()
+                            : null,
+                        icon: const Icon(
+                          Icons.mail,
+                          color: Colors.white,
+                        ),
+                        label: Text(
+                          languageText.verify_elb_text,
+                          style: const TextStyle(
+                              fontSize: 16, color: Colors.white),
+                        )),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text(
+                                widget.email,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    fontSize: 17, fontWeight: FontWeight.w900),
+                              ),
+                              content: RichText(
+                                  text: TextSpan(children: [
+                                TextSpan(
+                                    text: languageText.verify_email_dialog,
+                                    style: TextStyle(
+                                      color: Theme.of(context).brightness ==
+                                              Brightness.light
+                                          ? Colors.black
+                                          : Colors.white,
+                                    )),
+                                TextSpan(
+                                    text: languageText.verify_email_dialog_red,
+                                    style: const TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.w900)),
+                                TextSpan(
+                                    text: languageText.verify_email_dialog_2,
+                                    style: TextStyle(
+                                      color: Theme.of(context).brightness ==
+                                              Brightness.light
+                                          ? Colors.black
+                                          : Colors.white,
+                                    ))
+                              ])),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(languageText.verify_email_give_up,
+                                      style: TextStyle(
+                                          color: Theme.of(context).brightness ==
+                                                  Brightness.light
+                                              ? Colors.black
+                                              : Colors.white,
+                                          fontWeight: FontWeight.w900)),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    await FirebaseAuth.instance
+                                        .signOut()
+                                        .whenComplete(
+                                          () => Navigator.push(context, MaterialPageRoute(builder:
+                                          (context) => const MainPage(),)),
+                                        );
+                                  },
+                                  child: Text(
+                                      languageText.verify_email_continue,
+                                      style: TextStyle(
+                                          color: Theme.of(context).brightness ==
+                                                  Brightness.light
+                                              ? Colors.black
+                                              : Colors.white,
+                                          fontWeight: FontWeight.w900)),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Text(
+                        languageText.verify_tbt_text,
+                        style:
+                            TextStyle(color: Colors.red.shade800, fontSize: 19),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
+            );
+    } else {
+      return const SizedBox();
+    }
   }
-
 }
 //
 // import 'dart:async';

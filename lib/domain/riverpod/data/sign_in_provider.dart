@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../presentation/pages/sign_in_page.dart';
+import '../screen/botton_navigation_provider.dart';
+import 'isOnline.dart';
+
 //Sign In method
 final signInProvider = Provider((ref) => SignInNotifier(ref));
 
@@ -17,41 +21,36 @@ class SignInNotifier {
     required BuildContext context,
     required String email,
     required String password,
+    required WidgetRef ref,
   }) async {
     try {
       read.read(userDetailsProvider);
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return const Center(child: CircularProgressIndicator(
-            color: Colors.red,
-          )); // Use the custom dialog widget
-        },
-      );
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.trim(),
         password: password,
-      );
+      ).whenComplete(() =>
+          ref
+              .read(buttonNavigationProvider.notifier)
+              .selectedIndex(0));
     } on FirebaseAuthException catch (e) {
-      final languageText = AppLocalizations.of(context);
-      if (e.code == 'user-not-found') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(languageText!.sign_in_method_1_if)),
-        );
-      } else if (e.code == 'wrong-password') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(languageText!.sign_in_method_2_if)),
-        );
-      } else if (e.code == 'too-many-requests') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(languageText!.sign_in_method_3_if)),
-        );
-      }
+        final languageText = AppLocalizations.of(context);
+        if (e.code == 'user-not-found') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(languageText!.sign_in_method_1_if)),
+          );
+        } else if (e.code == 'wrong-password') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(languageText!.sign_in_method_2_if)),
+          );
+        } else if (e.code == 'too-many-requests') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(languageText!.sign_in_method_3_if)),
+          );
+        }
     } catch (e) {
       print('younis general errors $e');
     }finally{
-      Navigator.pop(context);
+      ref.read(isSignInningProvider.notifier).state = false;
     }
   }
   Future<void> isMyEmailVerified(BuildContext context)async {

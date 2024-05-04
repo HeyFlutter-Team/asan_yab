@@ -80,7 +80,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get verify_appBar_title => 'Email confirmation';
 
   @override
-  String get verify_body_text => 'A confirmation link has been sent to your email!\n   Please click on it to confirm your email.\n If you press the link,\n press send again!';
+  String get verify_body_text => 'A confirmation link has been sent to your email!\nPlease click on it to confirm your email.\n If you press the link,\n press send again!';
 
   @override
   String get verify_elb_text => 'Resend';
@@ -89,10 +89,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get verify_tbt_text => 'Cancel';
 
   @override
-  String get verify_email_dialog => 'An Asan Yab account has been \n created to the following email address.\n If you leave this page\n (without confirming your email and filling\n out the introduction form on the next page),\n you will no longer be able to\n enter Asan Yab with this email.';
+  String get verify_email_dialog => 'An Asan Yab account has been \n created to the following email address.\n If you leave this page\n';
 
   @override
-  String get verify_email_give_up => 'Give Up';
+  String get verify_email_dialog_red => 'without confirming your email and filling\n out the introduction form on the next page,';
+
+  @override
+  String get verify_email_dialog_2 => 'you will no longer be able to\n enter Asan Yab with this email.';
+
+  @override
+  String get verify_email_give_up => 'Cancel';
 
   @override
   String get verify_email_continue => 'Continue';
@@ -116,7 +122,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get category_title => 'Categories';
 
   @override
-  String get nearbyPlaces_title => 'Nearby places';
+  String get nearbyPlaces_title => 'Nearby Places';
 
   @override
   String get nearbyPlaces_meter_title => 'meters away';
@@ -176,10 +182,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get suggestion_customDialog_textButton => 'Return to the previous page';
 
   @override
+  String get suggestion_check_user => 'To submit a request, you must log in to your Asan Yab account';
+
+  @override
   String get profile_future_error => 'Information not available';
 
   @override
-  String get profile_copy_id_snack_bar => 'Your ID was copied to the clipboard';
+  String get profile_copy_id_snack_bar => 'ID was copied to the clipboard';
 
   @override
   String get profile_about_us_listTile => 'About Us';
@@ -203,13 +212,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profile_dark_mode => 'Dark Mode';
 
   @override
-  String get profile_rate_score => 'ُScore';
+  String get profile_rate_score => 'Score';
 
   @override
   String get profile_followers => 'Followers';
 
   @override
   String get profile_following => 'Following';
+
+  @override
+  String get profile_wall_paper => 'Chat WallPapers';
 
   @override
   String get edit_appBar_leading => 'Save';
@@ -219,6 +231,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get edit_2_txf_label => 'Last Name';
+
+  @override
+  String get edit_dialog => 'Will the changes be saved or not?';
+
+  @override
+  String get edit_dialog_do_not_save => 'Don\'t save';
 
   @override
   String get container_text => 'Search in';
@@ -293,13 +311,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get about_us_page_appbar_title => 'About Us';
 
   @override
-  String get nearby_place_page_title => 'NearBy Places';
+  String get nearby_place_page_title => 'Nearby Places';
 
   @override
   String get nearby_place_page_active_location => 'Activate your location';
 
   @override
-  String get nearby_place_page_distances => 'Choose the distance you want';
+  String get nearby_place_page_distances => 'Desired distance';
 
   @override
   String get nearby_place_page_meter => 'Meter';
@@ -341,13 +359,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get message_check_user2 => 'Enter to Email';
 
   @override
-  String get message_personal_score => 'current score';
+  String get message_personal_score => 'Current score';
 
   @override
-  String get message_description => 'To get points, \n you must introduce Asan Yab \n to two of your friends \n and they must enter your personal ID in the field \n mentioned below during registration...>';
+  String get message_description => 'To get points, \n you must introduce Asan Yab \n to two of your friends \n and they must enter your personal ID in the field \n mentioned below during registration =';
 
   @override
-  String get message_your_id => 'Your Id...>';
+  String get message_your_id => 'Your Id';
 
   @override
   String get for_add_comment => 'for add comment';
@@ -356,7 +374,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get log_in => 'Log in';
 
   @override
+  String get emoji_recent => 'There are no recent emojis';
+
+  @override
   String get download_image_loading => 'Please waite...';
+
+  @override
+  String get user_delete_account => 'Delete Account';
+
+  @override
+  String get wrong_email => 'Your email or password is wrong, please check first and then try again';
+
+  @override
+  String get wrong_password => 'Your Password is wrong';
 
   @override
   String get menus_restaurant => 'Menu';

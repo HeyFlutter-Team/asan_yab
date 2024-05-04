@@ -3,16 +3,20 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/domain/riverpod/config/internet_connectivity_checker.dart';
 import 'package:asan_yab/domain/riverpod/data/firebase_rating_provider.dart';
+import 'package:asan_yab/presentation/widgets/phone_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/utils/convert_digits_to_farsi.dart';
+import '../../core/utils/utils.dart';
 import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
 import '../../domain/riverpod/data/firbase_favorite_provider.dart';
+import '../../domain/riverpod/data/single_place_provider.dart';
 import '../pages/detials_page.dart';
 import '../pages/detials_page_offline.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -86,10 +90,9 @@ class _FavoritesState extends ConsumerState<Favorites> {
                       children: [
                         Card(
                           child: GestureDetector(
-                            onTap: () {
-                              debugPrint(
-                                  'Ramin check connectivity: ${widget.isConnected}');
-                              widget.isConnected
+                            onTap: () async {
+                              ref.read(getSingleProvider.notifier).state = null;
+                              Utils.netIsConnected(ref)
                                   ? Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -147,37 +150,14 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                               // color: Colors.black,
                                               ),
                                         ),
-                                        OutlinedButton(
-                                          onPressed: () async {
-                                            await FlutterPhoneDirectCaller
-                                                .callNumber(phoneNumber);
-                                          },
-                                          child: isRTL
-                                              ? Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    const Icon(
-                                                        Icons.phone_android,
-                                                        color: Colors.green),
-                                                    Text(phoneNumber),
-                                                  ],
-                                                )
-                                              : Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(phoneNumber,
-                                                        overflow: TextOverflow
-                                                            .ellipsis),
-                                                    const Icon(
-                                                        Icons.phone_android,
-                                                        color: Colors.green),
-                                                  ],
-                                                ),
-                                        ),
+                                        Directionality(
+                                            textDirection: isRTL
+                                                ? TextDirection.rtl
+                                                : TextDirection.ltr,
+                                            child: buildPhoneNumberWidget(
+                                                context: context,
+                                                isRTL: isRTL,
+                                                phone: phoneNumber)),
                                       ],
                                     ),
                                   ),
@@ -228,7 +208,9 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
-                                      return const CircularProgressIndicator(); // Show loading indicator while fetching rating
+                                      return const CircularProgressIndicator(
+                                        color: Colors.red,
+                                      ); // Show loading indicator while fetching rating
                                     } else if (snapshot.hasError) {
                                       return const Text(
                                           'Error fetching rating'); // Show error message if there's an error

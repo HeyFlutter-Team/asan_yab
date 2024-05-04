@@ -22,3 +22,4 @@ class FollowHttps extends StateNotifier {
 }
 
 final loadingFollowerProvider = StateProvider((ref) => false);
+final loadingFollowOrUnfollowProvider = StateProviderFamily<bool, int>((ref, index) => false);

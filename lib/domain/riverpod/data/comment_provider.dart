@@ -151,11 +151,11 @@ class VerticalDataNotifier extends ChangeNotifier {
     return userDoc.exists
         ? Users.fromMap(userDoc.data() as Map<String, dynamic>)
         : Users(
-            id: 1,
+            id: '1',
             name: 'name',
             lastName: 'lastName',
             email: 'email',
-            createdAt: Timestamp.now(),
+            createdAt: Timestamp.now().toString(),
             fcmToken: 'fcmToken',
             isOnline: true,
             imageUrl: '',
@@ -224,6 +224,36 @@ class VerticalDataNotifier extends ChangeNotifier {
         );
       },
     );
+    notifyListeners();
+  }
+
+  Future<void> userComments(String userId, List<String> commentIds) async {
+    try {
+      final docRef = FirebaseFirestore.instance.collection('User').doc(userId).collection('comments').doc('commentsList');
+
+      // Retrieve the current list of IDs
+      final docSnapshot = await docRef.get();
+      Set<String> currentIds = {};
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data();
+        if (data != null && data['CommentsId'] != null) {
+          currentIds = Set<String>.from(data['CommentsId']);
+        }
+      }
+
+      // Convert new IDs list to a set to remove duplicates
+      final Set<String> newIdsSet = Set<String>.from(commentIds);
+
+      // Merge the sets to remove duplicates
+      currentIds.addAll(newIdsSet);
+
+      // Update the document with the combined list of IDs
+      await docRef.set({'CommentsId': currentIds.toList()});
+
+      print('Comments added successfully');
+    } catch (e) {
+      print('Error adding comments: $e');
+    }
     notifyListeners();
   }
 }

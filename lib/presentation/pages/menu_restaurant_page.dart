@@ -70,7 +70,9 @@ class _MenuRestaurantState extends ConsumerState<MenuRestaurant>
         ),
         body: isLoading
             ? const Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  color: Colors.red,
+                ),
               )
             : SafeArea(
                 child: AnimatedBuilder(

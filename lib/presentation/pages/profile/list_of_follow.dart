@@ -1,26 +1,48 @@
+import 'package:asan_yab/core/utils/utils.dart';
 import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/domain/riverpod/config/internet_connectivity_checker.dart';
 import 'package:asan_yab/domain/riverpod/data/following_data.dart';
 import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
-import 'package:asan_yab/domain/riverpod/screen/search_load_screen.dart';
 import 'package:asan_yab/presentation/pages/profile/list_followers.dart';
 import 'package:asan_yab/presentation/pages/profile/list_following.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../data/repositoris/language_repository.dart';
 
-class ListOfFollow extends ConsumerWidget {
-  const ListOfFollow({Key? key}) : super(key: key);
+class ListOfFollow extends ConsumerStatefulWidget {
+  final int initialIndex;
+  const ListOfFollow({Key? key, required this.initialIndex}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final languageText = AppLocalizations.of(context);
+  ConsumerState<ListOfFollow> createState() => _ListOfFollowState();
+}
+
+class _ListOfFollowState extends ConsumerState<ListOfFollow> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    if(Utils.netIsConnected(ref)){
+      ref.read(listOfDataProvider.notifier).state.clear();
+      ref.read(listOfDataFollowersProvider.notifier).state.clear();
+      ref
+          .read(followingDataProvider.notifier)
+          .getProfile(FirebaseAuth.instance.currentUser!.uid);
+    }
+    else{
+      Utils.lostNetSnackBar(context);
+    }
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final profileDetails = ref.watch(userDetailsProvider);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     return DefaultTabController(
-      initialIndex: ref.read(indexFollowPageProvider),
+      initialIndex: widget.initialIndex,
       length: 2, // Number of tabs
       child: WillPopScope(
         onWillPop: () async {
@@ -31,38 +53,35 @@ class ListOfFollow extends ConsumerWidget {
         },
         child: Scaffold(
           appBar: AppBar(
+            iconTheme: const IconThemeData(color: Colors.white),
             flexibleSpace: Container(
-              decoration:  BoxDecoration(
-                gradient:  isRTL
+              decoration: BoxDecoration(
+                gradient: isRTL
                     ? LinearGradient(colors: [
-                  Colors.purple,
-                  Colors.red.shade900,
-                ],
-                begin:Alignment.bottomLeft ,
-                    end: Alignment.topRight
-                )
+                        Colors.red.shade900,
+                        Colors.grey,
+                        Colors.red.shade900,
+                      ], begin: Alignment.bottomLeft, end: Alignment.topRight)
                     : LinearGradient(colors: [
-                  Colors.red.shade900,
-                  Colors.purple,
-                ],
-                    begin:Alignment.bottomLeft ,
-                    end: Alignment.topRight
-                ),
+                        Colors.red.shade900,
+                        Colors.grey,
+                        Colors.red.shade900,
+                      ], begin: Alignment.bottomLeft, end: Alignment.topRight),
               ),
             ),
             title: Text(
-              profileDetails!.name,
-            style: const TextStyle(fontSize: 24),
+              profileDetails!.name.length>18?profileDetails.name.substring(0,18):profileDetails.name,
+              style: const TextStyle(fontSize: 24, color: Colors.white),
             ),
             centerTitle: true,
             leading: IconButton(
               icon: const Icon(
-                Icons.arrow_back_ios_new_outlined,
+                Icons.arrow_back,
               ),
               onPressed: () {
+                Navigator.pop(context);
                 ref.read(listOfDataProvider.notifier).state.clear();
                 ref.read(listOfDataFollowersProvider.notifier).state.clear();
-                Navigator.pop(context);
               },
             ),
             bottom: TabBar(
@@ -73,16 +92,23 @@ class ListOfFollow extends ConsumerWidget {
                     .read(followingDataProvider.notifier)
                     .getProfile(FirebaseAuth.instance.currentUser!.uid);
               },
-              labelColor: Colors.black87,
-              labelStyle: const TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 18),
+              labelStyle: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18),
+              indicatorColor: Colors.white,
+              unselectedLabelStyle:
+                  const TextStyle(color: Colors.white, fontSize: 14),
               tabs: [
                 Tab(
-                  text: '${languageText?.profile_following} ${profileDetails.followingCount}',
-                  // AppLocalizations.of(context)?.following ??
+                  icon: Text('${profileDetails.followingCount}',
+                      style: const TextStyle(fontSize: 20)),
+                  text: 'Following',
                 ),
                 Tab(
-                  text: '${languageText?.profile_followers} ${profileDetails.followerCount}',
-                  // AppLocalizations.of(context)?.followers ??
+                  icon: Text('${profileDetails.followerCount}',
+                      style: const TextStyle(fontSize: 20)),
+                  text: 'Followers',
                 ),
               ],
             ),
@@ -98,3 +124,5 @@ class ListOfFollow extends ConsumerWidget {
     );
   }
 }
+
+

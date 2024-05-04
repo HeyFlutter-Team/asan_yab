@@ -1,5 +1,4 @@
 import 'package:asan_yab/data/repositoris/language_repository.dart';
-import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/themeProvider.dart';
 import 'package:asan_yab/presentation/pages/verify_email_page.dart';
@@ -11,50 +10,67 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_emoji_gif_picker/flutter_emoji_gif_picker.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_notification_channel/flutter_notification_channel.dart';
+import 'package:flutter_notification_channel/notification_importance.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'data/models/language.dart';
+import 'domain/servers/nearby_places.dart';
 import 'firebase_options.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   debugPrint('Handling a background message ${message.data['id']}');
 }
-
 Future<void> main() async {
+    EmojiGifPickerPanel.setup(
+        giphyApiKey: "qpt8c8ZZp7fTW7Ypui7KuhDmOKr3TPYy", mode: Mode.dark);
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   WidgetsFlutterBinding.ensureInitialized();
   final container = ProviderContainer();
   final language =
-      await container.read(languageRepositoryProvider).getLanguage();
+  await container.read(languageRepositoryProvider).getLanguage();
   await Future.delayed(const Duration(seconds: 2));
   FlutterNativeSplash.remove();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseAnalytics.instance
-      .setAnalyticsCollectionEnabled(true); //firebase analytics
+  FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true); // Firebase Analytics
   SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp])
+      .then((_) async {
+    // Register notification channel
+    await FlutterNotificationChannel().registerNotificationChannel(
+      description: 'For Showing Message Notification',
+      id: 'Chats',
+      importance: NotificationImportance.IMPORTANCE_HIGH,
+      name: 'Chats',
+      enableSound: true,
+      showBadge: true,
+    );
+  });
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   PlatformDispatcher.instance.onError = (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
-  //firebase messegaing
-  FirebaseMessaging.instance.requestPermission();
+  // Firebase messaging
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  //
-  // FirebaseFirestore.instance.useFirestoreEmulator('host', '');
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: false,
+    badge: false,
+    sound: true,
+  );
+  // End of Firebase messaging setup
 
   runApp(ProviderScope(
     overrides: [languageProvider.overrideWith((ref) => language)],
     child: const MyApp(),
   ));
 }
-
 class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
@@ -66,8 +82,11 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   void initState() {
     super.initState();
-    ref.read(themeModelProvider.notifier).initialize().whenComplete(
-        () => ref.read(themeModelProvider.notifier).loadSavedTheme());
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ref.read(themeModelProvider.notifier).initialize().whenComplete(
+          () => ref.read(themeModelProvider.notifier).loadSavedTheme());
+      ref.watch(nearbyPlace.notifier).refresh();
+    });
   }
 
   @override
@@ -111,11 +130,7 @@ class _MyAppState extends ConsumerState<MyApp> {
               child: Text('خطا در اتصال'),
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.red,
-              ),
-            );
+            return const MainPage();
           } else if (snapshot.hasData && snapshot.data != null) {
             final user = snapshot.data!;
             if (user.emailVerified) {

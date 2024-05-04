@@ -6,10 +6,8 @@ import 'package:asan_yab/presentation/pages/profile/show_profile_page.dart';
 
 import 'package:asan_yab/presentation/widgets/buildProgress.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/profile_data_provider.dart';
@@ -104,6 +102,8 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                   padding:
                       const EdgeInsets.only(top: 118.0, left: 116, right: 116),
                   child: InkWell(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
