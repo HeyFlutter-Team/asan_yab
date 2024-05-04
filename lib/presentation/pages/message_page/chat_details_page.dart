@@ -4,17 +4,14 @@ import 'package:asan_yab/domain/riverpod/data/other_user_data.dart';
 import 'package:asan_yab/presentation/widgets/message/app_bar_chat_details.dart';
 import 'package:asan_yab/presentation/widgets/message/chat_messages.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_emoji_gif_picker/flutter_emoji_gif_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../../../data/models/message/message.dart';
 import '../../../data/models/message/textfield_message.dart';
 import '../../../data/repositoris/message/message_repo.dart';
-import '../../../domain/riverpod/config/message_notification_repo.dart';
 import '../../../domain/riverpod/data/message/chat_details_page_riv.dart';
 import '../../../domain/riverpod/data/profile_data_provider.dart';
 import '../../widgets/message/chat_details_page_widgets/chat_background_widget.dart';
@@ -26,6 +23,7 @@ import '../../widgets/message/chat_details_page_widgets/reply_container_widget.d
 import '../../widgets/message/chat_details_page_widgets/send_message_button_widget.dart';
 import '../themeProvider.dart';
 import 'dart:ui' as ui;
+
 
 class ChatDetailPage extends ConsumerStatefulWidget {
   const ChatDetailPage({super.key, this.uid});
@@ -86,11 +84,14 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
     final themDark = Theme.of(context).brightness == Brightness.dark;
     final languageText = AppLocalizations.of(context);
     final profileDetails = ref.watch(userDetailsProvider);
+    final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
     return PopScope(
       onPopInvoked: (didPop) async {
         await ref
             .read(handleWillPopProvider.notifier)
             .handleWillPop(context, ref, '${widget.uid}');
+        EmojiGifPickerPanel.onWillPop();
+
       },
       canPop: ref.watch(emojiShowingProvider) || ref.watch(gifShowingProvider) ? false : true,
       child: GestureDetector(
@@ -107,6 +108,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
           }
         },
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBarChatDetails(
             userId: newProfileUser!.uid!,
             employee: newProfileUser.userType,
@@ -165,20 +167,21 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                             padding: const EdgeInsets.only(right: 8.0),
                             child: Directionality(
                               textDirection: ui.TextDirection.ltr,
-                              child: Row(
-                                children: <Widget>[
-                                  const SizedBox(width: 10),
-                                  EmojiButtonWidget(themDark: themDark, ref: ref),
-                                  const SizedBox(width: 10),
-
-                                  ChatTextFieldWidget(themDark: themDark, ref: ref),
-
-                                  const SizedBox(width: 10),
-                                  !ref.watch(hasTextFieldValueProvider)?
-                                  GifButtonWidget(themDark: themDark, ref: ref):
-                                  SendMessageButtonWidget(themDark: themDark, ref: ref, profileDetails: profileDetails!, newProfileUser: newProfileUser, widget: widget),
-                                ],
-                              ),
+                              child: Padding(
+                               padding:  EdgeInsets.only(bottom:isKeyboardOpen? 255.0:0),
+                               child: Row(
+                                 children: <Widget>[
+                                   const SizedBox(width: 10),
+                                   EmojiButtonWidget(themDark: themDark, ref: ref),
+                                   const SizedBox(width: 10),
+                                   ChatTextFieldWidget(themDark: themDark, ref: ref),
+                                   const SizedBox(width: 10),
+                                   !ref.watch(hasTextFieldValueProvider)?
+                                   GifButtonWidget(themDark: themDark, ref: ref):
+                                   SendMessageButtonWidget(themDark: themDark, ref: ref, profileDetails: profileDetails!, newProfileUser: newProfileUser, widget: widget),
+                                 ],
+                               ),
+                                                              ),
                             ),
                           ),
                           SizedBox(
@@ -253,89 +256,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                             ),
                           ),
                                 //gif
-                          SizedBox(
-                            height: !ref.watch(gifShowingProvider)?20 : 300,
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  child: Offstage(
-                                    offstage: !ref.watch(gifShowingProvider),
-                                    child:
-                                    EmojiGifMenuLayout(
-                                      child: EmojiGifPickerIcon(
-                                        id: "1",
-                                        onGifSelected: (gif) async{
-                                          if(mounted) {
-                                            ref.read(localMessagesProvider.notifier)
-                                                .addMessage(
-                                                MessageModel(
-                                                    senderId: FirebaseAuth.instance.currentUser!.uid,
-                                                    receiverId:newProfileUser.uid! ,
-                                                    content:ref
-                                                        .watch(messageProfileProvider
-                                                        .notifier)
-                                                        .textController.text ,
-                                                    sentTime: DateTime.now().toUtc() ,
-                                                    messageType: MessageType.text,
-                                                    replayMessage:ref.watch(replayProvider),
-                                                    isSeen:false ,
-                                                    replayMessageIndex:ref.watch(
-                                                        messageIndexProvider)+1 ,
-                                                    replayIsMine:  ref.watch(
-                                                        replayIsMineProvider),
-                                                    isMessageEdited:ref.watch(
-                                                        messageEditedProvider
-                                                    ) ,
-                                                    replayMessageTime: ref.watch(replayMessageTimeProvider)
-                                                )
-                                            );
-                                            ref
-                                                .read(messageProfileProvider
-                                                .notifier)
-                                                .sendSticker(
-                                                receiverId: newProfileUser.uid!,
-                                                context: context,
-                                                currentUserCoinCount: 0,
-                                                scrollPositioned: 0,
-                                                gifUrl: '${gif?.images
-                                                    ?.fixedHeight?.url}'
-                                            ).whenComplete((){
-                                              MessageNotification
-                                                  .sendPushNotificationMessage(
-                                                  newProfileUser,
-                                                  ref
-                                                      .read(messageProfileProvider
-                                                      .notifier)
-                                                      .textController
-                                                      .text,
-                                                  ref.watch(
-                                                      userDetailsProvider)!);
-                                            });
-                                          }
-                                        },
-                                        fromStack: false,
-                                        hoveredBackgroundColor: Colors.black,
-                                        backgroundColor: Colors.black,
-                                        controller: ref
-                                            .watch(
-                                            messageProfileProvider.notifier)
-                                            .textController ,
-                                        viewEmoji: false,
-                                        viewGif: true,
-                                        keyboardIcon: const Icon(Icons.gif_box_outlined
-                                          ,color: Colors.red,),
-                                        icon: const Icon(
-                                          Icons.gif_box_outlined
-                                          ,color: Colors.red,
-                                          size: 80,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
+                          GifPickerWidget(ref: ref, newProfileUser: newProfileUser, mounted: mounted)
                         ],
                       ),
                     ),
@@ -351,7 +272,9 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                   padding: EdgeInsets.only(
                       left: 0,
                       right: 0,
-                      bottom: ref.watch(replayProvider) == '' ? 80 : 140),
+                      bottom:
+                       isKeyboardOpen?ref.watch(isMessageEditing) || ref.watch(replayProvider) != ''?420:350:
+                      ref.watch(replayProvider) == '' ? 90 : 140),
                   child: Visibility(
                     visible: !ref.watch(isToEndProvider),
                     child: InkWell(
@@ -388,10 +311,3 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
     );
   }
 }
-
-
-
-
-
-
-

@@ -83,6 +83,7 @@ dependencies:
   giphy_get: ^3.5.4
   flutter_emoji_gif_picker: ^0.1.6
   lottie: ^3.1.0
+  flutter_keyboard_visibility: ^6.0.0
 
 
 

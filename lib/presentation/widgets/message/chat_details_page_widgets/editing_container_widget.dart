@@ -138,9 +138,6 @@ class EditingContainerWidget extends StatelessWidget {
                         .read(replayProvider
                         .notifier)
                         .state = '';
-                    SystemChannels.textInput
-                        .invokeMethod(
-                        'TextInput.hide');
                     ref
                         .read(
                         replayIsMineProvider
