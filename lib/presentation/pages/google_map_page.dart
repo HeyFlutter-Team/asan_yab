@@ -29,6 +29,10 @@ class _GoogleMapPageState extends ConsumerState<GoogleMapPage> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeMode themeMode = Theme.of(context).brightness == Brightness.dark
+        ? ThemeMode.dark
+        : ThemeMode.light;
+
     final places = ref.watch(getSingleProvider);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     return ClipRRect(
@@ -44,6 +48,9 @@ class _GoogleMapPageState extends ConsumerState<GoogleMapPage> {
             markers: places.addresses.isNotEmpty
                 ? _buildMarkers(places.addresses)
                 : null!,
+            mapType:
+                themeMode == ThemeMode.dark ? MapType.hybrid : MapType.normal,
+            // Pass appropriate map style based on theme mode
           ),
           InkWell(
             onTap: () {
@@ -78,10 +85,14 @@ class _GoogleMapPageState extends ConsumerState<GoogleMapPage> {
                                   markers: _buildMarkers(places.addresses),
                                   scrollGesturesEnabled: true,
                                   zoomGesturesEnabled: true,
-                                  zoomControlsEnabled: true,
+                                  zoomControlsEnabled: false,
                                   myLocationButtonEnabled: false,
                                   rotateGesturesEnabled: true,
                                   myLocationEnabled: false,
+                                  mapToolbarEnabled: true,
+                                  mapType: themeMode == ThemeMode.dark
+                                      ? MapType.hybrid
+                                      : MapType.normal, // Add this line
                                 ),
                               ),
                             ),
@@ -103,7 +114,10 @@ class _GoogleMapPageState extends ConsumerState<GoogleMapPage> {
                               width: MediaQuery.of(context).size.width * 0.73,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
-                                color: Colors.white,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? Colors.black
+                                    : Colors.white,
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -126,70 +140,91 @@ class _GoogleMapPageState extends ConsumerState<GoogleMapPage> {
                                             '${places.addresses[index].branch.isNotEmpty ? ' ${places.addresses[index].branch}: ' : ''} ${places.addresses[index].address}',
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.black),
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.dark
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                            ),
                                           ),
                                         ),
                                       ],
                                     ),
-                                    Row(children: [
-                                      (places.addresses[index].phone.isEmpty)
-                                          ? const SizedBox(height: 0)
-                                          : ConstrainedBox(
-                                              constraints: const BoxConstraints(
-                                                minWidth: 70,
-                                              ),
-                                              child: OutlinedButton(
-                                                style: OutlinedButton.styleFrom(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 8)),
-                                                onPressed: () async {
-                                                  await FlutterPhoneDirectCaller
-                                                      .callNumber(
-                                                    places
-                                                        .addresses[index].phone,
-                                                  );
-                                                },
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                      isRTL
-                                                          ? convertDigitsToFarsi(
-                                                              places
-                                                                  .addresses[
-                                                                      index]
-                                                                  .phone)
-                                                          : places
-                                                              .addresses[index]
-                                                              .phone,
-                                                      style: const TextStyle(
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 12.0, right: 12),
+                                      child: Row(children: [
+                                        (places.addresses[index].phone.isEmpty)
+                                            ? const SizedBox(height: 0)
+                                            : ConstrainedBox(
+                                                constraints:
+                                                    const BoxConstraints(
+                                                  minWidth: 70,
+                                                ),
+                                                child: OutlinedButton(
+                                                  style:
+                                                      OutlinedButton.styleFrom(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal:
+                                                                      8)),
+                                                  onPressed: () async {
+                                                    await FlutterPhoneDirectCaller
+                                                        .callNumber(
+                                                      places.addresses[index]
+                                                          .phone,
+                                                    );
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        isRTL
+                                                            ? convertDigitsToFarsi(
+                                                                places
+                                                                    .addresses[
+                                                                        index]
+                                                                    .phone)
+                                                            : places
+                                                                .addresses[
+                                                                    index]
+                                                                .phone,
+                                                        style: TextStyle(
                                                           fontSize: 15,
-                                                          color: Colors.black),
-                                                    ),
-                                                    const SizedBox(width: 4),
-                                                    const Icon(
-                                                      Icons.phone_android_sharp,
-                                                      color: Colors.green,
-                                                    ),
-                                                  ],
+                                                          color: Theme.of(context)
+                                                                      .brightness ==
+                                                                  Brightness
+                                                                      .dark
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(width: 4),
+                                                      const Icon(
+                                                        Icons
+                                                            .phone_android_sharp,
+                                                        color: Colors.green,
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                      const SizedBox(width: 30),
-                                      IconButton(
-                                        onPressed: () {
-                                          _openDirections(
-                                              places.addresses[index]);
-                                        },
-                                        icon: const Icon(
-                                          Icons.directions,
-                                          size: 45,
-                                          color: Colors.blue,
+                                        const SizedBox(width: 40),
+                                        IconButton(
+                                          onPressed: () {
+                                            _openDirections(
+                                                places.addresses[index]);
+                                          },
+                                          icon: const Icon(
+                                            Icons.directions,
+                                            size: 45,
+                                            color: Colors.blue,
+                                          ),
                                         ),
-                                      ),
-                                    ]),
+                                      ]),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -239,11 +274,45 @@ class _GoogleMapPageState extends ConsumerState<GoogleMapPage> {
               double.parse(address.lang),
             ),
             consumeTapEvents: true,
+            onTap: () {
+              String locationName = address.branch.isNotEmpty
+                  ? '${address.branch}: ${address.address}'
+                  : address.address;
+              _onMarkerTapped(context, locationName);
+            },
           );
         } else {
           return null;
         }
       }).where((marker) => marker != null),
+    );
+  }
+
+  void _onMarkerTapped(BuildContext context, String locationName) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+            contentTextStyle: TextStyle(
+                overflow: TextOverflow.ellipsis,
+                fontSize: 16,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
+                fontWeight: FontWeight.bold),
+            backgroundColor: Theme.of(context).brightness == Brightness.dark
+                ? Colors.black
+                : Colors.white,
+            content: Container(
+              height: 50,
+              width: 50,
+              child: Center(
+                  child: Text(
+                locationName,
+                maxLines: 2,
+              )),
+            ));
+      },
     );
   }
 
