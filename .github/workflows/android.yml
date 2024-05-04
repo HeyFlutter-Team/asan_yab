@@ -22,22 +22,24 @@ jobs:
         run: |
           if echo "${{ steps.extract_commit_message.outputs.message }}" | grep -qi 'deploy'; then
             echo "Deploy keyword found in commit message. Proceeding with deployment."
+            echo "::set-output name=deploy::true"
           else
             echo "Deploy keyword not found in commit message. Skipping deployment."
+            echo "::set-output name=deploy::false"
           fi
 
       - name: Set Fastlane environment to non-interactive
-        if: steps.check_deploy.outputs.status == 'success'
+        if: steps.check_deploy.outputs.deploy == 'true'
         run: echo "FASTLANE_OPT_OUT_USAGE=1" >> $GITHUB_ENV
 
       - name: Setup Flutter
-        if: steps.check_deploy.outputs.status == 'success'
+        if: steps.check_deploy.outputs.deploy == 'true'
         uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.13.2
 
       - name: Build and Deploy to Google Play
-        if: steps.check_deploy.outputs.status == 'success'
+        if: steps.check_deploy.outputs.deploy == 'true'
         run: |
           flutter pub get
           if [ ${{ github.ref }} = 'refs/heads/production' ]; then
@@ -52,4 +54,3 @@ jobs:
           KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         working-directory: android
-
