@@ -121,7 +121,22 @@ final isMessageEditing = StateProvider((ref) => false);
 final messageEditedProvider = StateProvider((ref) => false);
 final activeChatIdProvider = StateProvider((ref) => '');
 final isUnreadMessageProvider = StateProvider((ref) => false);
-final localMessagesProvider = StateProvider<List<MessageModel>>((ref) => []);
+
+class LocalMessagesNotifier extends StateNotifier<List<MessageModel>> {
+  LocalMessagesNotifier() : super([]);
+
+  void addMessage(MessageModel message) {
+    state = [...state, message];
+  }
+ Future<void> clear()async {
+    state = [];
+  }
+}
+
+final localMessagesProvider = StateNotifierProvider<LocalMessagesNotifier, List<MessageModel>>((ref) {
+  return LocalMessagesNotifier();
+});
+
 
 
 class EditingMessageDetailsNotifier extends StateNotifier<MessageModel> {

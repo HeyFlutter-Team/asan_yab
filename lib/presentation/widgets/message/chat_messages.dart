@@ -34,8 +34,6 @@ class _ChatMessagesState extends ConsumerState<ChatMessages> {
     super.initState();
  WidgetsBinding.instance.addPostFrameCallback((_) async{
   ref.read(messageProvider.notifier).getMessages(widget.receiverId);
-
-
  if(mounted){
      ref.read(messageProvider.notifier).listenToScrollPosition();
  }
@@ -54,8 +52,8 @@ class _ChatMessagesState extends ConsumerState<ChatMessages> {
     final firebaseMessages = ref.watch(messageProvider);
     final localMessages = ref.watch(localMessagesProvider);
     //
-    // final combinedMessages = [...firebaseMessages, ...localMessages];
-    // combinedMessages.sort((a, b) => b.sentTime.compareTo(a.sentTime));
+    final combinedMessages = [...firebaseMessages, ...localMessages];
+    combinedMessages.sort((a, b) => b.sentTime.compareTo(a.sentTime));
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 10, top: 10),
@@ -63,12 +61,12 @@ class _ChatMessagesState extends ConsumerState<ChatMessages> {
         reverse: true,
         shrinkWrap: true,
         padding: EdgeInsets.zero,
-        itemCount: firebaseMessages.length,
+        itemCount: combinedMessages.length,
         key: scrollPositionKey,
         itemScrollController: ref.watch(messageProvider.notifier).scrollController,
         itemPositionsListener: ref.watch(messageProvider.notifier).itemPositionsListener,
         itemBuilder: (context, index) {
-          final messages = ref.watch(messageProvider);
+          final messages = [...combinedMessages];
           if (index < 0 || index >= messages.length) {
             return Container(
               height: 1,

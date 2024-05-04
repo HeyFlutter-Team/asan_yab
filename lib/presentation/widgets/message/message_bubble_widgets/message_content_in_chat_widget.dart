@@ -1,4 +1,5 @@
 import 'package:asan_yab/data/models/message/message.dart';
+import 'package:asan_yab/domain/riverpod/data/message/message.dart';
 import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -45,6 +46,10 @@ class _MessageContentInChatState extends ConsumerState<MessageContentInChat> {
     final themDark = Theme.of(context).brightness == Brightness.dark;
     final myDetails = ref.watch(userDetailsProvider);
     final isMessageText = widget.message.replayMessage.contains('giphy.com');
+    final localMessages = ref.watch(localMessagesProvider);
+    final isMessageInLocal = localMessages.any((message) =>
+    message.content == widget.message.content &&
+        message.sentTime == widget.message.sentTime);
     return Stack(
       children: [
         Column(
@@ -219,14 +224,14 @@ class _MessageContentInChatState extends ConsumerState<MessageContentInChat> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (widget.isMe && widget.isMessageSeen)
+                  if (widget.isMe && widget.isMessageSeen && !isMessageInLocal)
                     const Icon(
                       Icons.done_all,
                       color: Colors.blue,
                       size: 14,
                     ),
                   const SizedBox(width: 4),
-                  if (widget.isMe && !widget.isMessageSeen)
+                  if (widget.isMe && !widget.isMessageSeen && !isMessageInLocal)
                     Icon(
                       Icons.done,
                       color: widget.shouldHideDecoration()|| widget.message.messageType == MessageType.sticker
@@ -234,6 +239,12 @@ class _MessageContentInChatState extends ConsumerState<MessageContentInChat> {
                           : themDark
                               ? Colors.grey.shade800
                               : Colors.black45,
+                      size: 14,
+                    ),
+                  if(isMessageInLocal)
+                    const Icon(
+                      Icons.watch_later_outlined,
+                      color: Colors.grey,
                       size: 14,
                     ),
                   const SizedBox(width: 2),

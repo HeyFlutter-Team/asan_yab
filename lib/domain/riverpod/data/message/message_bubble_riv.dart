@@ -342,6 +342,11 @@ class MessageOnLongPressNotifier extends StateNotifier<bool>{
                       editingMessageDetails.notifier)
                       .state = message;
                 }
+                ref
+                    .read(
+                    hasTextFieldValueProvider
+                        .notifier)
+                    .state = true;
               },
               child: const ListTile(
                 title: Text(
