@@ -244,7 +244,7 @@ class _GoogleMapPageState extends ConsumerState<GoogleMapPage> {
                             },
                             child: const Icon(
                               Icons.close,
-                              size: 40,
+                              size: 42,
                               color: Colors.white,
                             )),
                       ),
