@@ -79,11 +79,13 @@ dependencies:
   focused_menu: ^1.0.5
   popover: ^0.3.0
   loading_animation_widget: ^1.2.1
-  flutter_notification_channel: ^3.1.0
+  flutter_notification_channel: any
   giphy_get: ^3.5.4
   flutter_emoji_gif_picker: ^0.1.6
   flutter_keyboard_visibility: ^6.0.0
 
+dependency_overrides:
+  meta: ^1.9.1
 
 
 
