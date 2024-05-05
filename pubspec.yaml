@@ -84,6 +84,8 @@ dependencies:
   flutter_emoji_gif_picker: ^0.1.6
   flutter_keyboard_visibility: ^6.0.0
 
+dependency_overrides:
+  meta: ^1.9.1
 
 
 
