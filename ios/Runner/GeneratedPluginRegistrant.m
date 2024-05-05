@@ -162,8 +162,8 @@
 @import path_provider_foundation;
 #endif
 
-#if __has_include(<rate_my_app/RateMyAppPlugin.h>)
-#import <rate_my_app/RateMyAppPlugin.h>
+#if __has_include(<rate_my_app/SwiftRateMyAppPlugin.h>)
+#import <rate_my_app/SwiftRateMyAppPlugin.h>
 #else
 @import rate_my_app;
 #endif
@@ -215,7 +215,7 @@
   [LocationPlugin registerWithRegistrar:[registry registrarForPlugin:@"LocationPlugin"]];
   [FPPPackageInfoPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FPPPackageInfoPlusPlugin"]];
   [PathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"PathProviderPlugin"]];
-  [RateMyAppPlugin registerWithRegistrar:[registry registrarForPlugin:@"RateMyAppPlugin"]];
+  [SwiftRateMyAppPlugin registerWithRegistrar:[registry registrarForPlugin:@"SwiftRateMyAppPlugin"]];
   [SharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"SharedPreferencesPlugin"]];
   [SqflitePlugin registerWithRegistrar:[registry registrarForPlugin:@"SqflitePlugin"]];
   [URLLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"URLLauncherPlugin"]];
