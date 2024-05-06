@@ -495,7 +495,10 @@
     <orderEntry type="jdk" jdkName="Android API 30 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Flutter Plugins" level="project" />
+<<<<<<< HEAD
+=======
     <orderEntry type="library" name="Dart SDK" level="project" />
     <orderEntry type="library" name="Dart Packages" level="project" />
+>>>>>>> 2e22adf4958fb040feed4ce7b81f70788019e898
   </component>
 </module>
