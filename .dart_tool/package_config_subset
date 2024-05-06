@@ -883,9 +883,9 @@ typed_data
 file:///C:/Users/E%20H%20C/AppData/Local/Pub/Cache/hosted/pub.dev/typed_data-1.3.2/
 file:///C:/Users/E%20H%20C/AppData/Local/Pub/Cache/hosted/pub.dev/typed_data-1.3.2/lib/
 typesense
-3.3
-file:///C:/Users/E%20H%20C/AppData/Local/Pub/Cache/hosted/pub.dev/typesense-0.5.1/
-file:///C:/Users/E%20H%20C/AppData/Local/Pub/Cache/hosted/pub.dev/typesense-0.5.1/lib/
+3.0
+file:///C:/Users/E%20H%20C/AppData/Local/Pub/Cache/hosted/pub.dev/typesense-0.4.0/
+file:///C:/Users/E%20H%20C/AppData/Local/Pub/Cache/hosted/pub.dev/typesense-0.4.0/lib/
 universal_io
 2.17
 file:///C:/Users/E%20H%20C/AppData/Local/Pub/Cache/hosted/pub.dev/universal_io-2.2.2/
@@ -978,6 +978,10 @@ asan_yab
 3.0
 file:///E:/My%20Flutter%20Projects/asanYab/asanYab/asan_yab/
 file:///E:/My%20Flutter%20Projects/asanYab/asanYab/asan_yab/lib/
+flutter_gen
+2.12
+file:///E:/My%20Flutter%20Projects/asanYab/asanYab/asan_yab/.dart_tool/flutter_gen/
+file:///E:/My%20Flutter%20Projects/asanYab/asanYab/asan_yab/.dart_tool/flutter_gen/
 sky_engine
 3.2
 file:///E:/src/flutter/bin/cache/pkg/sky_engine/
