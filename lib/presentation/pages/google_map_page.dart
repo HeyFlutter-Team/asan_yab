@@ -219,7 +219,7 @@ class _GoogleMapPageState extends ConsumerState<GoogleMapPage> {
                                           },
                                           icon: const Icon(
                                             Icons.directions,
-                                            size: 43,
+                                            size: 40,
                                             color: Colors.blue,
                                           ),
                                         ),
