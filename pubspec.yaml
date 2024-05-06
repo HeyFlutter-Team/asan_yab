@@ -40,7 +40,7 @@ dependencies:
   geocoding: ^3.0.0
   google_maps_flutter: ^2.5.0
   location: ^6.0.1
-  typesense: ^0.5.0
+  typesense: ^0.4.0
   firebase_analytics: ^10.5.0
   firebase_messaging: ^14.6.9
   flutter_local_notifications: ^17.1.1
