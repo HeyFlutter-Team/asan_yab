@@ -75,6 +75,8 @@ dependencies:
   flutter_notification_channel: any
   flutter_emoji_gif_picker: any
 
+dependency_overrides:
+  web: ^0.5.1
 
 
 
