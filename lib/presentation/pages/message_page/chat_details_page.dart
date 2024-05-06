@@ -24,7 +24,6 @@ import '../../widgets/message/chat_details_page_widgets/send_message_button_widg
 import '../themeProvider.dart';
 import 'dart:ui' as ui;
 
-
 class ChatDetailPage extends ConsumerStatefulWidget {
   const ChatDetailPage({super.key, this.uid});
   final String? uid;
@@ -37,44 +36,43 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-          try {
-            ref.read(activeChatIdProvider.notifier).state = '${widget.uid}';
-            final messages = ref.watch(textFieldMessagesListPro);
-            final userMessages = messages
-                .where((element) => element.userId == widget.uid)
-                .toList();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        try {
+          ref.read(activeChatIdProvider.notifier).state = '${widget.uid}';
+          final messages = ref.watch(textFieldMessagesListPro);
+          final userMessages = messages
+              .where((element) => element.userId == widget.uid)
+              .toList();
 
-            if (userMessages.isNotEmpty) {
-              final textFieldMessage = userMessages.first.textFieldMessage;
-              final replayText = userMessages.first.replayText;
-              final editingMessage = userMessages.first.editingMessage;
-              if ('$textFieldMessage'.isNotEmpty) {
-                ref.read(messageProfileProvider.notifier).textController.text =
-                    '$textFieldMessage';
-              }
-              if ('$replayText'.isNotEmpty) {
-                ref.read(replayProvider.notifier).state = '$replayText';
-              }
-              if ('$editingMessage'.isNotEmpty) {
-                ref.read(isMessageEditing.notifier).state = true;
-                ref
-                    .read(editingMessageDetails.notifier)
-                    .setContent('$editingMessage');
-              }
+          if (userMessages.isNotEmpty) {
+            final textFieldMessage = userMessages.first.textFieldMessage;
+            final replayText = userMessages.first.replayText;
+            final editingMessage = userMessages.first.editingMessage;
+            if ('$textFieldMessage'.isNotEmpty) {
+              ref.read(messageProfileProvider.notifier).textController.text =
+                  '$textFieldMessage';
             }
-            if (mounted) {
-              await MessageRepo()
-                  .markMessageAsSeen('${ref.watch(otherUserProvider)?.uid}');
+            if ('$replayText'.isNotEmpty) {
+              ref.read(replayProvider.notifier).state = '$replayText';
             }
-          } catch (e) {
-            print('Error fetching messages: $e');
+            if ('$editingMessage'.isNotEmpty) {
+              ref.read(isMessageEditing.notifier).state = true;
+              ref
+                  .read(editingMessageDetails.notifier)
+                  .setContent('$editingMessage');
+            }
           }
-
-        },
-      );
+          if (mounted) {
+            await MessageRepo()
+                .markMessageAsSeen('${ref.watch(otherUserProvider)?.uid}');
+          }
+        } catch (e) {
+          print('Error fetching messages: $e');
+        }
+      },
+    );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -85,22 +83,21 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
     final languageText = AppLocalizations.of(context);
     final profileDetails = ref.watch(userDetailsProvider);
     final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
-    return PopScope(
-      onPopInvoked: (didPop) async {
+    return WillPopScope(
+      onWillPop: () async {
         await ref
             .read(handleWillPopProvider.notifier)
             .handleWillPop(context, ref, '${widget.uid}');
         EmojiGifPickerPanel.onWillPop();
-
+        return ref.watch(emojiShowingProvider) || ref.watch(gifShowingProvider)
+            ? false
+            : true;
       },
-      canPop: ref.watch(emojiShowingProvider) || ref.watch(gifShowingProvider) ? false : true,
       child: GestureDetector(
         onTap: () {
           ref.read(emojiShowingProvider.notifier).state = false;
           ref.read(gifShowingProvider.notifier).state = false;
-          SystemChannels.textInput
-              .invokeMethod(
-              'TextInput.hide');
+          SystemChannels.textInput.invokeMethod('TextInput.hide');
         },
         onHorizontalDragEnd: (DragEndDetails details) {
           if (details.primaryVelocity! > 10) {
@@ -141,7 +138,10 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                         children: [
                           ref.watch(replayProvider) == ''
                               ? const SizedBox()
-                              : ReplyContainerWidget(ref: ref, newProfileUser: newProfileUser, isMessageText: isMessageText),
+                              : ReplyContainerWidget(
+                                  ref: ref,
+                                  newProfileUser: newProfileUser,
+                                  isMessageText: isMessageText),
                           (ref.watch(replayProvider) == ''
                               ? const SizedBox()
                               : const SizedBox(
@@ -168,20 +168,29 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                             child: Directionality(
                               textDirection: ui.TextDirection.ltr,
                               child: Padding(
-                               padding:  EdgeInsets.only(bottom:isKeyboardOpen? 255.0:0),
-                               child: Row(
-                                 children: <Widget>[
-                                   const SizedBox(width: 10),
-                                   EmojiButtonWidget(themDark: themDark, ref: ref),
-                                   const SizedBox(width: 10),
-                                   ChatTextFieldWidget(themDark: themDark, ref: ref),
-                                   const SizedBox(width: 10),
-                                   !ref.watch(hasTextFieldValueProvider)?
-                                   GifButtonWidget(themDark: themDark, ref: ref):
-                                   SendMessageButtonWidget(themDark: themDark, ref: ref, profileDetails: profileDetails!, newProfileUser: newProfileUser, widget: widget),
-                                 ],
-                               ),
-                                                              ),
+                                padding: EdgeInsets.only(
+                                    bottom: isKeyboardOpen ? 255.0 : 0),
+                                child: Row(
+                                  children: <Widget>[
+                                    const SizedBox(width: 10),
+                                    EmojiButtonWidget(
+                                        themDark: themDark, ref: ref),
+                                    const SizedBox(width: 10),
+                                    ChatTextFieldWidget(
+                                        themDark: themDark, ref: ref),
+                                    const SizedBox(width: 10),
+                                    !ref.watch(hasTextFieldValueProvider)
+                                        ? GifButtonWidget(
+                                            themDark: themDark, ref: ref)
+                                        : SendMessageButtonWidget(
+                                            themDark: themDark,
+                                            ref: ref,
+                                            profileDetails: profileDetails!,
+                                            newProfileUser: newProfileUser,
+                                            widget: widget),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -194,14 +203,16 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                 Expanded(
                                   child: Offstage(
                                     offstage: !ref.watch(emojiShowingProvider),
-                                    child:
-                                    EmojiPicker(
+                                    child: EmojiPicker(
                                       onEmojiSelected: (category, emoji) {
-                                        ref.read(hasTextFieldValueProvider.notifier).state=true;
+                                        ref
+                                            .read(hasTextFieldValueProvider
+                                                .notifier)
+                                            .state = true;
                                       },
                                       textEditingController: ref
                                           .watch(
-                                          messageProfileProvider.notifier)
+                                              messageProfileProvider.notifier)
                                           .textController,
                                       onBackspacePressed: ref
                                           .read(messageProfileProvider.notifier)
@@ -211,7 +222,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                         // Issue: https://github.com/flutter/flutter/issues/28894
                                         emojiSizeMax: 32 *
                                             (foundation.defaultTargetPlatform ==
-                                                TargetPlatform.iOS
+                                                    TargetPlatform.iOS
                                                 ? 1.30
                                                 : 1.0),
                                         verticalSpacing: 0,
@@ -219,7 +230,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                         gridPadding: EdgeInsets.zero,
                                         initCategory: Category.RECENT,
                                         bgColor: (themeModel.currentThemeMode ==
-                                            ThemeMode.dark)
+                                                ThemeMode.dark)
                                             ? Colors.black
                                             : Colors.white,
                                         indicatorColor: Colors.red,
@@ -230,7 +241,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                         skinToneIndicatorColor: Colors.grey,
                                         enableSkinTones: true,
                                         recentTabBehavior:
-                                        RecentTabBehavior.RECENT,
+                                            RecentTabBehavior.RECENT,
                                         recentsLimit: 28,
                                         replaceEmojiOnLimitExceed: false,
                                         noRecents: Text(
@@ -241,9 +252,9 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                           textAlign: TextAlign.center,
                                         ),
                                         loadingIndicator:
-                                        const SizedBox.shrink(),
+                                            const SizedBox.shrink(),
                                         tabIndicatorAnimDuration:
-                                        kTabScrollDuration,
+                                            kTabScrollDuration,
                                         categoryIcons: const CategoryIcons(),
                                         buttonMode: ButtonMode.MATERIAL,
                                         checkPlatformCompatibility: true,
@@ -251,12 +262,14 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                     ),
                                   ),
                                 ),
-
                               ],
                             ),
                           ),
-                                //gif
-                          GifPickerWidget(ref: ref, newProfileUser: newProfileUser, mounted: mounted)
+                          //gif
+                          GifPickerWidget(
+                              ref: ref,
+                              newProfileUser: newProfileUser,
+                              mounted: mounted)
                         ],
                       ),
                     ),
@@ -265,16 +278,23 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
               ),
             ],
           ),
-          floatingActionButton: ref.watch(emojiShowingProvider) ||ref.watch(gifShowingProvider)||
-                  ref.watch(isMessageEditing) ||ref.watch(messageProvider).length<13
+          floatingActionButton: ref.watch(emojiShowingProvider) ||
+                  ref.watch(gifShowingProvider) ||
+                  ref.watch(isMessageEditing) ||
+                  ref.watch(messageProvider).length < 13
               ? const SizedBox()
               : Padding(
                   padding: EdgeInsets.only(
                       left: 0,
                       right: 0,
-                      bottom:
-                       isKeyboardOpen?ref.watch(isMessageEditing) || ref.watch(replayProvider) != ''?420:350:
-                      ref.watch(replayProvider) == '' ? 90 : 140),
+                      bottom: isKeyboardOpen
+                          ? ref.watch(isMessageEditing) ||
+                                  ref.watch(replayProvider) != ''
+                              ? 420
+                              : 350
+                          : ref.watch(replayProvider) == ''
+                              ? 90
+                              : 140),
                   child: Visibility(
                     visible: !ref.watch(isToEndProvider),
                     child: InkWell(
