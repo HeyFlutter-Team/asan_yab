@@ -6,12 +6,6 @@
 
 #import "GeneratedPluginRegistrant.h"
 
-#if __has_include(<awesome_notifications/AwesomeNotificationsPlugin.h>)
-#import <awesome_notifications/AwesomeNotificationsPlugin.h>
-#else
-@import awesome_notifications;
-#endif
-
 #if __has_include(<cloud_firestore/FLTFirebaseFirestorePlugin.h>)
 #import <cloud_firestore/FLTFirebaseFirestorePlugin.h>
 #else
@@ -76,12 +70,6 @@
 #import <firebase_storage/FLTFirebaseStoragePlugin.h>
 #else
 @import firebase_storage;
-#endif
-
-#if __has_include(<flutter_keyboard_visibility/FlutterKeyboardVisibilityPlugin.h>)
-#import <flutter_keyboard_visibility/FlutterKeyboardVisibilityPlugin.h>
-#else
-@import flutter_keyboard_visibility;
 #endif
 
 #if __has_include(<flutter_local_notifications/FlutterLocalNotificationsPlugin.h>)
@@ -162,12 +150,6 @@
 @import path_provider_foundation;
 #endif
 
-#if __has_include(<rate_my_app/SwiftRateMyAppPlugin.h>)
-#import <rate_my_app/SwiftRateMyAppPlugin.h>
-#else
-@import rate_my_app;
-#endif
-
 #if __has_include(<shared_preferences_foundation/SharedPreferencesPlugin.h>)
 #import <shared_preferences_foundation/SharedPreferencesPlugin.h>
 #else
@@ -189,7 +171,6 @@
 @implementation GeneratedPluginRegistrant
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
-  [AwesomeNotificationsPlugin registerWithRegistrar:[registry registrarForPlugin:@"AwesomeNotificationsPlugin"]];
   [FLTFirebaseFirestorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseFirestorePlugin"]];
   [FLTFirebaseFunctionsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseFunctionsPlugin"]];
   [ConnectivityPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"ConnectivityPlusPlugin"]];
@@ -201,7 +182,6 @@
   [FLTFirebaseCrashlyticsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCrashlyticsPlugin"]];
   [FLTFirebaseMessagingPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseMessagingPlugin"]];
   [FLTFirebaseStoragePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseStoragePlugin"]];
-  [FlutterKeyboardVisibilityPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterKeyboardVisibilityPlugin"]];
   [FlutterLocalNotificationsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterLocalNotificationsPlugin"]];
   [FlutterNativeSplashPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterNativeSplashPlugin"]];
   [FlutterNotificationChannelPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterNotificationChannelPlugin"]];
@@ -215,7 +195,6 @@
   [LocationPlugin registerWithRegistrar:[registry registrarForPlugin:@"LocationPlugin"]];
   [FPPPackageInfoPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FPPPackageInfoPlusPlugin"]];
   [PathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"PathProviderPlugin"]];
-  [SwiftRateMyAppPlugin registerWithRegistrar:[registry registrarForPlugin:@"SwiftRateMyAppPlugin"]];
   [SharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"SharedPreferencesPlugin"]];
   [SqflitePlugin registerWithRegistrar:[registry registrarForPlugin:@"SqflitePlugin"]];
   [URLLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"URLLauncherPlugin"]];
