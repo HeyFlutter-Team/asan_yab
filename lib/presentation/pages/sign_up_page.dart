@@ -9,6 +9,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/riverpod/data/sign_in_provider.dart';
+import '../../main.dart';
+
+final isSignUppingProvider = StateProvider<bool>((ref) => false);
 
 class SignUpPage extends ConsumerStatefulWidget {
   final Function()? onClickedSignIn;
@@ -27,6 +30,13 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   final confirmPasswordController = TextEditingController();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    ref.read(isSignUppingProvider.notifier).state=false;
+  }
+
+  @override
   void dispose() {
     super.dispose();
     emailController.dispose();
@@ -41,7 +51,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       body: Form(
         key: signUpFormKey,
         child: Padding(
-          padding: const EdgeInsets.only(top: 15.0, left: 20),
+          padding: const EdgeInsets.only(top: 15.0, left: 20,right: 20),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -55,6 +65,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     label: languageText!.sign_in_email,
                     controller: emailController,
                     hintText: languageText.sign_in_email_hintText,
+                    keyboardType: TextInputType.emailAddress,
                     validator: (p0) {
                       if (p0!.isEmpty ||
                           p0.length < 10 && !EmailValidator.validate(p0)) {
@@ -74,6 +85,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       icon: const Icon(Icons.remove_red_eye_outlined)),
                   label: languageText.sign_in_password,
                   controller: passwordController,
+                  keyboardType: TextInputType.emailAddress,
                   hintText: languageText.sign_in_password_hintText,
                   validator: (p0) => p0!.length < 6
                       ? languageText.sign_in_password_2_valid
@@ -83,6 +95,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   obscureText: true,
                   label: languageText.sign_up_confirm_p,
                   controller: confirmPasswordController,
+                  keyboardType: TextInputType.emailAddress,
                   hintText: languageText.sign_up_confirm_p_hint_text,
                   validator: (p0) {
                     if (p0!.isEmpty) {
@@ -94,44 +107,46 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     }
                   },
                 ),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: languageText.sign_up_account_text,
-                        style: const TextStyle(color: Colors.grey),
-                      ),
-                      TextSpan(
-                        text: '  ${languageText.sign_up_account_text1}',
-                        style: const TextStyle(color: Colors.blue),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.pop(context);
-                          },
-                      ),
-                    ],
-                  ),
-                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [Text(languageText.sign_up_account_text,style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)
+                ,InkWell(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                    onTap: () {
+                      FocusScope.of(context).unfocus();
+                      Navigator.pop(context);
+                    },
+                  child: Text('  ${languageText.sign_up_account_text1}',
+                      style: const TextStyle(color: Colors.blue,fontSize: 15),),
+                )],),
+
                 const SizedBox(
                   height: 10,
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red.shade800,
-                      minimumSize: const Size(340, 55),
+                      minimumSize:  Size(MediaQuery.of(context).size.width * 0.9, 55),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12))),
-                  onPressed: () {
+                  onPressed:ref.watch(isSignUppingProvider)
+                      ?null
+                      :(){
                     final isValid = signUpFormKey.currentState!.validate();
                     if (!isValid) return;
-
+                    ref.read(isSignUppingProvider.notifier).state=true;
+                    FocusScope.of(context).unfocus();
                     ref.read(signUpNotifierProvider).signUp(
                           context: context,
                           email: emailController.text,
                           password: passwordController.text,
                         );
                   },
-                  child: Text(
+                  child:ref.watch(isSignUppingProvider)
+                      ? const CircularProgressIndicator(color: Colors.white,)
+                      : Text(
                     languageText.sign_up_elbT,
                     style: const TextStyle(fontSize: 20, color: Colors.white),
                   ),

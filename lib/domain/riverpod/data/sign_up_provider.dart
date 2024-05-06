@@ -11,6 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../data/models/users.dart';
+import '../../../presentation/pages/sign_up_page.dart';
 
 class SignUpNotifier {
   final Ref ref;
@@ -20,15 +21,6 @@ class SignUpNotifier {
       {required BuildContext context,
       required String email,
       required String password}) async {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(
-          color: Colors.red,
-        ),
-      ),
-    ).whenComplete(() => Navigator.pop(context));
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email.trim(), password: password.trim());
@@ -48,60 +40,91 @@ class SignUpNotifier {
         ));
         Navigator.pop(context);
       }
+    }finally{
+      ref.read(isSignUppingProvider.notifier).state=false;
+
     }
   }
 }
 
 final signUpNotifierProvider = Provider((ref) => SignUpNotifier(ref));
 
-class UserDetails {
-  final id = DateTime.now().millisecondsSinceEpoch;
-  final uid = FirebaseAuth.instance.currentUser?.uid;
-  Future<void> userDetails({
-    String? emailController,
-    String? lastNameController,
-    String? nameController,
-  }) async {
+class CreateUserDetails {
+  Future<void> addUserDetailsToFirebase(
+      {String? emailController,
+      String? lastNameController,
+      String? nameController,
+      String? personalIdController
+      }) async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    final id = DateTime.now().millisecondsSinceEpoch;
+
     final userRef = FirebaseFirestore.instance.collection('User').doc(uid);
     final fcmToken = await FirebaseMessaging.instance.getToken();
     final user = Users(
-        createdAt: Timestamp.now(),
+        createdAt: Timestamp.now().toString(),
         email: emailController!.trim(),
         lastName: lastNameController!.trim(),
         name: nameController!.trim(),
         uid: userRef.id,
-        id: id,
+        id: personalIdController!,
         followerCount: 0,
         followingCount: 0,
         fcmToken: fcmToken!,
-        isOnline: true);
+        isOnline: true,
+    );
     final json = user.toJson();
     await userRef.set(json).whenComplete(() async {
       final userFollow = FollowModel(followers: [], following: []);
       await FollowRepo().newUser(userRef.id, userFollow);
     });
   }
+
   Future<void> updateInviterRate(String inviterId) async {
     try {
       final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('User')
-          .where('id', isEqualTo: int.parse(inviterId))
+          .where('id', isEqualTo:inviterId)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
         final DocumentSnapshot inviterDoc = querySnapshot.docs.first;
-        final int currentRate = int.parse(inviterDoc['invitationRate'] ?? '0');
+        final int currentRate = inviterDoc['invitationRate'] ?? 0;
         final int newRate = currentRate + 1;
 
         await FirebaseFirestore.instance
             .collection('User')
             .doc(inviterDoc.id)
-            .update({'invitationRate': newRate.toString()});
+            .update({'invitationRate': newRate});
       }
     } catch (e) {
       print('Error updating inviter rate: $e');
     }
-}
+  }
+
+  Future<bool> isUniqueValue(String value) async {
+    try {
+      final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('User')
+          .where('id', isEqualTo: value)
+          .get();
+
+      // If any document matches the condition, return false (not unique)
+      return querySnapshot.docs.isEmpty;
+    } catch (e) {
+      print('Error checking uniqueness: $e');
+      // If an error occurs, return false to be safe
+      return false;
+    }
+  }
+  Future<void> updateIsContainId(String value,WidgetRef ref) async {
+    final isContainId = ref.read(isContainIdProvider.notifier);
+    bool isUnique = await isUniqueValue(value);
+    isContainId.state = !isUnique;
+  }
+
 }
 
-final userRegesterDetailsProvider = Provider((ref) => UserDetails());
+final userRegisterDetailsProvider = Provider((ref) => CreateUserDetails());
+
+final isContainIdProvider = StateProvider<bool>((ref) => false);

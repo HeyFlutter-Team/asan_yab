@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/res/image_res.dart';
 import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/categories_items_provider.dart';
+import '../../domain/riverpod/data/single_place_provider.dart';
 import '../../domain/riverpod/screen/loading_circularPRI_provider.dart';
 import '../pages/detials_page.dart';
 
@@ -31,19 +32,23 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
   void initState() {
     super.initState();
 
-    Future.delayed(Duration.zero, () async {
-      debugPrint('id for cat ${widget.id}');
-      ref.read(idProvider.notifier).state = widget.id;
-      Future.delayed(
-        Duration(milliseconds: 100),
-        () {
-          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            ref.read(catLazyLoading.notifier).loadMoreData();
-          });
-        },
-      );
-      await ref.read(categoriesItemsProvider.notifier).getInitPlaces(widget.id);
-      ref.read(loadingProvider.notifier).state = !ref.watch(loadingProvider);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (mounted) {
+        ref.read(loadingProvider.notifier).state = false;
+      }
+      if (mounted) {
+        debugPrint('id for cat ${widget.id}');
+        ref.read(idProvider.notifier).state = widget.id;
+
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          ref.read(catLazyLoading.notifier).loadMoreData();
+        });
+
+        await ref
+            .read(categoriesItemsProvider.notifier)
+            .getInitPlaces(widget.id);
+
+      }
     });
   }
 
@@ -53,33 +58,37 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
     final screenHeight = MediaQuery.of(context).size.width;
     final data = ref.watch(categoriesItemsProvider);
     final isRTL = ref.watch(languageProvider).code == 'fa';
-    debugPrint('Ui is load : $data ');
-    debugPrint('Ui is load : ${ref.watch(hasMore)} ');
 
     return ref.watch(loadingDataProvider) || ref.watch(loadingProvider)
-        ? const Center(
-            child: CircularProgressIndicator(
-              color: Colors.blueGrey,
-              strokeWidth: 5,
-            ),
-          )
+        ? const Padding(
+      padding: EdgeInsets.only(bottom: 40,top: 10),
+          child: CircularProgressIndicator(
+            color: Colors.red,
+            strokeWidth: 5,
+          ),
+        )
         : ListView.builder(
             controller: ref.read(catLazyLoading.notifier).scrollController,
             itemCount: ref.watch(hasMore) ? (data.length + 1) : data.length,
             itemBuilder: (context, index) {
               if (index < data.length) {
                 return InkWell(
-                  onTap: () {
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () async {
+                    ref.read(getSingleProvider.notifier).state = null;
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => DetailsPage(id: data[index].id),
                       ),
                     );
+
                     FirebaseAnalytics.instance.logEvent(
                       name: 'humm_1',
                       parameters: <String, dynamic>{
-                        'clicked_on': "${data[index].name}",
+                        'clicked_on': data[index].name,
                       },
                     );
                   },
@@ -123,7 +132,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  data[index].name!,
+                                  data[index].name,
                                   overflow: TextOverflow.fade,
                                   maxLines: 2,
                                   style: const TextStyle(fontSize: 18.0),
@@ -214,14 +223,13 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                   ),
                 );
               } else if (index == data.length) {
-                // debugPrint('Ui is load : ${ref.watch(hasMore)} ');
                 return const Padding(
-                  padding: EdgeInsets.only(bottom: 30.0),
+                  padding: EdgeInsets.only(bottom: 40,top: 10),
                   child: Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.black,
-                    ),
-                  ),
+                      child: CircularProgressIndicator(
+                    color: Colors.red,
+                    strokeWidth: 5,
+                  )),
                 );
               } else {
                 return const SizedBox.shrink();

@@ -11,11 +11,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: "14.2"
 
-      - name: install fastlane
+      - name: Install Fastlane
         run: sudo gem install fastlane
 
       - name: Set Fastlane environment to non-interactive
@@ -26,6 +27,7 @@ jobs:
         with:
           flutter-version: '3.13.2'
           cache: true 
+
       - run: flutter --version
 
       - name: Set FLUTTER_ROOT
@@ -39,12 +41,29 @@ jobs:
         with:
           host: github.com
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Clear Xcode Cache
         run: |
-            rm -rf ~/Library/Developer/Xcode/DerivedData
-            rm -rf ~/Library/Caches/CocoaPods
+          rm -rf ~/Library/Developer/Xcode/DerivedData
+          rm -rf ~/Library/Caches/CocoaPods
 
-      - name: Build and Deploy to App store
+      - name: Extract last commit message
+        id: extract_commit_message
+        run: echo "::set-output name=message::$(git log --format=%B -n 1)"
+
+      - name: Check if last commit message contains 'deploy'
+        id: check_deploy
+        run: |
+          if echo "${{ steps.extract_commit_message.outputs.message }}" | grep -qi 'deploy'; then
+            echo "Deploy keyword found in commit message. Proceeding with deployment."
+            echo "::set-output name=deploy::true"
+          else
+            echo "Deploy keyword not found in commit message. Skipping deployment."
+            echo "::set-output name=deploy::false"
+          fi
+
+      - name: Build and Deploy to App Store
+        if: steps.check_deploy.outputs.deploy == 'true'
         run: |
           cd ..
           flutter clean
@@ -52,19 +71,17 @@ jobs:
           cd ios
           gem install cocoapods
           bundle install
-          echo installing pods
+          echo "Installing pods..."
           pod install
-          echo updating pods
+          echo "Updating pods..."
 
-          echo running lane now
+          echo "Running lane now..."
 
           if [ ${{ github.ref }} = 'refs/heads/production' ]; then
             bundle exec fastlane deployToAppStore
           else
             bundle exec fastlane deployToTestFlight
           fi
-
-          
         shell: bash
         env:
           APPLICATION_ID: ${{ secrets.APPLICATION_ID }}
@@ -80,4 +97,7 @@ jobs:
           GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-        working-directory: ios
+        working-directory: ios 
+
+        
+

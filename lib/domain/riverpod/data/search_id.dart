@@ -14,11 +14,23 @@ class SearchUser extends StateNotifier<List<Users>> {
   }
 
   // late UserModel profile;
-  Future<List<Users>> getProfile(int? id) async {
+  Future<List<Users>> getProfile(String? userId) async {
     try {
       ref.read(loadingSearchUserProvider.notifier).state = true;
-      state = await singleRepo.getSearchedUser(id);
+      state = await singleRepo.getSearchedUser(userId);
       print(state);
+    } catch (e) {
+      print(' in provider $e');
+      rethrow;
+    } finally {
+      ref.read(loadingSearchUserProvider.notifier).state = false;
+    }
+    return state;
+  }
+  Future<List<Users>> getProfileByName(String? name) async {
+    try {
+        ref.read(loadingSearchUserProvider.notifier).state = true;
+      state = await singleRepo.getSearchedUserByName(name);
     } catch (e) {
       print(' in provider $e');
       rethrow;

@@ -1,5 +1,6 @@
 import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/domain/riverpod/screen/active_index.dart';
+import 'package:asan_yab/presentation/widgets/phone_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import '../../data/models/place.dart';
 
 import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/places_provider.dart';
+import '../../domain/riverpod/data/single_place_provider.dart';
 import '../pages/detials_page.dart';
 
 class NewPlaces extends ConsumerWidget {
@@ -25,17 +27,14 @@ class NewPlaces extends ConsumerWidget {
   //
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.read(placeProvider.notifier).getPlaces();
+    ref.watch(placeProvider.notifier).getPlaces();
     final screenHeight = MediaQuery.of(context).size.height;
     List<Place> places = ref.watch(placeProvider);
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: places.isEmpty
-          ? const Center(
-              child: CircularProgressIndicator(
-                strokeWidth: 5,
-                color: Colors.blueGrey,
-              ),
+          ? const SizedBox(
+              height: 0,
             )
           : Stack(
               children: [
@@ -44,17 +43,20 @@ class NewPlaces extends ConsumerWidget {
                   itemBuilder: (context, index, realIndex) {
                     final phoneNumberItems = places[index].addresses[0].phone;
                     final items = places[index];
-                    final isRTL = ref.watch(languageProvider).code=='fa';
-                    final phoneNumber =isRTL?convertDigitsToFarsi(phoneNumberItems):phoneNumberItems;
+                    final isRTL = ref.watch(languageProvider).code == 'fa';
+                    final phoneNumber = isRTL
+                        ? convertDigitsToFarsi(phoneNumberItems)
+                        : phoneNumberItems;
                     return GestureDetector(
-                      onTap: () {
+                      onTap: () async {
+                        ref.read(getSingleProvider.notifier).state = null;
+
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                DetailsPage(id: places[index].id),
-                          ),
-                        );
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  DetailsPage(id: places[index].id),
+                            ));
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 12),
@@ -90,7 +92,7 @@ class NewPlaces extends ConsumerWidget {
                                     width:
                                         MediaQuery.of(context).size.width * 0.7,
                                     child: Text(
-                                      items.name!,
+                                      items.name,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
@@ -103,37 +105,15 @@ class NewPlaces extends ConsumerWidget {
                                   const SizedBox(height: 24),
                                   phoneNumber.isEmpty
                                       ? const SizedBox()
-                                      : OutlinedButton(
-                                          style: OutlinedButton.styleFrom(
-                                            foregroundColor: Colors.white,
-                                            backgroundColor:
-                                                Colors.black.withOpacity(0.3),
-                                            elevation: 4,
-                                          ),
-                                          onPressed: () async {
-                                            await FlutterPhoneDirectCaller
-                                                .callNumber(phoneNumber);
-                                          },
-                                          child:isRTL
-                                      ?Row(
-                                            children: [
-                                              Text(phoneNumber),
-                                              const Icon(
-                                                Icons.phone_android,
-                                                color: Colors.green,
-                                              ),
-                                            ],
-                                          )
-                                    :Row(
-                                            children: [
-                                              const Icon(
-                                                Icons.phone_android,
-                                                color: Colors.green,
-                                              ),
-                                              Text(phoneNumber),
-
-                                            ],
-                                          ),
+                                      : Directionality(
+                                          textDirection: isRTL
+                                              ? TextDirection.rtl
+                                              : TextDirection.ltr,
+                                          child: buildPhoneNumberWidget(
+                                              context: context,
+                                              isRTL: isRTL,
+                                              phone: phoneNumber,
+                                              colorActive: true),
                                         ),
                                 ],
                               ),

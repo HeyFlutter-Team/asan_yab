@@ -1,11 +1,14 @@
 // ignore_for_file: avoid_print
 
+import 'package:asan_yab/core/utils/utils.dart';
 import 'package:asan_yab/data/models/language.dart';
 import 'package:asan_yab/domain/riverpod/data/edit_profile_page_provider.dart';
 import 'package:asan_yab/presentation/pages/profile/show_profile_page.dart';
 import 'package:asan_yab/presentation/widgets/buildProgress.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -47,145 +50,268 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
     final usersData = ref.watch(userDetailsProvider);
     final isRTL = ref.watch(languageProvider).code == 'fa';
     final languageText = AppLocalizations.of(context);
-    return Scaffold(
-      body: Column(
-        children: [
-          SizedBox(
-            height: 280,
-            child: Stack(
-              children: [
-                Container(
-                  height: 220,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    gradient: isRTL
-                        ? LinearGradient(colors: [
-                            Colors.white,
-                            Colors.red.shade900,
-                          ])
-                        : LinearGradient(colors: [
-                            Colors.red.shade900,
-                            Colors.white,
-                          ]),
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.elliptical(600, 100),
-                      bottomRight: Radius.elliptical(600, 100),
-                    ),
-                  ),
-                ),
-                Padding(
-                    padding: const EdgeInsets.only(top: 40.0, right: 4),
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                    )),
-                Padding(
-                  padding: isRTL
-                      ? const EdgeInsets.only(top: 40.0, right: 334)
-                      : const EdgeInsets.only(top: 40.0, left: 334),
-                  child: TextButton(
-                    child: Text(
-                      languageText!.edit_appBar_leading,
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                    onPressed: () async {
-                      ref
-                          .read(editProfilePageProvider.notifier)
-                          .editData(nameController, lastNameController)
-                          .whenComplete(() => Navigator.pop(context));
-                    },
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(top: 118.0, left: 116, right: 116),
-                  child: InkWell(
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => usersData?.imageUrl == ''
-                                ? const SizedBox()
-                                : ShowProfilePage(
-                                    imagUrl:
-                                        '${ref.watch(userDetailsProvider)?.imageUrl}'),
+    return GestureDetector(
+      onHorizontalDragEnd: (DragEndDetails details) {
+        if (details.primaryVelocity! > 10) {
+            if (nameController.text ==
+                ref.read(userDetailsProvider)!.name &&
+                lastNameController.text ==
+                    ref.read(userDetailsProvider)!.lastName) {
+              Navigator.pop(context);
+            } else {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    backgroundColor: Colors.red.shade300,
+                    title: Text(languageText.edit_dialog,
+                        style:
+                        const TextStyle(color: Colors.white)),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            languageText.edit_dialog_do_not_save,
+                            style: const TextStyle(
+                                color: Colors.white),
                           )),
-                      child: Stack(
-                        children: [
-                          Hero(
-                            tag: 'avatarHeroTag',
-                            child: CircleAvatar(
-                              radius: 80,
-                              backgroundImage: usersData?.imageUrl == ''
-                                  ? const AssetImage('assets/Avatar.png')
-                                  : NetworkImage(
-                                      '${ref.watch(userDetailsProvider)?.imageUrl}',
-                                    ) as ImageProvider<
-                                      Object>, // Your image URL
-                            ),
-                          ),
-                          Padding(
-                            padding: isRTL
-                                ? const EdgeInsets.only(top: 40.0, right: 50)
-                                : const EdgeInsets.only(top: 40.0, left: 55),
-                            child: ImageWidgets.buildProgress(ref: ref),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 15,
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                              child: IconButton(
-                                onPressed: () {
-                                  ImageWidgets.showBottomSheets(
-                                      context: context, ref: ref);
+                      TextButton(
+                          onPressed: () {
+                            ref
+                                .read(editProfilePageProvider
+                                .notifier)
+                                .editData(nameController,
+                                lastNameController)
+                                .whenComplete(() {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: Text(
+                              languageText.edit_appBar_leading,
+                              style: const TextStyle(
+                                  color: Colors.white))),
+                    ],
+                  );
+                },
+              );
+            }
+        }},
+      child: Scaffold(
+        body: Column(
+          children: [
+            SizedBox(
+              height: 280,
+              child: Stack(
+                children: [
+                  Container(
+                    height: 220,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: isRTL
+                          ? LinearGradient(colors: [
+                              Colors.white,
+                              Colors.red.shade900,
+                            ])
+                          : LinearGradient(colors: [
+                              Colors.red.shade900,
+                              Colors.white,
+                            ]),
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.elliptical(600, 100),
+                        bottomRight: Radius.elliptical(600, 100),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.only(top: 40.0, right: 4),
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          if(Utils.netIsConnected(ref)){
+                            if (nameController.text ==
+                                ref.read(userDetailsProvider)!.name &&
+                                lastNameController.text ==
+                                    ref.read(userDetailsProvider)!.lastName) {
+                              Navigator.pop(context);
+                            } else {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.red.shade300,
+                                    title: Text('${languageText?.edit_dialog}',
+                                        style:
+                                        const TextStyle(color: Colors.white)),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text(
+                                            '${languageText?.edit_dialog_do_not_save}',
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          )),
+                                      TextButton(
+                                          onPressed: () {
+                                            ref
+                                                .read(editProfilePageProvider
+                                                .notifier)
+                                                .editData(nameController,
+                                                lastNameController)
+                                                .whenComplete(() {
+                                              Navigator.pop(context);
+                                              Navigator.pop(context);
+                                            });
+                                          },
+                                          child: Text(
+                                              '${languageText?.edit_appBar_leading}',
+                                              style: const TextStyle(
+                                                  color: Colors.white))),
+                                    ],
+                                  );
                                 },
-                                icon: const Icon(
-                                  Icons.camera_alt,
-                                  size: 32,
-                                  color: Colors.blue,
+                              );
+                            }
+                          }else{
+                            Navigator.pop(context);
+                          }
+                        },
+                      )),
+                  Positioned(
+                    top: 40,
+                    left: isRTL?4:null,
+                    right: isRTL?null:4,
+                    child: TextButton(
+                      child: Text(
+                        languageText!.edit_appBar_leading,
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                      onPressed: () async {
+                        if(Utils.netIsConnected(ref)){
+                          ref
+                              .read(editProfilePageProvider.notifier)
+                              .editData(nameController, lastNameController)
+                              .whenComplete(() => Navigator.pop(context));
+                        }else{
+                          Navigator.pop(context);
+                        }
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(top: 118.0, left: 116, right: 116),
+                    child: InkWell(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => usersData?.imageUrl == ''
+                                  ? const SizedBox()
+                                  : ShowProfilePage(
+                                      imagUrl:
+                                          '${ref.watch(userDetailsProvider)?.imageUrl}',
+                                      isEditing: true),
+                            )),
+                        child: Stack(
+                          children: [
+                            Hero(
+                                tag: 'avatarHeroTag',
+                                child: ClipRRect(
+                                  borderRadius:
+                                      const BorderRadius.all(Radius.circular(80)),
+                                  child: CachedNetworkImage(
+                                    imageUrl:
+                                        '${ref.watch(userDetailsProvider)?.imageUrl}',
+                                    placeholder: (context, url) =>
+                                        Image.asset('assets/Avatar.png'),
+                                    errorListener: (value) =>
+                                        Image.asset('assets/Avatar.png'),
+                                  ),
+                                )),
+                            Padding(
+                              padding: isRTL
+                                  ? const EdgeInsets.only(top: 53.0, right: 55)
+                                  : const EdgeInsets.only(top: 53.0, left: 55),
+                              child: ImageWidgets.buildProgress(ref: ref),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: 15,
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: IconButton(
+                                  onPressed: () {
+                                    if(Utils.netIsConnected(ref)){
+                                      ImageWidgets.showBottomSheets(
+                                          context: context, ref: ref);
+                                    }else{
+                                      Utils.lostNetSnackBar(context);
+                                    }
+                                  },
+                                  icon: const Icon(
+                                    Icons.camera_alt,
+                                    size: 32,
+                                    color: Colors.blue,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      )),
+                          ],
+                        )),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              children: [
+                TextField(
+                  textCapitalization: TextCapitalization.words,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(25),
+                  ],
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    labelText: languageText.edit_1_txf_label,
+                    prefixIcon: const Icon(
+                      Icons.person_2_outlined,
+                      color: Colors.red,
+                      size: 30,
+                    ),
+                  ),
+                ),
+                TextField(
+                  textCapitalization: TextCapitalization.words,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(25),
+                  ],
+                  controller: lastNameController,
+                  decoration: InputDecoration(
+                    labelText: languageText.edit_2_txf_label,
+                    prefixIcon: const Icon(
+                      Icons.person_2_outlined,
+                      color: Colors.red,
+                      size: 30,
+                    ),
+                  ),
                 ),
               ],
             ),
-          ),
-          Column(
-            children: [
-              TextField(
-                controller: nameController,
-                decoration: InputDecoration(
-                  labelText: languageText.edit_1_txf_label,
-                  prefixIcon: const Icon(
-                    Icons.person_2_outlined,
-                    color: Colors.red,
-                    size: 30,
-                  ),
-                ),
-              ),
-              TextField(
-                controller: lastNameController,
-                decoration: InputDecoration(
-                  labelText: languageText.edit_2_txf_label,
-                  prefixIcon: const Icon(
-                    Icons.person_2_outlined,
-                    color: Colors.red,
-                    size: 30,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

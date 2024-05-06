@@ -3,37 +3,54 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class MessageSeen {
   Future<List<bool>> newMessage() async {
-    final uid = FirebaseAuth.instance.currentUser!.uid;
     try {
-      var documentSnapshot = await FirebaseFirestore.instance
-          .collection('User')
-          .doc(uid)
-          .collection('chat')
-          .orderBy('times', descending: true)
-          .get();
+      print('newMessage 1');
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+      if (uid.isNotEmpty) {
+        var querySnapshot = await FirebaseFirestore.instance
+            .collection('User')
+            .doc(uid)
+            .collection('chat')
+            .orderBy('times', descending: true)
+            .get();
 
-      // Check if the document exists
-      final data = documentSnapshot.docs
-          .map((e) => e.data()['last_message'] as bool)
-          .toList();
-
-      // Check if the 'last_message' field exists in the document
-      // final lastMessage = data['last_message'];
-      print("Last Message: $data");
-      return data;
+        // Check if the querySnapshot has data
+        if (querySnapshot.docs.isNotEmpty) {
+          // Extract message states from document snapshots
+          final states = querySnapshot.docs
+              .map((doc) => doc.data()['last_message'] as bool)
+              .toList();
+          print("Message Statesss: $states");
+          print('newMessage 2');
+          return states;
+        } else {
+          print("No messages found");
+          return [];
+        }
+      } else {
+        print("User ID is empty");
+        return [];
+      }
     } catch (e) {
-      print("Error retrieving document: $e");
-      rethrow;
+      print("Error retrieving message states: $e");
+      rethrow; // Rethrow the exception
     }
   }
 
   Future<void> updateSeenMessage(String receiverId, String uid) async {
-    print("receiverId:$receiverId and uid:$uid");
-    await FirebaseFirestore.instance
-        .collection('User')
-        .doc(uid)
-        .collection('chat')
-        .doc(receiverId)
-        .update({'last_message': false});
+    try {
+      print('updateSeenMessage 1');
+      print("Updating message seen status for receiver $receiverId");
+      await FirebaseFirestore.instance
+          .collection('User')
+          .doc(uid)
+          .collection('chat')
+          .doc(receiverId)
+          .update({'last_message': false});
+      print('updateSeenMessage 2');
+    } catch (e) {
+      print("Error updating message seen status: $e");
+      rethrow; // Rethrow the exception
+    }
   }
 }

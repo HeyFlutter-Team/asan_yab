@@ -6,6 +6,8 @@ import '../../domain/riverpod/data/sign_up_provider.dart';
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
 import '../widgets/custom_text_field.dart';
 
+final isLoadingInformation = StateProvider<bool>((ref) => false);
+
 class PersonalInformation extends ConsumerStatefulWidget {
   final String? email;
   const PersonalInformation({super.key, this.email});
@@ -18,8 +20,16 @@ class PersonalInformation extends ConsumerStatefulWidget {
 class _PersonalInformationState extends ConsumerState<PersonalInformation> {
   final nameController = TextEditingController();
   final lastNameController = TextEditingController();
-  final invitingPersonId=TextEditingController();
+  final personalId = TextEditingController();
+  final invitingPersonId = TextEditingController();
   final signUpFormKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ref.read(isLoadingInformation.notifier).state = false;
+    });
+  }
 
   @override
   void dispose() {
@@ -53,7 +63,9 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                   CustomTextField(
                     textCapitalization: TextCapitalization.words,
                     label: languageText!.first_text_field_label,
+                    label2: '*',
                     controller: nameController,
+                    keyboardType: TextInputType.emailAddress,
                     hintText: languageText.first_text_field_hint,
                     validator: (p0) => p0!.isEmpty
                         ? languageText.first_text_field_valid
@@ -62,17 +74,43 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                   CustomTextField(
                     textCapitalization: TextCapitalization.words,
                     label: languageText.second_text_field_label,
+                    label2: '*',
                     controller: lastNameController,
                     hintText: languageText.second_text_field_hint,
+                    keyboardType: TextInputType.emailAddress,
                     validator: (p0) => p0!.isEmpty
                         ? languageText.second_text_field_valid
                         : null,
                   ),
                   CustomTextField(
                     textCapitalization: TextCapitalization.words,
+                    label: 'آیدی',
+                    label2: '*',
+                    controller: personalId,
+                    keyboardType: TextInputType.emailAddress,
+                    hintText: 'آیدی خود را وارد کنید',
+                    validator: (p0) {
+                      if (p0!.isEmpty) {
+                        return languageText.first_text_field_valid;
+                      } else if(p0.isNotEmpty && ref.watch(isContainIdProvider)){
+                        return 'این آیدی قبلا استفاده شده است';
+                      }else{
+                        return null;
+                      }
+                    },
+                    onChange: (p0) {
+                      ref
+                          .read(userRegisterDetailsProvider)
+                          .updateIsContainId(personalId.text,ref);
+                      print('shah lalaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+                    },
+                  ),
+                  CustomTextField(
+                    textCapitalization: TextCapitalization.words,
                     label: languageText.inviter_ID,
                     controller: invitingPersonId,
                     hintText: languageText.third_text_field_hint,
+                    keyboardType: TextInputType.emailAddress,
                   ),
                   const SizedBox(
                     height: 10,
@@ -80,33 +118,55 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red.shade800,
-                        minimumSize: const Size(340, 55),
+                        minimumSize:
+                            Size(MediaQuery.of(context).size.width * 0.9, 55),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12))),
-                    onPressed: () {
-                      final isValid = signUpFormKey.currentState!.validate();
-                      if (!isValid) return;
-                      ref
-                          .read(userRegesterDetailsProvider)
-                          .userDetails(
-                              emailController: widget.email,
-                              lastNameController: lastNameController.text,
-                              nameController: nameController.text)
-                          .whenComplete(()async {
-                        await ref
-                            .read(userRegesterDetailsProvider)
-                            .updateInviterRate(invitingPersonId.text);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MainPage(),
-                            ));
-                        ref
-                            .read(buttonNavigationProvider.notifier)
-                            .selectedIndex(0);
-                      });
-                    },
-                    child: Text(languageText.elevated_text),
+                    onPressed: ref.watch(isLoadingInformation)
+                        ? null
+                        : () {
+                            final isValid =
+                                signUpFormKey.currentState!.validate();
+                            if (!isValid) return;
+                            ref.read(isLoadingInformation.notifier).state =
+                                true;
+                            FocusScope.of(context).unfocus();
+                            ref
+                                .read(userRegisterDetailsProvider)
+                                .addUserDetailsToFirebase(
+                                  emailController: widget.email,
+                                  lastNameController: lastNameController.text,
+                                  nameController: nameController.text,
+                              personalIdController:personalId.text
+                                )
+                                .whenComplete(() async {
+                              await ref
+                                  .read(userRegisterDetailsProvider)
+                                  .updateInviterRate(invitingPersonId.text);
+                              signUpFormKey.currentState!.reset();
+                            }).whenComplete(() {
+                              Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const MainPage(),
+                                      ))
+                                  .whenComplete(() => ref
+                                      .read(isLoadingInformation.notifier)
+                                      .state = false);
+                              ref
+                                  .read(buttonNavigationProvider.notifier)
+                                  .selectedIndex(0);
+                            });
+                          },
+                    child: ref.watch(isLoadingInformation)
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : Text(
+                            languageText.elevated_text,
+                            style: const TextStyle(
+                                fontSize: 17, color: Colors.white),
+                          ),
                   ),
                 ],
               ),

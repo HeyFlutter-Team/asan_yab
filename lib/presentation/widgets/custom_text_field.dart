@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../pages/themeProvider.dart';
@@ -12,7 +13,9 @@ class CustomTextField extends ConsumerStatefulWidget {
   final String? Function(String?)? validator;
   final TextEditingController controller;
   final String? label;
+  final String? label2;
   final String? hintText;
+  final void Function(String)? onChange;
   const CustomTextField({
     this.textCapitalization = TextCapitalization.none,
     this.suffixIcon,
@@ -22,7 +25,9 @@ class CustomTextField extends ConsumerStatefulWidget {
     this.validator,
     required this.controller,
     this.label,
+    this.label2,
     this.hintText,
+    this.onChange
   }) : super(key: key);
 
   @override
@@ -40,12 +45,20 @@ class _CustomTextFieldState extends ConsumerState<CustomTextField> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text(
-            '  ${widget.label}',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w400,
-            ),
+          Row(
+            children: [
+              Text(
+                '  ${widget.label}',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              const SizedBox(width: 5,),
+              widget.label2!=null?
+              Text('${widget.label2}',style: const TextStyle(color: Colors.red,fontSize: 15),)
+                  :const SizedBox()
+            ],
           ),
           const SizedBox(
             height: 5,
@@ -85,7 +98,9 @@ class _CustomTextFieldState extends ConsumerState<CustomTextField> {
               ),
               keyboardType: widget.keyboardType,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: widget.validator),
+              validator: widget.validator,
+            onChanged: widget.onChange,
+          ),
         ],
       ),
     );

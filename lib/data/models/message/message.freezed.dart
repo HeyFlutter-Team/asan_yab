@@ -26,6 +26,11 @@ mixin _$MessageModel {
   DateTime get sentTime => throw _privateConstructorUsedError;
   MessageType get messageType => throw _privateConstructorUsedError;
   String get replayMessage => throw _privateConstructorUsedError;
+  bool get isSeen => throw _privateConstructorUsedError;
+  int get replayMessageIndex => throw _privateConstructorUsedError;
+  bool get replayIsMine => throw _privateConstructorUsedError;
+  bool get isMessageEdited => throw _privateConstructorUsedError;
+  String get replayMessageTime => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,7 +50,12 @@ abstract class $MessageModelCopyWith<$Res> {
       String content,
       DateTime sentTime,
       MessageType messageType,
-      String replayMessage});
+      String replayMessage,
+      bool isSeen,
+      int replayMessageIndex,
+      bool replayIsMine,
+      bool isMessageEdited,
+      String replayMessageTime});
 }
 
 /// @nodoc
@@ -67,6 +77,11 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
     Object? sentTime = null,
     Object? messageType = null,
     Object? replayMessage = null,
+    Object? isSeen = null,
+    Object? replayMessageIndex = null,
+    Object? replayIsMine = null,
+    Object? isMessageEdited = null,
+    Object? replayMessageTime = null,
   }) {
     return _then(_value.copyWith(
       senderId: null == senderId
@@ -93,6 +108,26 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
           ? _value.replayMessage
           : replayMessage // ignore: cast_nullable_to_non_nullable
               as String,
+      isSeen: null == isSeen
+          ? _value.isSeen
+          : isSeen // ignore: cast_nullable_to_non_nullable
+              as bool,
+      replayMessageIndex: null == replayMessageIndex
+          ? _value.replayMessageIndex
+          : replayMessageIndex // ignore: cast_nullable_to_non_nullable
+              as int,
+      replayIsMine: null == replayIsMine
+          ? _value.replayIsMine
+          : replayIsMine // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isMessageEdited: null == isMessageEdited
+          ? _value.isMessageEdited
+          : isMessageEdited // ignore: cast_nullable_to_non_nullable
+              as bool,
+      replayMessageTime: null == replayMessageTime
+          ? _value.replayMessageTime
+          : replayMessageTime // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -111,7 +146,12 @@ abstract class _$$MessageModelImplCopyWith<$Res>
       String content,
       DateTime sentTime,
       MessageType messageType,
-      String replayMessage});
+      String replayMessage,
+      bool isSeen,
+      int replayMessageIndex,
+      bool replayIsMine,
+      bool isMessageEdited,
+      String replayMessageTime});
 }
 
 /// @nodoc
@@ -131,6 +171,11 @@ class __$$MessageModelImplCopyWithImpl<$Res>
     Object? sentTime = null,
     Object? messageType = null,
     Object? replayMessage = null,
+    Object? isSeen = null,
+    Object? replayMessageIndex = null,
+    Object? replayIsMine = null,
+    Object? isMessageEdited = null,
+    Object? replayMessageTime = null,
   }) {
     return _then(_$MessageModelImpl(
       senderId: null == senderId
@@ -157,6 +202,26 @@ class __$$MessageModelImplCopyWithImpl<$Res>
           ? _value.replayMessage
           : replayMessage // ignore: cast_nullable_to_non_nullable
               as String,
+      isSeen: null == isSeen
+          ? _value.isSeen
+          : isSeen // ignore: cast_nullable_to_non_nullable
+              as bool,
+      replayMessageIndex: null == replayMessageIndex
+          ? _value.replayMessageIndex
+          : replayMessageIndex // ignore: cast_nullable_to_non_nullable
+              as int,
+      replayIsMine: null == replayIsMine
+          ? _value.replayIsMine
+          : replayIsMine // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isMessageEdited: null == isMessageEdited
+          ? _value.isMessageEdited
+          : isMessageEdited // ignore: cast_nullable_to_non_nullable
+              as bool,
+      replayMessageTime: null == replayMessageTime
+          ? _value.replayMessageTime
+          : replayMessageTime // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -171,7 +236,12 @@ class _$MessageModelImpl extends _MessageModel {
       required this.content,
       required this.sentTime,
       required this.messageType,
-      required this.replayMessage})
+      required this.replayMessage,
+      required this.isSeen,
+      required this.replayMessageIndex,
+      required this.replayIsMine,
+      required this.isMessageEdited,
+      required this.replayMessageTime})
       : super._();
 
   factory _$MessageModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -189,10 +259,20 @@ class _$MessageModelImpl extends _MessageModel {
   final MessageType messageType;
   @override
   final String replayMessage;
+  @override
+  final bool isSeen;
+  @override
+  final int replayMessageIndex;
+  @override
+  final bool replayIsMine;
+  @override
+  final bool isMessageEdited;
+  @override
+  final String replayMessageTime;
 
   @override
   String toString() {
-    return 'MessageModel(senderId: $senderId, receiverId: $receiverId, content: $content, sentTime: $sentTime, messageType: $messageType, replayMessage: $replayMessage)';
+    return 'MessageModel(senderId: $senderId, receiverId: $receiverId, content: $content, sentTime: $sentTime, messageType: $messageType, replayMessage: $replayMessage, isSeen: $isSeen, replayMessageIndex: $replayMessageIndex, replayIsMine: $replayIsMine, isMessageEdited: $isMessageEdited, replayMessageTime: $replayMessageTime)';
   }
 
   @override
@@ -210,13 +290,33 @@ class _$MessageModelImpl extends _MessageModel {
             (identical(other.messageType, messageType) ||
                 other.messageType == messageType) &&
             (identical(other.replayMessage, replayMessage) ||
-                other.replayMessage == replayMessage));
+                other.replayMessage == replayMessage) &&
+            (identical(other.isSeen, isSeen) || other.isSeen == isSeen) &&
+            (identical(other.replayMessageIndex, replayMessageIndex) ||
+                other.replayMessageIndex == replayMessageIndex) &&
+            (identical(other.replayIsMine, replayIsMine) ||
+                other.replayIsMine == replayIsMine) &&
+            (identical(other.isMessageEdited, isMessageEdited) ||
+                other.isMessageEdited == isMessageEdited) &&
+            (identical(other.replayMessageTime, replayMessageTime) ||
+                other.replayMessageTime == replayMessageTime));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, senderId, receiverId, content,
-      sentTime, messageType, replayMessage);
+  int get hashCode => Object.hash(
+      runtimeType,
+      senderId,
+      receiverId,
+      content,
+      sentTime,
+      messageType,
+      replayMessage,
+      isSeen,
+      replayMessageIndex,
+      replayIsMine,
+      isMessageEdited,
+      replayMessageTime);
 
   @JsonKey(ignore: true)
   @override
@@ -239,7 +339,12 @@ abstract class _MessageModel extends MessageModel {
       required final String content,
       required final DateTime sentTime,
       required final MessageType messageType,
-      required final String replayMessage}) = _$MessageModelImpl;
+      required final String replayMessage,
+      required final bool isSeen,
+      required final int replayMessageIndex,
+      required final bool replayIsMine,
+      required final bool isMessageEdited,
+      required final String replayMessageTime}) = _$MessageModelImpl;
   _MessageModel._() : super._();
 
   factory _MessageModel.fromJson(Map<String, dynamic> json) =
@@ -257,6 +362,16 @@ abstract class _MessageModel extends MessageModel {
   MessageType get messageType;
   @override
   String get replayMessage;
+  @override
+  bool get isSeen;
+  @override
+  int get replayMessageIndex;
+  @override
+  bool get replayIsMine;
+  @override
+  bool get isMessageEdited;
+  @override
+  String get replayMessageTime;
   @override
   @JsonKey(ignore: true)
   _$$MessageModelImplCopyWith<_$MessageModelImpl> get copyWith =>

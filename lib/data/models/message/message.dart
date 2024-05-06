@@ -13,6 +13,12 @@ class MessageModel with _$MessageModel {
     required DateTime sentTime,
     required MessageType messageType,
     required String replayMessage,
+    required bool isSeen,
+    required int replayMessageIndex,
+    required bool replayIsMine,
+    required bool isMessageEdited,
+    required String replayMessageTime
+
   }) = _MessageModel;
 
   MessageModel._();

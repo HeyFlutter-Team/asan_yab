@@ -12,6 +12,10 @@ final getUserProvider = FutureProvider<Users>((ref) async {
 
 class SingleUserRepo {
   Future<Users> getFetchUser(String? uid) async {
+    if (uid == null) {
+      throw ArgumentError('UID cannot be null');
+    }
+
     final firebase = FirebaseFirestore.instance;
     try {
       final query = await firebase.collection('User').doc(uid).get();
@@ -23,4 +27,5 @@ class SingleUserRepo {
       rethrow;
     }
   }
+
 }
