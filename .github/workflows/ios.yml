@@ -1,4 +1,5 @@
 name: iOS Deploy
+
 on:
   push:
     branches:
@@ -7,17 +8,17 @@ on:
 
 jobs:
   build:
-    runs-on: macos-13
+    runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: "14.2"
+      - name: Setup Xcode
+        uses: actions/setup-xcode@v2
 
       - name: Install Fastlane
-        run: sudo gem install fastlane
+        run: gem install fastlane -N --no-document
 
       - name: Set Fastlane environment to non-interactive
         run: echo "FASTLANE_OPT_OUT_USAGE=1" >> $GITHUB_ENV
@@ -26,21 +27,15 @@ jobs:
         uses: subosito/flutter-action@v2.10.0
         with:
           flutter-version: '3.13.2'
-          cache: true 
-
-      - run: flutter --version
+          cache: true
 
       - name: Set FLUTTER_ROOT
-        run: echo "FLUTTER_ROOT=/Users/runner/hostedtoolcache/flutter/stable-3.10.6-x64" >> $GITHUB_ENV
-
-      - name: Set FASTLANE_SESSION
-        run: echo "FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}" >> $GITHUB_ENV
+        run: echo "FLUTTER_ROOT=$RUNNER_WORKSPACE/flutter" >> $GITHUB_ENV
 
       - name: Setup SSH
-        uses: MrSquaare/ssh-setup-action@v1
+        uses: webfactory/ssh-agent@v0.5.3
         with:
-          host: github.com
-          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Clear Xcode Cache
         run: |
@@ -65,16 +60,11 @@ jobs:
       - name: Build and Deploy to App Store
         if: steps.check_deploy.outputs.deploy == 'true'
         run: |
-          cd ..
-          flutter clean
-          flutter pub get
           cd ios
-          gem install cocoapods
+          gem install cocoapods -N --no-document
           bundle install
           echo "Installing pods..."
-          pod install
-          echo "Updating pods..."
-
+          bundle exec pod install
           echo "Running lane now..."
 
           if [ ${{ github.ref }} = 'refs/heads/production' ]; then
@@ -82,7 +72,6 @@ jobs:
           else
             bundle exec fastlane deployToTestFlight
           fi
-        shell: bash
         env:
           APPLICATION_ID: ${{ secrets.APPLICATION_ID }}
           BUNDLE_IDENTIFIER: ${{ secrets.BUNDLE_IDENTIFIER }}
@@ -97,7 +86,4 @@ jobs:
           GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-        working-directory: ios 
-
-        
-
+        working-directory: ios
