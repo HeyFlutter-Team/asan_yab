@@ -6,77 +6,77 @@ environment:
   sdk: '>=3.0.5 <4.0.0'
 
 dependencies:
-  carousel_slider: any
-  cloud_firestore: any
-  cupertino_icons: any
-  dio: any
-  firebase_core: any
-  firebase_crashlytics: any
-  firebase_storage: any
+  carousel_slider: ^4.2.1
+  cloud_firestore: ^4.8.3
+  cupertino_icons: ^1.0.2
+  dio: ^5.3.0
+  firebase_core: ^2.15.0
+  firebase_crashlytics: ^3.3.4
+  firebase_storage: ^11.2.5
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  flutter_phone_direct_caller: any
-  google_fonts: any
-  http: any
-  intl: any
-  path_provider: any
-  smooth_page_indicator: any
-  sqflite: any
+  flutter_phone_direct_caller: ^2.1.1
+  google_fonts: ^6.2.1
+  http: ^1.1.0
+  intl: ^0.18.1
+  path_provider: ^2.0.15
+  smooth_page_indicator: ^1.1.0
+  sqflite: ^2.2.8+4
 
-  connectivity_plus: any
-  awesome_snackbar_content: any
-  flutterflow_paginate_firestore: any
-  photo_view: any
-  flutter_launcher_icons: any
-  url_launcher: any
-  flutter_native_splash: any
-  change_app_package_name: any
-  new_version_plus: any
-  flutter_riverpod: any
-  logging: any
-  geolocator: any
-  geocoding: any
-  google_maps_flutter: any
-  location: any
-  typesense: any
-  firebase_analytics: any
-  firebase_messaging: any
-  flutter_local_notifications: any
-  firebase_auth: any
-  email_validator: any
-  shared_preferences: any
-  image_picker: any
-  file_picker: any
-  clipboard: any
-  flutter_popup_menu_button: any
-  flutter_rating_bar: any
+  connectivity_plus: ^4.0.1
+  awesome_snackbar_content: ^0.1.3
+  flutterflow_paginate_firestore: ^1.0.3+1
+  photo_view: ^0.15.0
+  flutter_launcher_icons: ^0.13.1
+  url_launcher: ^6.1.12
+  flutter_native_splash: ^2.3.1
+  change_app_package_name: ^1.1.0
+  new_version_plus: ^0.0.11
+  flutter_riverpod: ^2.4.0
+  logging: ^1.2.0
+  geolocator: ^11.0.0
+  geocoding: ^3.0.0
+  google_maps_flutter: ^2.5.0
+  location: ^6.0.1
+  typesense: ^0.5.1
+  firebase_analytics: ^10.5.0
+  firebase_messaging: ^14.6.9
+  flutter_local_notifications: ^17.1.1
+  firebase_auth: ^4.15.0
+  email_validator: ^2.1.17
+  shared_preferences: ^2.2.2
+  image_picker: ^1.0.4
+  file_picker: ^8.0.3
+  clipboard: ^0.1.3
+  flutter_popup_menu_button: ^0.0.1+5
+  flutter_rating_bar: ^4.0.1
 
-  easy_localization: any
-  cloud_functions: any
-  freezed: any
-  freezed_annotation: any
-  json_annotation: any
-  build_runner: any
-  json_serializable: any
-  fluttertoast: any
-  emoji_picker_flutter: any
-  timeago: any
-  lazy_load_scrollview: any
-  image_cropper: any
-  riverpod_annotation: any
-  riverpod_generator: any
-  riverpod_lint: any
-  cached_network_image: any
-  scrollable_positioned_list: any
-  popover: any
-  loading_animation_widget: any
-  flutter_notification_channel: any
-  flutter_emoji_gif_picker: any
+  easy_localization: ^3.0.3
+  cloud_functions: ^4.6.0
+  freezed: ^2.4.6
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.8.1
+  build_runner: ^2.4.7
+  json_serializable: ^6.7.1
+  fluttertoast: ^8.2.4
+  emoji_picker_flutter: ^1.6.3
+  timeago: ^3.6.0
+  lazy_load_scrollview: ^1.3.0
+  image_cropper: ^5.0.1
+  riverpod_annotation: ^2.3.5
+  riverpod_generator: ^2.4.0
+  riverpod_lint: ^2.3.10
+  cached_network_image: ^3.3.1
+  scrollable_positioned_list: ^0.3.8
+  popover: ^0.3.0
+  loading_animation_widget: ^1.2.1
+  flutter_notification_channel: ^3.1.0
+  flutter_emoji_gif_picker: ^0.1.6
 
 dependency_overrides:
-  web: any
+  web: ^0.5.1
 
 
 
@@ -94,7 +94,7 @@ flutter_native_splash:
 
 
 dev_dependencies:
-  flutter_lints: any
+  flutter_lints: ^3.0.2
   flutter_test:
     sdk: flutter
 
@@ -116,8 +116,3 @@ flutter_launcher_icons:
   ios: true
   image_path: "assets/asan_yab.jpg"
   background_color: "#ffffff"
-
-
-
-
-
