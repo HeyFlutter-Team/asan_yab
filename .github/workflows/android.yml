@@ -13,40 +13,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Extract last commit message
-        id: extract_commit_message
-        run: echo "::set-output name=message::$(git log --format=%B -n 1)"
-
-      - name: Check if last commit message contains 'deploy'
-        id: check_deploy
-        run: |
-          if echo "${{ steps.extract_commit_message.outputs.message }}" | grep -qi 'deploy'; then
-            echo "Deploy keyword found in commit message. Proceeding with deployment."
-            echo "::set-output name=deploy::true"
-          else
-            echo "Deploy keyword not found in commit message. Skipping deployment."
-            echo "::set-output name=deploy::false"
-          fi
-
       - name: Set Fastlane environment to non-interactive
-        if: steps.check_deploy.outputs.deploy == 'true'
         run: echo "FASTLANE_OPT_OUT_USAGE=1" >> $GITHUB_ENV
 
       - name: Setup Flutter
-        if: steps.check_deploy.outputs.deploy == 'true'
         uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.13.2
 
       - name: Build and Deploy to Google Play
-        if: steps.check_deploy.outputs.deploy == 'true'
         run: |
           flutter pub get
           if [ ${{ github.ref }} = 'refs/heads/production' ]; then
-            fastlane deploy_android production:true
+          fastlane deploy_android production:true
           else
             fastlane deploy_android
           fi
+          # fastlane deploy_android
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
           KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
