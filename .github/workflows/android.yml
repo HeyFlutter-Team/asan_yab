@@ -1,5 +1,4 @@
 name: Android Deploy
-
 on:
   push:
     branches:
@@ -55,3 +54,4 @@ jobs:
           KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         working-directory: android
+
