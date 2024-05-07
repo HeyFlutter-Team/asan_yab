@@ -73,7 +73,8 @@ dependencies:
   popover: ^0.3.0
   loading_animation_widget: ^1.2.1
   flutter_notification_channel: ^3.1.0
-  flutter_emoji_gif_picker: ^0.1.6
+  flutter_emoji_gif_picker: any
+
 
 dependency_overrides:
   web: ^0.5.1
