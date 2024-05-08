@@ -4,36 +4,29 @@ on:
     branches:
       - master
       - production
-
 jobs:
   build:
     runs-on: macos-13
-
     steps:
       - uses: actions/checkout@v2
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: "14.2"
-
       - name: install fastlane
         run: sudo gem install fastlane
-
       - name: Set Fastlane environment to non-interactive
         run: echo "FASTLANE_OPT_OUT_USAGE=1" >> $GITHUB_ENV
-
       - name: Flutter action
         uses: subosito/flutter-action@v2.10.0
         with:
-          flutter-version: '3.13.2'
-          cache: true 
+          flutter-version: 3.19.6
+          cache: true
       - run: flutter --version
 
       - name: Set FLUTTER_ROOT
         run: echo "FLUTTER_ROOT=/Users/runner/hostedtoolcache/flutter/stable-3.10.6-x64" >> $GITHUB_ENV
-
       - name: Set FASTLANE_SESSION
         run: echo "FASTLANE_SESSION=${{ secrets.FASTLANE_SESSION }}" >> $GITHUB_ENV
-
       - name: Setup SSH
         uses: MrSquaare/ssh-setup-action@v1
         with:
@@ -41,9 +34,8 @@ jobs:
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Clear Xcode Cache
         run: |
-            rm -rf ~/Library/Developer/Xcode/DerivedData
-            rm -rf ~/Library/Caches/CocoaPods
-
+          rm -rf ~/Library/Developer/Xcode/DerivedData
+          rm -rf ~/Library/Caches/CocoaPods
       - name: Build and Deploy to App store
         run: |
           cd ..
@@ -55,16 +47,13 @@ jobs:
           echo installing pods
           pod install
           echo updating pods
-
           echo running lane now
-
           if [ ${{ github.ref }} = 'refs/heads/production' ]; then
             bundle exec fastlane deployToAppStore
           else
             bundle exec fastlane deployToTestFlight
           fi
 
-          
         shell: bash
         env:
           APPLICATION_ID: ${{ secrets.APPLICATION_ID }}
