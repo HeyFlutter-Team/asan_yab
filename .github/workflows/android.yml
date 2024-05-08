@@ -4,24 +4,27 @@ on:
     branches:
       - master
       - production
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Set Fastlane environment to non-interactive
         run: echo "FASTLANE_OPT_OUT_USAGE=1" >> $GITHUB_ENV
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.13.2
-          channel: 'stable'
 
       - name: Build and Deploy to Google Play
         run: |
           flutter pub get
-          if [ ${{ github.ref }} = 'refs/heads/production' ]; then
+          if [ "${{ github.ref }}" = 'refs/heads/production' ]; then
           fastlane deploy_android production:true
           else
             fastlane deploy_android
