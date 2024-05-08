@@ -2,11 +2,14 @@ import 'package:asan_yab/presentation/pages/profile/other_profile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_emoji_gif_picker/flutter_emoji_gif_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:popover/popover.dart';
 import '../../../data/models/users.dart';
 import 'dart:ui' as ui;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+
+import '../../../domain/riverpod/data/message/message.dart';
 
 class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
   const AppBarChatDetails({
@@ -16,8 +19,8 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
     required this.employee,
     required this.userId,
     required this.user,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String urlImage;
   final String name;
@@ -67,6 +70,11 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
                             padding: EdgeInsets.zero,
                             onPressed: () {
                           FocusScope.of(context).unfocus();
+                          if(ref.watch(emojiShowingProvider) || ref.watch(gifShowingProvider)){
+                            ref.read(emojiShowingProvider.notifier).state=false;
+                            ref.read(gifShowingProvider.notifier).state=false;
+                          }
+                          EmojiGifPickerPanel.onWillPop();
 
                           Navigator.pop(context);
                         }, icon: const Icon(Icons.arrow_back_ios,size: 25,)),
