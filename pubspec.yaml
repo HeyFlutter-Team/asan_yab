@@ -72,8 +72,10 @@ dependencies:
   scrollable_positioned_list: ^0.3.8
   popover: ^0.3.0
   loading_animation_widget: ^1.2.1
-  flutter_notification_channel: ^3.1.0
-  flutter_emoji_gif_picker: any
+  flutter_notification_channel: ^3.0.0
+  giphy_get: ^3.5.4
+  flutter_emoji_gif_picker: ^0.1.6
+  lottie: ^3.1.0
 
 
 dependency_overrides:
