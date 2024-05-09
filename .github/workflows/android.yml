@@ -20,7 +20,11 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.13.2
+          channel: 'stable' # Add this line to ensure the latest stable channel is used
 
+      - name: Update Dart SDK
+        run: flutter pub global activate dart-sdk --release-channel stable
+          
       - name: Build and Deploy to Google Play
         run: |
           flutter pub get
@@ -37,4 +41,3 @@ jobs:
           KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         working-directory: android
-        
