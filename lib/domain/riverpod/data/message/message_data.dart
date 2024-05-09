@@ -15,7 +15,7 @@ class MessageProvider extends StateNotifier<List<MessageModel>> {
   final scrollController = ItemScrollController();
   final listViewController = ScrollController();
   MessageProvider(super.state, this.ref);
-  List<MessageModel> getMessages(String receiverId) {
+  Future<List<MessageModel>> getMessages(String receiverId)async {
     try {
       print('getMessages 1');
       if(ref.watch(activeChatIdProvider)== receiverId || ref.watch(activeChatIdProvider) == '') {
@@ -30,13 +30,20 @@ class MessageProvider extends StateNotifier<List<MessageModel>> {
             .collection('messages')
             .orderBy('sentTime', descending: true)
             .snapshots(includeMetadataChanges: true)
-            .listen((messages) {
-              print('getMessageeeeeeeeeeeeeeeeeeeeeeeeeee');
+            .listen((messages)async {
+            print('getMessageeeeeeeeeeeeeeeeeeeeeeeeeee');
               if(mounted) {
                 state = messages.docs
                     .map((doc) => MessageModel.fromJson(doc.data()))
                     .toList();
               }
+          await ref
+               .read(
+               localMessagesProvider
+                   .notifier)
+               .clear();
+
+
         });
         print('getMessages 2');
         return state;
@@ -47,8 +54,10 @@ class MessageProvider extends StateNotifier<List<MessageModel>> {
       rethrow;
     } finally {
       ref.read(messageLoadingProvider.notifier).state = false;
+      print('final test');
     }
   }
+
 
 
 

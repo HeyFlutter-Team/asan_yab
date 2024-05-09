@@ -24,7 +24,7 @@ jobs:
       - name: Build and Deploy to Google Play
         run: |
           flutter pub get
-          if [ ${{ github.ref }} = 'refs/heads/production' ]; then
+          if [ "${{ github.ref }}" = 'refs/heads/production' ]; then
           fastlane deploy_android production:true
           else
             fastlane deploy_android

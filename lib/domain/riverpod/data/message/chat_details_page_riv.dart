@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../../../data/models/message/textfield_message.dart';
 import 'message.dart';
-import 'message_data.dart';
 import 'message_history.dart';
 import 'message_seen.dart';
 import 'messages_notifier.dart';
@@ -18,11 +16,11 @@ class HandleWillPopNotifier extends StateNotifier<bool> {
   HandleWillPopNotifier() : super(true);
 
   Future<void> handleWillPop(BuildContext context,WidgetRef ref,String userId) async {
-    ref.read(activeChatIdProvider.notifier).state='';
     if (ref.watch(emojiShowingProvider) || ref.watch(gifShowingProvider)) {
       ref.read(emojiShowingProvider.notifier).state = false;
       ref.read(gifShowingProvider.notifier).state = false;
     } else {
+      ref.read(activeChatIdProvider.notifier).state='';
       FocusScope.of(context).unfocus();
       if (ref
           .watch(messageProfileProvider.notifier)

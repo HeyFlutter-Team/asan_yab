@@ -1,11 +1,8 @@
 import 'package:asan_yab/core/utils/utils.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../../data/models/message/message.dart';
-import '../../../domain/riverpod/data/message/message.dart';
 import '../../../domain/riverpod/data/message/message_data.dart';
 import '../../../domain/riverpod/data/message/message_history.dart';
 import '../../../domain/riverpod/data/message/message_seen.dart';
@@ -115,7 +112,7 @@ class _MessageHomeListViewState extends ConsumerState<MessageHomeListView> {
                                         ),
                                       ),
                                       child: userForChat.imageUrl == '' ||
-                                              userForChat.uid == null
+                                              userForChat.imageUrl.isEmpty
                                           ? Container(
                                               padding: EdgeInsets.zero,
                                               margin: EdgeInsets.zero,

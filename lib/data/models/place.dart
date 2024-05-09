@@ -18,25 +18,24 @@ class Place {
   final List<NewItems>? newItems;
   final List<NewItemsYounis>? newItemYounis;
   final List<String>? menuItemName;
-  Place({
-    required this.createdAt,
-    required this.addresses,
-    required this.coverImage,
-    required this.name,
-    required this.description,
-    required this.logo,
-    required this.id,
-    required this.categoryId,
-    required this.gallery,
-    required this.category,
-    required this.order,
-    this.distance = 1,
-    this.itemImages,
-    this.doctors,
-    this.newItems,
-    this.newItemYounis,
-    this.menuItemName
-  });
+  Place(
+      {required this.createdAt,
+      required this.addresses,
+      required this.coverImage,
+      required this.name,
+      required this.description,
+      required this.logo,
+      required this.id,
+      required this.categoryId,
+      required this.gallery,
+      required this.category,
+      required this.order,
+      this.distance = 1,
+      this.itemImages,
+      this.doctors,
+      this.newItems,
+      this.newItemYounis,
+      this.menuItemName});
 
   factory Place.fromJson(Map<String, dynamic> json) {
     DateTime createdAt;
@@ -227,4 +226,3 @@ class Doctors {
         time: json['time']);
   }
 }
-

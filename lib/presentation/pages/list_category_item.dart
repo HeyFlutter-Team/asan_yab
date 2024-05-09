@@ -15,9 +15,10 @@ class ListCategoryItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     debugPrint('is exist $catId');
-    return PopScope(
-      onPopInvoked: (didPop) {},
-      canPop: true,
+    return WillPopScope(
+      onWillPop: () async {
+        return true;
+      },
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -47,11 +48,11 @@ class ListCategoryItem extends ConsumerWidget {
         ),
         body: Utils.netIsConnected(ref)
             ? CategoryItem(id: catId)
-        :const Center(
-          child: CircularProgressIndicator(
-            color: Colors.red,
-          ),
-        ),
+            : const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.red,
+                ),
+              ),
       ),
     );
   }

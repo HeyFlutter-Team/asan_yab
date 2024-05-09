@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:asan_yab/data/models/message/message.dart';
 import 'package:asan_yab/data/repositoris/local_rep/notification.dart';
 import 'package:asan_yab/main.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -109,7 +110,7 @@ class FirebaseApi {
       if(ref.context.mounted) {
         if (chatId != ref.watch(activeChatIdProvider)) {
           BigTextStyleInformation bigPictureStyleInformation =
-          BigTextStyleInformation('${message.notification?.body.toString()}',
+          BigTextStyleInformation('${message.notification?.body.toString()}joooo',
               htmlFormatBigText: true,
               contentTitle: '${message.notification?.title.toString()}',
               htmlFormatContentTitle: true);
@@ -124,7 +125,7 @@ class FirebaseApi {
           NotificationDetails(android: androidNotificationDetails);
           FlutterLocalNotificationsPlugin().show(0,
               message.notification?.title,
-              message.notification?.body,
+              '${message.notification?.body}'.isNotEmpty?message.notification?.body:'Gif',
               platformChannelSpecifics,
               payload:jsonEncode(message.data)
           );
@@ -174,8 +175,6 @@ class FirebaseApi {
         Users userDetails = Users.fromMap(userDetailsMap);
         ref.read(messageProvider.notifier).clearState();
         ref.read(otherUserProvider.notifier).setDataUser(userDetails);
-        // print('younisssssssssssssssss ${userDetails.name}${userDetails.lastName} ${userDetails.id}');
-        // print('younisssssssssssssssss $chatToNavigate');
         if( navigatorKey.currentState?.canPop()==true){
           navigatorKey.currentState?.pop();
         }
