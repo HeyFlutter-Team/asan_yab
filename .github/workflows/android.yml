@@ -1,5 +1,5 @@
 ## Github Actions CI workflow to deploy to Internal testing in the Play Store
-name: CI_STORE_DEPLOY_ANDROID
+name: Android Deploy
 
 on:
   # Run this workflow when any new code is pushed into the main branch
@@ -21,7 +21,7 @@ jobs:
       AAB_PATH: build/app/outputs/bundle/release/app-release.aab
       KEYSTORE_PATH: android/upload-keystore.jks
       KEY_PROPS_PATH: android/key.properties
-      SERVICE_ACCOUNT_PATH: store_credentials.json
+      SERVICE_ACCOUNT_PATH: android/service-account.json
     steps:
       # Checkout repository codebase
       - name: Checkout the code
