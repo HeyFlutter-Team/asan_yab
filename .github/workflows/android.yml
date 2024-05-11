@@ -1,87 +1,39 @@
-## Github Actions CI workflow to deploy to Internal testing in the Play Store
 name: Android Deploy
-
 on:
-  # Run this workflow when any new code is pushed into the main branch
   push:
-      branches:
-        - master
-        - production
+    branches:
+      - master
+      - production
 
 jobs:
-  store_deploy_android:
-    # Only run this job if the branch name starts with 'release/'
-    if:  startsWith(github.head_ref, 'release/')
-    name: android store release
+  build:
     runs-on: ubuntu-latest
-    env:
-      # Setup env variables that will be used throughout the workflow
-      JAVA_VERSION: 12.0
-      FLUTTER_VERSION: 3.19.6
-      AAB_PATH: build/app/outputs/bundle/release/app-release.aab
-      KEYSTORE_PATH: android/upload-keystore.jks
-      KEY_PROPS_PATH: android/key.properties
-      SERVICE_ACCOUNT_PATH: android/service-account.json
-    steps:
-      # Checkout repository codebase
-      - name: Checkout the code
-        uses: actions/checkout@v3
 
-      # Setup Java in the VM
-      - name: Setup Java to compile the Android project
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'zulu'
-          java-version: ${{ env.JAVA_VERSION }}
-      
-      # Setup Flutter in the VM
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set Fastlane environment to non-interactive
+        run: echo "FASTLANE_OPT_OUT_USAGE=1" >> $GITHUB_ENV
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
+          flutter-version: 3.19.6
 
-      # Decode Android env variables
-      - name: Decode Android keystore
-        run: echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 --decode > ${{ env.KEYSTORE_PATH }}
-
-      - name: Decode Android key properties
-        run: echo "${{ secrets.ANDROID_KEY_PROPERTIES }}" | base64 --decode > ${{ env.KEY_PROPS_PATH }}
-
-      # Decode Android release Service Account
-      - name: Decode Android Service Account
-        run: echo "${{ secrets.PRODUCTION_CREDENTIAL_FILE }}" | base64 --decode > ${{ env.SERVICE_ACCOUNT_PATH }}
-
-      # Run flutter commands
-      - name: Run flutter pub get
-        run: flutter pub get
-
-      - name: 📦 Install dependencies
-        run: flutter pub get
-
-      - name: 🕵️ Analyze to check for bad Dart/Flutter practices
-        run: flutter analyze
-
-      - name: 📉 Run all app tests
-        run: flutter test
-
-      # Build Android Bundle release file
-      - name: Build aab
+      - name: Build and Deploy to Google Play
         run: |
-          flutter build appbundle 
-          --release
-
-      # Upload generated aab to project artifacts
-      - name: Upload generated aab to the artifacts
-        uses: actions/upload-artifact@master
-        with:
-          name: aab-stores
-          path: {{ env.AAB_PATH }}
-
-      # Deploy bundle to Google Play internal testing
-      - name: Deploy to Play Store (Internal testing)
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJson: {{ env.SERVICE_ACCOUNT_PATH }}
-          packageName: com.heyflutter.asanYab
-          releaseFiles: {{ env.AAB_PATH }}
-          track: internal
+          flutter pub get
+          if [ ${{ github.ref }} = 'refs/heads/production' ]; then
+          fastlane deploy_android production:true
+          else
+            fastlane deploy_android
+          fi
+          # fastlane deploy_android
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        working-directory: android
