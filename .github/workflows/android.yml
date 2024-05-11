@@ -21,7 +21,7 @@ jobs:
       AAB_PATH: build/app/outputs/bundle/release/app-release.aab
       KEYSTORE_PATH: android/upload-keystore.jks
       KEY_PROPS_PATH: android/key.properties
-      SERVICE_ACCOUNT_PATH: android/service-account.json
+      SERVICE_ACCOUNT_PATH: store_credentials.json
     steps:
       # Checkout repository codebase
       - name: Checkout the code
