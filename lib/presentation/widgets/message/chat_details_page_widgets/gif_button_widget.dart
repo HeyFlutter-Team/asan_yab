@@ -9,6 +9,7 @@ import '../../../../data/models/message/message.dart';
 import '../../../../data/models/users.dart';
 import '../../../../domain/riverpod/config/message_notification_repo.dart';
 import '../../../../domain/riverpod/data/message/message.dart';
+import '../../../../domain/riverpod/data/message/message_data.dart';
 import '../../../../domain/riverpod/data/profile_data_provider.dart';
 
 class GifButtonWidget extends StatelessWidget {
@@ -138,6 +139,9 @@ class GifPickerWidget extends StatelessWidget {
                       }
 
                     });
+                    ref
+                        .read(replayPositionProvider.notifier)
+                        .scrollItem(ref, 0);
                   },
                   fromStack: false,
                   hoveredBackgroundColor: Colors.black,

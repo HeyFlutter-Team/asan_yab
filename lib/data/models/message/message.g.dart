@@ -15,7 +15,7 @@ _$MessageModelImpl _$$MessageModelImplFromJson(Map<String, dynamic> json) =>
       messageType: $enumDecode(_$MessageTypeEnumMap, json['messageType']),
       replayMessage: json['replayMessage'] as String,
       isSeen: json['isSeen'] as bool,
-      replayMessageIndex: json['replayMessageIndex'] as int,
+      replayMessageIndex: (json['replayMessageIndex'] as num).toInt(),
       replayIsMine: json['replayIsMine'] as bool,
       isMessageEdited: json['isMessageEdited'] as bool,
       replayMessageTime: json['replayMessageTime'] as String,

@@ -170,7 +170,7 @@ class _MessageBubbleState extends ConsumerState<MessageBubble>
                   child: GestureDetector(
                     onHorizontalDragEnd: (DragEndDetails details) {
                       ref
-                          .read(handleOnHorizontalDragEndProvider.notifier)
+                          .read(handleOnHorizontalDragEndNotifierProvider.notifier)
                           .handleOnHorizontalDragEnd(
                               ref: ref,
                               context: context,
@@ -205,7 +205,7 @@ class _MessageBubbleState extends ConsumerState<MessageBubble>
                       onLongPress: () {
 
                         ref
-                            .read(messageOnLongPressProvider.notifier)
+                            .read(messageOnLongPressNotifierProvider.notifier)
                             .messageOnLongPress(
                                 context,
                                 ref,

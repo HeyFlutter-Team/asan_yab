@@ -15,6 +15,7 @@ import '../../../data/repositoris/message/message_repo.dart';
 import '../../../domain/riverpod/data/message/chat_details_page_riv.dart';
 import '../../../domain/riverpod/data/profile_data_provider.dart';
 import '../../widgets/message/chat_details_page_widgets/chat_background_widget.dart';
+import '../../widgets/message/chat_details_page_widgets/chat_scroll_button.dart';
 import '../../widgets/message/chat_details_page_widgets/chat_text_field_widget.dart';
 import '../../widgets/message/chat_details_page_widgets/editing_container_widget.dart';
 import '../../widgets/message/chat_details_page_widgets/emoji_button_widget.dart';
@@ -83,13 +84,15 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
     final languageText = AppLocalizations.of(context);
     final profileDetails = ref.watch(userDetailsProvider);
     final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+    final isEmojiOpened = ref.watch(emojiShowingProvider);
+    final isGifOpened = ref.watch(gifShowingProvider);
+    final isMessageOnEdit = ref.watch(isMessageEditing);
+    final messageLength = ref.watch(messageProvider).length;
     return WillPopScope(
       onWillPop: () async {
-        await ref
-            .read(handleWillPopProvider.notifier)
-            .handleWillPop(context, ref, '${widget.uid}');
+        await ref.read(handleWillPopNotifierProvider.notifier).handleWillPop(context, ref, '${widget.uid}');
         EmojiGifPickerPanel.onWillPop();
-        return ref.watch(emojiShowingProvider) || ref.watch(gifShowingProvider)
+        return isEmojiOpened || isGifOpened
             ? false
             : true;
       },
@@ -99,8 +102,10 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
           ref.read(gifShowingProvider.notifier).state = false;
           SystemChannels.textInput.invokeMethod('TextInput.hide');
         },
-        onHorizontalDragEnd: (DragEndDetails details) {
+        onHorizontalDragEnd: (DragEndDetails details) async{
           if (details.primaryVelocity! > 10) {
+            await ref.read(handleWillPopNotifierProvider.notifier).handleWillPop(context, ref, '${widget.uid}');
+            EmojiGifPickerPanel.onWillPop();
             Navigator.of(context).pop();
           }
         },
@@ -113,6 +118,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
             isOnline: newProfileUser.isOnline,
             urlImage: newProfileUser.imageUrl,
             user: newProfileUser,
+            uid: '${widget.uid}',
           ),
           body: Stack(
             children: [
@@ -149,7 +155,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                 )),
                           ref.watch(editingMessageDetails).content != ''
                               ? ref.watch(replayProvider) == ''
-                                  ? ref.watch(isMessageEditing)
+                                  ? isMessageOnEdit
                                       ? EditingContainerWidget(ref: ref)
                                       : const SizedBox(
                                           height: 0,
@@ -157,7 +163,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                   : const SizedBox()
                               : const SizedBox(),
                           ref.watch(replayProvider) == ''
-                              ? ref.watch(isMessageEditing)
+                              ? isMessageOnEdit
                                   ? const SizedBox(
                                       height: 10,
                                     )
@@ -194,7 +200,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                             ),
                           ),
                           SizedBox(
-                            height: !ref.watch(emojiShowingProvider) ? 20 : 350,
+                            height: !isEmojiOpened ? 20 : 350,
                             child: Column(
                               children: [
                                 const SizedBox(
@@ -202,7 +208,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                                 ),
                                 Expanded(
                                   child: Offstage(
-                                    offstage: !ref.watch(emojiShowingProvider),
+                                    offstage: !isEmojiOpened,
                                     child: EmojiPicker(
                                       onEmojiSelected: (category, emoji) {
                                         ref
@@ -278,54 +284,13 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
               ),
             ],
           ),
-          floatingActionButton: ref.watch(emojiShowingProvider) ||
-                  ref.watch(gifShowingProvider) ||
-                  ref.watch(isMessageEditing) ||
-                  ref.watch(messageProvider).length < 13
+          floatingActionButton:
+                  isEmojiOpened ||
+                      isGifOpened ||
+                      isMessageOnEdit ||
+                  messageLength < 13
               ? const SizedBox()
-              : Padding(
-                  padding: EdgeInsets.only(
-                      left: 0,
-                      right: 0,
-                      bottom: isKeyboardOpen
-                          ? ref.watch(isMessageEditing) ||
-                                  ref.watch(replayProvider) != ''
-                              ? 420
-                              : 350
-                          : ref.watch(replayProvider) == ''
-                              ? 90
-                              : 140),
-                  child: Visibility(
-                    visible: !ref.watch(isToEndProvider),
-                    child: InkWell(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onTap: () {
-                        ref
-                            .read(replayPositionProvider.notifier)
-                            .scrollItem(ref, 0);
-                      },
-                      child: Container(
-                        height: 45,
-                        width: 45,
-                        decoration: BoxDecoration(
-                            color: themDark
-                                ? Colors.white.withOpacity(0.8)
-                                : Colors.black.withOpacity(0.6),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(32))),
-                        child: Icon(
-                          Icons.keyboard_arrow_down_outlined,
-                          color: themDark
-                              ? Colors.black.withOpacity(0.6)
-                              : Colors.white,
-                          size: 37,
-                        ),
-                      ),
-                    ),
-                  ),
-                  // ),
-                ),
+              : ChatScrollButton(isKeyboardOpen: isKeyboardOpen, ref: ref, themDark: themDark),
         ),
       ),
     );

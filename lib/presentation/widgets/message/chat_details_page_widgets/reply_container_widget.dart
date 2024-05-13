@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../data/models/users.dart';
@@ -20,6 +19,8 @@ class ReplyContainerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final replyIsMine = ref.watch(
+        replayIsMineProvider);
     return InkWell(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
@@ -43,8 +44,7 @@ class ReplyContainerWidget extends StatelessWidget {
                 Container(
                   height: double.infinity,
                   width: 4,
-                  color: ref.watch(
-                      replayIsMineProvider)
+                  color: replyIsMine
                       ? Colors.purple.shade700
                       : Colors.blue,
                 ),
@@ -59,16 +59,14 @@ class ReplyContainerWidget extends StatelessWidget {
                     MainAxisAlignment.center,
                     children: [
                       Text(
-                        ref.watch(
-                            replayIsMineProvider)
+                        replyIsMine
                             ? 'You'
                             : '${newProfileUser?.name}',
                         style: TextStyle(
                           fontWeight:
                           FontWeight.bold,
                           fontSize: 17,
-                          color: ref.watch(
-                              replayIsMineProvider)
+                          color: replyIsMine
                               ? Colors
                               .purple.shade700
                               : Colors
