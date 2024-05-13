@@ -549,6 +549,12 @@ abstract class AppLocalizations {
   /// **'Last Name'**
   String get edit_2_txf_label;
 
+  /// No description provided for @edit_3_txf_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Username'**
+  String get edit_3_txf_label;
+
   /// No description provided for @edit_dialog.
   ///
   /// In en, this message translates to:
@@ -560,6 +566,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Don\'t save'**
   String get edit_dialog_do_not_save;
+
+  /// No description provided for @edit_name_is_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Name is empty'**
+  String get edit_name_is_empty;
+
+  /// No description provided for @edit_last_name_is_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Name is empty'**
+  String get edit_last_name_is_empty;
+
+  /// No description provided for @edit_id_is_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Username is empty'**
+  String get edit_id_is_empty;
+
+  /// No description provided for @edit_id_validation_is_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'This Username has already been used'**
+  String get edit_id_validation_is_empty;
 
   /// No description provided for @container_text.
   ///

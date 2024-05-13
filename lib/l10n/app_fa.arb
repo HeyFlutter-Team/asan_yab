@@ -104,8 +104,13 @@
   "edit_appBar_leading": "ذخیره",
   "edit_1_txf_label": "نام",
   "edit_2_txf_label": "تخلص",
+  "edit_3_txf_label": "آیدی",
   "edit_dialog": "آیا تغییرات ایجاد شده ذخیره شوند یا خیر؟",
   "edit_dialog_do_not_save": "خیر",
+  "edit_name_is_empty": "اسم خالی است",
+  "edit_last_name_is_empty": "تخلص خالی است",
+  "edit_id_is_empty": "آیدی خالی است",
+  "edit_id_validation_is_empty": "این آیدی قبلا استفاده شده است",
 
 
 

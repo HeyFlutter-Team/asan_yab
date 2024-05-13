@@ -107,8 +107,13 @@
   "edit_appBar_leading": "Save",
   "edit_1_txf_label": "Name",
   "edit_2_txf_label": "Last Name",
+  "edit_3_txf_label": "Username",
   "edit_dialog": "Will the changes be saved or not?",
   "edit_dialog_do_not_save": "Don't save",
+  "edit_name_is_empty": "Name is empty",
+  "edit_last_name_is_empty": "Last Name is empty",
+  "edit_id_is_empty": "Username is empty",
+  "edit_id_validation_is_empty": "This Username has already been used",
 
 
 
