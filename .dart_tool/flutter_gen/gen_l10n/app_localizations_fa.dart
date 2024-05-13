@@ -233,10 +233,25 @@ class AppLocalizationsFa extends AppLocalizations {
   String get edit_2_txf_label => 'تخلص';
 
   @override
+  String get edit_3_txf_label => 'آیدی';
+
+  @override
   String get edit_dialog => 'آیا تغییرات ایجاد شده ذخیره شوند یا خیر؟';
 
   @override
   String get edit_dialog_do_not_save => 'خیر';
+
+  @override
+  String get edit_name_is_empty => 'اسم خالی است';
+
+  @override
+  String get edit_last_name_is_empty => 'تخلص خالی است';
+
+  @override
+  String get edit_id_is_empty => 'آیدی خالی است';
+
+  @override
+  String get edit_id_validation_is_empty => 'این آیدی قبلا استفاده شده است';
 
   @override
   String get container_text => 'جستجوی در';

@@ -4,20 +4,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:popover/popover.dart';
-
 import '../../../../data/models/message/message.dart';
 import '../profile_data_provider.dart';
 import 'delete_message.dart';
 import 'message.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+part 'message_bubble_riv.g.dart';
 
 //first
-final handleOnHorizontalDragEndProvider =
-    StateNotifierProvider<HandleOnHorizontalDragEndNotifier, bool>((ref) {
-  return HandleOnHorizontalDragEndNotifier();
-});
 
-class HandleOnHorizontalDragEndNotifier extends StateNotifier<bool> {
-  HandleOnHorizontalDragEndNotifier() : super(true);
+@riverpod
+class HandleOnHorizontalDragEndNotifier extends _$HandleOnHorizontalDragEndNotifier{
+
+  @override
+  bool build() => true;
 
   Future<void> handleOnHorizontalDragEnd(
       {required WidgetRef ref,
@@ -91,15 +91,12 @@ class HandleOnHorizontalDragEndNotifier extends StateNotifier<bool> {
   }
 }
 
+
 //second
-final messageOnLongPressProvider =
-    StateNotifierProvider<MessageOnLongPressNotifier, bool>((ref) {
-  return MessageOnLongPressNotifier();
-});
-
-class MessageOnLongPressNotifier extends StateNotifier<bool> {
-  MessageOnLongPressNotifier() : super(true);
-
+@riverpod
+class MessageOnLongPressNotifier extends _$MessageOnLongPressNotifier {
+  @override
+  bool build() => true;
   Future<void> messageOnLongPress(
       BuildContext context,
       WidgetRef ref,
@@ -394,8 +391,8 @@ class MessageOnLongPressNotifier extends StateNotifier<bool> {
       height: isMe
           ? isMessageText
               ? 275
-              : 137
-          : 205,
+              : 130
+          : !isMe && !isMessageText? 130:205,
       arrowHeight: 15,
       arrowWidth: 30,
       transition: PopoverTransition.other,

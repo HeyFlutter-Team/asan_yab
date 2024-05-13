@@ -233,10 +233,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get edit_2_txf_label => 'Last Name';
 
   @override
+  String get edit_3_txf_label => 'Username';
+
+  @override
   String get edit_dialog => 'Will the changes be saved or not?';
 
   @override
   String get edit_dialog_do_not_save => 'Don\'t save';
+
+  @override
+  String get edit_name_is_empty => 'Name is empty';
+
+  @override
+  String get edit_last_name_is_empty => 'Last Name is empty';
+
+  @override
+  String get edit_id_is_empty => 'Username is empty';
+
+  @override
+  String get edit_id_validation_is_empty => 'This Username has already been used';
 
   @override
   String get container_text => 'Search in';

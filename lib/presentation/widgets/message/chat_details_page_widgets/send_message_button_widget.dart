@@ -29,6 +29,9 @@ class SendMessageButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final replyMessageTime = ref.watch(replayMessageTimeProvider);
+    final isMessageOnEdit = ref.watch(messageEditedProvider);
+    final isReplyMine = ref.watch(replayIsMineProvider);
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
           backgroundColor: themDark
@@ -91,12 +94,9 @@ class SendMessageButtonWidget extends StatelessWidget {
                   isSeen:false ,
                   replayMessageIndex:ref.watch(
                       messageIndexProvider)+1 ,
-                  replayIsMine:  ref.watch(
-                      replayIsMineProvider),
-                  isMessageEdited:ref.watch(
-                      messageEditedProvider
-                  ) ,
-                  replayMessageTime: ref.watch(replayMessageTimeProvider)
+                  replayIsMine:  isReplyMine,
+                  isMessageEdited:isMessageOnEdit,
+                  replayMessageTime: replyMessageTime
               )
           );
           MessageNotification
@@ -131,17 +131,12 @@ class SendMessageButtonWidget extends StatelessWidget {
               ref.watch(messageIndexProvider) +
                   1,
               ref: ref,
-              replayIsMine:
-              ref.watch(
-                  replayIsMineProvider),
-              messageEditedProvider:
-              ref.watch(
-                  messageEditedProvider),
+              replayIsMine:isReplyMine,
+              messageEditedProvider:isMessageOnEdit,
               users:
               newProfileUser,
               replayMessageTime:
-              ref.watch(
-                  replayMessageTimeProvider))
+              replyMessageTime)
               .whenComplete(() {
             print('hold check 2');
             ref

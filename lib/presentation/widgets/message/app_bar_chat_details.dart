@@ -1,6 +1,5 @@
 import 'package:asan_yab/presentation/pages/profile/other_profile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji_gif_picker/flutter_emoji_gif_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +8,7 @@ import '../../../data/models/users.dart';
 import 'dart:ui' as ui;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
+import '../../../domain/riverpod/data/message/chat_details_page_riv.dart';
 import '../../../domain/riverpod/data/message/message.dart';
 
 class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
@@ -19,6 +19,7 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
     required this.employee,
     required this.userId,
     required this.user,
+    required this.uid,
     super.key,
   });
 
@@ -28,11 +29,12 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
   final String employee;
   final String userId;
   final Users user;
+  final String uid;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themDark = Theme.of(context).brightness == Brightness.dark;
-
+    final isEmojiOpened = ref.watch(emojiShowingProvider);
+    final isGifOpened = ref.watch(gifShowingProvider);
     if (context.findRenderObject() == null) {
       return const SizedBox.shrink();
     }
@@ -68,12 +70,14 @@ class AppBarChatDetails extends ConsumerWidget implements PreferredSizeWidget {
                       children: <Widget>[
                         IconButton(
                             padding: EdgeInsets.zero,
-                            onPressed: () {
+                            onPressed: ()async {
                           FocusScope.of(context).unfocus();
-                          if(ref.watch(emojiShowingProvider) || ref.watch(gifShowingProvider)){
+                          if(isEmojiOpened || isGifOpened){
                             ref.read(emojiShowingProvider.notifier).state=false;
                             ref.read(gifShowingProvider.notifier).state=false;
                           }
+                          await ref.read(handleWillPopNotifierProvider.notifier).handleWillPop(context, ref, uid);
+
                           EmojiGifPickerPanel.onWillPop();
 
                           Navigator.pop(context);

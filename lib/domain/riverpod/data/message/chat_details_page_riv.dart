@@ -6,14 +6,14 @@ import 'message.dart';
 import 'message_history.dart';
 import 'message_seen.dart';
 import 'messages_notifier.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+part 'chat_details_page_riv.g.dart';
 
-final handleWillPopProvider =
-StateNotifierProvider<HandleWillPopNotifier, bool>((ref) {
-  return HandleWillPopNotifier();
-});
+@riverpod
+class HandleWillPopNotifier extends _$HandleWillPopNotifier {
 
-class HandleWillPopNotifier extends StateNotifier<bool> {
-  HandleWillPopNotifier() : super(true);
+  @override
+  bool build() => true;
 
   Future<void> handleWillPop(BuildContext context,WidgetRef ref,String userId) async {
     if (ref.watch(emojiShowingProvider) || ref.watch(gifShowingProvider)) {
