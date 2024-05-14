@@ -687,7 +687,7 @@ packages:
     source: hosted
     version: "3.3.2"
   flutter_emoji_gif_picker:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: flutter_emoji_gif_picker
       sha256: c03e58ebc90065517ba9fc32ed4e39a6b2459b6b2efa1a9882d79dba4af3cc8f
@@ -1398,7 +1398,7 @@ packages:
     source: hosted
     version: "2.0.1"
   path:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path
       sha256: "087ce49c3f0dc39180befefc60fdb4acd8f8620e5682fe2476afd0b3688bb4af"
