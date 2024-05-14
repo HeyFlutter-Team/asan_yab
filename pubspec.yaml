@@ -72,7 +72,7 @@ dependencies:
   loading_animation_widget: ^1.2.1
   flutter_notification_channel: ^3.0.0
   giphy_get: ^3.5.4
-  flutter_emoji_gif_picker: ^0.1.6
+  path: ^1.8.0
 
 
 dependency_overrides:
@@ -99,6 +99,7 @@ dev_dependencies:
   flutter_lints: ^3.0.2
   flutter_test:
     sdk: flutter
+  flutter_emoji_gif_picker: ^0.1.6
 
 
 
