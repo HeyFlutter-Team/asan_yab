@@ -73,6 +73,7 @@ dependencies:
   flutter_notification_channel: ^3.0.0
   giphy_get: ^3.5.4
   path: ^1.8.0
+  mockito: ^5.4.4
 
 
 dependency_overrides:
@@ -100,6 +101,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_emoji_gif_picker: ^0.1.6
+  firebase_core_platform_interface: any
+  mockito: any
+  test: ^1.25.2
 
 
 
