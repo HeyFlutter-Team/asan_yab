@@ -68,7 +68,7 @@ dependencies:
   riverpod_lint: ^2.3.10
   cached_network_image: ^3.3.1
   scrollable_positioned_list: ^0.3.8
-  popover: ^0.3.0+1
+  popover: any
   loading_animation_widget: ^1.2.1
   flutter_notification_channel: any
 
