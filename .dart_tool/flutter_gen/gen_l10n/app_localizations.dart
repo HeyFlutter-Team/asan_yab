@@ -303,6 +303,12 @@ abstract class AppLocalizations {
   /// **'Profile'**
   String get buttonNvB_4;
 
+  /// No description provided for @buttonNvB_5.
+  ///
+  /// In en, this message translates to:
+  /// **'Management'**
+  String get buttonNvB_5;
+
   /// No description provided for @proFile_type.
   ///
   /// In en, this message translates to:

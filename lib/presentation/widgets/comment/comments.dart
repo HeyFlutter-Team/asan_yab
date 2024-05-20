@@ -1,10 +1,10 @@
 import 'dart:core';
-import 'package:asan_yab/domain/riverpod/data/comment_provider.dart';
+import 'package:asan_yab/domain/riverpod/data/comments/comment_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../../data/models/comment_model.dart';
+import '../../../data/models/comment_model.dart';
 
 class Comments extends ConsumerStatefulWidget {
   final String postId;
@@ -47,7 +47,8 @@ class _CommentsState extends ConsumerState<Comments> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      StreamBuilder<QuerySnapshot>(
+                      Expanded(
+                        child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection('Places')
                               .doc(widget.postId)
@@ -57,7 +58,7 @@ class _CommentsState extends ConsumerState<Comments> {
                               .snapshots(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
-                              return Text("${languageText.firstComment} !\n");
+                              return Text("${languageText!.firstComment} !");
                             }
 
                             List<CommentM> comments = [];
@@ -65,14 +66,18 @@ class _CommentsState extends ConsumerState<Comments> {
                               comments.add(CommentM.fromDocument(doc));
                             }
                             if (comments.isEmpty) {
-                              return Text("${languageText.firstComment} !\n");
+                              return Text("${languageText!.firstComment} !");
                             }
-                            return Text(comments[0].text.length > 35
-                                ? comments[0].text.substring(0, 35)
-                                : comments[0].text);
-                          }),
+                            return Text(
+                              comments[0].text.length > 35
+                                  ? comments[0].text.substring(0, 35)
+                                  : comments[0].text,
+                            );
+                          },
+                        ),
+                      ),
                       Text(
-                        "${languageText.more}...",
+                        "${languageText!.more}...",
                         style: const TextStyle(
                           color: Colors.blueAccent,
                         ),

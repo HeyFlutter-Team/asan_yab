@@ -79,7 +79,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                     FirebaseAnalytics.instance.logEvent(
                       name: 'humm_1',
                       parameters: <String, dynamic>{
-                        'clicked_on': "${data[index].name}",
+                        'clicked_on': data[index].name,
                       },
                     );
                   },
@@ -219,8 +219,8 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                   padding: EdgeInsets.only(bottom: 30.0),
                   child: Center(
                     child: CircularProgressIndicator(
-                      // color: Colors.black,
-                    ),
+                        // color: Colors.black,
+                        ),
                   ),
                 );
               } else {

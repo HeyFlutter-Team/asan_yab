@@ -32,27 +32,21 @@ class ListOfFollow extends ConsumerWidget {
         child: Scaffold(
           appBar: AppBar(
             flexibleSpace: Container(
-              decoration:  BoxDecoration(
-                gradient:  isRTL
+              decoration: BoxDecoration(
+                gradient: isRTL
                     ? LinearGradient(colors: [
-                  Colors.purple,
-                  Colors.red.shade900,
-                ],
-                begin:Alignment.bottomLeft ,
-                    end: Alignment.topRight
-                )
+                        Colors.purple,
+                        Colors.red.shade900,
+                      ], begin: Alignment.bottomLeft, end: Alignment.topRight)
                     : LinearGradient(colors: [
-                  Colors.red.shade900,
-                  Colors.purple,
-                ],
-                    begin:Alignment.bottomLeft ,
-                    end: Alignment.topRight
-                ),
+                        Colors.red.shade900,
+                        Colors.purple,
+                      ], begin: Alignment.bottomLeft, end: Alignment.topRight),
               ),
             ),
             title: Text(
               profileDetails!.name,
-            style: const TextStyle(fontSize: 24),
+              style: const TextStyle(fontSize: 24),
             ),
             centerTitle: true,
             leading: IconButton(
@@ -74,14 +68,19 @@ class ListOfFollow extends ConsumerWidget {
                     .getProfile(FirebaseAuth.instance.currentUser!.uid);
               },
               labelColor: Colors.black87,
-              labelStyle: const TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 18),
+              labelStyle: const TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18),
               tabs: [
                 Tab(
-                  text: '${languageText?.profile_following} ${profileDetails.followingCount}',
+                  text:
+                      '${languageText?.profile_following} ${profileDetails.followingCount}',
                   // AppLocalizations.of(context)?.following ??
                 ),
                 Tab(
-                  text: '${languageText?.profile_followers} ${profileDetails.followerCount}',
+                  text:
+                      '${languageText?.profile_followers} ${profileDetails.followerCount}',
                   // AppLocalizations.of(context)?.followers ??
                 ),
               ],

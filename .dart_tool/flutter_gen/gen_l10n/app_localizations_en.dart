@@ -110,6 +110,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get buttonNvB_4 => 'Profile';
 
   @override
+  String get buttonNvB_5 => 'Management';
+
+  @override
   String get proFile_type => 'Account';
 
   @override

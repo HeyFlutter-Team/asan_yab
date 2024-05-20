@@ -1,5 +1,6 @@
 import 'package:asan_yab/domain/riverpod/config/notification_repo.dart';
 import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
+import 'package:asan_yab/presentation/pages/management.dart';
 import 'package:asan_yab/presentation/pages/message_page/message_home.dart';
 import 'package:asan_yab/presentation/pages/profile/profile_page.dart';
 import 'package:asan_yab/presentation/widgets/message/message_check_user.dart';
@@ -11,6 +12,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/riverpod/config/internet_connectivity_checker.dart';
+import '../../domain/riverpod/data/comments/comment_provider.dart';
+import '../../domain/riverpod/data/comments/management_provider.dart';
 import '../../domain/riverpod/screen/botton_navigation_provider.dart';
 import 'auth_page.dart';
 import 'home_page.dart';
@@ -25,9 +28,18 @@ class MainPage extends ConsumerStatefulWidget {
 
 class _MainPageState extends ConsumerState<MainPage>
     with WidgetsBindingObserver {
+  bool isBusiness = true;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final currentUser = FirebaseAuth.instance.currentUser!;
+      final users =
+          await ref.watch(commentProvider).getUserInfo(currentUser.uid);
+      isBusiness = (users.userType == 'Business');
+    });
+
     WidgetsBinding.instance.addObserver(this);
     setStatus(true);
     ref
@@ -59,6 +71,7 @@ class _MainPageState extends ConsumerState<MainPage>
   Widget build(BuildContext context) {
     final user = ref.watch(userDetailsProvider);
     final selectedIndex = ref.watch(buttonNavigationProvider);
+
     FirebaseApi().initInfo();
     FirebaseApi().getToken();
     FirebaseApi().initialize(context);
@@ -77,7 +90,8 @@ class _MainPageState extends ConsumerState<MainPage>
               : const MessageHome(),
           FirebaseAuth.instance.currentUser == null
               ? const AuthPage()
-              : const ProfilePage()
+              : const ProfilePage(),
+          if (isBusiness) const Management()
         ],
       ),
     );
@@ -90,6 +104,9 @@ class _MainPageState extends ConsumerState<MainPage>
         selectedItemColor: Colors.red,
         type: BottomNavigationBarType.fixed,
         onTap: (index) {
+          if (index == 4) {
+            ref.read(managementProvider.notifier).getInfo();
+          }
           FocusScope.of(context).unfocus();
           ref.read(buttonNavigationProvider.notifier).selectedIndex(index);
         },
@@ -111,6 +128,11 @@ class _MainPageState extends ConsumerState<MainPage>
             label: AppLocalizations.of(context)!.buttonNvB_4,
             icon: const Icon(Icons.person),
           ),
+          if (isBusiness)
+            BottomNavigationBarItem(
+              label: AppLocalizations.of(context)!.buttonNvB_5,
+              icon: const Icon(Icons.notifications),
+            ),
         ],
       );
 }
