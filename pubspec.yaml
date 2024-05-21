@@ -39,8 +39,8 @@ dependencies:
   geolocator: ^11.0.0
   geocoding: ^3.0.0
   google_maps_flutter: ^2.5.0
-  location: any
-  typesense: any
+  location: ^6.0.1
+  typesense: ^0.5.1
   firebase_analytics: ^10.5.0
   firebase_messaging: ^14.6.9
   flutter_local_notifications: ^17.1.1

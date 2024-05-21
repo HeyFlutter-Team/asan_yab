@@ -15,15 +15,13 @@ jobs:
 
       - name: Set Fastlane environment to non-interactive
         run: echo "FASTLANE_OPT_OUT_USAGE=1" >> $GITHUB_ENV
-      - name: Upgrade Dart SDK
-        run: |
-            dart --version  # Check current version
-            dart tool snapshot --channel stable download  # Download latest stable version
-            export PATH="$PATH":"$HOME/.dart-sdk/bin"  # Update PATH to include Dart SDK bin directory
-            dart --version  # Verify updated version
+
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: '3.4.0'
             
-            
-            - name: Setup Flutter
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.22.0
