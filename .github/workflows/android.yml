@@ -26,6 +26,12 @@ jobs:
         with:
           flutter-version: 3.22.0
 
+      - name: Update Version
+        run: |
+          echo "flutter.versionCode=${{ github.run_number }}" >> android/local.properties
+          echo "flutter.versionName=1.${{ github.run_number }}" >> android/local.properties
+
+
       - name: Build and Deploy to Google Play
         run: |
           flutter pub get
