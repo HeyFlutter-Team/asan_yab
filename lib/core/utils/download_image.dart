@@ -32,16 +32,17 @@ class DownloadImage {
               height: 100,
               child: AlertDialog(
                 elevation: 4,
-                content:  Row(
+                content: Row(
                   children: [
                     const SizedBox(
                       height: 30,
                       width: 30,
                       child: CircularProgressIndicator(
-                          color: Colors.blueGrey, strokeWidth: 3.0),
+                          color: Colors.red, strokeWidth: 3.0),
                     ),
                     const SizedBox(width: 12),
-                    Text('${languageText?.download_image_loading}',
+                    Text(
+                      '${languageText?.download_image_loading}',
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

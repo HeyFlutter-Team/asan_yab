@@ -1,5 +1,6 @@
 import 'package:asan_yab/data/models/message/message.dart';
 import 'package:asan_yab/data/repositoris/message/history_message.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final messageNotifierProvider =
@@ -12,13 +13,21 @@ class MessagesNotifier extends StateNotifier<List<MessageModel>> {
   final historyRepo = HistoryMessage();
 
   Future<void> fetchMessage() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      print("User is not authenticated");
+      return; // Return early if user is not authenticated
+    }
+
     ref.read(loadingMessagesNotifier.notifier).state = true;
     try {
+      print('fetchMessage 1');
       final data = await historyRepo
           .getOtherUserId()
           .then((value) async => await historyRepo.getLastMessage(value));
       state.clear();
       state = data;
+      print('fetchMessage 2');
     } catch (e) {
       rethrow;
     } finally {

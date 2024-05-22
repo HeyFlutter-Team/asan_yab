@@ -100,11 +100,11 @@ class VerticalDataNotifier extends ChangeNotifier {
           final user = userDoc.exists
               ? Users.fromMap(userDoc.data() as Map<String, dynamic>)
               : Users(
-                  id: 1,
+                  id: '1',
                   name: 'name',
                   lastName: 'lastName',
                   email: 'email',
-                  createdAt: Timestamp.now(),
+                  createdAt: Timestamp.now().toString(),
                   fcmToken: 'fcmToken',
                   isOnline: true,
                   imageUrl: '',
@@ -363,11 +363,11 @@ class VerticalDataNotifier extends ChangeNotifier {
     return userDoc.exists
         ? Users.fromMap(userDoc.data() as Map<String, dynamic>)
         : Users(
-            id: 1,
+            id: '1',
             name: 'name',
             lastName: 'lastName',
             email: 'email',
-            createdAt: Timestamp.now(),
+            createdAt: Timestamp.now().toString(),
             fcmToken: 'fcmToken',
             isOnline: true,
             imageUrl: '',
@@ -503,8 +503,6 @@ class VerticalDataNotifier extends ChangeNotifier {
       WidgetRef ref,
       bool isReply,
       CommentM comment) {
-    final themDark = Theme.of(context).brightness == Brightness.dark;
-
     return [
       isOwner
           ? SlidableAction(
@@ -614,11 +612,11 @@ class VerticalDataNotifier extends ChangeNotifier {
         final user = userDoc.exists
             ? Users.fromMap(userDoc.data() as Map<String, dynamic>)
             : Users(
-                id: 1,
+                id: '1',
                 name: 'name',
                 lastName: 'lastName',
                 email: 'email',
-                createdAt: Timestamp.now(),
+                createdAt: Timestamp.now().toString(),
                 fcmToken: 'fcmToken',
                 isOnline: true,
                 imageUrl: '',

@@ -51,7 +51,12 @@ class _CommentTextFieldState extends ConsumerState<CommentTextField> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                ref.watch(commentProvider).name,
+                                (ref.watch(commentProvider).name.length > 100
+                                    ? ref
+                                        .watch(commentProvider)
+                                        .name
+                                        .substring(0, 100)
+                                    : ref.watch(commentProvider).name),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 17,
@@ -60,7 +65,13 @@ class _CommentTextFieldState extends ConsumerState<CommentTextField> {
                               ),
                               Text(
                                 textDirection: ui.TextDirection.ltr,
-                                ref.watch(commentProvider).replyText,
+                                (ref.watch(commentProvider).replyText.length >
+                                        50
+                                    ? ref
+                                        .watch(commentProvider)
+                                        .replyText
+                                        .substring(0, 50)
+                                    : ref.watch(commentProvider).replyText),
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w300,

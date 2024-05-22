@@ -6,18 +6,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class EditProfileState {
   String name = '';
   String lastName = '';
+  String personalId = '';
 
   EditProfileState({
     required this.name,
     required this.lastName,
+    required this.personalId
   });
 }
 
 class EditProfile extends StateNotifier<EditProfileState> {
-  EditProfile() : super(EditProfileState(name: '', lastName: ''));
+  EditProfile() : super(EditProfileState(name: '', lastName: '',personalId: ''));
 
   Future editData(TextEditingController nameController,
-      TextEditingController lastNameController) async {
+      TextEditingController lastNameController,TextEditingController personalId) async {
     try {
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
@@ -26,11 +28,12 @@ class EditProfile extends StateNotifier<EditProfileState> {
             .doc(user.uid)
             .update({
           'name': nameController.text,
-          'lastName': lastNameController.text
+          'lastName': lastNameController.text,
+          'id':personalId.text
           // Add other fields you want to update here
         });
         state = EditProfileState(
-            name: nameController.text, lastName: lastNameController.text);
+            name: nameController.text, lastName: lastNameController.text,personalId: personalId.text);
         print('Data updated successfully!');
       } else {
         print('User is not authenticated!');
@@ -48,6 +51,9 @@ class EditProfile extends StateNotifier<EditProfileState> {
 
   updateLastName(String newLastName) {
     state.lastName = newLastName;
+  }
+  updatePersonalId(String newId){
+    state.personalId = newId;
   }
 }
 

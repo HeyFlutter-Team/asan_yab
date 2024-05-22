@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/category.dart';
 import '../../data/models/language.dart';
 import '../../data/repositoris/language_repository.dart';
+import '../../domain/riverpod/data/categories_items_provider.dart';
 import '../../domain/riverpod/data/categories_provider.dart';
 import '../pages/category_page.dart';
 import '../pages/list_category_item.dart';
@@ -26,7 +27,7 @@ class Categories extends ConsumerWidget {
           ? const Center(
               child: CircularProgressIndicator(
                 strokeWidth: 5,
-                color: Colors.blueGrey,
+                color: Colors.red,
               ),
             )
           : Column(
@@ -65,6 +66,7 @@ class Categories extends ConsumerWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: GestureDetector(
                           onTap: () {
+                            ref.read(categoriesItemsProvider).clear();
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(

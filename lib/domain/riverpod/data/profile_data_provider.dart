@@ -4,7 +4,9 @@ import 'package:clipboard/clipboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../data/models/users.dart';
@@ -42,6 +44,39 @@ class ReadUserDetails extends StateNotifier<Users?> {
   void disposeUserData() {
     state = null;
   }
+  Future<Map<String, int>> getCurrentUserFollowCounts() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+        print('getCurrentUserFollowCounts 1');
+
+      if (user != null) {
+        final userSnapshot = await FirebaseFirestore.instance
+            .collection('User')
+            .doc(user.uid)
+            .get();
+
+        if (userSnapshot.exists) {
+          final userData = Users.fromMap(userSnapshot.data()!);
+          return {
+            'followerCount': userData.followerCount,
+            'followingCount': userData.followingCount,
+          };
+        } else {
+          print('User data not found for user ID: ${user.uid}');
+        }
+      } else {
+        print('Current user is null');
+      }
+        print('getCurrentUserFollowCounts 2');
+    } catch (e, stackTrace) {
+      print('Error getting current user data: $e\n$stackTrace');
+    }
+
+    return {
+      'followerCount': 0,
+      'followingCount': 0,
+    };
+  }
 
   void copyToClipboard(String text) {
     FlutterClipboard.copy(text);
@@ -78,12 +113,26 @@ class ImageNotifier extends StateNotifier<ImageState> {
 
   Future<void> pickImage(ImageSource source) async {
     try {
-      final pickedImage = await _imagePicker.pickImage(source: source);
-      if (pickedImage == null) return;
+      print('pickImage 1');
+      await _imagePicker.pickImage(source: source).then((image)async {
+        if (image == null) {
+          return;
+        }
+        await ImageCropper().cropImage(sourcePath: image.path,
+            cropStyle: CropStyle.circle,
+            aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1))
+            .then((croppedImage){
+          if (croppedImage == null) {
+            return;
+          }
+          final imageTemp = File(croppedImage.path);
+          state = state.copyWith(image: imageTemp, imageUrl: croppedImage.path);
+          uploadFile();
+        } );
+      });
 
-      final imageTemp = File(pickedImage.path);
-      state = state.copyWith(image: imageTemp, imageUrl: pickedImage.path);
-      uploadFile();
+      print('pickImage 2');
+
     } catch (e, stackTrace) {
       print('Failed to pick image: $e\n$stackTrace');
     }
@@ -98,6 +147,7 @@ class ImageNotifier extends StateNotifier<ImageState> {
     final ref = FirebaseStorage.instance.ref().child(path);
 
     try {
+      print('uploadFile 1');
       final uploadTask = ref.putFile(state.image!);
       state = state.copyWith(uploadTask: uploadTask);
 
@@ -109,6 +159,7 @@ class ImageNotifier extends StateNotifier<ImageState> {
       });
 
       state = state.copyWith(imageUrl: uploadedImageUrl);
+      print('uploadFile 2');
     } catch (e, stackTrace) {
       print('Error uploading image: $e\n$stackTrace');
     }
@@ -118,3 +169,37 @@ class ImageNotifier extends StateNotifier<ImageState> {
 final imageProvider = StateNotifierProvider<ImageNotifier, ImageState>(
   (ref) => ImageNotifier(),
 );
+
+
+class DeleteProfile extends ChangeNotifier{
+
+  Future<void> deleteImageAndClearUrl(String imageUrl) async {
+    try {
+      print('deleteImageAndClearUrl 1');
+      // Delete the image file from storage
+      final imageRef = FirebaseStorage.instance.refFromURL(imageUrl);
+      await imageRef.delete();
+      print('younis: Image deleted successfully.');
+notifyListeners();
+      // Clear the image URL from the user's profile in the database
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await FirebaseFirestore.instance.collection('User').doc(user.uid).update({
+          'imageUrl': '',
+        });
+        notifyListeners();
+        print('Image URL cleared from database.');
+      }
+      notifyListeners();
+      print('deleteImageAndClearUrl 2');
+    } catch (error) {
+      print('Error deleting image: $error');
+    }
+  }
+}
+
+final deleteProfile=ChangeNotifierProvider<DeleteProfile>((ref) => DeleteProfile());
+
+final deleteIsLoading=StateProvider<bool>((ref) => false);
+
+final isSigningOut = StateProvider<bool>((ref) => false);

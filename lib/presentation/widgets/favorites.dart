@@ -79,6 +79,7 @@ class _FavoritesState extends ConsumerState<Favorites> {
                     final items = favorites[index];
                     List<String> phoneData =
                         List<String>.from(jsonDecode(items['phone']));
+
                     final phoneNumber = isRTL
                         ? convertDigitsToFarsi(phoneData[0])
                         : phoneData[0];

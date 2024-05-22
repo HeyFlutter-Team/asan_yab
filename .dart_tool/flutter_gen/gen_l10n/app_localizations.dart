@@ -246,7 +246,7 @@ abstract class AppLocalizations {
   /// No description provided for @verify_body_text.
   ///
   /// In en, this message translates to:
-  /// **'A confirmation link has been sent to your email!\n   Please click on it to confirm your email.\n If you press the link,\n press send again!'**
+  /// **'A confirmation link has been sent to your email!\nPlease click on it to confirm your email.\n If you press the link,\n press send again!'**
   String get verify_body_text;
 
   /// No description provided for @verify_elb_text.
@@ -264,13 +264,25 @@ abstract class AppLocalizations {
   /// No description provided for @verify_email_dialog.
   ///
   /// In en, this message translates to:
-  /// **'An Asan Yab account has been \n created to the following email address.\n If you leave this page\n (without confirming your email and filling\n out the introduction form on the next page),\n you will no longer be able to\n enter Asan Yab with this email.'**
+  /// **'An Asan Yab account has been \n created to the following email address.\n If you leave this page\n'**
   String get verify_email_dialog;
+
+  /// No description provided for @verify_email_dialog_red.
+  ///
+  /// In en, this message translates to:
+  /// **'without confirming your email and filling\n out the introduction form on the next page,'**
+  String get verify_email_dialog_red;
+
+  /// No description provided for @verify_email_dialog_2.
+  ///
+  /// In en, this message translates to:
+  /// **'you will no longer be able to\n enter Asan Yab with this email.'**
+  String get verify_email_dialog_2;
 
   /// No description provided for @verify_email_give_up.
   ///
   /// In en, this message translates to:
-  /// **'Give Up'**
+  /// **'Cancel'**
   String get verify_email_give_up;
 
   /// No description provided for @verify_email_continue.
@@ -324,7 +336,7 @@ abstract class AppLocalizations {
   /// No description provided for @nearbyPlaces_title.
   ///
   /// In en, this message translates to:
-  /// **'Nearby places'**
+  /// **'Nearby Places'**
   String get nearbyPlaces_title;
 
   /// No description provided for @nearbyPlaces_meter_title.
@@ -441,6 +453,12 @@ abstract class AppLocalizations {
   /// **'Return to the previous page'**
   String get suggestion_customDialog_textButton;
 
+  /// No description provided for @suggestion_check_user.
+  ///
+  /// In en, this message translates to:
+  /// **'To submit a request, you must log in to your Asan Yab account'**
+  String get suggestion_check_user;
+
   /// No description provided for @profile_future_error.
   ///
   /// In en, this message translates to:
@@ -450,7 +468,7 @@ abstract class AppLocalizations {
   /// No description provided for @profile_copy_id_snack_bar.
   ///
   /// In en, this message translates to:
-  /// **'Your ID was copied to the clipboard'**
+  /// **'ID was copied to the clipboard'**
   String get profile_copy_id_snack_bar;
 
   /// No description provided for @profile_about_us_listTile.
@@ -498,7 +516,7 @@ abstract class AppLocalizations {
   /// No description provided for @profile_rate_score.
   ///
   /// In en, this message translates to:
-  /// **'ُScore'**
+  /// **'Score'**
   String get profile_rate_score;
 
   /// No description provided for @profile_followers.
@@ -512,6 +530,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Following'**
   String get profile_following;
+
+  /// No description provided for @profile_wall_paper.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat WallPapers'**
+  String get profile_wall_paper;
 
   /// No description provided for @edit_appBar_leading.
   ///
@@ -530,6 +554,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Last Name'**
   String get edit_2_txf_label;
+
+  /// No description provided for @edit_3_txf_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Username'**
+  String get edit_3_txf_label;
+
+  /// No description provided for @edit_dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Will the changes be saved or not?'**
+  String get edit_dialog;
+
+  /// No description provided for @edit_dialog_do_not_save.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t save'**
+  String get edit_dialog_do_not_save;
+
+  /// No description provided for @edit_name_is_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Name is empty'**
+  String get edit_name_is_empty;
+
+  /// No description provided for @edit_last_name_is_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Name is empty'**
+  String get edit_last_name_is_empty;
+
+  /// No description provided for @edit_id_is_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Username is empty'**
+  String get edit_id_is_empty;
+
+  /// No description provided for @edit_id_validation_is_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'This Username has already been used'**
+  String get edit_id_validation_is_empty;
 
   /// No description provided for @container_text.
   ///
@@ -678,7 +744,7 @@ abstract class AppLocalizations {
   /// No description provided for @nearby_place_page_title.
   ///
   /// In en, this message translates to:
-  /// **'NearBy Places'**
+  /// **'Nearby Places'**
   String get nearby_place_page_title;
 
   /// No description provided for @nearby_place_page_active_location.
@@ -690,7 +756,7 @@ abstract class AppLocalizations {
   /// No description provided for @nearby_place_page_distances.
   ///
   /// In en, this message translates to:
-  /// **'Choose the distance you want'**
+  /// **'Desired distance'**
   String get nearby_place_page_distances;
 
   /// No description provided for @nearby_place_page_meter.
@@ -774,19 +840,19 @@ abstract class AppLocalizations {
   /// No description provided for @message_personal_score.
   ///
   /// In en, this message translates to:
-  /// **'current score'**
+  /// **'Current score'**
   String get message_personal_score;
 
   /// No description provided for @message_description.
   ///
   /// In en, this message translates to:
-  /// **'To get points, \n you must introduce Asan Yab \n to two of your friends \n and they must enter your personal ID in the field \n mentioned below during registration...>'**
+  /// **'To get points, \n you must introduce Asan Yab \n to two of your friends \n and they must enter your personal ID in the field \n mentioned below during registration ='**
   String get message_description;
 
   /// No description provided for @message_your_id.
   ///
   /// In en, this message translates to:
-  /// **'Your Id...>'**
+  /// **'Your Id'**
   String get message_your_id;
 
   /// No description provided for @for_add_comment.
@@ -801,6 +867,12 @@ abstract class AppLocalizations {
   /// **'Log in'**
   String get log_in;
 
+  /// No description provided for @emoji_recent.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no recent emojis'**
+  String get emoji_recent;
+
   /// No description provided for @download_image_loading.
   ///
   /// In en, this message translates to:
@@ -812,6 +884,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'you are not logged in'**
   String get you_are_not_logged_in;
+
+  /// No description provided for @user_delete_account.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get user_delete_account;
+
+  /// No description provided for @wrong_email.
+  ///
+  /// In en, this message translates to:
+  /// **'Your email or password is wrong, please check first and then try again'**
+  String get wrong_email;
+
+  /// No description provided for @wrong_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Password is wrong'**
+  String get wrong_password;
 
   /// No description provided for @menus_restaurant.
   ///

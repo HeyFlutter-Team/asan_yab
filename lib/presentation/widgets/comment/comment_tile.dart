@@ -3,8 +3,6 @@ import 'package:asan_yab/domain/riverpod/data/comments/comment_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -12,9 +10,7 @@ import '../../../core/res/image_res.dart';
 import '../../../data/models/comment_model.dart';
 import '../../../data/models/users.dart';
 import '../../../data/repositoris/language_repository.dart';
-import '../../../domain/riverpod/data/get_reply_message_riverpod.dart';
 import '../../../domain/riverpod/data/other_user_data.dart';
-
 import '../../../domain/riverpod/screen/follow_checker.dart';
 import '../../pages/profile/other_profile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -26,12 +22,11 @@ class CommentTile extends ConsumerStatefulWidget {
   final bool canDelete;
 
   const CommentTile(
-      {Key? key,
+      {super.key,
       required this.index,
       required this.postId,
       required this.comment,
-      required this.canDelete})
-      : super(key: key);
+      required this.canDelete});
 
   @override
   ConsumerState<CommentTile> createState() => _CommentTileState();
@@ -41,7 +36,6 @@ class _CommentTileState extends ConsumerState<CommentTile> {
   int replyCount = 0;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -102,8 +96,10 @@ class _CommentTileState extends ConsumerState<CommentTile> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            const OtherProfile(),
+                                        builder: (context) => OtherProfile(
+                                          user: myUser,
+                                          uid: widget.comment.uid,
+                                        ),
                                       ));
                                 }
                               } else {
@@ -149,8 +145,10 @@ class _CommentTileState extends ConsumerState<CommentTile> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            const OtherProfile(),
+                                        builder: (context) => OtherProfile(
+                                          user: myUser,
+                                          uid: widget.comment.uid,
+                                        ),
                                       ));
                                 }
                               } else {
@@ -189,7 +187,10 @@ class _CommentTileState extends ConsumerState<CommentTile> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const OtherProfile(),
+                                    builder: (context) => OtherProfile(
+                                      uid: widget.comment.commentId,
+                                      user: myUser,
+                                    ),
                                   ));
                             }
                           } else {
@@ -352,7 +353,13 @@ class _CommentTileState extends ConsumerState<CommentTile> {
                                                                   MaterialPageRoute(
                                                                     builder:
                                                                         (context) =>
-                                                                            const OtherProfile(),
+                                                                            OtherProfile(
+                                                                      user:
+                                                                          myUser,
+                                                                      uid: widget
+                                                                          .comment
+                                                                          .uid,
+                                                                    ),
                                                                   ));
                                                             }
                                                           } else {
@@ -421,7 +428,13 @@ class _CommentTileState extends ConsumerState<CommentTile> {
                                                                   MaterialPageRoute(
                                                                     builder:
                                                                         (context) =>
-                                                                            const OtherProfile(),
+                                                                            OtherProfile(
+                                                                      user:
+                                                                          myUser,
+                                                                      uid: widget
+                                                                          .comment
+                                                                          .uid,
+                                                                    ),
                                                                   ));
                                                             }
                                                           } else {
@@ -478,7 +491,12 @@ class _CommentTileState extends ConsumerState<CommentTile> {
                                                               MaterialPageRoute(
                                                                 builder:
                                                                     (context) =>
-                                                                        const OtherProfile(),
+                                                                        OtherProfile(
+                                                                  user: myUser,
+                                                                  uid: widget
+                                                                      .comment
+                                                                      .uid,
+                                                                ),
                                                               ));
                                                         }
                                                       } else {

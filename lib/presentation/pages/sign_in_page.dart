@@ -3,6 +3,7 @@
 import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
 import 'package:asan_yab/presentation/pages/main_page.dart';
 import 'package:asan_yab/presentation/pages/sign_up_page.dart';
+import 'package:asan_yab/presentation/pages/verify_email_page.dart';
 import 'package:asan_yab/presentation/widgets/custom_text_field.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,9 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import '../../domain/riverpod/data/isOnline.dart';
 import '../../domain/riverpod/data/sign_in_provider.dart';
-import '../../domain/riverpod/screen/botton_navigation_provider.dart';
+
+final isSignInningProvider = StateProvider<bool>((ref) => false);
 
 class LogInPage extends ConsumerStatefulWidget {
   final Function()? onClickedSignUp;
@@ -43,6 +45,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
     ).animate(_controller);
     _controller.forward();
     _initializeValues();
+    ref.read(isSignInningProvider.notifier).state = false;
   }
 
   void _initializeValues() async {
@@ -163,42 +166,74 @@ class _LogInPageState extends ConsumerState<LogInPage>
                 builder: (context, sref, child) => ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red.shade800,
-                      minimumSize: const Size(340, 55),
+                      minimumSize:
+                          Size(MediaQuery.of(context).size.width * 0.9, 55),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12))),
-                  onPressed: () async {
-                    final isValid = formKey.currentState!.validate();
-                    if (!isValid) return;
-                    final isCheckboxChecked = ref.read(isCheckProvider);
-                    if (isCheckboxChecked) {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      prefs.setString('email', emailCTRL.text);
-                      prefs.setString('password', passwordCTRL.text);
-                    }
-                    await ref
-                        .read(signInProvider)
-                        .signIn(
-                            context: context,
-                            email: emailCTRL.text,
-                            password: passwordCTRL.text)
-                        .whenComplete(() => ref.watch(userDetailsProvider))
-                        .whenComplete(() {})
-                        .whenComplete(() async {
-                      await ref
-                          .read(buttonNavigationProvider.notifier)
-                          .selectedIndex(0);
-                    }).whenComplete(() {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MainPage()));
-                    });
-                  },
-                  child: Text(
-                    languageText.sign_in_elbT,
-                    style: const TextStyle(fontSize: 20, color: Colors.white),
-                  ),
+                  onPressed: ref.watch(isSignInningProvider)
+                      ? null
+                      : () async {
+                          final isValid = formKey.currentState!.validate();
+                          if (!isValid) return;
+                          ref.read(isSignInningProvider.notifier).state = true;
+                          FocusScope.of(context).unfocus();
+                          final isCheckboxChecked = ref.read(isCheckProvider);
+                          if (isCheckboxChecked) {
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.setString('email', emailCTRL.text);
+                            prefs.setString('password', passwordCTRL.text);
+                          }
+
+                          final currentContext =
+                              context; // Store the current context
+
+                          await ref
+                              .read(signInProvider)
+                              .signIn(
+                                context: context,
+                                email: emailCTRL.text,
+                                password: passwordCTRL.text,
+                                ref: ref,
+                              )
+                              .then((_) async {
+                            await ref
+                                .watch(userDetailsProvider.notifier)
+                                .getCurrentUserData();
+                            final currentUser =
+                                FirebaseAuth.instance.currentUser;
+                            if (currentUser != null) {
+                              if (context.mounted) {
+                                  if (currentUser.emailVerified) {  Navigator.pushReplacement(
+                                     currentContext, // Use the stored context
+                                     MaterialPageRoute(
+                                         builder: (context) => const MainPage(),
+                                   ));
+                                 
+                                } else {
+                                  Navigator.pushReplacement(
+                                    currentContext, // Use the stored context
+                                    MaterialPageRoute(
+                                      builder: (context) => VerifyEmailPage(
+                                          email: emailCTRL.text),
+                                    ),
+                                  );
+                                }
+                              }
+                            } else {
+                              print('');
+                            }
+                          });
+                        },
+                  child: ref.watch(isSignInningProvider)
+                      ? const CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                      : Text(
+                          languageText.sign_in_elbT,
+                          style: const TextStyle(
+                              fontSize: 20, color: Colors.white),
+                        ),
                 ),
               ),
               const SizedBox(
@@ -217,11 +252,13 @@ class _LogInPageState extends ConsumerState<LogInPage>
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    minimumSize: const Size(340, 55),
+                    minimumSize:
+                        Size(MediaQuery.of(context).size.width * 0.9, 55),
                     shape: RoundedRectangleBorder(
                         side: BorderSide(color: Colors.black.withOpacity(0.44)),
                         borderRadius: BorderRadius.circular(12))),
                 onPressed: () {
+                  FocusScope.of(context).unfocus();
                   Navigator.push(
                       context,
                       MaterialPageRoute(

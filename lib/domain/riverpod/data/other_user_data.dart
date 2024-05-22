@@ -6,5 +6,8 @@ final otherUserProvider =
 
 class OtherUser extends StateNotifier<Users?> {
   OtherUser(super.state);
-  void setDataUser(Users user) => state = user;
+  void setDataUser(Users user){
+    state = user;
+    print('setUserCalled');
+  }
 }

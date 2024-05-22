@@ -1,9 +1,6 @@
-import 'package:asan_yab/data/models/language.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../data/repositoris/language_repository.dart';
 
 final noteProvider = ChangeNotifierProvider<Note>((ref) => Note());
 

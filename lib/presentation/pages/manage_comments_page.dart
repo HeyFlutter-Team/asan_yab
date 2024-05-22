@@ -153,11 +153,14 @@ class _ManageCommentsPageState extends ConsumerState<ManageCommentsPage> {
                     itemBuilder: (context, index) {
                       final myComment = ref.watch(commentProvider).comments;
                       if (index < myComment.length) {
-                        return CommentTile(
-                          index: index,
-                          postId: widget.postId,
-                          comment: myComment[index],
-                          canDelete: true,
+                        return Directionality(
+                          textDirection: TextDirection.ltr,
+                          child: CommentTile(
+                            index: index,
+                            postId: widget.postId,
+                            comment: myComment[index],
+                            canDelete: true,
+                          ),
                         );
                       }
 

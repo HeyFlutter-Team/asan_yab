@@ -14,7 +14,7 @@
   "sign_in_2_elbT": "ثبت نام",
   "sign_in_method_1_if": "ایمیل شما در دیتابیس ثبت نشده است",
   "sign_in_method_2_if": "رمز شما اشتباه است",
-  "sign_in_method_3_if": "برای درخواست اشتباه مکرر اکانت شما بلاک شده است لطفا بعدا امتحان کنید",
+  "sign_in_method_3_if": "برای درخواست اشتباه مکرر حساب شما بلاک شده است لطفا بعدا امتحان کنید",
 
 
 
@@ -37,8 +37,9 @@
   "verify_body_text": "یک لینک تاییدیه به ایمیل شما فرستاده شد!\n لطفا برای تایید ایمیل خود روی آن کلیک کنید \nاگر لینک را دریافت نکرده اید دکمه ارسال دوباره \nرا فشار بدهید!",
   "verify_elb_text": "ارسال دوباره",
   "verify_tbt_text": "لغو",
-  "verify_email_dialog": "یک حساب آسان یاب به ایمیل داده شده در بالا ساخته شده است اگر (بدون تایید کردن ایمیل خود و پر کردن فورم معرفی نامه در صفحه بعدی) از این صفحه خارج شوید دیگر با این ایمیل وارد آسان یاب شده نمی توانید",
-
+  "verify_email_dialog": "یک حساب آسان یاب به ایمیل داده شده در بالا ساخته شده است اگر ",
+"verify_email_dialog_red": "بدون تایید کردن ایمیل خود و پر کردن فورم معرفی نامه در صفحه بعدی ",
+  "verify_email_dialog_2": "از این صفحه خارج شوید دیگر با این ایمیل وارد آسان یاب شده نمی توانید",
 "verify_email_give_up": "انصراف",
   "verify_email_continue": "ادامه",
 
@@ -64,16 +65,16 @@
   "favorite_page_title": "موارد دلخواه",
 
 
-  "findingFriendById": "ایدی مورد نظر را  بنویسید",
-  "searchById": "گشتن با آیدی ",
+  "findingFriendById": "آیدی مورد نظر را  بنویسید",
+  "searchById": "جستجو با آیدی ",
 
   "suggestion_appBar_title": "درخواست مکان جدید",
   "suggestion_1_tf_labelName": "نام مکان",
   "suggestion_1_tf_valid": "مکان خود را وارد کنید!",
   "suggestion_2_tf_labelName": "آدرس مکان",
   "suggestion_2_tf_valid": "آدرس خود را وارد کنید!",
-  "suggestion_3_tf_labelName": "توضیجات مکان",
-  "suggestion_3_tf_valid": "توضیجات مکان را بنویسید",
+  "suggestion_3_tf_labelName": "توضیحات مکان",
+  "suggestion_3_tf_valid": "توضیحات مکان را بنویسید",
   "suggestion_4_tf_labelName": "شماره تماس",
   "suggestion_4_tf_valid": "شماره خود را وارد کنید!",
   "suggestion_custom_card_title": "نوت",
@@ -82,11 +83,12 @@
   "suggestion_customDialog_title": "ارسال درخواست مکان",
   "suggestion_customDialog_content": "درخواست شما ثیت گردید",
   "suggestion_customDialog_textButton": "بازگشت به صفحه قبلی",
+  "suggestion_check_user": "برای ارسال درخواست باید وارد حساب آسان یاب خود شوید",
 
 
 
   "profile_future_error": "اطلاعات در دسترس نیست",
-  "profile_copy_id_snack_bar": " آیدی شما در کلیپ بورد کپی شد",
+  "profile_copy_id_snack_bar": " آیدی در کلیپ بورد کپی شد",
   "profile_about_us_listTile": "درباره ما",
   "profile_edit_button_text": "ویرایش",
   "profile_buttonSheet_camera": "کامره",
@@ -97,12 +99,20 @@
   "profile_rate_score": "امتیاز",
   "profile_followers": "دنبال کننده ها",
   "profile_following": "دنبال شونده ها",
+  "profile_wall_paper": "پس زمینه گفتگو",
 
 
 
   "edit_appBar_leading": "ذخیره",
   "edit_1_txf_label": "نام",
   "edit_2_txf_label": "تخلص",
+  "edit_3_txf_label": "آیدی",
+  "edit_dialog": "آیا تغییرات ایجاد شده ذخیره شوند یا خیر؟",
+  "edit_dialog_do_not_save": "خیر",
+  "edit_name_is_empty": "اسم خالی است",
+  "edit_last_name_is_empty": "تخلص خالی است",
+  "edit_id_is_empty": "آیدی خالی است",
+  "edit_id_validation_is_empty": "این آیدی قبلا استفاده شده است",
 
 
 
@@ -126,7 +136,7 @@
 
 "rating_widget_dialog":"لطفا برای ما امتیاز دهید",
   "done_click":"تایید",
-  "details_page_snack_bar": "برای اضافه کردن به مورد دلخواه اول باید وارد اکانت خود شوید ",
+  "details_page_snack_bar": "برای اضافه کردن به مورد دلخواه اول باید وارد حساب خود شوید ",
   "details_page_1_custom_card": "توضیحات",
   "details_page_2_custom_card": "گالری",
   "details_page_3_custom_card": "مشخصات",
@@ -142,7 +152,7 @@
 
   "nearby_place_page_title": "مکان های نزدیک",
   "nearby_place_page_active_location": "لوکشن خود را فعال کنید",
-"nearby_place_page_distances": "فاصله مورد نظر خود را انتخاب کنید",
+"nearby_place_page_distances": "فاصله مورد نظر",
   "nearby_place_page_meter": "متر",
   "nearby_place_page_km": "کیلومتر",
   "nearby_place_page_meter_away": " متر تا مقصد",
@@ -156,15 +166,19 @@
   "add_a_comment": "نظر دهید",
   "chat_screen": "برای دسترسی به چت، \nامتیاز شما باید ۲ یا بیشتر باشد",
   "chat_message": "پیام",
-  "message_check_user1": "برای دسترسی به چت باید\n وارد اکانت خود شوید...",
+  "message_check_user1": "برای دسترسی به چت باید\n وارد حساب خود شوید...",
   "message_check_user2": "وارد شدن به ایمیل",
   "message_personal_score": "امتیاز فعلی",
-  "message_description": "برای امتیاز گرفتن \nشما باید آسان یاب را\n به دو نفر از دوستان تان معرفی کنید \nو آنها باید آیدی شخصی شمارا در\n قسمت ذکر شده در پایین در هنگام ثبت نام وارد کنند...>",
-  "message_your_id": "آیدی شما..>",
+  "message_description": "برای امتیاز گرفتن \nشما باید آسان یاب را\n به دو نفر از دوستان تان معرفی کنید \nو آنها باید آیدی شخصی شمارا در\n قسمت ذکر شده در پایین در هنگام ثبت نام وارد کنند =",
+  "message_your_id": "آیدی شما",
   "for_add_comment": "برای افزودن نظر",
   "log_in": "وارد شوید",
+  "emoji_recent": "هیچ ایموجی اخیری وجود ندارد",
 
 
+  "user_delete_account": "حذف حساب",
+  "wrong_email": "ایمیل یا رمز شما اشتباه است لطفا اول چک کنید بعد امتحان کنید",
+  "wrong_password": "رمز شما اشتباه است",
   "download_image_loading": "لطفا صبر کنید...",
   "you_are_not_logged_in": "شما وارد نشده اید"
 }

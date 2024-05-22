@@ -30,11 +30,13 @@
 
 
   "verify_appBar_title": "Email confirmation",
-  "verify_body_text": "A confirmation link has been sent to your email!\n   Please click on it to confirm your email.\n If you press the link,\n press send again!",
+  "verify_body_text": "A confirmation link has been sent to your email!\nPlease click on it to confirm your email.\n If you press the link,\n press send again!",
   "verify_elb_text": "Resend",
   "verify_tbt_text": "Cancel",
-  "verify_email_dialog": "An Asan Yab account has been \n created to the following email address.\n If you leave this page\n (without confirming your email and filling\n out the introduction form on the next page),\n you will no longer be able to\n enter Asan Yab with this email.",
-  "verify_email_give_up": "Give Up",
+  "verify_email_dialog": "An Asan Yab account has been \n created to the following email address.\n If you leave this page\n",
+  "verify_email_dialog_red": "without confirming your email and filling\n out the introduction form on the next page,",
+  "verify_email_dialog_2": "you will no longer be able to\n enter Asan Yab with this email.",
+  "verify_email_give_up": "Cancel",
   "verify_email_continue": "Continue",
 
 
@@ -52,7 +54,7 @@
 
 
 
-  "nearbyPlaces_title": "Nearby places",
+  "nearbyPlaces_title": "Nearby Places",
   "nearbyPlaces_meter_title": "meters away",
 
 
@@ -81,11 +83,12 @@
   "suggestion_customDialog_title": "Submit a location request",
   "suggestion_customDialog_content": "Your request has been registered",
   "suggestion_customDialog_textButton": "Return to the previous page",
+  "suggestion_check_user": "To submit a request, you must log in to your Asan Yab account",
 
 
 
   "profile_future_error": "Information not available",
-  "profile_copy_id_snack_bar": "Your ID was copied to the clipboard",
+  "profile_copy_id_snack_bar": "ID was copied to the clipboard",
   "profile_about_us_listTile": "About Us",
   "profile_edit_button_text": "Edit",
   "profile_buttonSheet_camera": "Camera",
@@ -93,9 +96,10 @@
   "profile_language_listTile": "Change Language",
   "profile_snackBar_catch": "Your internet is down",
   "profile_dark_mode": "Dark Mode",
-  "profile_rate_score": "ُScore",
+  "profile_rate_score": "Score",
   "profile_followers": "Followers",
   "profile_following": "Following",
+  "profile_wall_paper": "Chat WallPapers",
 
 
 
@@ -105,6 +109,14 @@
   "edit_appBar_leading": "Save",
   "edit_1_txf_label": "Name",
   "edit_2_txf_label": "Last Name",
+  "edit_3_txf_label": "Username",
+  "edit_dialog": "Will the changes be saved or not?",
+  "edit_dialog_do_not_save": "Don't save",
+  "edit_name_is_empty": "Name is empty",
+  "edit_last_name_is_empty": "Last Name is empty",
+  "edit_id_is_empty": "Username is empty",
+  "edit_id_validation_is_empty": "This Username has already been used",
+
 
 
 
@@ -153,9 +165,9 @@
 
 
 
-  "nearby_place_page_title": "NearBy Places",
+  "nearby_place_page_title": "Nearby Places",
   "nearby_place_page_active_location": "Activate your location",
-  "nearby_place_page_distances": "Choose the distance you want",
+  "nearby_place_page_distances": "Desired distance",
   "nearby_place_page_meter": "Meter",
   "nearby_place_page_km": "km",
   "nearby_place_page_meter_away": "Meters away",
@@ -173,14 +185,21 @@
   "chat_message": "Message",
   "message_check_user1": "To access the chat you must\n  Log in to your account...",
   "message_check_user2": "Enter to Email",
-  "message_personal_score": "current score",
-  "message_description": "To get points, \n you must introduce Asan Yab \n to two of your friends \n and they must enter your personal ID in the field \n mentioned below during registration...>",
-  "message_your_id": "Your Id...>",
+  "message_personal_score": "Current score",
+  "message_description": "To get points, \n you must introduce Asan Yab \n to two of your friends \n and they must enter your personal ID in the field \n mentioned below during registration =",
+  "message_your_id": "Your Id",
   "for_add_comment": "for add comment",
   "log_in": "Log in",
+  "emoji_recent": "There are no recent emojis",
+
 
   "download_image_loading": "Please waite...",
   "you_are_not_logged_in": "you are not logged in",
+
+
+  "user_delete_account": "Delete Account",
+  "wrong_email": "Your email or password is wrong, please check first and then try again",
+  "wrong_password": "Your Password is wrong",
 
   "menus_restaurant": "Menu"
 

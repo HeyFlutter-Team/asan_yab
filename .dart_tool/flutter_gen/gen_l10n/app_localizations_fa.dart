@@ -50,7 +50,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get sign_in_method_2_if => 'رمز شما اشتباه است';
 
   @override
-  String get sign_in_method_3_if => 'برای درخواست اشتباه مکرر اکانت شما بلاک شده است لطفا بعدا امتحان کنید';
+  String get sign_in_method_3_if => 'برای درخواست اشتباه مکرر حساب شما بلاک شده است لطفا بعدا امتحان کنید';
 
   @override
   String get sign_up_confirm_p => 'تایید رمز';
@@ -89,7 +89,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get verify_tbt_text => 'لغو';
 
   @override
-  String get verify_email_dialog => 'یک حساب آسان یاب به ایمیل داده شده در بالا ساخته شده است اگر (بدون تایید کردن ایمیل خود و پر کردن فورم معرفی نامه در صفحه بعدی) از این صفحه خارج شوید دیگر با این ایمیل وارد آسان یاب شده نمی توانید';
+  String get verify_email_dialog => 'یک حساب آسان یاب به ایمیل داده شده در بالا ساخته شده است اگر ';
+
+  @override
+  String get verify_email_dialog_red => 'بدون تایید کردن ایمیل خود و پر کردن فورم معرفی نامه در صفحه بعدی ';
+
+  @override
+  String get verify_email_dialog_2 => 'از این صفحه خارج شوید دیگر با این ایمیل وارد آسان یاب شده نمی توانید';
 
   @override
   String get verify_email_give_up => 'انصراف';
@@ -128,10 +134,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get favorite_page_title => 'موارد دلخواه';
 
   @override
-  String get findingFriendById => 'ایدی مورد نظر را  بنویسید';
+  String get findingFriendById => 'آیدی مورد نظر را  بنویسید';
 
   @override
-  String get searchById => 'گشتن با آیدی ';
+  String get searchById => 'جستجو با آیدی ';
 
   @override
   String get suggestion_appBar_title => 'درخواست مکان جدید';
@@ -149,10 +155,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get suggestion_2_tf_valid => 'آدرس خود را وارد کنید!';
 
   @override
-  String get suggestion_3_tf_labelName => 'توضیجات مکان';
+  String get suggestion_3_tf_labelName => 'توضیحات مکان';
 
   @override
-  String get suggestion_3_tf_valid => 'توضیجات مکان را بنویسید';
+  String get suggestion_3_tf_valid => 'توضیحات مکان را بنویسید';
 
   @override
   String get suggestion_4_tf_labelName => 'شماره تماس';
@@ -179,10 +185,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get suggestion_customDialog_textButton => 'بازگشت به صفحه قبلی';
 
   @override
+  String get suggestion_check_user => 'برای ارسال درخواست باید وارد حساب آسان یاب خود شوید';
+
+  @override
   String get profile_future_error => 'اطلاعات در دسترس نیست';
 
   @override
-  String get profile_copy_id_snack_bar => ' آیدی شما در کلیپ بورد کپی شد';
+  String get profile_copy_id_snack_bar => ' آیدی در کلیپ بورد کپی شد';
 
   @override
   String get profile_about_us_listTile => 'درباره ما';
@@ -215,6 +224,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get profile_following => 'دنبال شونده ها';
 
   @override
+  String get profile_wall_paper => 'پس زمینه گفتگو';
+
+  @override
   String get edit_appBar_leading => 'ذخیره';
 
   @override
@@ -222,6 +234,27 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get edit_2_txf_label => 'تخلص';
+
+  @override
+  String get edit_3_txf_label => 'آیدی';
+
+  @override
+  String get edit_dialog => 'آیا تغییرات ایجاد شده ذخیره شوند یا خیر؟';
+
+  @override
+  String get edit_dialog_do_not_save => 'خیر';
+
+  @override
+  String get edit_name_is_empty => 'اسم خالی است';
+
+  @override
+  String get edit_last_name_is_empty => 'تخلص خالی است';
+
+  @override
+  String get edit_id_is_empty => 'آیدی خالی است';
+
+  @override
+  String get edit_id_validation_is_empty => 'این آیدی قبلا استفاده شده است';
 
   @override
   String get container_text => 'جستجوی در';
@@ -263,7 +296,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get done_click => 'تایید';
 
   @override
-  String get details_page_snack_bar => 'برای اضافه کردن به مورد دلخواه اول باید وارد اکانت خود شوید ';
+  String get details_page_snack_bar => 'برای اضافه کردن به مورد دلخواه اول باید وارد حساب خود شوید ';
 
   @override
   String get details_page_1_custom_card => 'توضیحات';
@@ -302,7 +335,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get nearby_place_page_active_location => 'لوکشن خود را فعال کنید';
 
   @override
-  String get nearby_place_page_distances => 'فاصله مورد نظر خود را انتخاب کنید';
+  String get nearby_place_page_distances => 'فاصله مورد نظر';
 
   @override
   String get nearby_place_page_meter => 'متر';
@@ -338,7 +371,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get chat_message => 'پیام';
 
   @override
-  String get message_check_user1 => 'برای دسترسی به چت باید\n وارد اکانت خود شوید...';
+  String get message_check_user1 => 'برای دسترسی به چت باید\n وارد حساب خود شوید...';
 
   @override
   String get message_check_user2 => 'وارد شدن به ایمیل';
@@ -347,10 +380,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get message_personal_score => 'امتیاز فعلی';
 
   @override
-  String get message_description => 'برای امتیاز گرفتن \nشما باید آسان یاب را\n به دو نفر از دوستان تان معرفی کنید \nو آنها باید آیدی شخصی شمارا در\n قسمت ذکر شده در پایین در هنگام ثبت نام وارد کنند...>';
+  String get message_description => 'برای امتیاز گرفتن \nشما باید آسان یاب را\n به دو نفر از دوستان تان معرفی کنید \nو آنها باید آیدی شخصی شمارا در\n قسمت ذکر شده در پایین در هنگام ثبت نام وارد کنند =';
 
   @override
-  String get message_your_id => 'آیدی شما..>';
+  String get message_your_id => 'آیدی شما';
 
   @override
   String get for_add_comment => 'برای افزودن نظر';
@@ -359,10 +392,22 @@ class AppLocalizationsFa extends AppLocalizations {
   String get log_in => 'وارد شوید';
 
   @override
+  String get emoji_recent => 'هیچ ایموجی اخیری وجود ندارد';
+
+  @override
   String get download_image_loading => 'لطفا صبر کنید...';
 
   @override
   String get you_are_not_logged_in => 'شما وارد نشده اید';
+
+  @override
+  String get user_delete_account => 'حذف حساب';
+
+  @override
+  String get wrong_email => 'ایمیل یا رمز شما اشتباه است لطفا اول چک کنید بعد امتحان کنید';
+
+  @override
+  String get wrong_password => 'رمز شما اشتباه است';
 
   @override
   String get menus_restaurant => 'Menu';

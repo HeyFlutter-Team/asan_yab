@@ -25,7 +25,7 @@ jobs:
         uses: subosito/flutter-action@v2.10.0
         with:
           flutter-version: '3.13.2'
-          cache: true 
+          cache: true
       - run: flutter --version
 
       - name: Set FLUTTER_ROOT
@@ -41,8 +41,8 @@ jobs:
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Clear Xcode Cache
         run: |
-            rm -rf ~/Library/Developer/Xcode/DerivedData
-            rm -rf ~/Library/Caches/CocoaPods
+          rm -rf ~/Library/Developer/Xcode/DerivedData
+          rm -rf ~/Library/Caches/CocoaPods
 
       - name: Build and Deploy to App store
         run: |
@@ -58,13 +58,13 @@ jobs:
 
           echo running lane now
 
-          if [ ${{ github.ref }} = 'refs/heads/production' ]; then
+          if [ "${{ github.ref }}" = 'refs/heads/production' ]; then
             bundle exec fastlane deployToAppStore
           else
             bundle exec fastlane deployToTestFlight
           fi
+        
 
-          
         shell: bash
         env:
           APPLICATION_ID: ${{ secrets.APPLICATION_ID }}
