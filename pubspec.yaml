@@ -20,7 +20,7 @@ dependencies:
   flutter_phone_direct_caller: ^2.1.1
   google_fonts: ^6.2.1
   http: ^1.1.0
-  intl: ^0.18.1
+  intl: any
   path_provider: ^2.0.15
   smooth_page_indicator: ^1.1.0
   sqflite: ^2.2.8+4
@@ -99,7 +99,9 @@ dev_dependencies:
   flutter_lints: ^3.0.2
   flutter_test:
     sdk: flutter
-  flutter_emoji_gif_picker: ^0.1.6
+  flutter_emoji_gif_picker: any
+  firebase_core_platform_interface: any
+  test:
 
 
 
@@ -119,8 +121,3 @@ flutter_launcher_icons:
   ios: true
   image_path: "assets/asan_yab.jpg"
   background_color: "#ffffff"
-
-
-
-
-

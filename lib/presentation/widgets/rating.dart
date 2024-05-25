@@ -66,7 +66,6 @@ class _RatingWidgetsState extends ConsumerState<RatingWidgets> {
                       .watch(firebaseRatingProvider)
                       .showRating(context, ref, user, widget.postId);
                 }
-                ;
               },
               child: ref.watch(firebaseRatingProvider).stars(ref),
             ),

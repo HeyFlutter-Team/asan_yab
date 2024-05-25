@@ -21,10 +21,15 @@ jobs:
       - name: Set Fastlane environment to non-interactive
         run: echo "FASTLANE_OPT_OUT_USAGE=1" >> $GITHUB_ENV
 
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: '3.4.0'
+
       - name: Flutter action
         uses: subosito/flutter-action@v2.10.0
         with:
-          flutter-version: '3.13.2'
+          flutter-version: '3.22.0'
           cache: true
       - run: flutter --version
 
@@ -52,11 +57,7 @@ jobs:
           cd ios
           gem install cocoapods
           bundle install
-          echo installing pods
           pod install
-          echo updating pods
-
-          echo running lane now
 
           if [ "${{ github.ref }}" = 'refs/heads/production' ]; then
             bundle exec fastlane deployToAppStore
