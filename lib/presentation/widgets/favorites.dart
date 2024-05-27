@@ -3,20 +3,16 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:asan_yab/data/models/language.dart';
-import 'package:asan_yab/domain/riverpod/config/internet_connectivity_checker.dart';
 import 'package:asan_yab/domain/riverpod/data/firebase_rating_provider.dart';
-import 'package:asan_yab/presentation/widgets/phone_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/utils/convert_digits_to_farsi.dart';
-import '../../core/utils/utils.dart';
 import '../../data/repositoris/language_repository.dart';
 import '../../domain/riverpod/data/favorite_provider.dart';
 import '../../domain/riverpod/data/firbase_favorite_provider.dart';
-import '../../domain/riverpod/data/single_place_provider.dart';
 import '../pages/detials_page.dart';
 import '../pages/detials_page_offline.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -83,6 +79,7 @@ class _FavoritesState extends ConsumerState<Favorites> {
                     final items = favorites[index];
                     List<String> phoneData =
                         List<String>.from(jsonDecode(items['phone']));
+
                     final phoneNumber = isRTL
                         ? convertDigitsToFarsi(phoneData[0])
                         : phoneData[0];
@@ -90,9 +87,10 @@ class _FavoritesState extends ConsumerState<Favorites> {
                       children: [
                         Card(
                           child: GestureDetector(
-                            onTap: () async {
-                              ref.read(getSingleProvider.notifier).state = null;
-                              Utils.netIsConnected(ref)
+                            onTap: () {
+                              debugPrint(
+                                  'Ramin check connectivity: ${widget.isConnected}');
+                              widget.isConnected
                                   ? Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -150,14 +148,37 @@ class _FavoritesState extends ConsumerState<Favorites> {
                                               // color: Colors.black,
                                               ),
                                         ),
-                                        Directionality(
-                                            textDirection: isRTL
-                                                ? TextDirection.rtl
-                                                : TextDirection.ltr,
-                                            child: buildPhoneNumberWidget(
-                                                context: context,
-                                                isRTL: isRTL,
-                                                phone: phoneNumber)),
+                                        OutlinedButton(
+                                          onPressed: () async {
+                                            await FlutterPhoneDirectCaller
+                                                .callNumber(phoneNumber);
+                                          },
+                                          child: isRTL
+                                              ? Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    const Icon(
+                                                        Icons.phone_android,
+                                                        color: Colors.green),
+                                                    Text(phoneNumber),
+                                                  ],
+                                                )
+                                              : Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(phoneNumber,
+                                                        overflow: TextOverflow
+                                                            .ellipsis),
+                                                    const Icon(
+                                                        Icons.phone_android,
+                                                        color: Colors.green),
+                                                  ],
+                                                ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -199,48 +220,46 @@ class _FavoritesState extends ConsumerState<Favorites> {
                         widget.isConnected
                             ? Positioned(
                                 top: 95.0,
-                                left: 10.0,
+                                left: 15.0,
                                 child: FutureBuilder<double>(
                                   future: ref
                                       .read(firebaseRatingProvider)
                                       .getAverageRatingForPlace(
                                           favorites[index]['id']),
                                   builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return const CircularProgressIndicator(
-                                        color: Colors.red,
-                                      ); // Show loading indicator while fetching rating
-                                    } else if (snapshot.hasError) {
+                                    if (snapshot.hasError) {
                                       return const Text(
                                           'Error fetching rating'); // Show error message if there's an error
                                     } else {
                                       final averageRating = snapshot.data ?? 0;
-                                      return Container(
-                                        height: 35,
-                                        width: 35,
-                                        decoration: BoxDecoration(
-                                          color: Colors.green,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            isRTL
-                                                ? convertDigitsToFarsi(
-                                                    averageRating
-                                                        .toStringAsFixed(1))
-                                                : averageRating
-                                                    .toStringAsFixed(1),
-                                            // Display the average rating with one decimal place
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      );
+                                      return averageRating == 0
+                                          ? const SizedBox()
+                                          : Container(
+                                              height: 35,
+                                              width: 35,
+                                              decoration: BoxDecoration(
+                                                color: Colors.green,
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  isRTL
+                                                      ? convertDigitsToFarsi(
+                                                          averageRating
+                                                              .toStringAsFixed(
+                                                                  1))
+                                                      : averageRating
+                                                          .toStringAsFixed(1),
+                                                  // Display the average rating with one decimal place
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            );
                                     }
                                   },
                                 ),

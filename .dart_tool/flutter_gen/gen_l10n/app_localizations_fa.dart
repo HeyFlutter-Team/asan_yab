@@ -116,6 +116,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get buttonNvB_4 => 'پروفایل';
 
   @override
+  String get buttonNvB_5 => 'مدیریت';
+
+  @override
   String get proFile_type => 'حساب';
 
   @override
@@ -395,6 +398,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get download_image_loading => 'لطفا صبر کنید...';
 
   @override
+  String get you_are_not_logged_in => 'شما وارد نشده اید';
+
+  @override
   String get user_delete_account => 'حذف حساب';
 
   @override
@@ -404,5 +410,5 @@ class AppLocalizationsFa extends AppLocalizations {
   String get wrong_password => 'رمز شما اشتباه است';
 
   @override
-  String get menus_restaurant => 'منوی';
+  String get menus_restaurant => 'Menu';
 }

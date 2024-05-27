@@ -201,34 +201,12 @@ class _OtherProfileState extends ConsumerState<OtherProfile> {
                   color: Colors.grey,
                 ),
                 // LanguageIcon(),
-                InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AboutUsPage(),
-                        ));
-                  },
-                  child: ListTile(
-                    leading: const Icon(
-                      Icons.info_outline,
-                      color: Colors.red,
-                      size: 30,
-                    ),
-                    title: Text(languageText!.profile_about_us_listTile),
-                  ),
-                ),
-                const Divider(
-                  color: Colors.grey,
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
               ],
             ),
           ),
+          FirebaseAuth.instance.currentUser!.uid == usersData!.uid
+              ? const SizedBox()
+              :
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

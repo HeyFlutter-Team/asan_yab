@@ -68,13 +68,14 @@ dependencies:
   riverpod_lint: ^2.3.10
   cached_network_image: ^3.3.1
   scrollable_positioned_list: ^0.3.8
-  popover: any
+  popover: ^0.3.0
   loading_animation_widget: ^1.2.1
-  flutter_notification_channel: any
+  flutter_notification_channel: ^3.0.0
+  giphy_get: ^3.5.4
+  path: ^1.8.0
+  flutter_slidable: ^3.1.0
 
-dependency_overrides:
-  web: ^0.5.1
-  meta: any
+
 
 
 
@@ -100,7 +101,7 @@ dev_dependencies:
     sdk: flutter
   flutter_emoji_gif_picker: any
   firebase_core_platform_interface: any
-  test: ^1.25.2
+  test:
 
 
 
