@@ -268,9 +268,10 @@ class _CommentSheetState extends ConsumerState<CommentSheet>
                             child: SizedBox(
                               height: 250,
                               child: EmojiPicker(
+                                onEmojiSelected: (category, emoji) {},
                                 textEditingController: ref
                                     .watch(commentProvider.notifier)
-                                    .controller,
+                                    .commentController,
                                 onBackspacePressed: ref
                                     .read(commentProvider.notifier)
                                     .onBackspacePressed(),
@@ -286,20 +287,23 @@ class _CommentSheetState extends ConsumerState<CommentSheet>
                                   horizontalSpacing: 0,
                                   gridPadding: EdgeInsets.zero,
                                   initCategory: Category.RECENT,
-                                  bgColor: const Color(0xFFF2F2F2),
-                                  indicatorColor: Colors.blue,
+                                  bgColor: (themeModel.currentThemeMode ==
+                                          ThemeMode.dark)
+                                      ? Colors.black
+                                      : Colors.white,
+                                  indicatorColor: Colors.red,
                                   iconColor: Colors.grey,
-                                  iconColorSelected: Colors.blue,
-                                  backspaceColor: Colors.blue,
+                                  iconColorSelected: Colors.red,
+                                  backspaceColor: Colors.red,
                                   skinToneDialogBgColor: Colors.white,
                                   skinToneIndicatorColor: Colors.grey,
                                   enableSkinTones: true,
                                   recentTabBehavior: RecentTabBehavior.RECENT,
                                   recentsLimit: 28,
                                   replaceEmojiOnLimitExceed: false,
-                                  noRecents: const Text(
-                                    'لا توجد رموز تعبيرية حديثة',
-                                    style: TextStyle(
+                                  noRecents: Text(
+                                    '${languageText?.emoji_recent}',
+                                    style: const TextStyle(
                                         fontSize: 20, color: Colors.black26),
                                     textAlign: TextAlign.center,
                                   ),

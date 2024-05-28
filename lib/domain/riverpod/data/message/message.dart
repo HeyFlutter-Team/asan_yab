@@ -50,36 +50,31 @@ class MessageProvider extends StateNotifier<Users?> {
       {required String receiverId,
       required BuildContext context,
       required replayMessage,
-        required replayMessageIndex,
-        required replayIsMine,
-        required replayMessageTime,
-required WidgetRef ref,
-        required messageEditedProvider,
-        required Users users
-      }) async {
+      required replayMessageIndex,
+      required replayIsMine,
+      required replayMessageTime,
+      required WidgetRef ref,
+      required messageEditedProvider,
+      required Users users}) async {
     try {
       debugPrint('sendText 1');
       if (textController.text.isNotEmpty) {
-         messageRepo.addTextMessage(
+        messageRepo.addTextMessage(
             content: textController.text,
             receiverId: receiverId,
             replayMessage: replayMessage,
             replayMessageIndex: replayMessageIndex,
             replayIsMine: replayIsMine,
-           messageEditedProvider: messageEditedProvider,
-           replayMessageTime: replayMessageTime,
-           ref: ref
-        );
-         ref
-             .read(messageProvider.notifier)
-             .scrollDown(ref
-             .watch(messageProvider)
-             .length);
+            messageEditedProvider: messageEditedProvider,
+            replayMessageTime: replayMessageTime,
+            ref: ref);
+        ref
+            .read(messageProvider.notifier)
+            .scrollDown(ref.watch(messageProvider).length);
 
-         debugPrint('younis message sent2');
+        debugPrint('younis message sent2');
 
-
-         debugPrint('sendText 2');
+        debugPrint('sendText 2');
       }
     } catch (e) {
       return debugPrint(e.toString());
@@ -128,16 +123,16 @@ class LocalMessagesNotifier extends StateNotifier<List<MessageModel>> {
   void addMessage(MessageModel message) {
     state = [...state, message];
   }
- Future<void> clear()async {
+
+  Future<void> clear() async {
     state = [];
   }
 }
 
-final localMessagesProvider = StateNotifierProvider<LocalMessagesNotifier, List<MessageModel>>((ref) {
+final localMessagesProvider =
+    StateNotifierProvider<LocalMessagesNotifier, List<MessageModel>>((ref) {
   return LocalMessagesNotifier();
 });
-
-
 
 class EditingMessageDetailsNotifier extends StateNotifier<MessageModel> {
   EditingMessageDetailsNotifier(MessageModel initialState)
@@ -147,23 +142,22 @@ class EditingMessageDetailsNotifier extends StateNotifier<MessageModel> {
     state = state.copyWith(content: newContent);
   }
 }
-final editingMessageDetails = StateNotifierProvider<EditingMessageDetailsNotifier, MessageModel>((ref) {
+
+final editingMessageDetails =
+    StateNotifierProvider<EditingMessageDetailsNotifier, MessageModel>((ref) {
   return EditingMessageDetailsNotifier(MessageModel(
-    senderId: '',
-    receiverId: '',
-    content: '',
-    sentTime: DateTime.now(),
-    messageType: MessageType.text,
-    replayMessage: '',
-    isSeen: false,
-    replayMessageIndex: 0,
-    replayIsMine: false,
-    isMessageEdited: false,
-    replayMessageTime: ''
-  ));
+      senderId: '',
+      receiverId: '',
+      content: '',
+      sentTime: DateTime.now(),
+      messageType: MessageType.text,
+      replayMessage: '',
+      isSeen: false,
+      replayMessageIndex: 0,
+      replayIsMine: false,
+      isMessageEdited: false,
+      replayMessageTime: ''));
 });
-
-
 
 class WallpaperStateNotifier extends StateNotifier<String> {
   WallpaperStateNotifier() : super('assets/wallpaper_6_main.jpg');
@@ -192,6 +186,6 @@ class WallpaperStateNotifier extends StateNotifier<String> {
 }
 
 final wallpaperStateNotifierProvider =
-StateNotifierProvider<WallpaperStateNotifier, String>((ref) {
+    StateNotifierProvider<WallpaperStateNotifier, String>((ref) {
   return WallpaperStateNotifier()..loadInitialWallpaperPath();
 });

@@ -33,18 +33,18 @@ class VerticalDataNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  final TextEditingController _commentController = TextEditingController();
+  final TextEditingController commentController = TextEditingController();
 
-  TextEditingController get controller => _commentController;
+  TextEditingController get controller => commentController;
 
   void setText(String text) {
-    _commentController.text = text;
+    commentController.text = text;
     notifyListeners();
   }
 
   @override
   void dispose() {
-    _commentController.dispose();
+    commentController.dispose();
     super.dispose();
   }
 
@@ -58,15 +58,15 @@ class VerticalDataNotifier extends ChangeNotifier {
   }
 
   onBackspacePressed() {
-    controller
-      ..text = controller.text.characters.toString()
+    commentController
+      ..text = commentController.text.characters.toString()
       ..selection = TextSelection.fromPosition(
-          TextPosition(offset: controller.text.length));
+          TextPosition(offset: commentController.text.length));
   }
 
 // Define a method to get the stream for reply documents
   int calculateMaxLines() {
-    final text = _commentController.text;
+    final text = commentController.text.toString();
     if (text.isEmpty) {
       return 1; // Default to 1 line when text is empty
     }
@@ -139,8 +139,8 @@ class VerticalDataNotifier extends ChangeNotifier {
     notifyListeners(); // Notify listeners whenever isLoading changes
   }
 
-  Future<void> updateCommentAndReply(String commentText, BuildContext context,
-      WidgetRef ref, String postId) async {
+  Future<void> updateCommentAndReply(
+      BuildContext context, WidgetRef ref, String postId) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       final uid = user?.uid;
@@ -149,6 +149,7 @@ class VerticalDataNotifier extends ChangeNotifier {
         // User is not authenticated
         return;
       }
+      final commentText = commentController.text;
       if (commentText.trim().isEmpty) {
         // Comment text is empty
         print('reply cannot be empty.');
@@ -239,8 +240,7 @@ class VerticalDataNotifier extends ChangeNotifier {
     }
   }
 
-  void submitComment(String commentText, BuildContext context, WidgetRef ref,
-      String postId) async {
+  void submitComment(BuildContext context, WidgetRef ref, String postId) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       final uid = user?.uid;
@@ -249,10 +249,23 @@ class VerticalDataNotifier extends ChangeNotifier {
         // User is not authenticated
         return;
       }
+      final commentText = commentController.text;
 
-      if (commentText.trim().isEmpty) {
+      if (commentText.isEmpty) {
         // Comment text is empty
         print('Comment cannot be empty.');
+        return;
+      }
+
+      // Validate if the text is valid UTF-16
+      if (!isValidUTF16(commentText)) {
+        print('is not valid');
+        // Text is not valid UTF-16
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Invalid characters in the comment."),
+          ),
+        );
         return;
       }
 
@@ -287,7 +300,7 @@ class VerticalDataNotifier extends ChangeNotifier {
           'timestamp': FieldValue.serverTimestamp(),
           'hasReply': false
         });
-
+        print("finish");
         final newComment = CommentM(
             name: info.name,
             imageUrl: info.imageUrl,
@@ -356,6 +369,20 @@ class VerticalDataNotifier extends ChangeNotifier {
     }
   }
 
+// Function to validate UTF-16 strings
+  bool isValidUTF16(String text) {
+    try {
+      text.runes.forEach((int rune) {
+        if (rune > 0x10FFFF) {
+          throw ArgumentError('Invalid UTF-16 character');
+        }
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<Users> getUserInfo(String uid) async {
     final userDoc =
         await FirebaseFirestore.instance.collection('User').doc(uid).get();
@@ -389,6 +416,7 @@ class VerticalDataNotifier extends ChangeNotifier {
     if (!isReply) {
       setComments(
           comments.where((c) => c.commentId != reply.commentId).toList());
+      print("hello1");
       await FirebaseFirestore.instance
           .collection('Places')
           .doc(postId)
@@ -401,6 +429,7 @@ class VerticalDataNotifier extends ChangeNotifier {
           doc.reference.delete();
         }
       });
+      print("hello2");
 
       // Delete the comment itself from 'postComments' collection
       await FirebaseFirestore.instance
@@ -409,6 +438,7 @@ class VerticalDataNotifier extends ChangeNotifier {
           .collection('postComments')
           .doc(reply.commentId)
           .delete();
+      print("hello3");
     } else {
       replies = replies.where((c) => c.commentId != reply.commentId).toList();
       if (replies.isEmpty) {
@@ -451,11 +481,11 @@ class VerticalDataNotifier extends ChangeNotifier {
     ).then((value) {
       ref.read(emojiShowingProvider.notifier).state = false;
 
-      if (_commentController.text.isNotEmpty) {
+      if (commentController.text.isNotEmpty) {
         bool found = false;
         for (int i = 0; i < texts.length; i++) {
           if (texts[i].postId == postId) {
-            texts[i].comment = _commentController.text;
+            texts[i].comment = commentController.text;
             found = true;
             break; // Exit the loop since the comment has been updated
           }
@@ -464,11 +494,11 @@ class VerticalDataNotifier extends ChangeNotifier {
         // If no existing UnsentComment with matching postId is found, add a new one
         if (!found) {
           texts.add(
-            UnsentComment(comment: _commentController.text, postId: postId),
+            UnsentComment(comment: commentController.text, postId: postId),
           );
         }
       }
-      _commentController.clear();
+      commentController.clear();
       for (int i = 0; i < _isReplyOpened.length; i++) {
         _isReplyOpened[i] = false;
       }
@@ -481,7 +511,7 @@ class VerticalDataNotifier extends ChangeNotifier {
 
     for (int i = 0; i < copyTexts.length; i++) {
       if (copyTexts[i].postId == postId) {
-        _commentController.text = copyTexts[i].comment;
+        commentController.text = copyTexts[i].comment;
         texts.remove(copyTexts[i]);
         break;
       }
@@ -521,7 +551,7 @@ class VerticalDataNotifier extends ChangeNotifier {
                 if (isReply) {
                   ref.read(replyIdProvider.notifier).state = comment.commentId;
                 }
-                _commentController.text = comment.text;
+                commentController.text = comment.text;
                 notifyListeners();
               },
               backgroundColor: Colors.grey.shade700,
@@ -539,7 +569,7 @@ class VerticalDataNotifier extends ChangeNotifier {
         padding: const EdgeInsets.all(1),
         onPressed: (_) {
           isEditMode = false;
-          _commentController.clear();
+          commentController.clear();
 
           name = comment.name;
           replyText = comment.text;

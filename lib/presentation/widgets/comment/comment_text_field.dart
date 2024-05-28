@@ -66,11 +66,11 @@ class _CommentTextFieldState extends ConsumerState<CommentTextField> {
                               Text(
                                 textDirection: ui.TextDirection.ltr,
                                 (ref.watch(commentProvider).replyText.length >
-                                        50
+                                        30
                                     ? ref
                                         .watch(commentProvider)
                                         .replyText
-                                        .substring(0, 50)
+                                        .substring(0, 30)
                                     : ref.watch(commentProvider).replyText),
                                 style: const TextStyle(
                                   fontSize: 14,
@@ -213,17 +213,13 @@ class _CommentTextFieldState extends ConsumerState<CommentTextField> {
                     isReplyOpened[i] = false;
                   }
                   if (ref.watch(commentProvider).isEditMode) {
-                    ref.read(commentProvider.notifier).updateCommentAndReply(
-                        ref.watch(commentProvider).controller.text,
-                        context,
-                        ref,
-                        widget.postId);
+                    ref
+                        .read(commentProvider.notifier)
+                        .updateCommentAndReply(context, ref, widget.postId);
                   } else {
-                    ref.read(commentProvider.notifier).submitComment(
-                        ref.watch(commentProvider).controller.text,
-                        context,
-                        ref,
-                        widget.postId);
+                    ref
+                        .read(commentProvider.notifier)
+                        .submitComment(context, ref, widget.postId);
                   }
                 },
                 child: Icon(
