@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyANccJ4SzQJxS5jGzN8zNEOigxQ0_nWdFU',
-    appId: '1:525036166886:android:0f4cce6f7e5e1e1bfea527',
-    messagingSenderId: '525036166886',
-    projectId: 'asan-yab',
-    storageBucket: 'asan-yab.appspot.com',
+    apiKey: 'AIzaSyD5BwtFZqoenwIeDzr77GUnvPxPrU6qZrA',
+    appId: '1:1040154298313:android:a49d03265fea4a55b14a18',
+    messagingSenderId: '1040154298313',
+    projectId: 'asan-yab-new',
+    storageBucket: 'asan-yab-new.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD2tdf6l1bd-_hdACjG8dYqk2_0WddZMRk',
-    appId: '1:525036166886:ios:ae6d471349e26af8fea527',
-    messagingSenderId: '525036166886',
-    projectId: 'asan-yab',
-    storageBucket: 'asan-yab.appspot.com',
-    iosClientId: '525036166886-5n9hitf45b78qsdgulq4a4k51e7bcrs9.apps.googleusercontent.com',
-    iosBundleId: 'com.example.asanYab',
+    apiKey: 'AIzaSyAuvuGlVzSzVNJsygJOVbNuXsHbIEz0qJ0',
+    appId: '1:1040154298313:ios:ca11cb810a1ea8e8b14a18',
+    messagingSenderId: '1040154298313',
+    projectId: 'asan-yab-new',
+    storageBucket: 'asan-yab-new.appspot.com',
+    iosBundleId: 'com.heyflutter.asanYab',
   );
+
 }
