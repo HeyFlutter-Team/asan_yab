@@ -44,6 +44,8 @@
   "buttonNvB_2": "New Place",
   "buttonNvB_3": "Message",
   "buttonNvB_4": "Profile",
+  "buttonNvB_5": "Management",
+
 
 
  "proFile_type": "Account",
@@ -192,6 +194,7 @@
 
 
   "download_image_loading": "Please waite...",
+  "you_are_not_logged_in": "you are not logged in",
 
 
   "user_delete_account": "Delete Account",

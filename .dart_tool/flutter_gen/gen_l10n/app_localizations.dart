@@ -315,6 +315,12 @@ abstract class AppLocalizations {
   /// **'Profile'**
   String get buttonNvB_4;
 
+  /// No description provided for @buttonNvB_5.
+  ///
+  /// In en, this message translates to:
+  /// **'Management'**
+  String get buttonNvB_5;
+
   /// No description provided for @proFile_type.
   ///
   /// In en, this message translates to:
@@ -872,6 +878,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please waite...'**
   String get download_image_loading;
+
+  /// No description provided for @you_are_not_logged_in.
+  ///
+  /// In en, this message translates to:
+  /// **'you are not logged in'**
+  String get you_are_not_logged_in;
 
   /// No description provided for @user_delete_account.
   ///

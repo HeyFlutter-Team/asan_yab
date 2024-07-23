@@ -116,6 +116,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get buttonNvB_4 => 'Profile';
 
   @override
+  String get buttonNvB_5 => 'Management';
+
+  @override
   String get proFile_type => 'Account';
 
   @override
@@ -393,6 +396,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get download_image_loading => 'Please waite...';
+
+  @override
+  String get you_are_not_logged_in => 'you are not logged in';
 
   @override
   String get user_delete_account => 'Delete Account';

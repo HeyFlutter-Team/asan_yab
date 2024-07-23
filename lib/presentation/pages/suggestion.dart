@@ -1,4 +1,5 @@
 import 'package:asan_yab/data/models/language.dart';
+import 'package:asan_yab/domain/riverpod/screen/suggestion_page_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,12 +7,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositoris/firebase_modle_helper.dart';
 import '../../data/repositoris/language_repository.dart';
+
+import '../../domain/riverpod/screen/suggestion_page_provider.dart';
 import '../../domain/riverpod/screen/suggestion_page_provider.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/text_form_field_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-
 
 class SuggestionPage extends ConsumerStatefulWidget {
   const SuggestionPage({super.key});
@@ -40,32 +41,11 @@ class _SuggestionPageState extends ConsumerState<SuggestionPage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-     Future.delayed(Duration.zero,() async{
-       if (mounted) {
-         ref.read(isLoading.notifier).state = true;
-         final snapshot = await FirebaseFirestore.instance
-             .collection('Description')
-             .doc('add_new_place')
-             .get();
-         if (mounted) {
-           if (snapshot.exists) {
-             final isRTL = ref.watch(languageProvider).code == 'fa';
-             if (!isRTL) {
-               ref.read(noteProvider.notifier).state = snapshot.data()?['eNote'];
-             } else {
-               ref.read(noteProvider.notifier).state = snapshot.data()?['pNote'];
-             }
-
-             ref.read(isLoading.notifier).state = false;
-           }
-         }
-       }
-
-     },);
-
-       });
+      ref
+          .read(noteProvider.notifier)
+          .getNote(ref, ref.watch(languageProvider).code == 'fa');
+    });
   }
-
 
   @override
   void dispose() {
@@ -80,19 +60,19 @@ class _SuggestionPageState extends ConsumerState<SuggestionPage> {
   @override
   Widget build(BuildContext context) {
     final languageText = AppLocalizations.of(context);
-    return ref.watch(isLoading)
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
-        : Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              title: Text(
-                languageText!.suggestion_appBar_title,
-              ),
-              elevation: 0,
-            ),
-            body: SingleChildScrollView(
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(
+          languageText!.suggestion_appBar_title,
+        ),
+        elevation: 0,
+      ),
+      body: ref.watch(noteProvider.notifier).isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Form(
@@ -138,50 +118,53 @@ class _SuggestionPageState extends ConsumerState<SuggestionPage> {
                         const SizedBox(height: 20),
                         CustomCard(
                           title: languageText.suggestion_custom_card_title,
-                          child: Text(ref.watch(noteProvider)),
+                          child: Text(ref.watch(noteProvider).note),
                         ),
                         const SizedBox(height: 10),
                         ButtonWidget(
                           onClicked: () {
                             final isValid = _key.currentState!.validate();
-                            SystemChannels.textInput.invokeMethod('TextInput.hide');
+                            SystemChannels.textInput
+                                .invokeMethod('TextInput.hide');
                             if (isValid) {
-                             if(FirebaseAuth.instance.currentUser != null){
-                               FirebaseSuggestionCreate create =
-                               FirebaseSuggestionCreate();
-                               create
-                                   .createSuggestion(
-                                   nameController.text,
-                                   addressController.text,
-                                   phoneController.text,
-                                   typeController.text,ref)
-                                   .whenComplete(() =>
-                                   ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text(languageText.suggestion_customDialog_content))
-
-                                   ))
-                                   .whenComplete(() =>
-                                   controllerClear()
-                               );
-                             }else{
-                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                   content: Text(
-                                       languageText.suggestion_check_user)));
-                             }
+                              if (FirebaseAuth.instance.currentUser != null) {
+                                FirebaseSuggestionCreate create =
+                                    FirebaseSuggestionCreate();
+                                create
+                                    .createSuggestion(
+                                        nameController.text,
+                                        addressController.text,
+                                        phoneController.text,
+                                        typeController.text,
+                                        ref)
+                                    .whenComplete(() => ScaffoldMessenger.of(
+                                            context)
+                                        .showSnackBar(SnackBar(
+                                            content: Text(languageText
+                                                .suggestion_customDialog_content))))
+                                    .whenComplete(() => controllerClear());
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(languageText
+                                            .suggestion_check_user)));
+                              }
                             }
                           },
                           titleName: languageText.suggestion_button,
                           textColor1: Colors.white,
-                          btnColor:Colors.red.shade800,
+                          btnColor: Colors.red.shade800,
                         ),
-                        const SizedBox(height: 15,)
+                        const SizedBox(
+                          height: 15,
+                        )
                       ],
                     ),
                   ),
                 ),
               ),
             ),
-          );
+    );
   }
 }
 

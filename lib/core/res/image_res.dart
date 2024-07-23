@@ -13,4 +13,5 @@ class ImageRes {
   static String facebook = '$_imageBase/facebook.png';
   static String code = '$_imageBase/code.png';
   static String asanYab = '$_imageBase/asan_yab.png';
+  static String profileAvatar = '$_imageBase/Avatar.png';
 }

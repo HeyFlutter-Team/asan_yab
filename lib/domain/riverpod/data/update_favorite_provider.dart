@@ -85,11 +85,6 @@ class UpdateFavorite extends ChangeNotifier {
         addressData = [];
         phoneData = [];
 
-        for (int i = 0; i < places.addresses.length; i++) {
-          addressData.add(
-              '${places.addresses[i].branch}: ${places.addresses[i].address}');
-          phoneData.add(places.addresses[i].phone);
-        }
         provider.toggleFavorite(
           phoneId[i],
           places,
