@@ -57,7 +57,11 @@ jobs:
           cd ios
           gem install cocoapods
           bundle install
+          echo installing pods
           pod install
+          echo updating pods
+
+          echo running lane now
 
           if [ "${{ github.ref }}" = 'refs/heads/production' ]; then
             bundle exec fastlane deployToAppStore

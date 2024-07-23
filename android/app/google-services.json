@@ -1,43 +1,26 @@
 {
   "project_info": {
-    "project_number": "525036166886",
-    "project_id": "asan-yab",
-    "storage_bucket": "asan-yab.appspot.com"
+    "project_number": "1040154298313",
+    "project_id": "asan-yab-new",
+    "storage_bucket": "asan-yab-new.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:525036166886:android:0f4cce6f7e5e1e1bfea527",
+        "mobilesdk_app_id": "1:1040154298313:android:a49d03265fea4a55b14a18",
         "android_client_info": {
           "package_name": "com.heyflutter.asanYab"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "525036166886-gl45ok66knlp76uhsi0h0mlhv39op37m.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyANccJ4SzQJxS5jGzN8zNEOigxQ0_nWdFU"
+          "current_key": "AIzaSyD5BwtFZqoenwIeDzr77GUnvPxPrU6qZrA"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "525036166886-gl45ok66knlp76uhsi0h0mlhv39op37m.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "525036166886-5n9hitf45b78qsdgulq4a4k51e7bcrs9.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.asanYab"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

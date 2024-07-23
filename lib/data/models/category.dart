@@ -1,35 +1,41 @@
-class Category {
+
+class Category{
   final String id;
-  final String categoryName;
+  final String name;
+  final String numberOfPlaces;
   final String iconCode;
   final String color;
-  final String? enCategoryName;
+  final String enName;
 
-  Category({
+  const Category({
     required this.id,
-    required this.categoryName,
+    required this.name,
+    required this.numberOfPlaces,
     required this.iconCode,
     required this.color,
-    this.enCategoryName
+    required this.enName,
   });
 
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
       id: json['id'],
-      categoryName: json['categoryName'],
+      name: json['name'],
+      numberOfPlaces: json['numberOfPlaces'],
       iconCode: json['iconCode'],
       color: json['color'],
-      enCategoryName: json['enCategoryName']??''
+      enName: json['enName'],
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
+    final Map<String, dynamic> data = {
       'id': id,
-      'categoryName': categoryName,
+      'name': name,
+      'numberOfPlaces': numberOfPlaces,
       'iconCode': iconCode,
       'color': color,
-      'enCategoryName':enCategoryName
+      'enName': enName,
     };
+    return data;
   }
 }

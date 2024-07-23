@@ -74,8 +74,8 @@ class CategoryPage extends ConsumerWidget {
                                   catId: category[index].id,
                                   categoryName:
                                   isRTL?
-                                  category[index].categoryName
-                                  :category[index].enCategoryName!,
+                                  category[index].name
+                                  :category[index].enName!,
                                 ),
                               ),
                             );
@@ -99,8 +99,8 @@ class CategoryPage extends ConsumerWidget {
                                 const SizedBox(height: 16.0),
                                 Text(
                                   isRTL?
-                                  category[index].categoryName
-                                  :category[index].enCategoryName!,
+                                  category[index].name
+                                  :category[index].enName,
                                   style: const TextStyle(
                                       color: Colors.white, fontSize: 16.0),
                                 ),
