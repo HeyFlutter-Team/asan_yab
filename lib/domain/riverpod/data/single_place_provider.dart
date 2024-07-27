@@ -13,7 +13,7 @@ class SingleProvider extends StateNotifier<Place?> {
   Future fetchSinglePlace(String id) async {
     final database = FirebaseFirestore.instance;
     try {
-      final querySnapshot = await database.collection('Places').doc(id).get();
+      final querySnapshot = await database.collection('NewPlaces').doc(id).get();
 
       final place = Place.fromJson(querySnapshot.data()!);
       state = place;

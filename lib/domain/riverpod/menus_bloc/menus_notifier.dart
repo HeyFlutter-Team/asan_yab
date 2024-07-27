@@ -61,7 +61,7 @@ class RappiBloc with ChangeNotifier {
     if (docSnapshot.exists) {
       Place restaurantMenu =
       Place.fromJson(docSnapshot.data() as Map<String, dynamic>);
-      final List<String> menuItemNames = restaurantMenu.menuItemName!;
+        final List<String> menuItemNames =[];
       final List<String> customPopups = menus;
 
       for (final String itemName in menuItemNames) {

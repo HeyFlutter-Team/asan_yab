@@ -198,12 +198,12 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                           borderRadius:
                                               BorderRadius.circular(12),
                                           child: isConnectedNet
-                                              ? places.coverImage != '' &&
-                                                      places
-                                                          .coverImage.isNotEmpty
+                                              ? places.coverImage.url != '' &&
+                                                      places.coverImage.url!
+                                                          .isNotEmpty
                                                   ? CachedNetworkImage(
-                                                      imageUrl:
-                                                          places.coverImage,
+                                                      imageUrl: places
+                                                          .coverImage.url!,
                                                       width: double.infinity,
                                                       height:
                                                           size.height * 0.31,
@@ -251,8 +251,8 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         left: 20.0, right: 20),
-                                    child: (places.menuItemName == null ||
-                                            places.menuItemName!.isEmpty)
+                                    child: (places.items == null ||
+                                            places.items.isEmpty)
                                         ? const SizedBox()
                                         : ElevatedButton(
                                             onPressed: () {
@@ -303,15 +303,14 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                 postId: places.id,
                               ),
                               const SizedBox(height: 12),
-
                               (places.description == '' ||
-                                      places.description.isEmpty)
+                                      places.description!.isEmpty)
                                   ? const SizedBox()
                                   : CustomCard(
                                       title:
                                           '${languageText?.details_page_1_custom_card}',
                                       child: Text(
-                                        places.description,
+                                        places.description!,
                                         textDirection: TextDirection.rtl,
                                       ),
                                     ),
@@ -368,17 +367,15 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                                               },
                                             ),
                                     ),
-
-                              ////younis////
-                              MallNewItemsWidget(places: places),
-                              ////younis finish////
-
-                              ////hojjat////
-                              HospitalDoctorsWidget(places: places),
-                              ////hojjat finish////
-
-                              places.addresses.last.lang.isNotEmpty &&
-                                      places.addresses.last.lat.isNotEmpty
+                              MallNewItemsWidget(
+                                places: places,
+                              ),
+                              HospitalDoctorsWidget(
+                                places: places,
+                              ),
+                              places.addresses.last.latLng?.longitude != null &&
+                                      places.addresses.last.latLng?.latitude !=
+                                          null
                                   ? Padding(
                                       padding: const EdgeInsets.all(18.0),
                                       child: InkWell(

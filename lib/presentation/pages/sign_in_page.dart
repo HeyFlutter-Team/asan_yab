@@ -11,14 +11,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../domain/riverpod/data/isOnline.dart';
 import '../../domain/riverpod/data/sign_in_provider.dart';
 
 final isSignInningProvider = StateProvider<bool>((ref) => false);
 
 class LogInPage extends ConsumerStatefulWidget {
   final Function()? onClickedSignUp;
-  const LogInPage({Key? key, this.onClickedSignUp}) : super(key: key);
+  const LogInPage({super.key, this.onClickedSignUp});
 
   @override
   ConsumerState<LogInPage> createState() => _LogInPageState();
@@ -35,7 +34,7 @@ class _LogInPageState extends ConsumerState<LogInPage>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+      _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 7),
     );
@@ -45,7 +44,9 @@ class _LogInPageState extends ConsumerState<LogInPage>
     ).animate(_controller);
     _controller.forward();
     _initializeValues();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
     ref.read(isSignInningProvider.notifier).state = false;
+    });
   }
 
   void _initializeValues() async {

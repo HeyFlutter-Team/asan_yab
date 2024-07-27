@@ -83,7 +83,7 @@ class VerticalDataNotifier extends ChangeNotifier {
 
       try {
         final snapshot = await FirebaseFirestore.instance
-            .collection('Places')
+            .collection('NewPlaces')
             .doc(postId)
             .collection('postComments')
             .orderBy("timestamp", descending: true)
@@ -173,7 +173,7 @@ class VerticalDataNotifier extends ChangeNotifier {
         final commentIdToEdit = ref.watch(commentIdProvider);
         if (commentIdToEdit.isNotEmpty) {
           await FirebaseFirestore.instance
-              .collection('Places')
+              .collection('NewPlaces')
               .doc(postId)
               .collection('postComments')
               .doc(commentIdToEdit)
@@ -202,7 +202,7 @@ class VerticalDataNotifier extends ChangeNotifier {
         final replyIdToEdit = ref.watch(replyIdProvider);
         if (commentIdToEdit.isNotEmpty && replyIdToEdit.isNotEmpty) {
           await FirebaseFirestore.instance
-              .collection('Places')
+              .collection('NewPlaces')
               .doc(postId)
               .collection('postComments')
               .doc(commentIdToEdit)
@@ -276,7 +276,7 @@ class VerticalDataNotifier extends ChangeNotifier {
         print("Adding new comment");
 
         final newCommentDoc = await FirebaseFirestore.instance
-            .collection('Places')
+            .collection('NewPlaces')
             .doc(postId)
             .collection('postComments')
             .add({
@@ -306,7 +306,7 @@ class VerticalDataNotifier extends ChangeNotifier {
         print("Adding new reply");
         if (!ref.watch(hasReplyProvider)) {
           FirebaseFirestore.instance
-              .collection('Places')
+              .collection('NewPlaces')
               .doc(postId)
               .collection('postComments')
               .doc(commentIdToReply)
@@ -327,7 +327,7 @@ class VerticalDataNotifier extends ChangeNotifier {
         }
         if (commentIdToReply.isNotEmpty) {
           await FirebaseFirestore.instance
-              .collection('Places')
+              .collection('NewPlaces')
               .doc(postId)
               .collection('postComments')
               .doc(commentIdToReply)
@@ -390,7 +390,7 @@ class VerticalDataNotifier extends ChangeNotifier {
       setComments(
           comments.where((c) => c.commentId != reply.commentId).toList());
       await FirebaseFirestore.instance
-          .collection('Places')
+          .collection('NewPlaces')
           .doc(postId)
           .collection('postComments')
           .doc(reply.commentId)
@@ -404,7 +404,7 @@ class VerticalDataNotifier extends ChangeNotifier {
 
       // Delete the comment itself from 'postComments' collection
       await FirebaseFirestore.instance
-          .collection('Places')
+          .collection('NewPlaces')
           .doc(postId)
           .collection('postComments')
           .doc(reply.commentId)
@@ -416,7 +416,7 @@ class VerticalDataNotifier extends ChangeNotifier {
         ref.read(hasReplyProvider.notifier).state = true;
 
         FirebaseFirestore.instance
-            .collection('Places')
+            .collection('NewPlaces')
             .doc(postId)
             .collection('postComments')
             .doc(commentId)
@@ -425,7 +425,7 @@ class VerticalDataNotifier extends ChangeNotifier {
         });
       }
       await FirebaseFirestore.instance
-          .collection('Places')
+          .collection('NewPlaces')
           .doc(postId)
           .collection('postComments')
           .doc(commentId)
@@ -595,7 +595,7 @@ class VerticalDataNotifier extends ChangeNotifier {
     replies = [];
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('Places')
+          .collection('NewPlaces')
           .doc(postId)
           .collection('postComments')
           .doc(commentId)

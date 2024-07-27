@@ -265,13 +265,13 @@ class _GoogleMapPageState extends ConsumerState<GoogleMapPage> {
   Set<Marker> _buildMarkers(List<Address> addresses) {
     return Set.from(
       addresses.map((address) {
-        if (address.lat.isNotEmpty && address.lang.isNotEmpty) {
+        if (address.latLng?.latitude!= null && address.latLng?.longitude != null) {
           return Marker(
-            markerId: MarkerId('SourceLocation${address.lat}-${address.lang}'),
+            markerId: MarkerId('SourceLocation${address.latLng?.latitude}-${address.latLng?.longitude}'),
             icon: BitmapDescriptor.defaultMarker,
             position: LatLng(
-              double.parse(address.lat),
-              double.parse(address.lang),
+              address.latLng!.latitude,
+              address.latLng!.longitude,
             ),
             consumeTapEvents: true,
             onTap: () {
@@ -341,11 +341,11 @@ class _GoogleMapPageState extends ConsumerState<GoogleMapPage> {
     double maxLng = -double.infinity;
 
     for (var address in addresses) {
-      double lat = double.parse(address.lat);
-      double lng = double.parse(address.lang);
-      minLat = min(lat, minLat);
+      double? lat = address.latLng?.latitude;
+      double? lng = address.latLng?.longitude;
+      minLat = min(lat!, minLat);
       maxLat = max(lat, maxLat);
-      minLng = min(lng, minLng);
+      minLng = min(lng!, minLng);
       maxLng = max(lng, maxLng);
     }
 
@@ -384,10 +384,10 @@ class _GoogleMapPageState extends ConsumerState<GoogleMapPage> {
 
   void _openDirections(Address address) async {
     // Check if the coordinates are available
-    if (address.lat.isNotEmpty && address.lang.isNotEmpty) {
+    if (address.latLng?.latitude != null && address.latLng?.longitude != null) {
       // Construct the Google Maps URL with the destination coordinates
       final url =
-          'https://www.google.com/maps/dir/?api=1&destination=${address.lat},${address.lang}';
+          'https://www.google.com/maps/dir/?api=1&destination=${address.latLng?.latitude},${address.latLng?.longitude}';
 
       // Launch the URL
       if (await canLaunch(url)) {

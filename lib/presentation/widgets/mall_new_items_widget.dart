@@ -30,8 +30,8 @@ class _MallNewItemsWidgetState extends ConsumerState<MallNewItemsWidget> {
         Padding(
           padding:
           const EdgeInsets.symmetric(horizontal: 12),
-          child: (widget.places.itemImages == null ||
-              widget.places.itemImages!.isEmpty)
+          child: (widget.places.items == null ||
+              widget.places.items.isEmpty)
               ? const SizedBox()
               : Row(
             mainAxisAlignment:
@@ -74,8 +74,8 @@ class _MallNewItemsWidgetState extends ConsumerState<MallNewItemsWidget> {
         const SizedBox(
           height: 5,
         ),
-        widget.places.itemImages == null ||
-            widget.places.itemImages!.isEmpty
+        widget.places.items == null ||
+            widget.places.items.isEmpty
             ? const SizedBox(height: 0)
             : SizedBox(
           height: size.height * 0.25,
@@ -87,9 +87,9 @@ class _MallNewItemsWidgetState extends ConsumerState<MallNewItemsWidget> {
             padding: const EdgeInsets.symmetric(
                 horizontal: 12),
             scrollDirection: Axis.horizontal,
-            itemCount: widget.places.itemImages!.length >= 5
+            itemCount: widget.places.items.length >= 5
                 ? 5
-                : widget.places.itemImages!.length,
+                : widget.places.items.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.only(
@@ -105,9 +105,9 @@ class _MallNewItemsWidgetState extends ConsumerState<MallNewItemsWidget> {
                         builder: (context) =>
                             ImageView(
                               selectedIndex: index,
-                              gallery: widget.places.itemImages!
+                              gallery: widget.places.items
                                   .map((item) =>
-                              item.imageUrl)
+                              item.image)
                                   .toList(),
                             ),
                       ),
@@ -146,8 +146,8 @@ class _MallNewItemsWidgetState extends ConsumerState<MallNewItemsWidget> {
                                   10)),
                           child: CachedNetworkImage(
                             imageUrl: widget.places
-                                .itemImages![index]
-                                .imageUrl,
+                                .items[index]
+                                .image.url!,
                             width: size.width * 0.24,
                             height:
                             size.height * 0.13,
@@ -164,7 +164,7 @@ class _MallNewItemsWidgetState extends ConsumerState<MallNewItemsWidget> {
                         const SizedBox(height: 8),
                         Text(
                           maxLines: 1,
-                          widget.places.itemImages![index]
+                          widget.places.items[index]
                               .name,
                           style: const TextStyle(
                             overflow:
@@ -182,7 +182,7 @@ class _MallNewItemsWidgetState extends ConsumerState<MallNewItemsWidget> {
                               ? TextSpan(children: [
                             TextSpan(
                               text:
-                              '${convertDigitsToFarsi(widget.places.itemImages![index].price)} ',
+                              '${convertDigitsToFarsi(widget.places.items[index].price)} ',
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight:
@@ -207,7 +207,7 @@ class _MallNewItemsWidgetState extends ConsumerState<MallNewItemsWidget> {
                               : TextSpan(children: [
                             TextSpan(
                               text:
-                              '${widget.places.itemImages![index].price} ',
+                              '${widget.places.items[index].price} ',
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight:

@@ -32,7 +32,7 @@ class SearchInstance {
     };
     try {
       final result =
-          await client.collection('places').documents.search(searchParameters);
+          await client.collection('NewPlaces').documents.search(searchParameters);
 
       // print(result);
       final data = result["hits"];

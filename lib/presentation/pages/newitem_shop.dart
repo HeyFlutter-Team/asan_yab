@@ -33,7 +33,7 @@ class _ItemsSoppingState extends ConsumerState<ItemsSopping> {
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12),
         scrollDirection: Axis.vertical,
-        itemCount: places!.itemImages!.length,
+        itemCount: places!.items.length,
         itemBuilder: (context, index) {
           return Padding(
             padding:
@@ -45,8 +45,8 @@ class _ItemsSoppingState extends ConsumerState<ItemsSopping> {
                   MaterialPageRoute(
                     builder: (context) => ImageView(
                       selectedIndex: index,
-                      gallery: places.itemImages!
-                          .map((item) => item.imageUrl)
+                      gallery: places.items
+                          .map((item) => item.image)
                           .toList(),
                     ),
                   ),
@@ -71,7 +71,7 @@ class _ItemsSoppingState extends ConsumerState<ItemsSopping> {
                           bottomLeft: Radius.circular(10),
                           bottomRight: Radius.circular(10)),
                       child: CachedNetworkImage(
-                        imageUrl: places.itemImages![index].imageUrl,
+                        imageUrl: places.items[index].image.url!,
                         width: double.infinity,
                         height: size.height * 0.14,
                         fit: BoxFit.cover,
@@ -85,7 +85,7 @@ class _ItemsSoppingState extends ConsumerState<ItemsSopping> {
                     const SizedBox(height: 10),
                     Text(
                       maxLines: 1,
-                      places.itemImages![index].name,
+                      places.items[index].name,
                       style: const TextStyle(
                         overflow: TextOverflow.fade,
                         fontSize: 16,
@@ -100,7 +100,7 @@ class _ItemsSoppingState extends ConsumerState<ItemsSopping> {
                           ? TextSpan(children: [
                         TextSpan(
                           text:
-                          '${convertDigitsToFarsi(places.itemImages![index].price)} ',
+                          '${convertDigitsToFarsi(places.items[index].price)} ',
                           style:  TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold,
                               color: Colors.green.shade500
@@ -117,7 +117,7 @@ class _ItemsSoppingState extends ConsumerState<ItemsSopping> {
                       ])
                           : TextSpan(children: [
                         TextSpan(
-                          text: '${places.itemImages![index].price} ',
+                          text: '${places.items[index].price} ',
                           style:  TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold,
                               color: Colors.green.shade500

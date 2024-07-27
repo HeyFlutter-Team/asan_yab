@@ -1,5 +1,6 @@
 import 'package:asan_yab/data/models/place.dart';
 import 'package:asan_yab/domain/riverpod/data/single_place_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -46,7 +47,7 @@ class UpdateFavorite extends ChangeNotifier {
             }
 
             await DownloadImage.getImage(
-                    places.logo, places.coverImage, context)
+                    places.logo.url!, places.coverImage.url!, context)
                 .then((_) {
               Navigator.pop(context);
               ref.read(favoriteProvider.notifier).toggleFavorite(
@@ -73,14 +74,16 @@ class UpdateFavorite extends ChangeNotifier {
           categoryId: '',
           category: '',
           addresses: [],
-          id: phoneId[i],
-          logo: '',
-          coverImage: '',
+          id: firebaseId[i],
+          logo: ImageModel(url: ImageModel.defaultImage),
+          coverImage: ImageModel(url: ImageModel.defaultImage),
           name: '',
           description: '',
           gallery: [],
-          createdAt: DateTime.now(),
+          createdAt: Timestamp.now(),
           order: 1,
+          items: [],
+          doctors: [],
         );
         addressData = [];
         phoneData = [];

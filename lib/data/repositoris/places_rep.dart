@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 
 class PlacesRepository {
   final firebase = FirebaseFirestore.instance;
-  final _path = 'Places';
+  final _path = 'NewPlaces';
   Future<List<Place>> fetchPlaces() async {
     try {
       // Ensure Firebase initialization

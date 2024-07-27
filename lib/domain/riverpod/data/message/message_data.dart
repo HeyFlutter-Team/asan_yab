@@ -164,7 +164,6 @@ class UnreadMessageCountNotifier extends ChangeNotifier {
     final currentUserUid = FirebaseAuth.instance.currentUser!.uid;
 
     try {
-      print('getUnseenMessageCounts 1');
       final unseenMessagesSnapshot = await FirebaseFirestore.instance
           .collection('User')
           .doc(currentUserUid)
@@ -187,7 +186,6 @@ class UnreadMessageCountNotifier extends ChangeNotifier {
             .state = false;
 
       }
-      print('getUnseenMessageCounts 2');
     } catch (e) {
       print('Error fetching unseen messages for chat $chatId: $e');
       // Handle error

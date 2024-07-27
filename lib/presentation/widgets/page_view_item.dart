@@ -9,11 +9,12 @@ import 'package:photo_view/photo_view_gallery.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../core/res/image_res.dart';
+import '../../data/models/place.dart';
 import '../../data/repositoris/language_repository.dart';
 
 class PageViewItem extends StatelessWidget {
   final int selectedIndex;
-  final List<String?> gallery;
+  final List<ImageModel> gallery;
   const PageViewItem({
     super.key,
     required this.gallery,
@@ -39,7 +40,7 @@ class PageViewItem extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(50),
           child: CachedNetworkImage(
-            imageUrl: gallery[selectedIndex]!,
+            imageUrl: gallery[selectedIndex].url!,
             fit: BoxFit.cover,
             errorWidget: (context, url, error) => Image.asset(ImageRes.asanYab),
             placeholder: (context, url) => Image.asset(ImageRes.asanYab),
@@ -52,7 +53,7 @@ class PageViewItem extends StatelessWidget {
 
 class ImageView extends ConsumerStatefulWidget {
   final int selectedIndex;
-  final List<String?> gallery;
+  final List<ImageModel> gallery;
   const ImageView({
     super.key,
     required this.selectedIndex,
@@ -110,7 +111,7 @@ class _ImageViewState extends ConsumerState<ImageView> {
                 initialScale: PhotoViewComputedScale.contained,
                 minScale: PhotoViewComputedScale.contained * 0.8,
                 maxScale: PhotoViewComputedScale.covered * 2.0,
-                imageProvider: NetworkImage(widget.gallery[index]!),
+                imageProvider: NetworkImage(widget.gallery[index].url!),
               );
             },
             itemCount: widget.gallery.length,

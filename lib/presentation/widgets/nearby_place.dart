@@ -103,7 +103,7 @@ class NearbyPlaceWidget extends ConsumerWidget {
                                           shape: BoxShape.rectangle,
                                         ),
                                         child: CachedNetworkImage(
-                                          imageUrl: place[index].logo,
+                                          imageUrl: place[index].logo.url!,
                                           placeholder: (context, url) =>
                                               Image.asset(
                                                   'assets/asan_yab.png'),

@@ -33,7 +33,7 @@ class _Doctors_PageState extends ConsumerState<Doctors_Page> {
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12),
         scrollDirection: Axis.vertical,
-        itemCount: places!.doctors?.length,
+        itemCount: places!.doctors.length,
         itemBuilder: (context, index) {
           return Padding(
             padding:
@@ -55,7 +55,7 @@ class _Doctors_PageState extends ConsumerState<Doctors_Page> {
                         bottomLeft: Radius.circular(10),
                         bottomRight: Radius.circular(10)),
                     child: CachedNetworkImage(
-                      imageUrl: places.doctors![index].imageUrl,
+                      imageUrl: places.doctors[index].image.url!,
                       width: double.infinity,
                       height: size.height * 0.16,
                       fit: BoxFit.cover,
@@ -68,7 +68,7 @@ class _Doctors_PageState extends ConsumerState<Doctors_Page> {
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    places.doctors![index].name,
+                    places.doctors[index].name,
                     maxLines: 1,
                     overflow: TextOverflow.fade,
                     style: const TextStyle(
@@ -80,7 +80,7 @@ class _Doctors_PageState extends ConsumerState<Doctors_Page> {
                   Text(
                     maxLines: 1,
                     overflow: TextOverflow.fade,
-                    places.doctors![index].title,
+                    places.doctors[index].specialist,
                     style: TextStyle(
                         fontSize: 16,
                         color: Colors.green.shade400,
@@ -90,7 +90,9 @@ class _Doctors_PageState extends ConsumerState<Doctors_Page> {
                   Text(
                     maxLines: 1,
                     overflow: TextOverflow.fade,
-                    '${languageText?.details_page_9_custom_card}: ${isRTL ? convertDigitsToFarsi(places.doctors![index].time) : places.doctors![index].time}',
+                    '${languageText?.details_page_9_custom_card}: ${isRTL
+                        ? convertDigitsToFarsi(places.doctors[index].time.startTime)
+                        : places.doctors[index].time}',
                     style: TextStyle(
                         fontSize: 16,
                         color: Colors.green.shade400,
