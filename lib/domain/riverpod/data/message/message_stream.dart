@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:asan_yab/core/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,18 +25,13 @@ class Suspend {
             .streamController
             ?.stream
             .listen((_) async {
-          if (FirebaseAuth.instance.currentUser != null && context.mounted) {
-            // print('myTest1');
+          if (FirebaseAuth.instance.currentUser != null && context.mounted && Utils.netIsConnected(ref)) {
              ref.watch(seenMassageProvider.notifier).isNewMassage();
-            // // print('myTest2');
              ref.watch(messageHistory.notifier).getMessageHistory();
-            // // print('myTest3');
              ref.watch(messageNotifierProvider.notifier).fetchMessage();
-            // print('myTest4');
              ref
                 .watch(userDetailsProvider.notifier)
                 .getCurrentUserFollowCounts();
-            // print('myTest5');
           }
         });
 
