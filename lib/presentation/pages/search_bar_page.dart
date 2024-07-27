@@ -1,15 +1,12 @@
 import 'package:asan_yab/core/utils/utils.dart';
 import 'package:asan_yab/data/models/place.dart';
-import 'package:asan_yab/domain/riverpod/config/internet_connectivity_checker.dart';
 import 'package:asan_yab/presentation/pages/search_notifire.dart';
 import 'package:asan_yab/presentation/pages/search_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../core/res/image_res.dart';
-import '../../domain/riverpod/data/firbase_favorite_provider.dart';
 import '../../domain/riverpod/data/single_place_provider.dart';
 import 'detials_page.dart';
 
@@ -33,7 +30,6 @@ class _SearchPageState extends ConsumerState<SearchPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     searchController.dispose();
   }
@@ -96,7 +92,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
         ),
       ),
       body: ref.watch(searchNotifierProvider) == ''
-          ? SizedBox()
+          ? const SizedBox()
           : _data.when(
               data: (_data) {
                 List<Place> postList = _data.map((e) => e).toList();
@@ -126,7 +122,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(60),
                             child: CachedNetworkImage(
-                              imageUrl: postList[index].logo,
+                              imageUrl: postList[index].logo.url!,
                               fit: BoxFit.cover,
                               height: 60,
                               width: 60,

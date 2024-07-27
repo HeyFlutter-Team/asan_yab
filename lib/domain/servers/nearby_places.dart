@@ -1,22 +1,22 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
-
 import '../../data/models/place.dart';
 import '../../data/repositoris/places_rep.dart';
 import '../riverpod/screen/drop_Down_Buton.dart';
 
 final nearbyPlace = StateNotifierProvider<NearbyPlace, List<Place>>(
-    (ref) => NearbyPlace([], ref));
+      (ref) => NearbyPlace([], ref),
+);
 
 class NearbyPlace extends StateNotifier<List<Place>> {
   final Ref ref;
-  final placeRepository = PlacesRepository();
+  final PlacesRepository placeRepository = PlacesRepository();
   List<Place> nearestLocations = [];
-  void nearPlace() => state = nearestLocations;
+
   NearbyPlace(super.state, this.ref);
+
   double degreesToRadians(double degrees) {
     return degrees * pi / 180.0;
   }
@@ -38,62 +38,82 @@ class NearbyPlace extends StateNotifier<List<Place>> {
     return earthRadius * c;
   }
 
-  // double baseLat, double baseLng
-  Future<List<Place>> getNearestLocations() async {
-    Position? currentLocation;
-    late bool servicePremission = false;
-    late LocationPermission permission;
-
-    Future<Position> getCurrentLocation() async {
-      servicePremission = await Geolocator.isLocationServiceEnabled();
-      if (!servicePremission) {
-        debugPrint('servies disabled');
-      }
-      permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-      }
-
-      return await Geolocator.getCurrentPosition();
+  Future<Position> getCurrentLocation() async {
+    bool servicePermission = await Geolocator.isLocationServiceEnabled();
+    if (!servicePermission) {
+      throw Exception('Location services are disabled.');
     }
 
-    currentLocation = await getCurrentLocation();
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.deniedForever) {
+        throw Exception('Location permissions are permanently denied.');
+      }
+      if (permission == LocationPermission.denied) {
+        throw Exception('Location permissions are denied.');
+      }
+    }
+    return await Geolocator.getCurrentPosition();
+  }
 
-    double maxDistance =
-        ref.watch(valueOfDropButtonProvider); // Maximum distance in kilometers
-    final locationsRef = await placeRepository.fetchPlaces();
+  Future<List<Place>> getNearestLocations(WidgetRef ref) async {
+    Position currentLocation;
+    try {
+      currentLocation = await getCurrentLocation();
+    } catch (e) {
+      debugPrint('Error getting current location: $e');
+      return [];
+    }
+
+    double maxDistance = ref.watch(valueOfDropButtonProvider); // Maximum distance in kilometers
+    List<Place> locationsRef;
+    try {
+      locationsRef = await placeRepository.fetchPlaces();
+    } catch (e) {
+      debugPrint('Error fetching places: $e');
+      return [];
+    }
+
     nearestLocations.clear();
     for (final doc in locationsRef) {
-      for (final addressN in doc.addresses) {
-        debugPrint(' ${doc.name}');
-        if (addressN.lat.isNotEmpty) {
-          final double lat = double.parse(addressN.lat);
-          final double lng = double.parse(addressN.lang);
+      for (final address in doc.addresses) {
+        if (address.latLng != null) {
+          final double lat = address.latLng!.latitude;
+          final double lng = address.latLng!.longitude;
           final double distance = calculateDistance(
-              currentLocation.latitude, currentLocation.longitude, lat, lng);
+            currentLocation.latitude,
+            currentLocation.longitude,
+            lat,
+            lng,
+          );
 
           if (distance <= maxDistance) {
-            // debugPrint(
-            //     'hello it place that near you  ${doc.name} distance : ${distance},id: ${doc.id} lang:${doc.adresses[0].lang} , lat:${doc.adresses[0].lat} ');
             doc.distance = (distance * 1000).round();
             nearestLocations.add(doc);
             debugPrint(' ${doc.distance}');
           }
-        } else {
-          // debugPrint('hello it null ${doc.name}');
         }
       }
     }
-    removeDuplicates();
-    nearPlace();
-    return nearestLocations.toList();
+
+    return nearestLocations.toSet().toList(); // Remove duplicates
   }
 
-  Future<void> refresh() async {
-    await getNearestLocations();
+  Future<void> refresh(WidgetRef ref) async {
+    try {
+      nearestLocations = await getNearestLocations(ref);
+      state = nearestLocations;
+    } catch (e) {
+      debugPrint('Error refreshing locations: $e');
+    }
   }
 
-  List removeDuplicates() {
+  void nearPlace() {
+    state = nearestLocations;
+  }
+
+  List<Place> removeDuplicates() {
     Set<Place> uniqueData = Set<Place>.from(nearestLocations);
     nearestLocations = uniqueData.toList();
     nearestLocations.sort((a, b) => a.distance.compareTo(b.distance));

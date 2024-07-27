@@ -33,7 +33,7 @@ class _HospitalDoctorsWidgetState extends ConsumerState<HospitalDoctorsWidget> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child:
-              (widget.places.doctors == null || widget.places.doctors!.isEmpty)
+              (widget.places.doctors.isEmpty)
                   ? const SizedBox()
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -71,7 +71,7 @@ class _HospitalDoctorsWidgetState extends ConsumerState<HospitalDoctorsWidget> {
         const SizedBox(
           height: 5,
         ),
-        widget.places.doctors == null || widget.places.doctors!.isEmpty
+        widget.places.doctors == null || widget.places.doctors.isEmpty
             ? const SizedBox(height: 0)
             : SizedBox(
                 height: size.height * 0.28,
@@ -109,7 +109,7 @@ class _HospitalDoctorsWidgetState extends ConsumerState<HospitalDoctorsWidget> {
                                   bottomRight: Radius.circular(10)),
                               child: CachedNetworkImage(
                                 imageUrl:
-                                    widget.places.doctors![index].imageUrl,
+                                    widget.places.doctors[index].image.url!,
                                 width: size.width * 0.24,
                                 height: size.height * 0.13,
                                 fit: BoxFit.cover,
@@ -132,7 +132,7 @@ class _HospitalDoctorsWidgetState extends ConsumerState<HospitalDoctorsWidget> {
                             Text(
                               maxLines: 1,
                               overflow: TextOverflow.fade,
-                              widget.places.doctors![index].title,
+                              widget.places.doctors[index].specialist,
                               style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.green.shade400,
@@ -142,7 +142,7 @@ class _HospitalDoctorsWidgetState extends ConsumerState<HospitalDoctorsWidget> {
                             Text(
                               maxLines: 1,
                               overflow: TextOverflow.fade,
-                              '${languageText?.details_page_9_custom_card}: ${isRTL ? convertDigitsToFarsi(widget.places.doctors![index].time) : widget.places.doctors![index].time}',
+                              '${languageText?.details_page_9_custom_card}: ${isRTL ? convertDigitsToFarsi(widget.places.doctors[index].time.startTime) : widget.places.doctors[index].time.startTime}',
                               style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.green.shade500,

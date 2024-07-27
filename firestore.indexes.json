@@ -1,7 +1,7 @@
 {
   "indexes": [
     {
-      "collectionGroup": "Places",
+      "collectionGroup": "NewPlaces",
       "queryScope": "COLLECTION",
       "fields": [
         {
@@ -15,7 +15,7 @@
       ]
     },
     {
-      "collectionGroup": "Places",
+      "collectionGroup": "NewPlaces",
       "queryScope": "COLLECTION",
       "fields": [
         {

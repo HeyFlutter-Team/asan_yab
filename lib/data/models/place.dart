@@ -1,228 +1,241 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Place {
-  final DateTime createdAt;
-  final List<Address> addresses;
-  final String coverImage;
-  final String name;
-  final String description;
-  final String logo;
   final String id;
-  final String categoryId;
-  final List<String> gallery;
+  final ImageModel logo;
+  final ImageModel coverImage;
+  final String name;
+  final String? description;
+  final List<Address> addresses;
+  final List<ImageModel> gallery;
   final String category;
+  final String categoryId;
+  final Timestamp createdAt;
   final int order;
-  final List<ItemImage>? itemImages;
-  final List<Doctors>? doctors;
+  final List<NewItems> items;
+  final List<Doctors> doctors;
   int distance;
-  final List<NewItems>? newItems;
-  final List<NewItemsYounis>? newItemYounis;
-  final List<String>? menuItemName;
-  Place(
-      {required this.createdAt,
-      required this.addresses,
-      required this.coverImage,
-      required this.name,
-      required this.description,
-      required this.logo,
-      required this.id,
-      required this.categoryId,
-      required this.gallery,
-      required this.category,
-      required this.order,
-      this.distance = 1,
-      this.itemImages,
-      this.doctors,
-      this.newItems,
-      this.newItemYounis,
-      this.menuItemName});
+
+
+   Place(
+      {required this.categoryId,
+        required this.category,
+        required this.addresses,
+        required this.id,
+        required this.logo,
+        required this.coverImage,
+        required this.name,
+        required this.description,
+        required this.gallery,
+        required this.createdAt,
+        required this.order,
+        required this.items,
+        this.distance = 1,
+        required this.doctors});
+  Place copyWith({
+    String? id,
+    ImageModel? logo,
+    ImageModel? coverImage,
+    String? name,
+    String? description,
+    List<Address>? addresses,
+    List<ImageModel>? gallery,
+    String? category,
+    String? categoryId,
+    Timestamp? createdAt,
+    int? order,
+    List<NewItems>? items,
+    List<Doctors>? doctors,
+  }) {
+    return Place(
+      id: id ?? this.id,
+      logo: logo ?? this.logo,
+      coverImage: coverImage ?? this.coverImage,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      addresses: addresses ?? this.addresses,
+      gallery: gallery ?? this.gallery,
+      category: category ?? this.category,
+      categoryId: categoryId ?? this.categoryId,
+      createdAt: createdAt ?? this.createdAt,
+      order: order ?? this.order,
+      items: items ?? this.items,
+      doctors: doctors ?? this.doctors,
+    );
+  }
 
   factory Place.fromJson(Map<String, dynamic> json) {
-    DateTime createdAt;
-
-    if (json['createdAt'] == null) {
-      throw Exception("Missing 'createdAt' field in JSON");
-    }
-
-    try {
-      if (json['createdAt'] is Timestamp) {
-        // If 'createdAt' is already a Timestamp
-        createdAt = (json['createdAt'] as Timestamp).toDate();
-      } else if (json['createdAt'] is Map<String, dynamic>) {
-        // If 'createdAt' is a map with '_seconds' and '_nanoseconds'
-        createdAt = DateTime.fromMillisecondsSinceEpoch(
-          (json['createdAt']['_seconds'] * 1000) +
-              (json['createdAt']['_nanoseconds'] / 1e6).round(),
-        );
-      } else {
-        // Handle other cases or throw an error if necessary
-        throw Exception(
-            "Invalid 'createdAt' type: ${json['createdAt'].runtimeType}");
-      }
-    } catch (e) {
-      throw Exception("Error parsing 'createdAt': $e");
-    }
-
     return Place(
-      createdAt: createdAt,
+      createdAt: json['createdAt'],
       addresses: List<Address>.from(
         json['addresses'].map((address) => Address.fromJson(address)),
       ),
-      coverImage: json['coverImage'],
+      id: json['id'],
+      logo: ImageModel.fromJson(json['logo']),
+      coverImage: ImageModel.fromJson(json['coverImage']),
       name: json['name'],
       description: json['description'],
-      logo: json['logo'],
-      id: json['id'],
-      categoryId: json['categoryId'],
-      gallery: List<String>.from(json['gallery']),
+      gallery: (json['gallery'] as List<dynamic>)
+          .map((url) => ImageModel(url: url))
+          .toList(),
       category: json['category'],
+      categoryId: json['categoryId'],
       order: json['order'],
-      itemImages: json['itemImages'] != null
-          ? List<ItemImage>.from(
-              json['itemImages'].map((item) => ItemImage.fromJson(item)),
-            )
-          : null,
-      doctors: json['doctors'] != null
-          ? List<Doctors>.from(
-              json['doctors'].map((doctors) => Doctors.fromJson(doctors)),
-            )
-          : null,
-      newItems: json['newItems'] != null
-          ? List<NewItems>.from(
-              json['newItems'].map((newItem) => NewItems.fromJson(newItem)))
-          : null,
-      newItemYounis: json['newItemYounis'] != null
-          ? List<NewItemsYounis>.from(json['newItemYounis']
-              .map((newItemYounis) => NewItems.fromJson(newItemYounis)))
-          : null,
-      menuItemName: json['menuItemName'] != null
-          ? List<String>.from(json['menuItemName'])
-          : null,
+      items: List<NewItems>.from(
+          json['itemImages'].map((item) => NewItems.fromJson(item))),
+      doctors: List<Doctors>.from(
+          json['doctors'].map((doctor) => Doctors.fromJson(doctor))),
     );
   }
 }
-
 class Address {
-  final String address;
-  final String phone;
-  final String lang;
+  final String? id;
   final String branch;
-  final String lat;
+  final String address;
+  final LatLng? latLng;
+  final String phone;
 
   Address({
-    required this.address,
-    required this.phone,
-    required this.lang,
+    required this.id,
     required this.branch,
-    required this.lat,
+    required this.phone,
+    required this.address,
+    required this.latLng,
   });
-
   factory Address.fromJson(Map<String, dynamic> json) {
     return Address(
-      address: json['address'],
-      phone: json['phone'],
-      lang: json['lang'],
-      branch: json['branch'],
-      lat: json['lat'],
-    );
+        id: json['id'],
+        branch: json['branch'],
+        address: json['address'],
+        latLng: LatLng.fromJson(json['latlng']),
+        phone: json['phone']);
   }
+
 }
 
 class NewItems {
-  final String? imageUrl;
-  final String? itemName;
-  final String? itemPrice;
-  NewItems({this.imageUrl, this.itemName, this.itemPrice});
+  final String id;
+  final String name;
+  final String price;
+  final ImageModel image;
+
+  NewItems({
+    required this.id,
+    required this.name,
+    required this.price,
+    required this.image,
+  });
 
   Map<String, dynamic> toJson() {
-    return {'imageUrl': imageUrl, 'itemName': itemName, 'itemPrice': itemPrice};
+    return {
+      'id': id,
+      'name': name,
+      'price': price,
+      'imageUrl': image,
+    };
   }
 
   factory NewItems.fromJson(Map<String, dynamic> json) {
     return NewItems(
-        imageUrl: json['imageUrl'],
-        itemName: json['itemName'],
-        itemPrice: json['itemPrice']);
-  }
-}
-
-class NewItemsYounis {
-  final String? newItemYounisImage;
-  final String? itemYounisName;
-  final String? itemYounisPrice;
-
-  NewItemsYounis({
-    this.newItemYounisImage,
-    this.itemYounisName,
-    this.itemYounisPrice,
-  });
-
-  factory NewItemsYounis.fromJson(Map<String, dynamic> json) {
-    return NewItemsYounis(
-      newItemYounisImage: json['newItemYounis'],
-      itemYounisName: json['itemYounisName'],
-      itemYounisPrice: json['itemYounisPrice'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'newItemYounis': newItemYounisImage,
-      'itemYounisName': itemYounisName,
-      'itemYounisPrice': itemYounisPrice,
-    };
-  }
-}
-
-class ItemImage {
-  final String name;
-  final String price;
-  final String imageUrl;
-
-  ItemImage({
-    required this.name,
-    required this.price,
-    required this.imageUrl,
-  });
-
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'price': price,
-      'imageUrl': imageUrl,
-    };
-  }
-
-  factory ItemImage.fromJson(Map<String, dynamic> json) {
-    return ItemImage(
+      id: json['id'],
       name: json['name'],
       price: json['price'],
-      imageUrl: json['imageUrl'],
+      image: json['imageUrl'],
+    );
+  }
+}
+class ImageModel {
+  bool isLoading;
+  String? url;
+  static const defaultImage = 'https://via.placeholder.com/150';
+
+  ImageModel({
+    this.isLoading = false,
+    required this.url,
+  });
+
+  factory ImageModel.fromJson(Map<String, dynamic> json) {
+    return ImageModel(
+      isLoading: json['isLoading'] ?? false,
+      url: json['url'],
     );
   }
 }
 
+
+
 class Doctors {
+  final String id;
   final String name;
-  final String title;
-  final String time;
-  final String imageUrl;
+  final String specialist;
+  final WorkTimeModel time;
+  final ImageModel image;
 
   Doctors(
-      {required this.name,
-      required this.title,
-      required this.imageUrl,
-      required this.time});
-
-  Map<String, dynamic> toJson() {
-    return {'name': name, 'title': title, 'imageUrl': imageUrl, "time": time};
-  }
+      {required this.id,
+        required this.name,
+        required this.specialist,
+        required this.image,
+        required this.time});
 
   factory Doctors.fromJson(Map<String, dynamic> json) {
     return Doctors(
+        id: json['id'],
         name: json['name'],
-        title: json['title'],
-        imageUrl: json['imageUrl'],
-        time: json['time']);
+        specialist: json['title'],
+        image: ImageModel.fromJson(json['image']),
+        time: WorkTimeModel.fromJson(json['time']));
+  }
+
+  Doctors copyWith({
+    final String? id,
+    final String? name,
+    final String? specialist,
+    final WorkTimeModel? time,
+    final ImageModel? image,
+  }) {
+    return Doctors(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      specialist: specialist ?? this.specialist,
+      time: time ?? this.time,
+      image: image ?? this.image,
+    );
+  }
+}
+
+
+class WorkTimeModel {
+  final String startTime;
+  final String endTime;
+
+  WorkTimeModel({
+    required this.startTime,
+    required this.endTime,
+  });
+
+  factory WorkTimeModel.fromJson(Map<String, dynamic> json) {
+    return WorkTimeModel(
+      startTime: json['startTime'],
+      endTime: json['endTime'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'startTime': startTime,
+      'endTime': endTime,
+    };
+  }
+
+  WorkTimeModel copyWith({
+    String? startTime,
+    String? endTime,
+  }) {
+    return WorkTimeModel(
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+    );
   }
 }

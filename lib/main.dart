@@ -85,7 +85,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       ref.read(themeModelProvider.notifier).initialize().whenComplete(
           () => ref.read(themeModelProvider.notifier).loadSavedTheme());
-      ref.watch(nearbyPlace.notifier).refresh();
+      ref.watch(nearbyPlace.notifier).refresh(ref);
     });
   }
 

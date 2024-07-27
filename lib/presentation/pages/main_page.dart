@@ -1,6 +1,5 @@
 import 'package:asan_yab/domain/riverpod/config/notification_repo.dart';
 import 'package:asan_yab/domain/riverpod/data/message/message_stream.dart';
-import 'package:asan_yab/domain/riverpod/data/profile_data_provider.dart';
 import 'package:asan_yab/presentation/pages/management.dart';
 import 'package:asan_yab/presentation/pages/message_page/message_home.dart';
 import 'package:asan_yab/presentation/pages/profile/profile_page.dart';
@@ -8,11 +7,9 @@ import 'package:asan_yab/presentation/widgets/message/message_check_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../core/utils/utils.dart';
 import '../../domain/riverpod/config/internet_connectivity_checker.dart';
 import '../../domain/riverpod/data/message/message.dart';
@@ -39,10 +36,14 @@ class _MainPageState extends ConsumerState<MainPage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final currentUser = FirebaseAuth.instance.currentUser!;
-      final users =
-          await ref.watch(commentProvider).getUserInfo(currentUser.uid);
-      isBusiness = (users.userType == 'Business');
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        final users = await ref.watch(commentProvider).getUserInfo(currentUser.uid);
+        setState(() {
+          isBusiness = (users.userType == 'Business');
+        });
+      }
+
     });
 
     WidgetsBinding.instance.addObserver(this);

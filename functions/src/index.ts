@@ -86,7 +86,7 @@ export const SearchPlace = functions.https.onRequest(
   async (request, response) => {
     try {
 
-      const snapshot = await admin.firestore().collection("Places").get();
+      const snapshot = await admin.firestore().collection("NewPlaces").get();
 
 
       const documents: any[] = [];

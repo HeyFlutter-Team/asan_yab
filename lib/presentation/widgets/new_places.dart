@@ -70,7 +70,7 @@ class NewPlaces extends ConsumerWidget {
                               child: CachedNetworkImage(
                                 placeholder: (context, url) =>
                                     Image.asset(ImageRes.asanYab),
-                                imageUrl: items.coverImage,
+                                imageUrl: items.coverImage.url!,
                                 fit: BoxFit.cover,
                                 height: double.infinity,
                                 width: double.infinity,

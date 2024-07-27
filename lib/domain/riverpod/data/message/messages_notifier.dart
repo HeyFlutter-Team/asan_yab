@@ -21,13 +21,11 @@ class MessagesNotifier extends StateNotifier<List<MessageModel>> {
 
     ref.read(loadingMessagesNotifier.notifier).state = true;
     try {
-      print('fetchMessage 1');
       final data = await historyRepo
           .getOtherUserId()
           .then((value) async => await historyRepo.getLastMessage(value));
       state.clear();
       state = data;
-      print('fetchMessage 2');
     } catch (e) {
       rethrow;
     } finally {

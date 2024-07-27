@@ -139,13 +139,15 @@ class AccountDeletionNotifier extends ChangeNotifier {
         category: '',
         addresses: [],
         id: firebaseId[i],
-        logo: '',
-        coverImage: '',
+        logo: ImageModel(url: ImageModel.defaultImage),
+        coverImage: ImageModel(url: ImageModel.defaultImage),
         name: '',
         description: '',
         gallery: [],
-        createdAt: DateTime.now(),
+        createdAt: Timestamp.now(),
         order: 1,
+        items: [],
+        doctors: [],
       );
 
       provider.toggleFavorite(

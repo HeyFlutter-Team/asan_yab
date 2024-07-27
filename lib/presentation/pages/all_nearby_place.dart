@@ -76,7 +76,7 @@ class _NearbyPlacePageState extends ConsumerState<NearbyPlacePage> {
                               onClicked: () async {
                                 await ref
                                     .refresh(nearbyPlace.notifier)
-                                    .refresh();
+                                    .refresh(ref);
                               },
                               titleName: languageText
                                   .nearby_place_page_active_location,
@@ -86,7 +86,7 @@ class _NearbyPlacePageState extends ConsumerState<NearbyPlacePage> {
               : RefreshIndicator(
                   onRefresh: () async {
                     await Future.delayed(const Duration(seconds: 2)).then(
-                        (value) => ref.watch(nearbyPlace.notifier).refresh());
+                        (value) => ref.watch(nearbyPlace.notifier).refresh(ref));
 
                     ref.read(isConnectedLocation.notifier).state =
                         await Geolocator.isLocationServiceEnabled();
@@ -141,7 +141,7 @@ class _NearbyPlacePageState extends ConsumerState<NearbyPlacePage> {
                                 return DropdownMenuItem<double>(
                                   value: e,
                                   onTap: () async {
-                                    ref.refresh(nearbyPlace.notifier).refresh();
+                                    ref.refresh(nearbyPlace.notifier).refresh(ref);
                                     ref
                                             .read(isConnectedLocation.notifier)
                                             .state =
@@ -278,14 +278,14 @@ class _NearbyPlacePageState extends ConsumerState<NearbyPlacePage> {
                                                 ),
                                                 shape: BoxShape.rectangle,
                                               ),
-                                              child: place[index].coverImage !=
+                                              child: place[index].coverImage.url !=
                                                           '' &&
                                                       place[index]
-                                                          .coverImage
-                                                          .isNotEmpty
+                                                          .coverImage.url
+                                                          !.isNotEmpty
                                                   ? CachedNetworkImage(
                                                       imageUrl: place[index]
-                                                          .coverImage, // Use the placeholder image URL if the cover image is null
+                                                          .coverImage.url!, // Use the placeholder image URL if the cover image is null
                                                       placeholder: (context,
                                                               url) =>
                                                           Image.asset(

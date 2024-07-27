@@ -19,9 +19,9 @@ final idProvider = StateProvider((ref) => '');
 class CategoryItem extends ConsumerStatefulWidget {
   final String id;
   const CategoryItem({
-    Key? key,
+    super.key,
     required this.id,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _CategoryItemState();
@@ -109,7 +109,7 @@ class _CategoryItemState extends ConsumerState<CategoryItem> {
                                 child: CachedNetworkImage(
                                   placeholder: (context, url) =>
                                       Image.asset(ImageRes.asanYab),
-                                  imageUrl: data[index].logo,
+                                  imageUrl: data[index].logo.url!,
                                   width: double.maxFinite,
                                   height: double.maxFinite,
                                   fit: BoxFit.cover,

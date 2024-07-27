@@ -47,7 +47,6 @@ class ReadUserDetails extends StateNotifier<Users?> {
   Future<Map<String, int>> getCurrentUserFollowCounts() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
-        print('getCurrentUserFollowCounts 1');
 
       if (user != null) {
         final userSnapshot = await FirebaseFirestore.instance
@@ -67,7 +66,6 @@ class ReadUserDetails extends StateNotifier<Users?> {
       } else {
         print('Current user is null');
       }
-        print('getCurrentUserFollowCounts 2');
     } catch (e, stackTrace) {
       print('Error getting current user data: $e\n$stackTrace');
     }
